@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--<link rel="icon" href="favicon.ico">-->
+
+  <title>Experience NYC</title>
+  <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="./materialize/css/materialize.min.css"  media="screen,projection"/>
+
+      <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script><!-- jQuery CDN-->
+</head>
+<script>
+  $(document).ready(function(){
+    $('.sidenav').sidenav({edge: 'right'});
+    $('select').select();
+    $('.datepicker').datepicker();
+    $('#sideBtn').on('click', function(){
+      $('.sidenav').sidenav('hide');
+    });
+  });
+</script>
+
+<body>
+  <header>
+    <div class="container-fluid">
+      <div class="navbar-fixed">
+        <nav class="nav-extended" style="background-color: #000000">
+          <div class="nav-wrapper">
+            <a href="#!" class="brand-logo"></a>
+            <a class="center">Experience NYC<a>
+            <ul class="right hide-on-med-and-down">
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Contact</a></li>
+              <li><a href="#">Login | Signup</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+    <ul id="nav-mobile" class="sidenav sidenav-fixed" style="overflow-y: scroll;height:auto; transform: translateX(0%);top: 65px;">
+      <div class="row">
+      <div class="col s1">
+        <a id="sideBtn" class="btn-floating btn-medium waves-effect waves-light red" style="background-color: #000000 !important;position:absolute;left: 2px;top:2px;"><i class="material-icons">remove</i></a>
+      </div>
+      <div class="col s11">
+        <div class="input-field col s12">
+          <input id="tripSearch" type="search" class="validate">
+          <label for="tripSearch">Search</label>
+        </div>
+          <ul class="collapsible">
+            <li>
+              <div class="collapsible-header" style="display: inline-block;">
+                    <i class="material-icons">place</i>Trip 1
+                    <i class="material-icons" style="width: 0px;font-size: 20px;margin: 5px;">attach_money</i>
+                    <i class="material-icons" style="width: 0px;font-size: 20px;margin: 5px;">attach_money</i>
+                    <i class="material-icons" style="width: 0px;font-size: 20px;margin: 5px;">attach_money</i>
+                    <i class="material-icons" style="width: 0px;font-size: 15px;margin: 5px;">star</i>
+                    <i class="material-icons" style="width: 0px;font-size: 15px;margin: 5px;">star</i>
+                    <i class="material-icons" style="width: 0px;font-size: 15px;margin: 5px;">star</i>
+                    <i class="material-icons" style="width: 0px;font-size: 15px;margin: 5px;">star</i>
+                    <i class="material-icons" style="width: 0px;font-size: 15px;margin: 5px;">star</i>
+              </div>
+              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+            <li>
+              <div class="collapsible-header"  style="display: inline-block;"><i class="material-icons">place</i>Trip 2
+                <i class="material-icons" style="width: 0px;font-size: 15px;">star</i>
+                <i class="material-icons" style="width: 0px;font-size: 15px;">star</i>
+                <i class="material-icons" style="width: 0px;font-size: 15px;">star</i>
+                <i class="material-icons" style="width: 0px;font-size: 15px;">star</i>
+                <i class="material-icons" style="width: 0px;font-size: 15px;">star</i>
+              </div>
+              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+            <li>
+              <div class="collapsible-header"  style="display: inline-block;"><i class="material-icons">place</i>Trip 3
+                <i class="material-icons" style="width: 0px;font-size: 15px;">star</i>
+                <i class="material-icons" style="width: 0px;font-size: 15px;">star</i>
+                <i class="material-icons" style="width: 0px;font-size: 15px;">star</i>
+                <i class="material-icons" style="width: 0px;font-size: 15px;">star</i>
+                <i class="material-icons" style="width: 0px;font-size: 15px;">star</i>
+              </div>
+              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+            <li>
+              <div class="collapsible-header"  style="display: inline-block;"><i class="material-icons">place</i>Trip 4
+                <i class="material-icons" style="width: 0px;font-size: 15px;">star</i>
+                <i class="material-icons" style="width: 0px;font-size: 15px;">star</i>
+                <i class="material-icons" style="width: 0px;font-size: 15px;">star</i>
+                <i class="material-icons" style="width: 0px;font-size: 15px;">star</i>
+                <i class="material-icons" style="width: 0px;font-size: 15px;">star</i>
+              </div>
+              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+            <li>
+            </li>
+          </ul>
+        </div>
+      </div>
+      </div>
+      </ul>
+  </header>
+  <main>
+    <div class="row" style="margin-top: 1%">
+      <div class="input-field col s3 offset-s1">
+        <input id="cardSearch" type="search" class="validate">
+        <label for="cardSearch">Search</label>
+      </div>
+      <div class="input-field col s2">
+       <select multiple>
+         <option value="" disabled selected>All</option>
+         <option value="1">Bars</option>
+         <option value="2">Restaurants</option>
+         <option value="3">Museums</option>
+         <option value="4">Clubs</option>
+       </select>
+       <label>Filter by Type</label>
+     </div>
+     <div class="input-field col s1">
+      <select>
+        <option value="" disabled selected>All</option>
+        <option value="1">< 1 Mile</option>
+        <option value="2">< 3 Miles</option>
+        <option value="3">< 5 Miles</option>
+      </select>
+      <label>Distance</label>
+    </div>
+    <div class="input-field col s1">
+     <select>
+       <option value="" disabled selected></option>
+       <option value="1">$</option>
+       <option value="2">$$</option>
+       <option value="3">$$$</option>
+     </select>
+     <label>Price</label>
+   </div>
+    <div class="input-field col s1">
+      <input type="text" class="datepicker" value="Today"><label>Date</label>
+    </div>
+  </div>
+    <div class="row">
+      <div class="col s8 offset-s1">
+        <h2 class="center">Trending</h2>
+        <div class="row">
+          <div class="col s4">
+            <div class="card">
+              <div class="card-image waves-effect waves-block waves-light">
+                <img class="activator" src="C:\Users\Alex\Downloads\moma.jpg" style="max-height: 226px;object-fit: cover;">
+              </div>
+              <div class="card-content">
+                <span class="card-title activator grey-text text-darken-4">Meseum of Modern Art<i class="material-icons right">more_vert</i></span>
+                <p><a href="#">Website</a></p>
+              </div>
+              <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4"><i class="material-icons left">close</i></span>
+                <img src="https://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=AIzaSyDC23oDwr83Xdm4SkNoVfRw_LOdBGeMrHI">
+
+              </div>
+            </div>
+          </div>
+          <div class="col s4">
+            <div class="card">
+              <div class="card-image waves-effect waves-block waves-light">
+                <img class="activator" src="C:\Users\Alex\Downloads\office.jpg" style="max-height: 226px;object-fit: cover;">
+              </div>
+              <div class="card-content">
+                <span class="card-title activator grey-text text-darken-4">Card Title<i class="material-icons right">more_vert</i></span>
+                <p><a href="#">This is a link</a></p>
+              </div>
+              <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
+                <p>Here is some more information about this product that is only revealed once clicked on.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col s4">
+            <div class="card">
+              <div class="card-image waves-effect waves-block waves-light">
+                <img class="activator" src="C:\Users\Alex\Downloads\office.jpg" style="max-height: 226px;object-fit: cover;">
+              </div>
+              <div class="card-content">
+                <span class="card-title activator grey-text text-darken-4">Card Title<i class="material-icons right">more_vert</i></span>
+                <p><a href="#">This is a link</a></p>
+              </div>
+              <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
+                <p>Here is some more information about this product that is only revealed once clicked on.</p>
+              </div>
+            </div>
+          </div>
+          <h2 class="center">Nearby</h2>
+          <div class="col s4">
+            <div class="card">
+              <div class="card-image waves-effect waves-block waves-light">
+                <img class="activator" src="C:\Users\Alex\Downloads\office.jpg" style="max-height: 226px;object-fit: cover;">
+              </div>
+              <div class="card-content">
+                <span class="card-title activator grey-text text-darken-4">Card Title<i class="material-icons right">more_vert</i></span>
+                <p><a href="#">This is a link</a></p>
+              </div>
+              <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
+                <img src="https://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=AIzaSyDC23oDwr83Xdm4SkNoVfRw_LOdBGeMrHI">
+
+              </div>
+            </div>
+          </div>
+          <div class="col s4">
+            <div class="card">
+              <div class="card-image waves-effect waves-block waves-light">
+                <img class="activator" src="C:\Users\Alex\Downloads\office.jpg" style="max-height: 226px;object-fit: cover;">
+              </div>
+              <div class="card-content">
+                <span class="card-title activator grey-text text-darken-4">Card Title<i class="material-icons right">more_vert</i></span>
+                <p><a href="#">This is a link</a></p>
+              </div>
+              <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
+                <p>Here is some more information about this product that is only revealed once clicked on.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col s4">
+            <div class="card">
+              <div class="card-image waves-effect waves-block waves-light">
+                <img class="activator" src="C:\Users\Alex\Downloads\office.jpg" style="max-height: 226px;object-fit: cover;">
+              </div>
+              <div class="card-content">
+                <span class="card-title activator grey-text text-darken-4">Card Title<i class="material-icons right">more_vert</i></span>
+                <p><a href="#">This is a link</a></p>
+              </div>
+              <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
+                <p>Here is some more information about this product that is only revealed once clicked on.</p>
+              </div>
+            </div>
+          </div>
+          <h2 class="center">Top Rated</h2>
+          <div class="col s4">
+            <div class="card">
+              <div class="card-image waves-effect waves-block waves-light">
+                <img class="activator" src="C:\Users\Alex\Downloads\office.jpg" style="max-height: 226px;object-fit: cover;">
+              </div>
+              <div class="card-content">
+                <span class="card-title activator grey-text text-darken-4">Card Title<i class="material-icons right">more_vert</i></span>
+                <p><a href="#">This is a link</a></p>
+              </div>
+              <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
+                <img src="https://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=AIzaSyDC23oDwr83Xdm4SkNoVfRw_LOdBGeMrHI">
+
+              </div>
+            </div>
+          </div>
+          <div class="col s4">
+            <div class="card">
+              <div class="card-image waves-effect waves-block waves-light">
+                <img class="activator" src="C:\Users\Alex\Downloads\office.jpg" style="max-height: 226px;object-fit: cover;">
+              </div>
+              <div class="card-content">
+                <span class="card-title activator grey-text text-darken-4">Card Title<i class="material-icons right">more_vert</i></span>
+                <p><a href="#">This is a link</a></p>
+              </div>
+              <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
+                <p>Here is some more information about this product that is only revealed once clicked on.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col s4">
+            <div class="card">
+              <div class="card-image waves-effect waves-block waves-light">
+                <img class="activator" src="C:\Users\Alex\Downloads\office.jpg" style="max-height: 226px;object-fit: cover;">
+              </div>
+              <div class="card-content">
+                <span class="card-title activator grey-text text-darken-4">Card Title<i class="material-icons right">more_vert</i></span>
+                <p><a href="#">This is a link</a></p>
+              </div>
+              <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
+                <p>Here is some more information about this product that is only revealed once clicked on.</p>
+              </div>
+            </div>
+          </div>
+    </div>
+  </main>
+
+  <footer class="page-footer" style="background-color: #000000">
+   <div class="container">
+     <div class="row">
+       <div class="col l6 s12">
+         <h5 class="white-text">Footer Content</h5>
+         <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+       </div>
+       <div class="col l4 offset-l2 s12">
+         <h5 class="white-text">Links</h5>
+         <ul>
+           <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+           <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+           <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
+           <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+         </ul>
+       </div>
+     </div>
+   </div>
+   <div class="footer-copyright">
+     <div class="container">
+     © 2014 Copyright Text
+     <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+     </div>
+   </div>
+ </footer>
+<script type="text/javascript" src="./materialize/js/materialize.min.js"></script>
+</body>
+</html>
