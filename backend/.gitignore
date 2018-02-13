@@ -1,0 +1,10 @@
+# json files used for testing
+*.json
+
+# general python 
+__pycache__
+
+*.pyc
+*.pyo
+build/
+dist/
