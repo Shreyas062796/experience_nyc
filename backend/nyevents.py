@@ -27,7 +27,6 @@ def grabKeys():
 def getEvents():
 	global g_events, g_header
 
-
 	# r will be a bytestring
 	r = requests.get(web_link) # get request to website
 	# print(r.status_code)
