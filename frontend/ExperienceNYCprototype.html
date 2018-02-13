@@ -17,7 +17,8 @@
 <script>
   $(document).ready(function(){
     $('.sidenav').sidenav({edge: 'right'});
-
+    $('select').select();
+    $('.datepicker').datepicker();
     $('#sideBtn').on('click', function(){
       $('.sidenav').sidenav('hide');
     });
@@ -48,8 +49,8 @@
       </div>
       <div class="col s11">
         <div class="input-field col s12">
-          <input id="search" type="search" class="validate">
-          <label for="search">Search</label>
+          <input id="tripSearch" type="search" class="validate">
+          <label for="tripSearch">Search</label>
         </div>
           <ul class="collapsible">
             <li>
@@ -105,6 +106,34 @@
       </ul>
   </header>
   <main>
+    <div class="row">
+      <div class="input-field col s3 offset-s1">
+        <input id="cardSearch" type="search" class="validate">
+        <label for="cardSearch">Search</label>
+      </div>
+      <div class="input-field col s2">
+       <select multiple>
+         <option value="" disabled selected>All</option>
+         <option value="1">Bars</option>
+         <option value="2">Restaurants</option>
+         <option value="3">Museums</option>
+         <option value="4">Clubs</option>
+       </select>
+       <label>Filter by Type</label>
+     </div>
+     <div class="input-field col s1">
+      <select>
+        <option value="" disabled selected>All</option>
+        <option value="1">< 1 Mile</option>
+        <option value="2">< 3 Miles</option>
+        <option value="3">< 5 Miles</option>
+      </select>
+      <label>Distance</label>
+    </div>
+    <div class="input-field col s1">
+      <input type="text" class="datepicker"><label>Date</label>
+    </div>
+    
     <div class="row">
       <div class="col s8 offset-s1">
         <div class="row">
