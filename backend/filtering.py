@@ -28,6 +28,7 @@ class Filtering:
 		lat2 = radian(to_lat)
 		lon2 = radians(to_lon)
 
+		# part1
 		dlat = lat2-lat1
 		dlon = lon2-lon1
 
@@ -46,6 +47,7 @@ class Filtering:
 		# you shouldn't have to walk more than 3 miles from the place you are in
 		def score(rating,distance):
 			if distance>3:
+
 				return 0
 			else:
 				return 1/(5.2-rating)*(3-distance)
