@@ -9,8 +9,13 @@ def addUser():
     loginInfo = requests.get_json()
     #add to database
 
-@restApi.route('/verify', methods = ['POST'])
+@restApi.route('/authenticate', methods = ['POST'])
 def auth():
+    info = requests.get_json()
+#authenticates user for database
+    
+@restApi.route('/verify', methods = ['POST'])
+def verify():
     info = requests.get_json()
     
     #querydb for user and compare user
