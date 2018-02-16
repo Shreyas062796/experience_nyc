@@ -4,6 +4,7 @@
 # general python 
 __pycache__
 tester.py
+mytoken.py
 *.pyc
 *.pyo
 build/
