@@ -14,7 +14,7 @@ def auth():
     info = requests.get_json()
 #authenticates user for database
     
-@restApi.route('/verify', methods = ['POST'])
+@restApi.route('/verify/<username>/<password>', methods = ['POST'])
 def verify():
     info = requests.get_json()
     

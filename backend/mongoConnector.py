@@ -42,8 +42,14 @@ def populateLogin(login):
 	db = loginConnect()
 	db.Info.insert_one(tag)
 
-def authenticateLogin(login):
+def authenticateLogin(username,password)):
+	db = loginConnect()
+	for login in db.Info.find({"username": username}):
+		if(login["password"] == password):
+			return(True)
+	return(False)
 	#authenticate login and return true or false
+
 
 def populateTags(tags):
 	db = tagsConnect()
