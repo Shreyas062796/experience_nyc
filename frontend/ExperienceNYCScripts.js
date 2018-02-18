@@ -1,7 +1,8 @@
 $(document).ready(function(){
   //Materialize CSS Element Initializations
   $('.sidenav').sidenav({edge: 'right'});
-  $('select').select();
+  $('#catagory').select();
+  $('#price').select();
   $('.datepicker').datepicker();
   $('.collapsible').collapsible();
   $('.modal').modal();
@@ -13,22 +14,22 @@ $(document).ready(function(){
 
   //on search button click
   $('#search').on('click', function(){
-      var keywords = document.getElementById('keywords').value;
-      var catagory = document.getElementById('catagory').value;
-      var distance = document.getElementById('distance').value;
-      var price = document.getElementById('price').value;
-      var date = document.getElementById('date').value;
+      var keywords = $('#keywords').val();
+      var catagory = $('#catagory').val();
+      var distance = $('#distance').val();
+      var price = $('#price').val();
+      var date = $('#date').val();
 
-      login(data);
+      filter(keywords, catagory, distance, price, date)
   });
 
   //on register button click
   $('#register').on('click', function(){
-      var firstName = document.getElementById('first_name').value;
-      var lastName = document.getElementById('last_name').value;
-      var username = document.getElementById('username').value;
-      var password = document.getElementById('registrationPassword').value;
-      var email = document.getElementById('registrationEmail').value;
+      var firstName = $('#first_name').val();
+      var lastName = $('#last_name').val();
+      var username = $('#username').val();
+      var password = $('#registrationPassword').val();
+      var email = $('#registrationEmail').val();
       var data = {type: "Register", firstName: firstName, lastName: lastName, username: username, password: password, email: email};
       register(data);
   });
@@ -36,8 +37,8 @@ $(document).ready(function(){
 
   //on login button click
   $('#login').on('click', function(){
-      var user = document.getElementById('user').value;
-      var password = document.getElementById('loginPassword').value;
+      var user = $('#user').val();
+      var password = $('#password').val();
       var data = {type: "Login", password: password, user: user};
       login(data);
   });
@@ -67,4 +68,13 @@ $(document).ready(function(){
       }
     });
   }
+
+  //request filtered data
+  function filter(keywords, catagory, distance, price, date){
+    $.post( "restClient.py", {keywords: keywords, catagory: JSON.stringify(catagory), distance: distance, price: price, date: date})
+     .done(function( response ) {
+
+    });
+  }
+
 });
