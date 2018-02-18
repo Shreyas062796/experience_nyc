@@ -158,7 +158,7 @@ const modal = <div id="modal1" className="modal">
   </div>
 </div>;
 
-const loginModal = <div id="loginModal" className="modal" style={{width: '45%', overflowY: 'hidden', backgroundImage: 'url("./newYork.jpg")'}}>
+const loginModal = <div id="loginModal" className="modal" style={{width: '45%', maxHeight: '100%',overflowY: 'hidden', backgroundImage: 'url("./newYork.jpg")'}}>
   <div className="modal-content">
     <ul className="tabs tabs-fixed-width z-depth-1">
       <li className="tab"><a className="active" href="#login">Login</a></li>
@@ -170,8 +170,8 @@ const loginModal = <div id="loginModal" className="modal" style={{width: '45%', 
         <form className="col s12">
           <div className="row">
             <div className="input-field col s12">
-              <input id="loginEmail" type="email" className="validate" />
-              <label htmlFor="email">Email</label>
+              <input id="user" className="validate" />
+              <label htmlFor="user">Username or Email</label>
             </div>
           </div>
           <div className="row">
@@ -188,6 +188,7 @@ const loginModal = <div id="loginModal" className="modal" style={{width: '45%', 
         </form>
       </div>
     </div>
+
     <div className="card-panel" id="register">
       <div className="row">
         <form className="col s12">
@@ -199,6 +200,12 @@ const loginModal = <div id="loginModal" className="modal" style={{width: '45%', 
             <div className="input-field col s6">
               <input id="last_name" type="text" className="validate" />
               <label htmlFor="last_name">Last Name</label>
+            </div>
+          </div>
+          <div className="row">
+            <div className="input-field col s12">
+              <input id="username" className="validate" />
+              <label htmlFor="username">Username</label>
             </div>
           </div>
           <div className="row">
@@ -224,45 +231,45 @@ const loginModal = <div id="loginModal" className="modal" style={{width: '45%', 
   </div>
 </div>;
 
-const filter = <div className="row" style={{marginTop: '1%'}}>
-  <div className="input-field col s3 offset-s1">
-    <input id="cardSearch" type="search" className="validate" />
-    <label htmlFor="cardSearch">Search</label>
-  </div>
-  <div className="input-field col s2">
-    <select multiple>
-      <option value disabled selected>All</option>
-      <option value={1}>Bars</option>
-      <option value={2}>Restaurants</option>
-      <option value={3}>Museums</option>
-      <option value={4}>Clubs</option>
-    </select>
-    <label>Filter Created By Type</label>
-  </div>
-  <div className="input-field col s1">
-    <select>
-      <option value disabled selected>All</option>
-      <option value={1}>&lt; 1 Mile</option>
-      <option value={2}>&lt; 3 Miles</option>
-      <option value={3}>&lt; 5 Miles</option>
-    </select>
-    <label>Distance</label>
-  </div>
-  <div className="input-field col s1">
-    <select>
-      <option value disabled selected />
-      <option value={1}>$</option>
-      <option value={2}>$$</option>
-      <option value={3}>$$$</option>
-    </select>
-    <label>Price</label>
-  </div>
-  <div className="input-field col s1">
-    <input type="text" className="datepicker" defaultValue="Today" /><label>Date</label>
-  </div>
-</div>;
+const filter = <div className="card-panel" style={{zIndex: 2,marginTop: 0,width: '100%',position: 'fixed', padding: '0', paddingTop: '1%'}}>
+  <div className="row">
+    <div className="input-field col s2 offset-s1">
+      <input id="cardSearch" type="search"/>
+      <label htmlFor="cardSearch">Search</label>
+    </div>
+    <div className="input-field col s2">
+      <select multiple>
+        <option value disabled selected>All</option>
+        <option value={1}>Bars</option>
+        <option value={2}>Restaurants</option>
+        <option value={3}>Museums</option>
+        <option value={4}>Clubs</option>
+      </select>
+      <label>Catagory</label>
+    </div>
+    <div className="input-field col s1">
+      <input id="distance" type="text"/>
+      <label htmlFor="distance">Distance (miles)</label>
+    </div>
+    <div className="input-field col s1">
+      <select>
+        <option value disabled selected />
+        <option value={1}>$</option>
+        <option value={2}>$$</option>
+        <option value={3}>$$$</option>
+      </select>
+      <label>Price</label>
+    </div>
+    <div className="input-field col s1">
+      <input type="text" className="datepicker" defaultValue="Today"/><label>Date</label>
+    </div>
+    <div className="input-field col s1">
+      <button className="btn waves-effect waves-light" type="submit" name="action" id="search">Search</button>
+    </div>
+    </div>
+  </div>;
 
-const cards = <div className="row">
+const cards = <div className="row" style={{marginTop: "1%"}}>
   <div className="col s8 offset-s1">
     <h2 className="center">Trending</h2>
     <div className="row">
