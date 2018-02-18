@@ -17,20 +17,21 @@ def tagsConnect():
 	tagsdb = client.Tags
 	return(tagsdb)
 
-
+#adds initital restaurant data to database
 def populateRestaurants():
 	restaurants = getNYCRestaurants()
 	db = placesConnect()
 	for restaurant in restaurants['results']:
 		db.restaurants.insert_one(restaurant)
 
+#adds initital Bars data to database
 def populateBars():
 	bars = getNYCBars()
 	db = placesConnect()
 	for bar in bars['results']:
 		db.bars.insert_one(bar)
 
-
+#test to see if you can get all the bar data in database
 def getBars():
 	allBars = []
 	db = placesConnect()
@@ -38,13 +39,15 @@ def getBars():
 		allBars.append(document)
 	return(allBars)
 
+#populates login table with json data
 def populateLogin(login):
 	db = loginConnect()
 	db.Info.insert_one(tag)
 
-def authenticateLogin(username,password)):
+def authenticateLogin(username,password):
 	db = loginConnect()
-	for login in db.Info.find({"username": username}):
+	login = db.Info.find_one({"username": username}):
+	if(login):
 		if(login["password"] == password):
 			return(True)
 	return(False)
