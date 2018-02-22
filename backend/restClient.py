@@ -32,6 +32,11 @@ def getRestaurants():
 	#query db and return json to the front end
 	pass
 
+@restClient.route('/events', methods = ['POST', 'GET'])
+def getEvents():
+	#temporary just for front testing
+	pass
+
 @restClient.route('/')
 def index():
 	return '<h1>It is live</h1>'
