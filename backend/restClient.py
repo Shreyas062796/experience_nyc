@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request, redirect, session
 import random, json
 from mongoConnector import *
-import sys
+import sys, os
 import json
 
 # [print("{} {}".format(keys, values)) for keys,values in sys.modules(__name__).items()]
+
+DEBUG = True
 
 restClient = Flask(__name__)
 
@@ -37,9 +39,17 @@ def getRestaurants():
 def getEvents():
 	#temporary just for front testing
 
+	# this block is for heroku
+	cwd = os.getcwd()
+	jsonfile = ''
+	if DEBUG:
+		jsonfile = cwd + '/example.json'
+
+	
+
 	jsonString = ''
 
-	with open('events.json', 'r') as File:
+	with open(jsonfile, 'r') as File:
 		a = json.loads(File.read())
 		# print(a[0].keys())
 
