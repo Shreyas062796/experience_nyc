@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, session
 import random, json
 from mongoConnector import *
 import sys
+import json
 
 # [print("{} {}".format(keys, values)) for keys,values in sys.modules(__name__).items()]
 
@@ -35,7 +36,33 @@ def getRestaurants():
 @restClient.route('/events', methods = ['POST', 'GET'])
 def getEvents():
 	#temporary just for front testing
-	pass
+
+	jsonString = ''
+
+	with open('events.json', 'r') as File:
+		a = json.loads(File.read())
+		# print(a[0].keys())
+
+		returndic = list()
+
+		for i in range(len(a)):
+			temp = dict()
+			print(a[i]['rating'])
+
+			temp['rating'] = a[i]['rating']
+			temp['name'] = a[i]['name']
+			temp['opening_hours'] = a[i]['opening_hours']
+			# temp['price_level'] = a[i]['price_level']
+
+			returndic.append(temp)
+
+		jsonString = json.dumps(returndic)
+
+	return jsonString
+
+
+
+
 
 @restClient.route('/')
 def index():
