@@ -4,7 +4,7 @@ import json
 from operator import itemgetter
 from math import sin, cos, sqrt, atan2, radians
 
-DEBUG = False
+DEBUG = True
 
 
 class Filtering:
@@ -49,10 +49,10 @@ class Filtering:
 		# you shouldn't have to walk more than 3 miles from the place you are in
 	def score(self, rating, distance):
 		miles = distance/5280
-		if miles>3:
+		if miles>2:
 			return 0
 		else:
-			return 1/(5.2-rating)*(3-miles)
+			return 1/(5.2-rating)*(2-miles)
 
 
 	# WILL CHANGE AS WE CREATE A BETTER ESTIMATE
@@ -86,6 +86,7 @@ class Filtering:
 
 	# my score functon is petty work on something better soon
 	def newscore(self):
+		# this is for when we have more parameters to fix
 		pass
 
 
@@ -99,10 +100,10 @@ def main():
 		myobj = Filtering(ex_lat, ex_lng)
 		myobj.getBars()
 
-		myobj.getTop(3, self.bars)
+		myobj.getTop(3, myobj.bars)
 
 		places = myobj.filterby(myobj.bars)
-		[print("{}:\t{}".format(key,val)) for key,val in places.items()]
+		# [print("{}:\t{}".format(key,val)) for key,val in places.items()]
 
 		# bars = places.getNYCBars()['results'] # bars is a list
 
