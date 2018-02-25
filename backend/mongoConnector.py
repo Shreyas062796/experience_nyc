@@ -2,6 +2,8 @@ from pymongo import *
 from places import *
 from bson.objectid import *
 
+
+
 def placesConnect():
 	client = MongoClient('mongodb://localhost:27017/')
 	placesdb = client.places
@@ -46,7 +48,7 @@ def populateLogin(login):
 
 def authenticateLogin(username,password):
 	db = loginConnect()
-	login = db.Info.find_one({"username": username}):
+	login = db.Info.find_one({"username": username})
 	if(login):
 		if(login["password"] == password):
 			return(True)
