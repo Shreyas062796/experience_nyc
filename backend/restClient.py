@@ -1,8 +1,10 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, jsonify
 import random, json
 from mongoConnector import *
 import sys, os, time
 import json
+import filtering
+
 # [print("{} {}".format(keys, values)) for keys,values in sys.modules(__name__).items()]
 
 DEBUG = True
@@ -12,9 +14,13 @@ restClient = Flask(__name__)
 # this works, it may not be the best way to do it, but works
 # this way whenever the server loads up you have data for the 
 # user to work with and will keep updating hourly
-@app.before_first_request
+@restClient.before_first_request
 def activate_job():
 	def get_data():
+		hour = datetime.datetime.now().hour # for first setup
+		# keep checking when you reach the end of the first hour
+		while hour == datetime.datetime.now().hour:
+			time.sleep(60)
 		while True:
 			# updateEvents()	#write this later
 			# updatePlaces()	#write this later
@@ -24,13 +30,10 @@ def activate_job():
 
 	# This is for the caching of data
 	# sets up the data for when the first first goes up
-	updateEvents()
-	updatePlaces()
+	# updateEvents()
+	# updatePlaces()
 
-	hour = datetime.datetime.now().hour # for first setup
-	# keep checking when you reach the end of the first hour
-	while hour == datetime.datetime.now().hour:
-		time.sleep(60)
+	
 
 	thread = threading.Thread(target=get_data)
 	thread.start()
@@ -60,6 +63,16 @@ def auth():
 def getRestaurants():
 	#query db and return json to the front end
 	pass
+
+# gets bars that right now have preset coordinates
+@restClient.route('/topbars/<amount>', methods = ['GET'])#have some parameters
+def getTopBars(amount):
+	defaultlat  = 40.7831
+	defaultlong = 73.9712
+
+	myobj = filtering.Filtering(defaultlat, defaultlong)
+	return jsonify(myobj.getTopBars(int(amount)))
+
 
 @restClient.route('/events', methods = ['POST', 'GET'])
 def getEvents():
