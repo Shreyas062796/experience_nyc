@@ -106,8 +106,8 @@ def getEvents():
 
 @restClient.route('/')
 def index():
-	return '<h1>It is live</h1>'
+	return '<h1>Flask Client is up and running</h1>'
 
 
 if __name__ == '__main__':
-	restClient.run()
+	restClient.run(debug=DEBUG)
