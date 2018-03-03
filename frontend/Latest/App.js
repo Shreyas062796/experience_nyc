@@ -1,29 +1,22 @@
 import React, {Component} from "react";
 import ReactDOM from "react-dom";
 import $ from 'jquery';
-import ExperienceNYCScripts from './ExperienceNYCScripts.js';
-import 'materialize-css';
-import 'materialize-css/dist/css/materialize.css';
-import 'materialize-css/dist/js/materialize.min.js';
-import TopNav from './Components/TopNav';
+//import ExperienceNYCScripts from './ExperienceNYCScripts.js';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SideNav from './Components/SideNav';
 import LoginModal from './Components/LoginModal';
 import TripModal from './Components/TripModal';
-import FilterBar from './Components/FilterBar';
+
 import Cards from './Components/Cards';
-import Footer from './Components/Footer';
+
+import MainContainer from './Components/MainContainer';
 
 function App() {
   return (
-    <div>
-      <TopNav />
+    <MuiThemeProvider>
+      <MainContainer />
       <SideNav />
-      <LoginModal />
-      <TripModal />
-      <FilterBar />
-      <Cards />
-      <Footer />
-    </div>
+    </MuiThemeProvider>
   );
 }
 
