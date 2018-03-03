@@ -58,11 +58,13 @@ def auth():
 		print("The password or the username that you have entered doesnt exist")
 
 
-@restClient.route('/restaurants/', methods = ['POST'])#have some parameters
-def getRestaurants():
-	#query db and return json to the front end
-	pass
+@restClient.route('/restaurants/<cost>/<rating>', methods = ['GET'])#have some parameters
+def getRestaurants(cost,rating):
 
+	#query db and return json to the front end
+	return(QueryRestaurants(cost,rating))
+
+<<<<<<< HEAD
 # gets bars that right now have preset coordinates
 @restClient.route('/topbars/<amount>', methods = ['GET'])#have some parameters
 def getTopBars(amount):
@@ -93,6 +95,9 @@ def getTopBar():
 
 
 @restClient.route('/events', methods = ['POST', 'GET'])
+=======
+@restClient.route('/events', methods = ['GET'])
+>>>>>>> master
 def getEvents():
 	#temporary just for front testing
 
@@ -119,12 +124,13 @@ def getEvents():
 
 		jsonString = json.dumps(returndic)
 
-	return jsonString
+	return(jsonString)
 
 
 @restClient.route('/')
 def index():
 	return '<h1>Flask Client is up and running</h1>'
+
 
 
 if __name__ == '__main__':
