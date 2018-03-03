@@ -1,7 +1,7 @@
-#ExperienceNYC
+# ExperienceNYC
 
 
-##**Flask Links:**
+## **Flask Links:**
 
 
 Url is for getting the best bars given the formula 1/(5.2-rating)*(2-distance)
