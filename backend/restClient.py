@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, session, jsonify
 import random, json
-from mongoConnector import *
+import mongoConnector as mg
 import sys, os, time
 import json
 
@@ -11,7 +11,7 @@ from maps.geo import addressToGeo
 DEBUG = True
 
 restClient = Flask(__name__)
-
+#mongoInstance = mg.MongoConnector("localhost","27017")
 # this works, it may not be the best way to do it, but works
 # this way whenever the server loads up you have data for the 
 # user to work with and will keep updating hourly
@@ -43,7 +43,7 @@ def activate_job():
 @restClient.route('/createuser', methods = ['POST'])
 def addUser():
 	info = request.get_json()
-	populateLogin(info)
+	mg.MongoConnector("localhost","27017").populateLogin(info)
 	print("login data was populated")
 	#creates session when the person creates account
 	session['user'] = info['username']
@@ -52,19 +52,25 @@ def addUser():
 @restClient.route('/authenticate', methods = ['POST'])
 def auth():
 	info = requests.get_json()
-	if(authenticateLogin(info["username"],info["password"])):
+	if(mg.MongoConnector("localhost","27017").authenticateLogin(info["username"],info["password"])):
 		session['user'] = info["username"]
 	else:
 		print("The password or the username that you have entered doesnt exist")
 
 
-@restClient.route('/restaurants/<cost>/<rating>', methods = ['GET'])#have some parameters
+@restClient.route('/queryrestaurants/<cost>/<rating>', methods = ['GET'])#have some parameters
 def getRestaurants(cost,rating):
 
 	#query db and return json to the front end
-	return(QueryRestaurants(cost,rating))
+	return(mg.MongoConnector("localhost","27017").QueryRestaurants(cost,rating))
 
-<<<<<<< HEAD
+@restClient.route('/querybars/<cost>/<rating>', methods = ['GET'])#have some parameters
+def getBars(cost,rating):
+
+	#query db and return json to the front end
+	return(mg.MongoConnector("localhost","27017").QueryBars(cost,rating))
+
+# <<<<<<< HEAD
 # gets bars that right now have preset coordinates
 @restClient.route('/topbars/<amount>', methods = ['GET'])#have some parameters
 def getTopBars(amount):
@@ -94,10 +100,10 @@ def getTopBar():
 		return "<h1> Error </h1>"
 
 
-@restClient.route('/events', methods = ['POST', 'GET'])
-=======
+# @restClient.route('/events', methods = ['POST', 'GET'])
+# =======
 @restClient.route('/events', methods = ['GET'])
->>>>>>> master
+# >>>>>>> master
 def getEvents():
 	#temporary just for front testing
 
