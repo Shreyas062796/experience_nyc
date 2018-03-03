@@ -2,19 +2,20 @@ from pymongo import *
 from places import *
 from bson.objectid import *
 
-client = MongoClient('mongodb://localhost:27017/')
+
 
 def placesConnect():
+	client = MongoClient('mongodb://localhost:27017/')
 	placesdb = client.places
 	return(placesdb)
 
 def loginConnect():
-	#client = MongoClient('mongodb://localhost:27017/')
+	client = MongoClient('mongodb://localhost:27017/')
 	logindb = client.loginInfo
 	return(logindb)
 
 def tagsConnect():
-	#client = MongoClient('mongodb://localhost:27017/')
+	client = MongoClient('mongodb://localhost:27017/')
 	tagsdb = client.Tags
 	return(tagsdb)
 
@@ -68,12 +69,10 @@ def getRestaurants():
 	return(allRestaurants)
 
 def QueryRestaurants(cost,rating):
-	queriedRestaurant = []
 	for restaurant in getRestaurants():
 		if('price_level' in restaurant and 'rating' in restaurant):
 			if(restaurant['rating'] >= rating and restaurant['price_level'] >= cost):
-				queriedRestaurant.append(restaurant)
-	return(queriedRestaurant)
+				pprint(restaurant)
 
 if __name__ == "__main__":
 	#populateRestaurants()
