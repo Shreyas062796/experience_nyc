@@ -8,3 +8,9 @@ tester.py
 *.pyo
 build/
 dist/
+
+# logging
+ghostdriver.log
+
+#testdata
+data.txt
