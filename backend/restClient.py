@@ -3,8 +3,9 @@ import random, json
 from mongoConnector import *
 import sys, os, time
 import json
-import filtering
 
+import filtering
+from maps.geo import addressToGeo
 # [print("{} {}".format(keys, values)) for keys,values in sys.modules(__name__).items()]
 
 DEBUG = True
@@ -33,8 +34,6 @@ def activate_job():
 	# updateEvents()
 	# updatePlaces()
 
-	
-
 	thread = threading.Thread(target=get_data)
 	thread.start()
 
@@ -43,7 +42,7 @@ def activate_job():
 #any other information is get request
 @restClient.route('/createuser', methods = ['POST'])
 def addUser():
-	info = requests.get_json()
+	info = request.get_json()
 	populateLogin(info)
 	print("login data was populated")
 	#creates session when the person creates account
@@ -72,6 +71,25 @@ def getTopBars(amount):
 
 	myobj = filtering.Filtering(defaultlat, defaultlong)
 	return jsonify(myobj.getTopBars(int(amount)))
+
+
+#temporary for testing geochange
+# and everything will be passed as a querystring
+# this works for new places as your trip grows
+@restClient.route('/topbar', methods=['POST'])
+def getTopBar():
+	if request.method == 'POST':
+
+		amount = request.form['amount']
+		location = request.form['address']
+
+		place = addressToGeo(location)	
+		lat, lng = place['lat'], place['lng']
+		myobj = filtering.Filtering(lat,lng)
+
+		return myobj.getTopBars(int(amount), output='json')
+	else:
+		return "<h1> Error </h1>"
 
 
 @restClient.route('/events', methods = ['POST', 'GET'])
