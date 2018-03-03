@@ -1,113 +1,49 @@
 import React from "react";
-import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import IconMenu from 'material-ui/IconMenu';
-import IconButton from 'material-ui/IconButton';
-import FontIcon from 'material-ui/FontIcon';
-import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import Paper from 'material-ui/Paper';
-import SelectField from 'material-ui/SelectField';
-import Select from 'material-ui-next/Select';
-import MenuItem from 'material-ui/MenuItem';
-import Grid from 'material-ui-next/Grid';
-import { FormControl } from 'material-ui-next/Form';
-import Button from 'material-ui-next/Button';
-import Input, { InputLabel } from 'material-ui-next/Input';
-
-const names = [
-  'Bars',
-  'Restaurants',
-  'Museums',
-  'Clubs'
-];
 
 export default class FilterBar extends React.Component {
-  state = {
-    catagories: [],
-    price: ''
-  };
-
-
-  handleChangeCatagories = (event, index, catagories) => this.setState({catagories});
-  handleChangePrice = (event, index, price) => this.setState({price});
-
-  menuItems(catagories) {
-    return names.map((name) => (
-      <MenuItem
-        key={name}
-        insetChildren={true}
-        checked={catagories && catagories.indexOf(name) > -1}
-        value={name}
-        primaryText={name}
-      />
-    ));
+  constructor(props) {
+    super(props);
   }
 
   render() {
-    const { catagories } = this.state;
-    const { classes } = this.props;
-
-    const style = {
-      width: '100%',
-      paddingLeft: 15,
-      paddingBottom: 20,
-      display: 'inline-block',
-    };
     return (
-
-      <Paper style={style} zDepth={1} rounded={false}>
-        <TextField
-          style={{marginRight: 10, marginLeft:20}}
-          hintText="Search"
-          floatingLabelText="Search"
-        />
-        <SelectField
-          multiple={true}
-          hintText="Catagory"
-          value={this.state.catagories}
-          onChange={this.handleChangeCatagories}
-          style={{verticalAlign: 'bottom', width: 200, marginRight: 10}}
-        >
-          {this.menuItems(catagories)}
-        </SelectField>
-        <TextField
-          style={{marginRight: 10, width: 150}}
-          hintText="Distance"
-          floatingLabelText="Distance (miles)"
-        />
-          <InputLabel htmlFor="price">Price</InputLabel>
-          <Select
-            value={this.state.price}
-            onChange={this.handleChangePrice}
-            inputProps={{
-              name: 'price',
-              id: 'price',
-            }}
-          >
-            <MenuItem value="">
-              <em>All</em>
-            </MenuItem>
-            <MenuItem value={1}>$</MenuItem>
-            <MenuItem value={2}>$$</MenuItem>
-            <MenuItem value={3}>$$$</MenuItem>
-          </Select>
-        <TextField
-          style={{width: 150, marginRight: 10}}
-          id="date"
-          label="Date"
-          type="date"
-          defaultValue="Today"
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
-        <Button color="primary" style={{color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
-            Submit
-        </Button>
-      </Paper>
+      <div className="card-panel" style={{zIndex: 2,marginTop: 0,width: '100%',position: 'fixed', padding: '0', paddingTop: '1%'}}>
+        <div className="row">
+          <div className="input-field col s2 offset-s1">
+            <input id="keywords" type="search"/>
+            <label htmlFor="keywords">Search</label>
+          </div>
+          <div className="input-field col s2">
+            <select multiple id="catagory">
+              <option value disabled selected>All</option>
+              <option value={'Bars'}>Bars</option>
+              <option value={'Restaurants'}>Restaurants</option>
+              <option value={'Museums'}>Museums</option>
+              <option value={'Clubs'}>Clubs</option>
+            </select>
+            <label>Catagory</label>
+          </div>
+          <div className="input-field col s1">
+            <input id="distance" type="text"/>
+            <label htmlFor="distance">Distance (miles)</label>
+          </div>
+          <div className="input-field col s1">
+            <select id="price">
+              <option value disabled selected />
+              <option value={'1'}>$</option>
+              <option value={'2'}>$$</option>
+              <option value={'3'}>$$$</option>
+            </select>
+            <label>Price</label>
+          </div>
+          <div className="input-field col s1">
+            <input type="text" className="datepicker" defaultValue="" id="date"/><label>Date</label>
+          </div>
+          <div className="input-field col s1">
+            <button className="btn waves-effect waves-light" type="submit" name="action" id="search">Search</button>
+          </div>
+          </div>
+        </div>
     );
   }
 }

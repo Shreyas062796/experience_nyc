@@ -1,7 +1,14 @@
 $(document).ready(function(){
   //Materialize CSS Element Initializations
+  
+  $('#catagory').select();
+  $('#price').select();
+  $('.datepicker').datepicker();
+  $('.collapsible').collapsible();
   $('.modal').modal();
-  //$('.fixed-action-btn').floatingActionButton();
+  $('.tabs').tabs();
+  $('select').formSelect();
+  $('.fixed-action-btn').floatingActionButton();
   $('#sideBtn').on('click', function(){
     $('.sidenav').sidenav('hide');
   });
@@ -30,6 +37,12 @@ $(document).ready(function(){
 
 
   //on login button click
+  $('#login').on('click', function(){
+      var user = $('#user').val();
+      var password = jQuery.md5($('#password').val());
+      var data = {type: "Login", password: password, user: user};
+      login(data);
+  });
 
   //user register request
   function register(data){
