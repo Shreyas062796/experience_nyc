@@ -80,12 +80,20 @@ def getTopBars(amount):
 #temporary for testing geochange
 # and everything will be passed as a querystring
 # this works for new places as your trip grows
-@restClient.route('/topbar', methods=['GET'])
+@restClient.route('/topbar', methods=['GET', 'POST'])
 def getTopBar():
-	if request.method == 'GET':
-
+	if request.method == 'POST':
 		amount = request.form['amount']
 		location = request.form['address']
+
+		place = geo.addressToGeo(location)	
+		lat, lng = place['lat'], place['lng']
+		myobj = filtering.Filtering(lat,lng)
+
+		return myobj.getTopBars(int(amount), output='json')
+	elif request.method == 'GET':	
+		amount = request.args['amount']
+		location = request.args['address']
 
 		place = geo.addressToGeo(location)	
 		lat, lng = place['lat'], place['lng']
