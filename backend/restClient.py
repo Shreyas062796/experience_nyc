@@ -3,7 +3,12 @@ import random, json
 from mongoConnector import *
 import sys, os, time
 import json
+
 import filtering
+from maps import geo
+
+# try:
+# 	from maps import geo
 
 # [print("{} {}".format(keys, values)) for keys,values in sys.modules(__name__).items()]
 
@@ -33,8 +38,6 @@ def activate_job():
 	# updateEvents()
 	# updatePlaces()
 
-	
-
 	thread = threading.Thread(target=get_data)
 	thread.start()
 
@@ -43,7 +46,7 @@ def activate_job():
 #any other information is get request
 @restClient.route('/createuser', methods = ['POST'])
 def addUser():
-	info = requests.get_json()
+	info = request.get_json()
 	populateLogin(info)
 	print("login data was populated")
 	#creates session when the person creates account
@@ -72,6 +75,25 @@ def getTopBars(amount):
 
 	myobj = filtering.Filtering(defaultlat, defaultlong)
 	return jsonify(myobj.getTopBars(int(amount)))
+
+
+#temporary for testing geochange
+# and everything will be passed as a querystring
+# this works for new places as your trip grows
+@restClient.route('/topbar', methods=['GET'])
+def getTopBar():
+	if request.method == 'GET':
+
+		amount = request.form['amount']
+		location = request.form['address']
+
+		place = geo.addressToGeo(location)	
+		lat, lng = place['lat'], place['lng']
+		myobj = filtering.Filtering(lat,lng)
+
+		return myobj.getTopBars(int(amount), output='json')
+	else:
+		return "<h1> Error </h1>"
 
 
 @restClient.route('/events', methods = ['POST', 'GET'])
@@ -106,8 +128,8 @@ def getEvents():
 
 @restClient.route('/')
 def index():
-	return '<h1>It is live</h1>'
+	return '<h1>Flask Client is up and running</h1>'
 
 
 if __name__ == '__main__':
-	restClient.run()
+	restClient.run(debug=DEBUG)
