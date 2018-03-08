@@ -1,21 +1,17 @@
 from flask import Flask, render_template, request, redirect, session, jsonify
 import random, json
-from mongoConnector import *
+import mongoConnector as mg
 import sys, os, time
 import json
 
 import filtering
-from maps import geo
-
-# try:
-# 	from maps import geo
-
+from maps.geo import addressToGeo
 # [print("{} {}".format(keys, values)) for keys,values in sys.modules(__name__).items()]
 
 DEBUG = True
 
 restClient = Flask(__name__)
-
+#mongoInstance = mg.MongoConnector("localhost","27017")
 # this works, it may not be the best way to do it, but works
 # this way whenever the server loads up you have data for the 
 # user to work with and will keep updating hourly
@@ -47,6 +43,8 @@ def activate_job():
 @restClient.route('/createuser', methods = ['POST'])
 def addUser():
 	info = request.get_json()
+
+	#mg.MongoConnector("localhost","27017").populateLogin(info)
 	populateLogin(info)
 	print("login data was populated")
 	#creates session when the person creates account
@@ -56,16 +54,23 @@ def addUser():
 @restClient.route('/authenticate', methods = ['POST'])
 def auth():
 	info = requests.get_json()
-	if(authenticateLogin(info["username"],info["password"])):
+	if(mg.MongoConnector("localhost","27017").authenticateLogin(info["username"],info["password"])):
 		session['user'] = info["username"]
 	else:
 		print("The password or the username that you have entered doesnt exist")
 
 
-@restClient.route('/restaurants/', methods = ['POST'])#have some parameters
-def getRestaurants():
+@restClient.route('/queryrestaurants/<cost>/<rating>', methods = ['GET'])#have some parameters
+def getRestaurants(cost,rating):
+
 	#query db and return json to the front end
-	pass
+	return(mg.MongoConnector("localhost","27017").QueryRestaurants(cost,rating))
+
+@restClient.route('/querybars/<cost>/<rating>', methods = ['GET'])#have some parameters
+def getBars(cost,rating):
+
+	#query db and return json to the front end
+	return(mg.MongoConnector("localhost","27017").QueryBars(cost,rating))
 
 # gets bars that right now have preset coordinates
 @restClient.route('/topbars/<amount>', methods = ['GET'])#have some parameters
@@ -80,17 +85,18 @@ def getTopBars(amount):
 #temporary for testing geochange
 # and everything will be passed as a querystring
 # this works for new places as your trip grows
+
 @restClient.route('/topbar', methods=['GET', 'POST'])
 def getTopBar():
 	if request.method == 'POST':
 		amount = request.form['amount']
-		location = request.form['address']
-
+		place = addressToGeo(location)	
 		place = geo.addressToGeo(location)	
 		lat, lng = place['lat'], place['lng']
 		myobj = filtering.Filtering(lat,lng)
 
 		return myobj.getTopBars(int(amount), output='json')
+  
 	elif request.method == 'GET':	
 		amount = request.args['amount']
 		location = request.args['address']
@@ -100,6 +106,7 @@ def getTopBar():
 		myobj = filtering.Filtering(lat,lng)
 
 		return myobj.getTopBars(int(amount), output='json')
+  
 	else:
 		return "<h1> Error </h1>"
 
@@ -131,7 +138,7 @@ def getEvents():
 
 		jsonString = json.dumps(returndic)
 
-	return jsonString
+	return(jsonString)
 
 
 @restClient.route('/')
