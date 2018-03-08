@@ -2,12 +2,13 @@ import googlemaps
 from pprint import pprint
 
 def setClient():
-    gmap = googlemaps.Client(key="AIzaSyCK_P92YBIo04vU5ldaBiTnCtvi9kejAjw")
+    gmap = googlemaps.Client(key="AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o")
     return(gmap)
 
 def getNYCRestaurants():
     gmap = setClient()
-    return(gmap.places("restaurant",location=[40.7831,-73.9712],type="restaurant"))
+    x = gmap.places("restaurant",location=[40.7831,-73.9712],type="restaurant")
+    return(x)
 
 def getNYCBars():
 	gmap = setClient()
@@ -15,5 +16,5 @@ def getNYCBars():
 
 
 if __name__ == "__main__":
-   	getNYCRestaurants()
-   	getNYCBars()
+    getNYCRestaurants()
+    print(getNYCBars())

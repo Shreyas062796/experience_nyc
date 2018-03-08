@@ -89,12 +89,12 @@ class Filtering:
 		places = self.filterby(self.bars)
 
 		top = sorted(places.items(), key=lambda x: x[1])[-n:]
-			
-		
+					
 		for item in top:
 			for i in range(len(self.bars)):
 				if item[0] == self.bars[i]['place_id']:
 					returnlst.append(self.bars[i])
+
 
 		if output == 'json':
 			return json.dumps(returnlst)

@@ -87,8 +87,18 @@ class LoginModal extends React.Component {
       </div>
     );
   }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> master
 }
 
 const LoginModalWrapped = withStyles(styles)(LoginModal);
 
 export default LoginModalWrapped;
+<<<<<<< HEAD
+=======
+=======
+}
+>>>>>>> master
+>>>>>>> master
