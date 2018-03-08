@@ -5,10 +5,12 @@ import sys, os, time
 import json
 
 import filtering
+from chaching import Chacher
 from maps.geo import addressToGeo
 # [print("{} {}".format(keys, values)) for keys,values in sys.modules(__name__).items()]
 
 DEBUG = True
+CACHE = Chacher()
 
 restClient = Flask(__name__)
 #mongoInstance = mg.MongoConnector("localhost","27017")
@@ -26,7 +28,7 @@ def activate_job():
 			# updateEvents()	#write this later
 			# updatePlaces()	#write this later
 
-			time.sleep(3600) # sleep for an hour
+			time.sleep(900) # sleep for an hour
 	#==============================================
 
 	# This is for the caching of data
@@ -86,27 +88,22 @@ def getTopBars(amount):
 # and everything will be passed as a querystring
 # this works for new places as your trip grows
 
-@restClient.route('/topbar', methods=['GET', 'POST'])
+@restClient.route('/topbar', methods=['GET'])
 def getTopBar():
-	if request.method == 'POST':
-		amount = request.form['amount']
-		place = addressToGeo(location)	
-		place = geo.addressToGeo(location)	
-		lat, lng = place['lat'], place['lng']
-		myobj = filtering.Filtering(lat,lng)
-
-		return myobj.getTopBars(int(amount), output='json')
-  
-	elif request.method == 'GET':	
+	if request.method == 'GET':	
 		amount = request.args['amount']
 		location = request.args['address']
 
-		place = geo.addressToGeo(location)	
-		lat, lng = place['lat'], place['lng']
-		myobj = filtering.Filtering(lat,lng)
+		data = CACHE.retrieveJson(location)
+		if data is not None:
+			return data 
+		else:
+			place = geo.addressToGeo(location)	
+			lat, lng = place['lat'], place['lng']
+			myobj = filtering.Filtering(lat,lng)
 
-		return myobj.getTopBars(int(amount), output='json')
-  
+			return myobj.getTopBars(int(amount), output='json')
+			
 	else:
 		return "<h1> Error </h1>"
 
