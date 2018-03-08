@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, redirect, session, jsonify
 import random, json
 import mongoConnector as mg
-import sys, os, time
+import sys, os, time, threading
 import json
+import datetime
 
 import filtering
-from chaching import Chacher
+from caching import Chacher
 from maps.geo import addressToGeo
 # [print("{} {}".format(keys, values)) for keys,values in sys.modules(__name__).items()]
 
@@ -98,12 +99,14 @@ def getTopBar():
 		if data is not None:
 			return data 
 		else:
-			place = geo.addressToGeo(location)	
+			place = addressToGeo(location)	
 			lat, lng = place['lat'], place['lng']
 			myobj = filtering.Filtering(lat,lng)
 
-			return myobj.getTopBars(int(amount), output='json')
-			
+			outdata = myobj.getTopBars(int(amount), output='json')
+			CACHE.addToCache(location, outdata)
+			return outdata
+
 	else:
 		return "<h1> Error </h1>"
 
