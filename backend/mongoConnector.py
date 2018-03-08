@@ -82,21 +82,21 @@ class MongoConnector:
 			allRestaurants.append(document)
 		return(allRestaurants)
 
-	def QueryRestaurants(self,cost,rating):
+	def QueryRestaurants(self,cost,rating,num):
 		queriedRestaurant = []
 		for restaurant in self.getRestaurants():
 			if('price_level' in restaurant and 'rating' in restaurant):
 				if(restaurant['rating'] >= rating and restaurant['price_level'] >= cost):
 					queriedRestaurant.append(restaurant)
-		return(queriedRestaurant)
+		return(queriedRestaurant[:num])
 
-	def QueryBars(self,cost,rating):
+	def QueryBars(self,cost,rating,num):
 		queriedBars = []
 		for bar in self.getBars():
 			if('price_level' in bar and 'rating' in bar):
 				if(bar['rating'] >= rating and bar['price_level'] >= cost):
 					queriedBars.append(restaurant)
-		return(queriedBars)
+		return(queriedBars[:num])
 
 if __name__ == "__main__":
 	Experience = MongoConnector("localhost","27017")
