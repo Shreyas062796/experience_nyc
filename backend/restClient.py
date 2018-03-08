@@ -43,7 +43,13 @@ def activate_job():
 @restClient.route('/createuser', methods = ['POST'])
 def addUser():
 	info = request.get_json()
+<<<<<<< HEAD
 	mg.MongoConnector("localhost","27017").populateLogin(info)
+=======
+
+	#mg.MongoConnector("localhost","27017").populateLogin(info)
+	populateLogin(info)
+>>>>>>> 3f14d1de5d8a582c053f88b622271b73013d8f33
 	print("login data was populated")
 	#creates session when the person creates account
 	session['user'] = info['username']
@@ -61,8 +67,19 @@ def auth():
 @restClient.route('/queryrestaurants/<cost>/<rating>', methods = ['GET'])#have some parameters
 def getRestaurants(cost,rating):
 
+<<<<<<< HEAD
 	#query db and return json to the front end
 	return(mg.MongoConnector("localhost","27017").QueryRestaurants(cost,rating))
+=======
+	#query db and return json to the front end
+	return(mg.MongoConnector("localhost","27017").QueryRestaurants(cost,rating))
+
+@restClient.route('/querybars/<cost>/<rating>', methods = ['GET'])#have some parameters
+def getBars(cost,rating):
+
+	#query db and return json to the front end
+	return(mg.MongoConnector("localhost","27017").QueryBars(cost,rating))
+>>>>>>> 3f14d1de5d8a582c053f88b622271b73013d8f33
 
 @restClient.route('/querybars/<cost>/<rating>', methods = ['GET'])#have some parameters
 def getBars(cost,rating):
@@ -84,6 +101,7 @@ def getTopBars(amount):
 #temporary for testing geochange
 # and everything will be passed as a querystring
 # this works for new places as your trip grows
+<<<<<<< HEAD
 @restClient.route('/topbar', methods=['POST'])
 def getTopBar():
 	if request.method == 'POST':
@@ -92,18 +110,45 @@ def getTopBar():
 		location = request.form['address']
 
 		place = addressToGeo(location)	
+=======
+
+@restClient.route('/topbar', methods=['GET', 'POST'])
+def getTopBar():
+	if request.method == 'POST':
+		amount = request.form['amount']
+		place = addressToGeo(location)	
+		place = geo.addressToGeo(location)	
 		lat, lng = place['lat'], place['lng']
 		myobj = filtering.Filtering(lat,lng)
 
 		return myobj.getTopBars(int(amount), output='json')
+  
+	elif request.method == 'GET':	
+		amount = request.args['amount']
+		location = request.args['address']
+
+		place = geo.addressToGeo(location)	
+>>>>>>> 3f14d1de5d8a582c053f88b622271b73013d8f33
+		lat, lng = place['lat'], place['lng']
+		myobj = filtering.Filtering(lat,lng)
+
+		return myobj.getTopBars(int(amount), output='json')
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 3f14d1de5d8a582c053f88b622271b73013d8f33
 	else:
 		return "<h1> Error </h1>"
 
 
+<<<<<<< HEAD
 # @restClient.route('/events', methods = ['POST', 'GET'])
 # =======
 @restClient.route('/events', methods = ['GET'])
 # >>>>>>> master
+=======
+@restClient.route('/events', methods = ['POST', 'GET'])
+>>>>>>> 3f14d1de5d8a582c053f88b622271b73013d8f33
 def getEvents():
 	#temporary just for front testing
 
@@ -136,7 +181,10 @@ def getEvents():
 @restClient.route('/')
 def index():
 	return '<h1>Flask Client is up and running</h1>'
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3f14d1de5d8a582c053f88b622271b73013d8f33
 
 
 if __name__ == '__main__':

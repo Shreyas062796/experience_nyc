@@ -67,9 +67,13 @@ class LoginForm extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState({display: nextProps.display});
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     console.log("login" + this.state.display);
 >>>>>>> master
+=======
+    console.log("login" + this.state.display);
+>>>>>>> 3f14d1de5d8a582c053f88b622271b73013d8f33
   }
 
   handleMouseDownPassword = event => {
@@ -85,12 +89,17 @@ class LoginForm extends React.Component {
       var password = $('#password').val();
       var data = {type: "Login", password: password, user: user};
 <<<<<<< HEAD
+<<<<<<< HEAD
 
       $.post( "https://enyc-m.herokuapp.com/login", JSON.stringify(data))
 =======
       
       $.post( "restClient.py", JSON.stringify(data))
 >>>>>>> master
+=======
+      
+      $.post( "restClient.py", JSON.stringify(data))
+>>>>>>> 3f14d1de5d8a582c053f88b622271b73013d8f33
        .done(function( response ) {
         if(response == "True"){
           alert("Logged In!");

@@ -7,8 +7,7 @@ def setClient():
 
 def getNYCRestaurants():
     gmap = setClient()
-    x = gmap.places("restaurant",location=[40.7831,-73.9712],type="restaurant")
-    return(x)
+    return(gmap.places("restaurant",location=[40.7831,-73.9712],type="restaurant"))
 
 def getNYCBars():
 	gmap = setClient()
@@ -17,4 +16,4 @@ def getNYCBars():
 
 if __name__ == "__main__":
     getNYCRestaurants()
-    print(getNYCBars())
+    getNYCBars()

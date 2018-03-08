@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui-next/styles';
@@ -191,6 +192,8 @@ const cardsWrapped = withStyles(styles)(Cards);
 
 export default cardsWrapped;
 =======
+=======
+>>>>>>> 3f14d1de5d8a582c053f88b622271b73013d8f33
 import React from "react";
 
 export default class Cards extends React.Component {
@@ -360,4 +363,7 @@ export default class Cards extends React.Component {
     );
   }
 }
+<<<<<<< HEAD
 >>>>>>> master
+=======
+>>>>>>> 3f14d1de5d8a582c053f88b622271b73013d8f33
