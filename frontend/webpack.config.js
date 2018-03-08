@@ -28,6 +28,22 @@ module.exports = {
           }
         ]
       },
+<<<<<<< HEAD
+<<<<<<< HEAD
+	  {
+            test: /\.(png|jp(e*)g|svg)$/,  
+            use: [{
+                loader: 'url-loader',
+                options: { 
+                    limit: 8000, // Convert images < 8kb to base64 strings
+                    name: 'Images/[hash]-[name].[ext]'
+                } 
+            }]
+       },
+=======
+>>>>>>> master
+=======
+>>>>>>> 3f14d1de5d8a582c053f88b622271b73013d8f33
 	  { test: /\.css$/,
 		use: ['style-loader', 'css-loader'],
 	  },

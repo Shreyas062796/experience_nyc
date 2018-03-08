@@ -46,9 +46,9 @@ def activate_job():
 @restClient.route('/createuser', methods = ['POST'])
 def addUser():
 	info = request.get_json()
+	mg.MongoConnector("localhost","27017").populateLogin(info)
+	# populateLogin(info)
 
-	#mg.MongoConnector("localhost","27017").populateLogin(info)
-	populateLogin(info)
 	print("login data was populated")
 	#creates session when the person creates account
 	session['user'] = info['username']
@@ -65,15 +65,14 @@ def auth():
 
 @restClient.route('/queryrestaurants/<cost>/<rating>', methods = ['GET'])#have some parameters
 def getRestaurants(cost,rating):
-
 	#query db and return json to the front end
 	return(mg.MongoConnector("localhost","27017").QueryRestaurants(cost,rating))
 
-@restClient.route('/querybars/<cost>/<rating>', methods = ['GET'])#have some parameters
-def getBars(cost,rating):
-
+@restClient.route('/querybars/<cost>/<rating>/<num>', methods = ['GET'])#have some parameters
+def getBars(cost,rating,num):
 	#query db and return json to the front end
 	return(mg.MongoConnector("localhost","27017").QueryBars(cost,rating))
+
 
 # gets bars that right now have preset coordinates
 @restClient.route('/topbars/<amount>', methods = ['GET'])#have some parameters
@@ -111,7 +110,7 @@ def getTopBar():
 		return "<h1> Error </h1>"
 
 
-@restClient.route('/events', methods = ['POST', 'GET'])
+@restClient.route('/events', methods = ['GET'])
 def getEvents():
 	#temporary just for front testing
 
@@ -144,7 +143,6 @@ def getEvents():
 @restClient.route('/')
 def index():
 	return '<h1>Flask Client is up and running</h1>'
-
 
 if __name__ == '__main__':
 	restClient.run(debug=DEBUG)
