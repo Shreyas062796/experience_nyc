@@ -74,18 +74,12 @@ def getRestaurants(cost,rating):
 	#query db and return json to the front end
 	return(mg.MongoConnector("localhost","27017").QueryRestaurants(cost,rating))
 
-@restClient.route('/querybars/<cost>/<rating>', methods = ['GET'])#have some parameters
-def getBars(cost,rating):
+@restClient.route('/querybars/<cost>/<rating>/<num>', methods = ['GET'])#have some parameters
+def getBars(cost,rating,num):
 
 	#query db and return json to the front end
 	return(mg.MongoConnector("localhost","27017").QueryBars(cost,rating))
 #>>>>>>> 3f14d1de5d8a582c053f88b622271b73013d8f33
-
-@restClient.route('/querybars/<cost>/<rating>', methods = ['GET'])#have some parameters
-def getBars(cost,rating):
-
-	#query db and return json to the front end
-	return(mg.MongoConnector("localhost","27017").QueryBars(cost,rating))
 
 # <<<<<<< HEAD
 # gets bars that right now have preset coordinates
@@ -112,33 +106,33 @@ def getTopBar():
 		place = addressToGeo(location)	
 #=======
 
-@restClient.route('/topbar', methods=['GET', 'POST'])
-def getTopBar():
-	if request.method == 'POST':
-		amount = request.form['amount']
-		place = addressToGeo(location)	
-		place = geo.addressToGeo(location)	
-		lat, lng = place['lat'], place['lng']
-		myobj = filtering.Filtering(lat,lng)
+# @restClient.route('/topbar', methods=['GET', 'POST'])
+# def getTopBar():
+# 	if request.method == 'POST':
+# 		amount = request.form['amount']
+# 		place = addressToGeo(location)	
+# 		place = geo.addressToGeo(location)	
+# 		lat, lng = place['lat'], place['lng']
+# 		myobj = filtering.Filtering(lat,lng)
 
-		return myobj.getTopBars(int(amount), output='json')
+# 		return myobj.getTopBars(int(amount), output='json')
   
-	elif request.method == 'GET':	
-		amount = request.args['amount']
-		location = request.args['address']
+# 	elif request.method == 'GET':	
+# 		amount = request.args['amount']
+# 		location = request.args['address']
 
-		place = geo.addressToGeo(location)	
-#>>>>>>> 3f14d1de5d8a582c053f88b622271b73013d8f33
-		lat, lng = place['lat'], place['lng']
-		myobj = filtering.Filtering(lat,lng)
+# 		place = geo.addressToGeo(location)	
+# #>>>>>>> 3f14d1de5d8a582c053f88b622271b73013d8f33
+# 		lat, lng = place['lat'], place['lng']
+# 		myobj = filtering.Filtering(lat,lng)
 
-		return myobj.getTopBars(int(amount), output='json')
-# <<<<<<< HEAD
-# =======
+# 		return myobj.getTopBars(int(amount), output='json')
+# # <<<<<<< HEAD
+# # =======
   
-# >>>>>>> 3f14d1de5d8a582c053f88b622271b73013d8f33
-	else:
-		return "<h1> Error </h1>"
+# # >>>>>>> 3f14d1de5d8a582c053f88b622271b73013d8f33
+# 	else:
+# 		return "<h1> Error </h1>"
 
 
 # <<<<<<< HEAD
