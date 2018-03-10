@@ -36,11 +36,5 @@
     "url-loader": "^0.6.2",
     "webpack": "^3.11.0",
     "webpack-dev-server": "^2.11.1"
-  },
-  "dependencies": {
-    "classnames": "^2.2.5"
-  },
-  "dependencies": {
-    "classnames": "^2.2.5"
   }
 }

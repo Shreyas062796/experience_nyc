@@ -32,7 +32,7 @@ export default class FilterBar extends React.Component {
 
 
   handleChangeCatagories = (event, index, catagories) => this.setState({catagories});
-  handleChangePrice = (event, index, price) => this.setState({price});
+  handlePriceChange = (event, index, price) => this.setState({price});
 
   menuItems(catagories) {
     return names.map((name) => (
@@ -55,6 +55,8 @@ export default class FilterBar extends React.Component {
       paddingLeft: 15,
       paddingBottom: 20,
       display: 'inline-block',
+      marginTop: '5%',
+      textAlign: 'center'
     };
     return (
 
@@ -78,22 +80,16 @@ export default class FilterBar extends React.Component {
           hintText="Distance"
           floatingLabelText="Distance (miles)"
         />
-          <InputLabel htmlFor="price">Price</InputLabel>
-          <Select
-            value={this.state.price}
-            onChange={this.handleChangePrice}
-            inputProps={{
-              name: 'price',
-              id: 'price',
-            }}
-          >
-            <MenuItem value="">
-              <em>All</em>
-            </MenuItem>
-            <MenuItem value={1}>$</MenuItem>
-            <MenuItem value={2}>$$</MenuItem>
-            <MenuItem value={3}>$$$</MenuItem>
-          </Select>
+        <SelectField style={{verticalAlign: 'bottom', width: 100, marginRight: 10}}
+          floatingLabelText="Price"
+          value={this.state.price}
+          onChange={this.handlePriceChange}
+        >
+          <MenuItem value={1} primaryText="$" />
+          <MenuItem value={2} primaryText="$$" />
+          <MenuItem value={3} primaryText="$$$" />
+        </SelectField>
+
         <TextField
           style={{width: 150, marginRight: 10}}
           id="date"
