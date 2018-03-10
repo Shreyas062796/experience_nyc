@@ -28,8 +28,6 @@ module.exports = {
           }
         ]
       },
-<<<<<<< HEAD
-<<<<<<< HEAD
 	  {
             test: /\.(png|jp(e*)g|svg)$/,  
             use: [{
@@ -40,10 +38,6 @@ module.exports = {
                 } 
             }]
        },
-=======
->>>>>>> master
-=======
->>>>>>> 3f14d1de5d8a582c053f88b622271b73013d8f33
 	  { test: /\.css$/,
 		use: ['style-loader', 'css-loader'],
 	  },
