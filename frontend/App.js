@@ -3,8 +3,6 @@ import ReactDOM from "react-dom";
 import $ from 'jquery';
 //import ExperienceNYCScripts from './ExperienceNYCScripts.js';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-<<<<<<< HEAD
-<<<<<<< HEAD
 import LoginModal from './Components/LoginModal';
 import TripModal from './Components/TripModal';
 import SideNav from './Components/SideNav';
