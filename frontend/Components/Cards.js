@@ -47,7 +47,7 @@ class Cards extends React.Component {
   };
 
   componentDidMount = () => {
-    $.get( "https://enyc-m.herokuapp.com/topbars/10")
+    $.get( "https://enyc-m.herokuapp.com/topbars/5")
      .done((response) => {
 
        const result = response.map((value) =>
@@ -65,8 +65,9 @@ class Cards extends React.Component {
              title={value['name']}
              subheader={value['formatted_address']}
            />
-         <img className="image" src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "315"+ "&maxheight=" + "300" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyB7Hu52lUJ-yM-BHHbHqRYdUezLMGVpn0I"}/>
-
+         <div style={{overflow:'hidden'}}>
+            <img className="image" style={{maxHeight: '226px', objectFit: 'cover'}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyB7Hu52lUJ-yM-BHHbHqRYdUezLMGVpn0I"}/>
+          </div>
            <CardContent>
              <Typography component="p">
 
