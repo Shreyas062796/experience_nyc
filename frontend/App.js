@@ -7,8 +7,6 @@ import LoginModal from './Components/LoginModal';
 import TripModal from './Components/TripModal';
 import SideNav from './Components/SideNav';
 import Cards from './Components/Cards';
-=======
-=======
 import SideNav from './Components/SideNav';
 import LoginModal from './Components/LoginModal';
 import TripModal from './Components/TripModal';
