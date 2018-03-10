@@ -14,13 +14,7 @@
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.6.1",
-<<<<<<< HEAD
-<<<<<<< HEAD
     "babel-preset-es2015": "^6.24.1",
-=======
->>>>>>> master
-=======
->>>>>>> 3f14d1de5d8a582c053f88b622271b73013d8f33
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.10",
     "file-loader": "^1.1.9",
@@ -42,17 +36,11 @@
     "url-loader": "^0.6.2",
     "webpack": "^3.11.0",
     "webpack-dev-server": "^2.11.1"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
   },
   "dependencies": {
     "classnames": "^2.2.5"
->>>>>>> master
-=======
   },
   "dependencies": {
     "classnames": "^2.2.5"
->>>>>>> 3f14d1de5d8a582c053f88b622271b73013d8f33
   }
 }
