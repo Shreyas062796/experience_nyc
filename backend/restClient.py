@@ -1,16 +1,20 @@
 from flask import Flask, render_template, request, redirect, session, jsonify
 import random, json
-from mongoConnector import *
-import sys, os, time
+import mongoConnector as mg
+import sys, os, time, threading
 import json
-import filtering
+import datetime
 
+import filtering
+from caching import Chacher
+from maps.geo import addressToGeo
 # [print("{} {}".format(keys, values)) for keys,values in sys.modules(__name__).items()]
 
 DEBUG = True
+CACHE = Chacher()
 
 restClient = Flask(__name__)
-
+#mongoInstance = mg.MongoConnector("localhost","27017")
 # this works, it may not be the best way to do it, but works
 # this way whenever the server loads up you have data for the 
 # user to work with and will keep updating hourly
@@ -25,15 +29,13 @@ def activate_job():
 			# updateEvents()	#write this later
 			# updatePlaces()	#write this later
 
-			time.sleep(3600) # sleep for an hour
+			time.sleep(900) # sleep for an hour
 	#==============================================
 
 	# This is for the caching of data
 	# sets up the data for when the first first goes up
 	# updateEvents()
 	# updatePlaces()
-
-	
 
 	thread = threading.Thread(target=get_data)
 	thread.start()
@@ -43,8 +45,10 @@ def activate_job():
 #any other information is get request
 @restClient.route('/createuser', methods = ['POST'])
 def addUser():
-	info = requests.get_json()
-	populateLogin(info)
+	info = request.get_json()
+	mg.MongoConnector("localhost","27017").populateLogin(info)
+	# populateLogin(info)
+
 	print("login data was populated")
 	#creates session when the person creates account
 	session['user'] = info['username']
@@ -53,16 +57,22 @@ def addUser():
 @restClient.route('/authenticate', methods = ['POST'])
 def auth():
 	info = requests.get_json()
-	if(authenticateLogin(info["username"],info["password"])):
+	if(mg.MongoConnector("localhost","27017").authenticateLogin(info["username"],info["password"])):
 		session['user'] = info["username"]
 	else:
 		print("The password or the username that you have entered doesnt exist")
 
 
-@restClient.route('/restaurants/', methods = ['POST'])#have some parameters
-def getRestaurants():
+@restClient.route('/queryrestaurants/<cost>/<rating>', methods = ['GET'])#have some parameters
+def getRestaurants(cost,rating):
 	#query db and return json to the front end
-	pass
+	return(mg.MongoConnector("localhost","27017").QueryRestaurants(cost,rating))
+
+@restClient.route('/querybars/<cost>/<rating>/<num>', methods = ['GET'])#have some parameters
+def getBars(cost,rating,num):
+	#query db and return json to the front end
+	return(mg.MongoConnector("localhost","27017").QueryBars(cost,rating))
+
 
 # gets bars that right now have preset coordinates
 @restClient.route('/topbars/<amount>', methods = ['GET'])#have some parameters
@@ -74,7 +84,33 @@ def getTopBars(amount):
 	return jsonify(myobj.getTopBars(int(amount)))
 
 
-@restClient.route('/events', methods = ['POST', 'GET'])
+#temporary for testing geochange
+# and everything will be passed as a querystring
+# this works for new places as your trip grows
+
+@restClient.route('/topbar', methods=['GET'])
+def getTopBar():
+	if request.method == 'GET':	
+		amount = request.args['amount']
+		location = request.args['address']
+
+		data = CACHE.retrieveJson(location)
+		if data is not None:
+			return data 
+		else:
+			place = addressToGeo(location)	
+			lat, lng = place['lat'], place['lng']
+			myobj = filtering.Filtering(lat,lng)
+
+			outdata = myobj.getTopBars(int(amount), output='json')
+			CACHE.addToCache(location, outdata)
+			return outdata
+
+	else:
+		return "<h1> Error </h1>"
+
+
+@restClient.route('/events', methods = ['GET'])
 def getEvents():
 	#temporary just for front testing
 
@@ -101,13 +137,12 @@ def getEvents():
 
 		jsonString = json.dumps(returndic)
 
-	return jsonString
+	return(jsonString)
 
 
 @restClient.route('/')
 def index():
-	return '<h1>It is live</h1>'
-
+	return '<h1>Flask Client is up and running</h1>'
 
 if __name__ == '__main__':
-	restClient.run()
+	restClient.run(debug=DEBUG)
