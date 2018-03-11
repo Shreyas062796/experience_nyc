@@ -21,28 +21,20 @@ const styles = theme => ({
 });
 
 class LoginModal extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentWillReceiveProps(nextProps) {
-      //console.log(nextProps);
-      this.setState({open: nextProps, value: 0});
+      this.setState({open: nextProps['clicked'], value: 0});
+      console.log(this.state.open);
   }
 
   state = {
-    open: false,
+    open: '',
     value: 0,
     loginForm: 'block',
     registerForm: 'none'
   }
 
-  handleOpen = () => {
-    this.setState({ open: true });
-  };
-
   handleClose = () => {
-    this.setState({ open: false });
+    this.setState({ open: '' });
   };
 
   handleTabChange = (event, value) => {
@@ -92,6 +84,3 @@ class LoginModal extends React.Component {
 const LoginModalWrapped = withStyles(styles)(LoginModal);
 
 export default LoginModalWrapped;
-
-}
-}

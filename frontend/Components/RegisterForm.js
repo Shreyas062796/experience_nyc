@@ -64,8 +64,6 @@ class RegisterForm extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({display: nextProps.display});
-    console.log("register" + this.state.display);
-    console.log("register" + this.state.display);
   }
 
   handleChange = prop => event => {

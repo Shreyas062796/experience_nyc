@@ -1,8 +1,5 @@
 import React from "react";
-import TopNav from './TopNav';
-import FilterBar from './FilterBar';
-import Cards from './Cards';
-import SideNav2 from './SideNav2';
+import Main from './Main';
 
 export default class MainContainer extends React.Component {
   constructor(props) {
@@ -13,13 +10,7 @@ export default class MainContainer extends React.Component {
   render() {
     return (
       <div>
-        <SideNav2 />
-      <div style={{marginRight: 300}}>
-        <TopNav />
-        <FilterBar />
-      <div style={{marginRight: 300}}>
-        <TopNav />
-        <FilterBar />
+        <Main />
       </div>
     );
   }
