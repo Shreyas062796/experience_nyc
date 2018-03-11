@@ -46,7 +46,7 @@ def activate_job():
 @restClient.route('/createuser', methods = ['POST'])
 def addUser():
 	info = request.get_json()
-	mg.MongoConnector("localhost","27017").populateLogin(info)
+	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
 	# populateLogin(info)
 
 	print("login data was populated")
@@ -57,7 +57,7 @@ def addUser():
 @restClient.route('/authenticate', methods = ['POST'])
 def auth():
 	info = requests.get_json()
-	if(mg.MongoConnector("localhost","27017").authenticateLogin(info["username"],info["password"])):
+	if(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").authenticateLogin(info["username"],info["password"])):
 		session['user'] = info["username"]
 	else:
 		print("The password or the username that you have entered doesnt exist")
@@ -66,12 +66,12 @@ def auth():
 @restClient.route('/queryrestaurants/<cost>/<rating>', methods = ['GET'])#have some parameters
 def getRestaurants(cost,rating):
 	#query db and return json to the front end
-	return(mg.MongoConnector("localhost","27017").QueryRestaurants(cost,rating))
+	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryRestaurants(cost,rating))
 
 @restClient.route('/querybars/<cost>/<rating>/<num>', methods = ['GET'])#have some parameters
 def getBars(cost,rating,num):
 	#query db and return json to the front end
-	return(mg.MongoConnector("localhost","27017").QueryBars(cost,rating))
+	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryBars(cost,rating))
 
 
 # gets bars that right now have preset coordinates
