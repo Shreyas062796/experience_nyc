@@ -18,10 +18,32 @@
 		<div id = "map"></div>
 		
 		<script>	
+			function moveDown(){
+				var index = listboxTrips.selectedIndex				
+				if(index + 1 < listboxTrips.options.length){				
+					//swap
+					var temp = listboxTrips.options[index + 1].text
+					listboxTrips.options[index + 1].text = listboxTrips.options[index].text;
+					listboxTrips.options[index].text = temp;					
+					listboxTrips.selectedIndex = index + 1;	
+				}
+				
+			}
+			
+			function moveUp(){
+				var index = listboxTrips.selectedIndex				
+				if(index - 1 >= 0){				
+					//swap
+					var temp = listboxTrips.options[index - 1].text
+					listboxTrips.options[index - 1].text = listboxTrips.options[index].text;
+					listboxTrips.options[index].text = temp;					
+					listboxTrips.selectedIndex = index - 1;	
+				}
+			}
+		
 			function clearTrip(){
 				trip = [];
-				var listboxTrips = document.getElementById("listboxTrips")
-				
+				var listboxTrips = document.getElementById("listboxTrips")				
 				listboxTrips.options.length = 0
 			}
 		
@@ -29,9 +51,6 @@
 				var mapDiv = document.getElementById('map')
 				mapDiv.style.width = String(100 * width) + '%';
 				mapDiv.style.height = String(400 * height) + 'px';
-				
-				
-				
 				
 				google.maps.event.trigger(map, "resize");
 			}
@@ -42,6 +61,17 @@
 			
 			//trips
 			var trip = []
+			
+			//middle stopping points
+			waypts = [{
+              location: {lat: 42.3601, lng: -71.0589},
+              stopover: true
+            },
+			{
+			location: {lat: 42.5, lng: -71.1},
+              stopover: true
+            }]
+			
 			
 			function initMap(){				
 				//map properties
@@ -71,22 +101,39 @@
 			
 				directions.addEventListener('click', function(){
 				
+				var size = listboxTrips.options.length;
+				var start = parseFloat(listboxTrips.options[0].text);
+				var end = parseFloat(listboxTrips.options[size - 1].text)
+				
+				waypts = []
+				for(var i = 1; i < size - 1; i++){
+					//lat and lng
 					
+					var index = parseInt(listboxTrips.options[i].text)
+					
+					var lat = markers[index].getPosition().lat()
+					var lng = markers[index].getPosition().lng()
+				
+					waypts.push({
+						location: {lat: lat, lng: lng},
+						stopover: true
+					})
+				}
 				
 					//var start = new google.maps.LatLng(42.1, -71.2);
 					
 					//console.log(markers[0].getPosition().lng())
 					
 					var start = {					
-						lat: markers[trip[0]].getPosition().lat(), 
-						lng: markers[trip[0]].getPosition().lng()
+						lat: markers[start].getPosition().lat(), 
+						lng: markers[start].getPosition().lng()
 					}
 					
 					//var end = new google.maps.LatLng(42.7, -71.8);
 					
 					var end = {					
-						lat: markers[trip[trip.length - 1]].getPosition().lat(), 
-						lng: markers[trip[trip.length - 1]].getPosition().lng()
+						lat: markers[end].getPosition().lat(), 
+						lng: markers[end].getPosition().lng()
 					}
 					
 					
@@ -94,13 +141,23 @@
 					var request = {
 						origin: start,
 						destination: end,
-						travelMode: 'DRIVING'
+						waypoints: waypts,
+						optimizeWaypoints: true,
+						travelMode: 'WALKING'
 					};
 					
 					dirServ.route(request, function(result, status){
 						console.log(result, status);
+						
+						//get update the travel information
+						var distanceDiv = document.getElementById("dist")
+						var timeDiv = document.getElementById("time")
+						
 						if (status == 'OK'){
 							dirDisp.setDirections(result);
+							
+							timeDiv.innerHTML = result.routes[0].legs[0].duration.text;
+							distanceDiv.innerHTML = result.routes[0].legs[0].distance.text;
 						}
 					});
 				});
@@ -155,8 +212,21 @@
 				var addLoc = document.getElementById('addLoc');		
 				addLoc.addEventListener('click', function(){
 					//locals, read from slected index in locations
+					
+					
+					/*
 					var lat = (Math.random() + 42);					
 					var lng = (Math.random() + 70) * -1;
+					*/					
+					
+					var latElm = document.getElementById("lat")
+					var lngElm = document.getElementById("lng")
+					
+					var lat = parseFloat(latElm.value)
+					var lng = -1 * parseFloat(lngElm.value)
+					
+					latElm.value = ""
+					lngElm.value = ""
 					
 					var marker = addMarker({lat: lat, lng: lng});
 					var content = 'Location ' + count + ", Lat: " + lat + " Lng: " + lng;
@@ -212,22 +282,18 @@
 				});
 				
 				
-				//add Location to Trip
-				
+				//add Location to Trip				
 				var addLocToTrip = document.getElementById('addLocToTrip');
 				addLocToTrip.addEventListener('click', function(){
 					//handle listbox events
 					var option = document.createElement('option');
 
-					
+					//add the location the listbox
 					option.id = 'item'
 					option.text = listbox.selectedIndex
 					
 					
 					trip.push(listbox.selectedIndex)
-					
-					
-					console.log(markers[listbox.selectedIndex].getPosition().lat());
 					
 					listboxTrips.options.add(option)
 				});
@@ -270,10 +336,13 @@
 		</select>
 		
 		</br>
+		Lat<input type = "text" id = "lat"  placeholder = "42.*"/>Lng<input type = "text" id = "lng" placeholder = "71.*"/>
 		<button id = "addLoc" type = "button"> Add Location</button> 
+		
 		</br>
 		
 		
+		</br>
 		
 		<!-- Add to Trip -->
 		<h2>Trip</h2>
@@ -288,6 +357,21 @@
 		
 		<!-- Directions -->
 		<button id = "directions" type = "button"> Directions  </button>
+		
+		
+		</br>
+		<!--move item up and down-->
+		<button id = "up" onclick = "moveUp()">move up</button>
+		<button id = "down" onclick = "moveDown()">move down</button>
+		
+		
+		
+		
+		</br>
+		<h3>Trip Details</h3>
+		distance(mi):  <span id = "dist"> </span>
+		</br>
+		time(mins): <span id = "time"> </span>
 		
 	</body>
 </html>
