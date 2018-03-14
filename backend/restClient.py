@@ -64,6 +64,7 @@ def auth():
 @restClient.route('/verify', methods = ['POST'])
 def verify():
 	info = request.get_json()
+	if(info['username']):
 	#username,unique_id,email
 
 @restClient.route('/queryrestaurants/<cost>/<rating>', methods = ['GET'])#have some parameters
