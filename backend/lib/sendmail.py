@@ -10,8 +10,6 @@ logging.basicConfig(filename=LOG_NAME, level=logging.DEBUG)
 base_msg = "Hi there, thanks for creating an account at ExperienceNYC,\n\n\tin order to finalize your authentication please go to the following link.\n\t"
 base_url = "https://enyc-m.herokuapp.com/"
 
-
-
 class sendMail:
 
 	def __init__(self, mymail, mypass):
@@ -27,8 +25,8 @@ class sendMail:
 
 	# ensure code is unique
 	def _generateCode(self, to_email):
-		h_email = hashlib.md5(to_email.encode('utf-8')).hexdigest()
-		unique_code = h_email+str(int(time.time()))
+		unique_code = hashlib.md5(to_email.encode('utf-8') + str(int(time.time())).encode('utf-8')).hexdigest()
+		#unique_code = h_email+str(int(time.time()))
 		message = (base_msg+base_url+unique_code)
 		return message, unique_code
 
@@ -51,8 +49,6 @@ class sendMail:
 		except Exception as e: # Something can go wrong from google's side or an update
 			print("Error: unable to send email: {}".format(e))
 			logging.debug(e)
-
-
 
 
 

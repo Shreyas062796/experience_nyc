@@ -8,6 +8,7 @@ import datetime
 import filtering
 from caching import Chacher
 from maps.geo import addressToGeo
+import lib.sendmail as mail
 # [print("{} {}".format(keys, values)) for keys,values in sys.modules(__name__).items()]
 
 DEBUG = True
@@ -43,11 +44,12 @@ def activate_job():
 
 #any personal or important info is a post request
 #any other information is get request
+#{"type":"Register","firstName":"Alex","lastName":"Markenzon","username":"testUsername","password":"","email":"testemail@gmial.com"}:
 @restClient.route('/createuser', methods = ['POST'])
 def addUser():
 	info = request.get_json()
 	info['verify'] = False
-	info['user_unique_id'] = 'dasdaad'
+	info['user_unique_id'] = mail.sendMail("experiencenycco@gmail.com","anotherone_44")._generateCode("experiencenycco@gmail.com")
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
 	# populateLogin(info)
 	print("login data was populated")
