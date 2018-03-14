@@ -5,12 +5,6 @@ import $ from 'jquery';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import LoginModal from './Components/LoginModal';
 import TripModal from './Components/TripModal';
-import SideNav from './Components/SideNav';
-import Cards from './Components/Cards';
-import SideNav from './Components/SideNav';
-import LoginModal from './Components/LoginModal';
-import TripModal from './Components/TripModal';
-
 import Cards from './Components/Cards';
 import MainContainer from './Components/MainContainer';
 
@@ -18,8 +12,6 @@ function App() {
   return (
     <MuiThemeProvider>
       <MainContainer />
-      <SideNav />
-      <SideNav />
     </MuiThemeProvider>
   );
 }

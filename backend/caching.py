@@ -1,8 +1,8 @@
 # There is definitly a better way to do this
 # however in attempt to have the serve live for
 # debugging I will make this temporary fix.
-
 import json
+
 
 class Chacher:
 
@@ -10,6 +10,8 @@ class Chacher:
 		self._cache_file = cache_file
 		self._clear()
 		self._keys = list()
+		self.size = 0 # figure out a way to determine the size to limit
+					  # the amount of memory we can take in heroku  
 
 	def _clear(self):
 		# purge all old data on inital launch
@@ -20,13 +22,13 @@ class Chacher:
 	def _isIn(self, address):
 		return address in self._keys
 
-
+	# this can be remode going throught the whole list to see if
+	# it exists is bad, than again this is meant to be temporary
 	def retrieveJson(self, address):
 		if self._isIn(address):
 			json_data = dict()
 			with open(self._cache_file, 'r') as cFile:
 				json_data = json.load(cFile)
-
 			return json_data[address]
 		else:
 			return None
