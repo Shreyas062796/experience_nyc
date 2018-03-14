@@ -48,7 +48,6 @@ def addUser():
 	info = request.get_json()
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
 	# populateLogin(info)
-
 	print("login data was populated")
 	#creates session when the person creates account
 	session['user'] = info['username']
@@ -58,10 +57,14 @@ def addUser():
 def auth():
 	info = requests.get_json()
 	if(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").authenticateLogin(info["username"],info["password"])):
-		session['user'] = info["username"]
+		return(True)
 	else:
-		print("The password or the username that you have entered doesnt exist")
+		return(False)
 
+@restClient.route('/verify', methods = ['POST'])
+def verify():
+	info = request.get_json()
+	#username,unique_id,email
 
 @restClient.route('/queryrestaurants/<cost>/<rating>', methods = ['GET'])#have some parameters
 def getRestaurants(cost,rating):
@@ -79,10 +82,8 @@ def getBars(cost,rating,num):
 def getTopBars(amount):
 	defaultlat  = 40.7831
 	defaultlong = 73.9712
-
 	myobj = filtering.Filtering(defaultlat, defaultlong)
 	return jsonify(myobj.getTopBars(int(amount)))
-
 
 #temporary for testing geochange
 # and everything will be passed as a querystring
