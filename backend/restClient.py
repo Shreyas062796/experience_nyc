@@ -139,6 +139,17 @@ def getEvents():
 
 	return(jsonString)
 
+@restClient.route('/authenticate/<int:code>')
+def authenticate(code):
+	'''
+	check the code againts something in mongo 
+	where the user can click, make it timeout after a
+	certain amount of time
+	'''
+	return "OK"
+
+
+
 
 @restClient.route('/')
 def index():
