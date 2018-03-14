@@ -56,7 +56,6 @@ class Filtering:
 		else:
 			return 1/(5.2-rating)*(2-miles)
 
-
 	# WILL CHANGE AS WE CREATE A BETTER ESTIMATE
 	# objective of this is to create a system that will work in the sort of give up .1 rating for ever 100 feet you have to walk
 	# from the path you have

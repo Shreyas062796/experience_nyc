@@ -46,6 +46,8 @@ def activate_job():
 @restClient.route('/createuser', methods = ['POST'])
 def addUser():
 	info = request.get_json()
+	info['verify'] = False
+	info['user_unique_id'] = ''
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
 	# populateLogin(info)
 	print("login data was populated")
