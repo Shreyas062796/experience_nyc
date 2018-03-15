@@ -52,6 +52,7 @@ def addUser():
 	info['user_unique_id'] = mail.sendMail("experiencenycco@gmail.com","anotherone_44")._generateCode(info['email'])
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
 	# populateLogin(info)
+
 	print("login data was populated")
 	#creates session when the person creates account
 	session['user'] = info['username']
@@ -145,7 +146,8 @@ def getEvents():
 
 	return(jsonString)
 
-@restClient.route('/authenticate/<int:code>')
+
+@restClient.route('/authenticate/<string:code>')
 def authenticate(code):
 	'''
 	check the code againts something in mongo 

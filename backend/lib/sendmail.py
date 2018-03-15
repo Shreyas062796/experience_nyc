@@ -19,7 +19,7 @@ class sendMail:
 
 	def Send(self, to_email, subject):
 		message, code = self._generateCode(to_email)
-		_sendmail(to_email, subject, message)
+		self._sendmail(to_email, subject, message)
 		# add_to_db(to_email, unique_code) # add the code to db to check when user clicks it
 
 
@@ -49,8 +49,4 @@ class sendMail:
 		except Exception as e: # Something can go wrong from google's side or an update
 			print("Error: unable to send email: {}".format(e))
 			logging.debug(e)
-
-
-
-
 
