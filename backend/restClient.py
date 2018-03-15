@@ -48,7 +48,7 @@ def activate_job():
 def addUser():
 	info = request.get_json()
 	info['verify'] = False
-	info['user_unique_id'] = mail.sendMail("experiencenycco@gmail.com","anotherone_44")._generateCode(info['email'])
+	info['user_unique_id'] = mail.sendMail("experiencenycco@gmail.com","anotherone_44").generateCode(info['email'])
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
 	# populateLogin(info)
 
@@ -56,7 +56,7 @@ def addUser():
 	#creates session when the person creates account
 	session['user'] = info['username']
 
-	return "<h1>User: {}</h1>",format(info['email'])
+	return "<h1>User: {}</h1>".format(info['email'])
 
 #authenticates user for database
 @restClient.route('/authenticate', methods = ['POST'])
@@ -150,7 +150,7 @@ def getEvents():
 	return(jsonString)
 
 
-@restClient.route('/authenticate/<string:code>')
+@restClient.route('/auth/<string:code>')
 def authenticate(code):
 	'''
 	check the code againts something in mongo 

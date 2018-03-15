@@ -12,6 +12,8 @@ class MongoConnector:
 		self.username = username
 		self.password = password
 		self.database = database
+	
+
 	def clientConnect(self):
 		connection = 'mongodb://' + str(self.username) + ':' + str(self.password) + '@' + str(self.clientHost) + ':' + str(self.clientPort) + '/' + str(self.database)
 		client = MongoClient(connection).experience_nyc
@@ -63,6 +65,7 @@ class MongoConnector:
 	def populateLogin(self,login):
 		db = self.clientConnect()
 		db.users.insert_one(login)
+
 
 	def authenticateLogin(self,username,password):
 		db = self.clientConnect()
