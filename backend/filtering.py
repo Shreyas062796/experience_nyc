@@ -19,6 +19,7 @@ class Filtering:
 	def getBars(self):
 		self.bars = places.getNYCBars()['results']
 
+
 	def getRestaurants(self):
 		self.restaurants= places.getNYCRestaurants()['results']
 
@@ -94,7 +95,6 @@ class Filtering:
 				if item[0] == self.bars[i]['place_id']:
 					returnlst.append(self.bars[i])
 
-
 		if output == 'json':
 			return json.dumps(returnlst)
 		else:
@@ -106,34 +106,17 @@ class Filtering:
 		pass
 
 
-
 def main():
 	if DEBUG:
-
 		ex_lat = 40.7831
 		ex_lng = 73.9712
 
 		myobj = Filtering(ex_lat, ex_lng)
 		myobj.getBars()
 
-
 		places = myobj.filterby(myobj.bars)
-		# [print("{}:\t{}".format(key,val)) for key,val in places.items()]
-
 		print(myobj.getTopBars(3, output='json'))
-		# print(places)
-
-		# bars = places.getNYCBars()['results'] # bars is a list
-
-
-		# print(bars[1]['id'])
-		# sorted_by_score = sorted(bars, key=itemgetter('rating'))
-
-		# # with open('example.json', 'w') as File:
-		# # 	json.dump(bars, File)
 
 
 if __name__ == '__main__':
 	main()
-
-

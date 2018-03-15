@@ -105,6 +105,7 @@ class MongoConnector:
 
 # mongodb://<dbuser>:<dbpassword>@ds163918.mlab.com:63918/experience_nyc
 if __name__ == "__main__":
+	pass
 	#Experience = MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
 	# Experience.populateBars()
 	# Experience.populateRestaurants()

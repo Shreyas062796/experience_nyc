@@ -9,7 +9,7 @@ import filtering
 from caching import Chacher
 from maps.geo import addressToGeo
 import lib.sendmail as mail
-# [print("{} {}".format(keys, values)) for keys,values in sys.modules(__name__).items()]
+
 
 DEBUG = True
 CACHE = Chacher()
@@ -32,7 +32,6 @@ def activate_job():
 
 			time.sleep(900) # sleep for an hour
 	#==============================================
-
 	# This is for the caching of data
 	# sets up the data for when the first first goes up
 	# updateEvents()
@@ -57,6 +56,8 @@ def addUser():
 	#creates session when the person creates account
 	session['user'] = info['username']
 
+	return "<h1>User: {}</h1>",format(info['email'])
+
 #authenticates user for database
 @restClient.route('/authenticate', methods = ['POST'])
 def auth():
@@ -66,13 +67,15 @@ def auth():
 	else:
 		return(False)
 
+
 @restClient.route('/verify', methods = ['POST'])
 def verify():
 	info = request.get_json()
 	if(info['username']):
+		pass
 	#username,unique_id,email
 
-@restClient.route('/queryrestaurants/<cost>/<rating>', methods = ['GET'])#have some parameters
+@restClient.route('/queryrestaurants/<cost>/<rating>', methods=['GET']) #have some parameters
 def getRestaurants(cost,rating):
 	#query db and return json to the front end
 	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryRestaurants(cost,rating))
@@ -157,11 +160,10 @@ def authenticate(code):
 	return "OK"
 
 
-
-
 @restClient.route('/')
 def index():
 	return '<h1>Flask Client is up and running</h1>'
+
 
 if __name__ == '__main__':
 	restClient.run(debug=DEBUG)
