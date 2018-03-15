@@ -1,14 +1,17 @@
 from flask import Flask, render_template, request, redirect, session, jsonify
 import random, json
 import mongoConnector as mg
-import sys, os, time
+import sys, os, time, threading
 import json
+import datetime
 
 import filtering
+from caching import Chacher
 from maps.geo import addressToGeo
 # [print("{} {}".format(keys, values)) for keys,values in sys.modules(__name__).items()]
 
 DEBUG = True
+CACHE = Chacher()
 
 restClient = Flask(__name__)
 #mongoInstance = mg.MongoConnector("localhost","27017")
@@ -26,7 +29,7 @@ def activate_job():
 			# updateEvents()	#write this later
 			# updatePlaces()	#write this later
 
-			time.sleep(3600) # sleep for an hour
+			time.sleep(900) # sleep for an hour
 	#==============================================
 
 	# This is for the caching of data
@@ -43,9 +46,9 @@ def activate_job():
 @restClient.route('/createuser', methods = ['POST'])
 def addUser():
 	info = request.get_json()
+	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
+	# populateLogin(info)
 
-	#mg.MongoConnector("localhost","27017").populateLogin(info)
-	populateLogin(info)
 	print("login data was populated")
 	#creates session when the person creates account
 	session['user'] = info['username']
@@ -54,7 +57,7 @@ def addUser():
 @restClient.route('/authenticate', methods = ['POST'])
 def auth():
 	info = requests.get_json()
-	if(mg.MongoConnector("localhost","27017").authenticateLogin(info["username"],info["password"])):
+	if(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").authenticateLogin(info["username"],info["password"])):
 		session['user'] = info["username"]
 	else:
 		print("The password or the username that you have entered doesnt exist")
@@ -62,15 +65,14 @@ def auth():
 
 @restClient.route('/queryrestaurants/<cost>/<rating>', methods = ['GET'])#have some parameters
 def getRestaurants(cost,rating):
-
 	#query db and return json to the front end
-	return(mg.MongoConnector("localhost","27017").QueryRestaurants(cost,rating))
+	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryRestaurants(cost,rating))
 
-@restClient.route('/querybars/<cost>/<rating>', methods = ['GET'])#have some parameters
-def getBars(cost,rating):
-
+@restClient.route('/querybars/<cost>/<rating>/<num>', methods = ['GET'])#have some parameters
+def getBars(cost,rating,num):
 	#query db and return json to the front end
-	return(mg.MongoConnector("localhost","27017").QueryBars(cost,rating))
+	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryBars(cost,rating))
+
 
 # gets bars that right now have preset coordinates
 @restClient.route('/topbars/<amount>', methods = ['GET'])#have some parameters
@@ -86,32 +88,29 @@ def getTopBars(amount):
 # and everything will be passed as a querystring
 # this works for new places as your trip grows
 
-@restClient.route('/topbar', methods=['GET', 'POST'])
+@restClient.route('/topbar', methods=['GET'])
 def getTopBar():
-	if request.method == 'POST':
-		amount = request.form['amount']
-		place = addressToGeo(location)	
-		place = geo.addressToGeo(location)	
-		lat, lng = place['lat'], place['lng']
-		myobj = filtering.Filtering(lat,lng)
-
-		return myobj.getTopBars(int(amount), output='json')
-  
-	elif request.method == 'GET':	
+	if request.method == 'GET':	
 		amount = request.args['amount']
 		location = request.args['address']
 
-		place = geo.addressToGeo(location)	
-		lat, lng = place['lat'], place['lng']
-		myobj = filtering.Filtering(lat,lng)
+		data = CACHE.retrieveJson(location)
+		if data is not None:
+			return data 
+		else:
+			place = addressToGeo(location)	
+			lat, lng = place['lat'], place['lng']
+			myobj = filtering.Filtering(lat,lng)
 
-		return myobj.getTopBars(int(amount), output='json')
-  
+			outdata = myobj.getTopBars(int(amount), output='json')
+			CACHE.addToCache(location, outdata)
+			return outdata
+
 	else:
 		return "<h1> Error </h1>"
 
 
-@restClient.route('/events', methods = ['POST', 'GET'])
+@restClient.route('/events', methods = ['GET'])
 def getEvents():
 	#temporary just for front testing
 
@@ -140,11 +139,21 @@ def getEvents():
 
 	return(jsonString)
 
+@restClient.route('/authenticate/<string:code>')
+def authenticate(code):
+	'''
+	check the code againts something in mongo 
+	where the user can click, make it timeout after a
+	certain amount of time
+	'''
+	return "OK"
+
+
+
 
 @restClient.route('/')
 def index():
 	return '<h1>Flask Client is up and running</h1>'
-
 
 if __name__ == '__main__':
 	restClient.run(debug=DEBUG)
