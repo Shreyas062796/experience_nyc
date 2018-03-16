@@ -13,6 +13,10 @@ import ShareIcon from 'material-ui-icons/Share';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import MoreVertIcon from 'material-ui-icons/MoreVert';
 import Grid from 'material-ui-next/Grid';
+import Button from 'material-ui-next/Button';
+import Star from 'material-ui-icons/Star';
+import Send from 'material-ui-icons/Send';
+import AttachMoney from 'material-ui-icons/AttachMoney';
 
 const styles = theme => ({
   card: {
@@ -36,7 +40,7 @@ const styles = theme => ({
   },
   avatar: {
     backgroundColor: red[500],
-  },
+  }
 });
 
 class Cards extends React.Component {
@@ -47,8 +51,17 @@ class Cards extends React.Component {
   };
 
   componentDidMount = () => {
-    $.get( "https://enyc-m.herokuapp.com/topbars/5")
+    $.get( "https://enyc-m.herokuapp.com/topbars/6")
      .done((response) => {
+
+       let price = '';
+
+       for(var i=0; i < parseInt(response['price_level']); i++){
+         console.log('test');
+         price += <AttachMoney style={{color: 'rgb(0, 188, 212)', width: '40px'}}/>
+       }
+       console.log(price);
+
 
        const result = response.map((value) =>
        (<Grid item md={4}>
@@ -57,39 +70,34 @@ class Cards extends React.Component {
              avatar={
                <Avatar aria-label="Recipe" src={value['icon']} className={this.props.avatar}/>
              }
-             action={
-               <IconButton>
-                 <MoreVertIcon />
-               </IconButton>
-             }
              title={value['name']}
              subheader={value['formatted_address']}
            />
          <div style={{overflow:'hidden'}}>
             <img className="image" style={{maxHeight: '226px', objectFit: 'cover'}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyB7Hu52lUJ-yM-BHHbHqRYdUezLMGVpn0I"}/>
           </div>
-           <CardContent>
-             <Typography component="p">
-
-             </Typography>
-           </CardContent>
            <CardActions className={this.props.actions} disableActionSpacing>
-             <IconButton aria-label="Add to favorites">
-               <FavoriteIcon />
-             </IconButton>
-             <IconButton aria-label="Share">
-               <ShareIcon />
-             </IconButton>
-             <IconButton
-               className={classnames(this.props.expand, {
-                 [this.props.expandOpen]: this.state.expanded,
-               })}
-               onClick={this.handleExpandClick}
-               aria-expanded={this.state.expanded}
-               aria-label="Show more"
-             >
-               <ExpandMoreIcon />
-             </IconButton>
+             <div style={{width: '25%'}}>
+               <IconButton aria-label="Add to favorites">
+                 <FavoriteIcon />
+               </IconButton>
+             </div>
+             <div style={{width: '25%', textAlign: 'center', display: 'flex'}}>
+               <IconButton>
+                 {price}
+               </IconButton>
+             </div>
+             <div style={{width: '25%', textAlign: 'center', display: 'flex'}}>
+               <Typography style={{marginTop: '14px', marginRight: '5px', }}>{value['rating']}</Typography>
+               <IconButton style={{flex: 'auto'}}>
+                 <Star style={{color: 'rgb(0, 188, 212)', height: '', width: '75px'}}/><Star style={{color: 'rgb(0, 188, 212)', width: '75px'}}/><Star style={{color: 'rgb(0, 188, 212)', width: '75px'}}/><Star style={{color: 'rgb(0, 188, 212)', width: '75px'}}/><Star style={{color: 'rgb(0, 188, 212)', width: '75px'}}/>
+               </IconButton>
+             </div>
+             <div style={{width: '25%', textAlign: 'right'}}>
+               <Button href={"http://maps.google.com/?q=" + value['formatted_address']} target="_blank" color="primary" style={{minWidth: '0px', color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
+                GO
+               </Button>
+             </div>
            </CardActions>
            <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
              <CardContent>
@@ -114,68 +122,11 @@ class Cards extends React.Component {
   render() {
     const { classes } = this.props;
 
-    const placeCard = (<Grid item md={4}>
-      <Card className={classes.card}>
-        <CardHeader
-          avatar={
-            <Avatar aria-label="Recipe" className={classes.avatar}>
-              R
-            </Avatar>
-          }
-          action={
-            <IconButton>
-              <MoreVertIcon />
-            </IconButton>
-          }
-          title="Shrimp and Chorizo Paella"
-          subheader="September 14, 2016"
-        />
-        <CardMedia
-          className={classes.media}
-          image="../Images/moma.jpg"
-          title="Contemplative Reptile"
-        />
-        <CardContent>
-          <Typography component="p">
-            This impressive paella is a perfect party dish and a fun meal to cook together with
-            your guests. Add 1 cup of frozen peas along with the mussels, if you like.
-          </Typography>
-        </CardContent>
-        <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="Add to favorites">
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton aria-label="Share">
-            <ShareIcon />
-          </IconButton>
-          <IconButton
-            className={classnames(classes.expand, {
-              [classes.expandOpen]: this.state.expanded,
-            })}
-            onClick={this.handleExpandClick}
-            aria-expanded={this.state.expanded}
-            aria-label="Show more"
-          >
-            <ExpandMoreIcon />
-          </IconButton>
-        </CardActions>
-        <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-          <CardContent>
-            <Typography paragraph variant="body2">
-              Method:
-            </Typography>
-            <Typography paragraph>
-              Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10
-              minutes.
-            </Typography>
-          </CardContent>
-        </Collapse>
-      </Card>
-    </Grid>);
+
 
     return (
-      <div style={{margin: 25, height: '100vh',overflowY: 'auto', overflowX: 'hidden'}}>
-        <Grid container spacing={40} justify={'center'} style={{padding: 10}}>
+      <div style={{margin: 10, height: '75vh',overflowY: 'auto', overflowX: 'hidden'}}>
+        <Grid container spacing={40} justify={'center'} style={{padding: 25}}>
           {this.state.items}
         </Grid>
       </div>

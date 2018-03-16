@@ -8,7 +8,6 @@ import Drawer from 'material-ui-next/Drawer';
 import AppBar from 'material-ui-next/AppBar';
 import Toolbar from 'material-ui-next/Toolbar';
 import List from 'material-ui-next/List';
-import { MenuItem } from 'material-ui-next/Menu';
 import Typography from 'material-ui-next/Typography';
 import TextField from 'material-ui-next/TextField';
 import Divider from 'material-ui-next/Divider';
@@ -21,6 +20,9 @@ import FilterBar from './FilterBar';
 import Cards from './Cards';
 import Button from 'material-ui-next/Button';
 import LoginModal from './LoginModal';
+import AccountCircle from 'material-ui-icons/AccountCircle';
+import Menu, { MenuItem } from 'material-ui-next/Menu';
+
 
 const drawerWidth = 300;
 
@@ -54,7 +56,7 @@ const styles = theme => ({
     marginRight: drawerWidth,
   },
   menuButton: {
-    marginLeft: 12,
+    marginLeft: -12,
     marginRight: 20,
   },
   hide: {
@@ -101,8 +103,19 @@ const styles = theme => ({
 class Main extends React.Component {
   state = {
     open: true,
-    loginClick: ''
+    loginClick: '',
+    username: '',
+    anchorEl: null,
   };
+
+
+  handleUserLoggedIn = () => {
+
+  }
+
+  componentDidMount = () => {
+    //this.setState({ username: sessionStorage.getItem(username); });
+  }
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -116,10 +129,55 @@ class Main extends React.Component {
     this.setState({loginClick: true});
   }
 
-  render() {
-    const { classes, theme } = this.props;
-    const { open } = this.state;
+  handleMenu = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
 
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
+
+  render() {
+    const { classes, theme  } = this.props;
+    const { open, username, anchorEl } = this.state;
+
+    const menuOpen = Boolean(anchorEl);
+
+    let userAppbarOption = null;
+
+    if(this.state.username){
+      userAppbarOption = (<div><Typography style={{color: 'white', display: 'inline-block'}}>{this.state.username}</Typography><IconButton
+                            aria-owns={menuOpen ? 'menu-appbar' : null}
+                            aria-haspopup="true"
+                            onClick={this.handleMenu}
+                          >
+                            <AccountCircle color="white"/>
+                          </IconButton>
+                          <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                            }}
+                            transformOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                            }}
+                            open={menuOpen}
+                            onClose={this.handleClose}
+                          >
+                            <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+                            <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                            <MenuItem onClick={this.handleClose}>Logout</MenuItem>
+                          </Menu></div>);
+    }
+    else {
+      userAppbarOption = (<Typography onClick={this.handleLoginClick} style={{color: 'white', cursor: 'pointer'}}>
+                                Login | Signup
+                              </Typography>);
+
+    }
     const tripCards = (<Card className={classes.card} style={{margin: '5%'}}>
                         <CardContent>
                           <Typography className={classes.title}>The Broke College Kid</Typography>
@@ -151,10 +209,7 @@ class Main extends React.Component {
                 </Typography>
               </div>
               <div style={{width: '50%', alignItems: 'center', justifyContent: 'flex-end', display: 'flex'}}>
-
-                <Typography onClick={this.handleLoginClick} style={{color: 'white', cursor: 'pointer'}}>
-                  Login | Signup
-                </Typography>
+                {userAppbarOption}
                 <IconButton
                   aria-label="open drawer"
                   onClick={this.handleDrawerOpen}
