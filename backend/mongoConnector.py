@@ -16,27 +16,7 @@ class MongoConnector:
 		connection = 'mongodb://' + str(self.username) + ':' + str(self.password) + '@' + str(self.clientHost) + ':' + str(self.clientPort) + '/' + str(self.database)
 		client = MongoClient(connection).experience_nyc
 		return(client)
-	# def placesConnect(self):
-	# 	client = self.clientConnect()
-	# 	placesdb = client.places
-	# 	return(placesdb)
 
-	# def loginConnect(self):
-	# 	client = self.clientConnect()
-	# 	logindb = client.loginInfo
-	# 	return(logindb)
-
-	# def tagsConnect(self):
-	# 	client = self.clientConnect()
-	# 	tagsdb = client.Tags
-	# 	return(tagsdb)
-
-	# def tripsConnect(self):
-	# 	client = self.clientConnect()
-	# 	tripsdb = client.trips
-	# 	return(tripsdb)
-
-	#adds initital restaurant data to database
 	def populateRestaurants(self):
 		restaurants = getNYCRestaurants()
 		db = self.clientConnect()
@@ -103,11 +83,13 @@ class MongoConnector:
 					queriedBars.append(restaurant)
 		return(queriedBars[:num])
 
+	
+
 # mongodb://<dbuser>:<dbpassword>@ds163918.mlab.com:63918/experience_nyc
 if __name__ == "__main__":
-	#Experience = MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
+	Experience = MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
 	# Experience.populateBars()
 	# Experience.populateRestaurants()
 	#Experience.getBars()
-	# Experience.getRestaurants()
+	Experience.getRestaurants()
 	#QueryRestaurants(3,4)
