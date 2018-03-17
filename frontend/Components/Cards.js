@@ -76,7 +76,7 @@ class Cards extends React.Component {
 
        const { classes } = this.props;
        const result = response.map((value) =>
-       (<Grid item md={4}>
+       (<Grid item xl={3} lg={3} md={6} sm={12} xs={9}>
          <Card className={this.props.card}>
            <CardHeader classes={{subheader: classes.subheader}}
              avatar={
