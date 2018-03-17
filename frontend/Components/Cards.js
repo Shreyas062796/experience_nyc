@@ -22,6 +22,10 @@ const styles = theme => ({
   card: {
     maxWidth: 400,
   },
+  subheader: {
+    display: 'block',
+    height: '2rem'
+  },
   media: {
     height: 150,
   },
@@ -50,23 +54,31 @@ class Cards extends React.Component {
     this.setState({ expanded: !this.state.expanded });
   };
 
+  returnPriceLevel = (items) => {
+    let price = [];
+    for(var i=0; i < items; i++){
+      price.push(<AttachMoney style={{color: 'rgb(0, 188, 212)', width: '40px'}}/>);
+    }
+    return price;
+  }
+
   componentDidMount = () => {
-    $.get( "https://enyc-m.herokuapp.com/topbars/6")
+
+    $.get( "https://enyc-m.herokuapp.com/topbars/10")
      .done((response) => {
+       //
+       // console.log(response['price_level']);
+       // for(var i=0; i < parseInt(response['price_level']); i++){
+       //   console.log('test');
+       //   price += <AttachMoney style={{color: 'rgb(0, 188, 212)', width: '40px'}}/>
+       // }
+       // console.log(price);
 
-       let price = '';
-
-       for(var i=0; i < parseInt(response['price_level']); i++){
-         console.log('test');
-         price += <AttachMoney style={{color: 'rgb(0, 188, 212)', width: '40px'}}/>
-       }
-       console.log(price);
-
-
+       const { classes } = this.props;
        const result = response.map((value) =>
        (<Grid item md={4}>
          <Card className={this.props.card}>
-           <CardHeader
+           <CardHeader classes={{subheader: classes.subheader}}
              avatar={
                <Avatar aria-label="Recipe" src={value['icon']} className={this.props.avatar}/>
              }
@@ -84,7 +96,7 @@ class Cards extends React.Component {
              </div>
              <div style={{width: '25%', textAlign: 'center', display: 'flex'}}>
                <IconButton>
-                 {price}
+                 {this.returnPriceLevel(value['price_level'])}
                </IconButton>
              </div>
              <div style={{width: '25%', textAlign: 'center', display: 'flex'}}>
