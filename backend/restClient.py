@@ -28,11 +28,11 @@ def activate_job():
 		# keep checking when you reach the end of the first hour
 		while hour == datetime.datetime.now().hour:
 			time.sleep(60)
-			print('minute notification')
 		while True:
 			# updateEvents()	#write this later
 			# updatePlaces()	#write this later
 
+			print('Hour Notification')
 			time.sleep(900) # sleep for an hour
 	#==============================================
 	# This is for the caching of data
@@ -113,7 +113,7 @@ def getTopBar():
 
 		data = CACHE.retrieveJson(location)
 		if data is not None:
-			# print
+			print("Data is in cache, it is working congrats pls take down later")
 			return data 
 		else:
 			place = addressToGeo(location)	
