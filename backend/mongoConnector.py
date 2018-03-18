@@ -46,7 +46,6 @@ class MongoConnector:
 		db = self.clientConnect()
 		for document in db.places.find({'types': 'bar'}):
 			allBars.append(document)
-		pprint(allBars)
 		return(allBars)
 
 	def getPlaces(self):
@@ -82,24 +81,29 @@ class MongoConnector:
 		db = self.clientConnect()
 		for document in db.places.find({'types': 'restaurant'}):
 			allRestaurants.append(document)
-		pprint(allRestaurants)
 		return(allRestaurants)
 
 	def QueryRestaurants(self,cost,rating,num):
 		queriedRestaurant = []
+		count = 0
 		for restaurant in self.getRestaurants():
 			if('price_level' in restaurant and 'rating' in restaurant):
 				if(restaurant['rating'] >= rating and restaurant['price_level'] >= cost):
 					queriedRestaurant.append(restaurant)
-		return(queriedRestaurant[:num])
+			if(len(queriedRestaurant) == num):
+				break
+		return(queriedRestaurant)
 
 	def QueryBars(self,cost,rating,num):
 		queriedBars = []
+		count = 0
 		for bar in self.getBars():
 			if('price_level' in bar and 'rating' in bar):
 				if(bar['rating'] >= rating and bar['price_level'] >= cost):
-					queriedBars.append(restaurant)
-		return(queriedBars[:num])
+					queriedBars.append(bar)
+			if(len(queriedBars) == num):
+				break
+		return(queriedBars)
 
 # 	{
 #   trip_id:"1242112",
@@ -155,6 +159,8 @@ if __name__ == "__main__":
 	# Experience.populateRestaurants()
 	# Experience.getBars()
 	# Experience.getRestaurants()
+	# pprint(Experience.QueryRestaurants(2,2,2))
+	# Experience.QueryBars(2,2,2)
 	# Experience.getPlaces()
 	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
 	# for i in tripnames:
