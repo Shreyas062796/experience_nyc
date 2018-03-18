@@ -7,13 +7,13 @@ import json
 import datetime
 
 import filtering
-from caching import Chacher
+from caching import Cacher
 from maps.geo import addressToGeo
 import lib.sendmail as mail
 
 
 DEBUG = True
-CACHE = Chacher()
+CACHE = Cacher()
 
 restClient = Flask(__name__)
 CORS(restClient)
@@ -94,6 +94,11 @@ def getTopBars(amount):
 	defaultlong = 73.9712
 	myobj = filtering.Filtering(defaultlat, defaultlong)
 	return jsonify(myobj.getTopBars(int(amount)))
+
+
+
+
+
 
 #temporary for testing geochange
 # and everything will be passed as a querystring
