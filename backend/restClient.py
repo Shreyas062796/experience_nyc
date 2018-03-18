@@ -4,7 +4,7 @@ import mongoConnector as mg
 import sys, os, time, threading
 import json
 import datetime
-
+import reccomendations as rec
 import filtering
 from caching import Chacher
 from maps.geo import addressToGeo
@@ -70,6 +70,7 @@ def auth():
 def verify():
 	info = request.get_json()
 	if(info['username']):
+		return(True)
 	#username,unique_id,email
 
 @restClient.route('/queryrestaurants/<cost>/<rating>', methods = ['GET'])#have some parameters
@@ -94,6 +95,11 @@ def getTopBars(amount):
 #temporary for testing geochange
 # and everything will be passed as a querystring
 # this works for new places as your trip grows
+@restClient.route('/reccomendplaces<user>', methods=['GET'])
+def getReccomendations(user):
+	reccomendations = rec.placeReccomendations(user).getTrips()
+	return(reccomendations)
+
 
 @restClient.route('/topbar', methods=['GET'])
 def getTopBar():
