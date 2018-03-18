@@ -88,9 +88,9 @@ class MongoConnector:
 		count = 0
 		for restaurant in self.getRestaurants():
 			if('price_level' in restaurant and 'rating' in restaurant):
-				if(restaurant['rating'] >= rating and restaurant['price_level'] >= cost):
+				if(restaurant['rating'] >= float(rating) and restaurant['price_level'] >= float(cost)):
 					queriedRestaurant.append(restaurant)
-			if(len(queriedRestaurant) == num):
+			if(len(queriedRestaurant) == int(num)):
 				break
 		return(queriedRestaurant)
 
@@ -99,9 +99,9 @@ class MongoConnector:
 		count = 0
 		for bar in self.getBars():
 			if('price_level' in bar and 'rating' in bar):
-				if(bar['rating'] >= rating and bar['price_level'] >= cost):
+				if(bar['rating'] >= float(rating) and bar['price_level'] >= float(cost)):
 					queriedBars.append(bar)
-			if(len(queriedBars) == num):
+			if(len(queriedBars) == int(num)):
 				break
 		return(queriedBars)
 
@@ -160,7 +160,7 @@ if __name__ == "__main__":
 	# Experience.getBars()
 	# Experience.getRestaurants()
 	# pprint(Experience.QueryRestaurants(2,2,2))
-	# Experience.QueryBars(2,2,2)
+	# pprint(Experience.QueryBars(2,2,2))
 	# Experience.getPlaces()
 	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
 	# for i in tripnames:
