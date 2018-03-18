@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
 INFO:werkzeug: * Restarting with stat
 WARNING:werkzeug: * Debugger is active!
@@ -22,3 +23,6 @@ INFO:werkzeug: * Detected change in '/Users/Shreyas/Documents/ExperienceNYC/back
 INFO:werkzeug: * Restarting with stat
 WARNING:werkzeug: * Debugger is active!
 INFO:werkzeug: * Debugger PIN: 471-509-110
+=======
+
+>>>>>>> 4a2a85bca0abeeb96cd7c649c4b1ef2341ca7f1c
