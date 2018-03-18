@@ -56,8 +56,6 @@ def addUser():
 
 	print("login data was populated")
 	#creates session when the person creates account
-	session['user'] = info['username']
-
 	return "<h1>User: {}</h1>".format(info['email'])
 
 #authenticates user for database
