@@ -77,15 +77,9 @@ def verify():
 		pass
 	#username,unique_id,email
 
-<<<<<<< HEAD
-@restClient.route('/queryrestaurants/<cost>/<rating>/<num>', methods = ['GET'])#have some parameters
-def getRestaurants(cost,rating,num):
-	#query db for restaurants and get a certain amount
-=======
-@restClient.route('/queryrestaurants/<cost>/<rating>', methods=['GET']) #have some parameters
+@restClient.route('/queryrestaurants/<cost>/<rating>/<num>', methods=['GET']) #have some parameters
 def getRestaurants(cost,rating):
 	#query db and return json to the front end
->>>>>>> 4a2a85bca0abeeb96cd7c649c4b1ef2341ca7f1c
 	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryRestaurants(cost,rating,num))
 
 @restClient.route('/querybars/<cost>/<rating>/<num>', methods = ['GET'])#have some parameters
