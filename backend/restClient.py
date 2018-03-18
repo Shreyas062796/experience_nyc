@@ -77,14 +77,20 @@ def verify():
 		pass
 	#username,unique_id,email
 
+<<<<<<< HEAD
+@restClient.route('/queryrestaurants/<cost>/<rating>/<num>', methods = ['GET'])#have some parameters
+def getRestaurants(cost,rating,num):
+	#query db for restaurants and get a certain amount
+=======
 @restClient.route('/queryrestaurants/<cost>/<rating>', methods=['GET']) #have some parameters
 def getRestaurants(cost,rating):
 	#query db and return json to the front end
+>>>>>>> 4a2a85bca0abeeb96cd7c649c4b1ef2341ca7f1c
 	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryRestaurants(cost,rating,num))
 
 @restClient.route('/querybars/<cost>/<rating>/<num>', methods = ['GET'])#have some parameters
 def getBars(cost,rating,num):
-	#query db and return json to the front end
+	#query db for bars and get a certain amount
 	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryBars(cost,rating,num))
 
 
@@ -97,7 +103,7 @@ def getTopBars(amount):
 	return jsonify(myobj.getTopBars(int(amount)))
 
 #temporary for testing geochange
-# and everything will be passed as a querystring
+# and everything will be passed as a querystrin
 # this works for new places as your trip grows
 @restClient.route('/reccomendplaces/<user>', methods=['GET'])
 def getReccomendations(user):
