@@ -14,6 +14,8 @@ class MongoConnector:
 		self.username = username
 		self.password = password
 		self.database = database
+	
+
 	def clientConnect(self):
 		connection = 'mongodb://' + str(self.username) + ':' + str(self.password) + '@' + str(self.clientHost) + ':' + str(self.clientPort) + '/' + str(self.database)
 		client = MongoClient(connection).experience_nyc
@@ -59,6 +61,7 @@ class MongoConnector:
 		db = self.clientConnect()
 		login['password'] = hashlib.md5(login['password']).hexdigest()
 		db.users.insert_one(login)
+
 
 	def authenticateLogin(self,username,password):
 		db = self.clientConnect()
@@ -148,7 +151,6 @@ class MongoConnector:
 
 if __name__ == "__main__":
 	Experience = MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
-
 	# Experience.populateBars()
 	# Experience.populateRestaurants()
 	# Experience.getBars()
