@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, session, jsonify
+from flask_cors import CORS
 import random, json
 import mongoConnector as mg
 import sys, os, time, threading
@@ -15,7 +16,8 @@ DEBUG = True
 CACHE = Chacher()
 
 restClient = Flask(__name__)
-#mongoInstance = mg.MongoConnector("localhost","27017")
+CORS(restClient)
+
 # this works, it may not be the best way to do it, but works
 # this way whenever the server loads up you have data for the 
 # user to work with and will keep updating hourly
