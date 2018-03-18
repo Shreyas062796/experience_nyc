@@ -28,6 +28,7 @@ def activate_job():
 		# keep checking when you reach the end of the first hour
 		while hour == datetime.datetime.now().hour:
 			time.sleep(60)
+			print('minute notification')
 		while True:
 			# updateEvents()	#write this later
 			# updatePlaces()	#write this later
@@ -73,6 +74,7 @@ def auth():
 def verify():
 	info = request.get_json()
 	if(info['username']):
+		pass
 	#username,unique_id,email
 
 @restClient.route('/queryrestaurants/<cost>/<rating>', methods=['GET']) #have some parameters
@@ -83,7 +85,7 @@ def getRestaurants(cost,rating):
 @restClient.route('/querybars/<cost>/<rating>/<num>', methods = ['GET'])#have some parameters
 def getBars(cost,rating,num):
 	#query db and return json to the front end
-	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryBars(cost,rating))
+	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryBars(cost,rating, num))
 
 
 # gets bars that right now have preset coordinates
@@ -111,6 +113,7 @@ def getTopBar():
 
 		data = CACHE.retrieveJson(location)
 		if data is not None:
+			# print
 			return data 
 		else:
 			place = addressToGeo(location)	
