@@ -81,9 +81,11 @@ class LoginForm extends React.Component {
       var password = $('#password').val();
       var data = {type: "Login", password: password, user: user};
 
-      $.post( "https://enyc-m.herokuapp.com/login", JSON.stringify(data))
+      $.post( "https://enyc-m.herokuapp.com/authenticate", JSON.stringify(data))
        .done(function( response ) {
+         console.log(response);
         if(response == "True"){
+          //sessionStorage.setItem('username', username);
           alert("Logged In!");
         }
         else {
@@ -131,7 +133,9 @@ class LoginForm extends React.Component {
         <FormControl className={classes.formControl} style={{marginTop: 25}}>
           <Grid container>
             <Grid item md={4}>
-              <a href="#">Forgot Username or Password?</a>
+              <Typography>
+                <a href="#">Forgot Username or Password?</a>
+              </Typography>
             </Grid>
             <Grid item md={4} style={{textAlign: "center"}}>
               <Button href="#" id='login' className={classes.button} style={{width: '25%',color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>

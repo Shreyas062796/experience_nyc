@@ -4,7 +4,7 @@ import mongoConnector as mg
 import sys, os, time, threading
 import json
 import datetime
-
+import reccomendations as rec
 import filtering
 from caching import Chacher
 from maps.geo import addressToGeo
@@ -52,6 +52,7 @@ def addUser():
 	info['user_unique_id'] = mail.sendMail("experiencenycco@gmail.com","anotherone_44")._generateCode(info['email'])
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
 	# populateLogin(info)
+
 	print("login data was populated")
 	#creates session when the person creates account
 	session['user'] = info['username']
@@ -68,7 +69,8 @@ def auth():
 @restClient.route('/verify', methods = ['POST'])
 def verify():
 	info = request.get_json()
-	if(info['username'] ):
+	if(info['username']):
+		return(True)
 	#username,unique_id,email
 
 @restClient.route('/queryrestaurants/<cost>/<rating>', methods = ['GET'])#have some parameters
@@ -93,6 +95,11 @@ def getTopBars(amount):
 #temporary for testing geochange
 # and everything will be passed as a querystring
 # this works for new places as your trip grows
+@restClient.route('/reccomendplaces<user>', methods=['GET'])
+def getReccomendations(user):
+	reccomendations = rec.placeReccomendations(user).getTrips()
+	return(reccomendations)
+
 
 @restClient.route('/topbar', methods=['GET'])
 def getTopBar():
@@ -145,7 +152,8 @@ def getEvents():
 
 	return(jsonString)
 
-@restClient.route('/authenticate/<int:code>')
+
+@restClient.route('/authenticate/<string:code>')
 def authenticate(code):
 	'''
 	check the code againts something in mongo 

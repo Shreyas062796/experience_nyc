@@ -87,7 +87,7 @@ class RegisterForm extends React.Component {
       var email = $('#email').val();
       var data = {type: "Register", firstName: firstName, lastName: lastName, username: username, password: password, email: email};
 
-      $.post( "restClient.py", JSON.stringify(data))
+      $.post( "https://enyc-m.herokuapp.com/createuser", JSON.stringify(data))
        .done(function( response ) {
          if(response == "True"){
            alert("Registered Successfully!");
