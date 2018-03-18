@@ -76,12 +76,12 @@ def verify():
 @restClient.route('/queryrestaurants/<cost>/<rating>', methods = ['GET'])#have some parameters
 def getRestaurants(cost,rating):
 	#query db and return json to the front end
-	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryRestaurants(cost,rating))
+	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryRestaurants(cost,rating,num))
 
 @restClient.route('/querybars/<cost>/<rating>/<num>', methods = ['GET'])#have some parameters
 def getBars(cost,rating,num):
 	#query db and return json to the front end
-	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryBars(cost,rating))
+	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryBars(cost,rating,num))
 
 
 # gets bars that right now have preset coordinates
@@ -95,7 +95,7 @@ def getTopBars(amount):
 #temporary for testing geochange
 # and everything will be passed as a querystring
 # this works for new places as your trip grows
-@restClient.route('/reccomendplaces<user>', methods=['GET'])
+@restClient.route('/reccomendplaces/<user>', methods=['GET'])
 def getReccomendations(user):
 	reccomendations = rec.placeReccomendations(user).getTrips()
 	return(reccomendations)
