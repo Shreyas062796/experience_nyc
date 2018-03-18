@@ -18,3 +18,7 @@ INFO:werkzeug: * Detected change in '/Users/Shreyas/Documents/ExperienceNYC/back
 INFO:werkzeug: * Restarting with stat
 WARNING:werkzeug: * Debugger is active!
 INFO:werkzeug: * Debugger PIN: 471-509-110
+INFO:werkzeug: * Detected change in '/Users/Shreyas/Documents/ExperienceNYC/backend/restClient.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 471-509-110
