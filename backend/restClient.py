@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, session, jsonify
+from flask_cors import CORS
 import random, json
 import mongoConnector as mg
 import sys, os, time, threading
@@ -9,13 +10,14 @@ import filtering
 from caching import Chacher
 from maps.geo import addressToGeo
 import lib.sendmail as mail
-# [print("{} {}".format(keys, values)) for keys,values in sys.modules(__name__).items()]
+
 
 DEBUG = True
 CACHE = Chacher()
 
 restClient = Flask(__name__)
-#mongoInstance = mg.MongoConnector("localhost","27017")
+CORS(restClient)
+
 # this works, it may not be the best way to do it, but works
 # this way whenever the server loads up you have data for the 
 # user to work with and will keep updating hourly
@@ -26,13 +28,13 @@ def activate_job():
 		# keep checking when you reach the end of the first hour
 		while hour == datetime.datetime.now().hour:
 			time.sleep(60)
+			print('minute notification')
 		while True:
 			# updateEvents()	#write this later
 			# updatePlaces()	#write this later
 
 			time.sleep(900) # sleep for an hour
 	#==============================================
-
 	# This is for the caching of data
 	# sets up the data for when the first first goes up
 	# updateEvents()
@@ -49,13 +51,14 @@ def activate_job():
 def addUser():
 	info = request.get_json()
 	info['verify'] = False
-	info['user_unique_id'] = mail.sendMail("experiencenycco@gmail.com","anotherone_44")._generateCode(info['email'])
+	info['user_unique_id'] = mail.sendMail("experiencenycco@gmail.com","anotherone_44").generateCode(info['email'])
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
-	# populateLogin(info)
 
 	print("login data was populated")
 	#creates session when the person creates account
 	session['user'] = info['username']
+
+	return "<h1>User: {}</h1>".format(info['email'])
 
 #authenticates user for database
 @restClient.route('/authenticate', methods = ['POST'])
@@ -66,14 +69,15 @@ def auth():
 	else:
 		return(False)
 
+
 @restClient.route('/verify', methods = ['POST'])
 def verify():
 	info = request.get_json()
 	if(info['username']):
-		return(True)
+		pass
 	#username,unique_id,email
 
-@restClient.route('/queryrestaurants/<cost>/<rating>', methods = ['GET'])#have some parameters
+@restClient.route('/queryrestaurants/<cost>/<rating>', methods=['GET']) #have some parameters
 def getRestaurants(cost,rating):
 	#query db and return json to the front end
 	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryRestaurants(cost,rating,num))
@@ -109,6 +113,7 @@ def getTopBar():
 
 		data = CACHE.retrieveJson(location)
 		if data is not None:
+			# print
 			return data 
 		else:
 			place = addressToGeo(location)	
@@ -153,7 +158,7 @@ def getEvents():
 	return(jsonString)
 
 
-@restClient.route('/authenticate/<string:code>')
+@restClient.route('/auth/<string:code>')
 def authenticate(code):
 	'''
 	check the code againts something in mongo 
@@ -163,11 +168,10 @@ def authenticate(code):
 	return "OK"
 
 
-
-
 @restClient.route('/')
 def index():
 	return '<h1>Flask Client is up and running</h1>'
+
 
 if __name__ == '__main__':
 	restClient.run(debug=DEBUG)
