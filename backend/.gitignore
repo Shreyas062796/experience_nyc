@@ -10,6 +10,7 @@ build/
 dist/
 
 # logging
+*/Error_Log.log
 ghostdriver.log
 
 #testdata

@@ -32,6 +32,7 @@ def activate_job():
 			# updateEvents()	#write this later
 			# updatePlaces()	#write this later
 
+			print('Hour Notification')
 			time.sleep(900) # sleep for an hour
 	#==============================================
 	# This is for the caching of data
@@ -48,7 +49,9 @@ def activate_job():
 #{"type":"Register","firstName":"Alex","lastName":"Markenzon","username":"testUsername","password":"","email":"testemail@gmial.com"}:
 @restClient.route('/createuser', methods = ['POST'])
 def addUser():
-	info = request.get_json()
+	print(request.is_json)
+	info = request.get_json() 
+	print(info)
 	info['verify'] = False
 	info['user_unique_id'] = mail.sendMail("experiencenycco@gmail.com","anotherone_44").generateCode(info['email'])
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
@@ -73,17 +76,18 @@ def auth():
 def verify():
 	info = request.get_json()
 	if(info['username']):
+		pass
 	#username,unique_id,email
 
-@restClient.route('/queryrestaurants/<cost>/<rating>', methods=['GET']) #have some parameters
-def getRestaurants(cost,rating):
+@restClient.route('/queryrestaurants/<cost>/<rating>/<num>', methods=['GET']) #have some parameters
+def getRestaurants(cost,rating,num):
 	#query db and return json to the front end
-	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryRestaurants(cost,rating))
+	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryRestaurants(cost,rating,num))
 
 @restClient.route('/querybars/<cost>/<rating>/<num>', methods = ['GET'])#have some parameters
 def getBars(cost,rating,num):
-	#query db and return json to the front end
-	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryBars(cost,rating))
+	#query db for bars and get a certain amount
+	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryBars(cost,rating,num))
 
 
 # gets bars that right now have preset coordinates
@@ -92,6 +96,7 @@ def getTopBars(amount):
 	defaultlat  = 40.7831
 	defaultlong = 73.9712
 	myobj = filtering.Filtering(defaultlat, defaultlong)
+	print(type(jsonify(myobj.getTopBars(int(amount)))))
 	return jsonify(myobj.getTopBars(int(amount)))
 
 
@@ -100,9 +105,9 @@ def getTopBars(amount):
 
 
 #temporary for testing geochange
-# and everything will be passed as a querystring
+# and everything will be passed as a querystrin
 # this works for new places as your trip grows
-@restClient.route('/reccomendplaces<user>', methods=['GET'])
+@restClient.route('/reccomendplaces/<user>', methods=['GET'])
 def getReccomendations(user):
 	reccomendations = rec.placeReccomendations(user).getTrips()
 	return(reccomendations)
@@ -116,15 +121,16 @@ def getTopBar():
 
 		data = CACHE.retrieveJson(location)
 		if data is not None:
+			print("Data is in cache, it is working congrats pls take down later")
 			return data 
 		else:
 			place = addressToGeo(location)	
 			lat, lng = place['lat'], place['lng']
 			myobj = filtering.Filtering(lat,lng)
 
-			outdata = myobj.getTopBars(int(amount), output='json')
+			outdata = myobj.getTopBars(int(amount))
 			CACHE.addToCache(location, outdata)
-			return outdata
+			return jsonify(outdata)
 
 	else:
 		return "<h1> Error </h1>"
