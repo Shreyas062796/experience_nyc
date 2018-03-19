@@ -1,5 +1,5 @@
 
-class Chacher:
+class Cacher:
 	'''
 	# average json reply is <7kb
 	100 replies == 700kb

@@ -4,7 +4,8 @@ import requests
 import json
 from datetime import datetime
 
-DEBUG = True
+
+DEBUG = False
 
 # make this a library to get events for a person
 
@@ -16,6 +17,10 @@ web_link = "https://www.eventbriteapi.com/v3/events/search/?location.within=6mi&
 
 BASE_LINK = "https://www.eventbriteapi.com/v3/events/search/?"
 WEB_LINK = ""
+
+
+DEFAULT_KEYWORDS = ['music', 'dance', 'convention', 'exercise']
+
 
 EVENTS = dict()
 HEADER = dict()
@@ -75,7 +80,7 @@ def getEvents(pages=1): # RIGHT NOW STICK TO ONE PAGE TO MINIMIZE TIME
 # force the location to decrese the amount of results
 # have some of this data cached but allow the user to query
 # some of it themselves
-def setParams(latitude, longitude, within=5, sortby= None, query=None, price=None, period_start=None, period_end=None):
+def setParams(latitude, longitude, within=5, keyword=None, sortby= None, query=None, price=None, period_start=None, period_end=None):
 	global WEB_LINK
 	global EVENTS, HEADER
 
@@ -96,6 +101,8 @@ def setParams(latitude, longitude, within=5, sortby= None, query=None, price=Non
 	
 
 	# add querys late on as needed
+	if keyword:
+		WEB_LINK+="&q={}".format(keyword)
 
 
 def main():
