@@ -10,6 +10,7 @@ import Visibility from 'material-ui-icons/Visibility';
 import VisibilityOff from 'material-ui-icons/VisibilityOff';
 import Button from 'material-ui-next/Button';
 import Grid from 'material-ui-next/Grid';
+import md5 from 'md5.js';
 import $ from 'jquery';
 //import {md5} from 'js-md5';
 
@@ -19,7 +20,8 @@ const styles = theme => ({
     flexWrap: 'wrap',
   },
   formControl: {
-    width: '100%'
+    width: '100%',
+    marginTop: 20
   },
   inputLabelFocused: {
     color: 'blue',
@@ -77,21 +79,27 @@ class LoginForm extends React.Component {
   };
   componentDidMount = () => {
     $('#login').on('click', function() {
+
       var user = $('#user').val();
       var password = $('#password').val();
       var data = {type: "Login", password: password, user: user};
 
-      $.post( "https://enyc-m.herokuapp.com/authenticate", JSON.stringify(data))
-       .done(function( response ) {
-         console.log(response);
-        if(response == "True"){
-          //sessionStorage.setItem('username', username);
-          alert("Logged In!");
+      $.ajax({
+        url:"https://experiencenyc.herokuapp.com/authenticate",
+        type:"POST",
+        data: JSON.stringify(data),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json",
+        success: function(response){
+          if(response == "True"){
+            //sessionStorage.setItem('username', username);
+            alert("Logged In!");
+          }
+          else {
+            alert("Incorrect Credentials!");
+          }
         }
-        else {
-          alert("Incorrect Credentials!");
-        }
-      });
+      })
     })
   }
 
@@ -134,11 +142,11 @@ class LoginForm extends React.Component {
           <Grid container>
             <Grid item md={4}>
               <Typography>
-                <a href="#">Forgot Username or Password?</a>
+                <a href="#" style={{textDecoration: "none"}}>Forgot Username or Password?</a>
               </Typography>
             </Grid>
             <Grid item md={4} style={{textAlign: "center"}}>
-              <Button href="#" id='login' className={classes.button} style={{width: '25%',color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
+              <Button id='login' className={classes.button} style={{width: '25%',color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
                 Login
               </Button>
             </Grid>

@@ -22,6 +22,7 @@ import Button from 'material-ui-next/Button';
 import LoginModal from './LoginModal';
 import AccountCircle from 'material-ui-icons/AccountCircle';
 import Menu, { MenuItem } from 'material-ui-next/Menu';
+import Trips from './Trips.js';
 
 const styles = theme => ({
   root: {
@@ -42,10 +43,16 @@ const styles = theme => ({
 });
 
 class Main extends React.Component {
+  constructor(props){
+    super(props)
+
+    this.handlePage = this.handlePage.bind(this)
+  }
   state = {
     loginClick: '',
     username: '',
     anchorEl: null,
+    currentPage: 'search'
   };
 
 
@@ -68,6 +75,21 @@ class Main extends React.Component {
   handleClose = () => {
     this.setState({ anchorEl: null });
   };
+
+  handlePage = (page) => {
+    this.setState({
+      currentPage: page
+    })
+  }
+
+  handlePageDisplay = (page) => {
+    if(page == this.state.currentPage){
+      return 'block';
+    }
+    else{
+      return 'none';
+    }
+  }
 
   render() {
     const { classes, theme  } = this.props;
@@ -130,10 +152,18 @@ class Main extends React.Component {
             </Toolbar>
 
           </AppBar>
-          <FilterBar />
-          <LoginModal clicked={this.state.loginClick}/>
-          <Cards />
-          <BottomNav/>
+          <div style={{display: this.handlePageDisplay('search')}}>
+            <FilterBar />
+            <LoginModal clicked={this.state.loginClick}/>
+            <Cards />
+          </div>
+          <div style={{display: this.handlePageDisplay('favorites')}}>
+
+          </div>
+          <div style={{display: this.handlePageDisplay('trips')}}>
+            <Trips />
+          </div>
+          <BottomNav pageChange={this.handlePage}/>
         </div>
       </div>
     );

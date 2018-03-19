@@ -10,6 +10,7 @@ import Visibility from 'material-ui-icons/Visibility';
 import VisibilityOff from 'material-ui-icons/VisibilityOff';
 import Button from 'material-ui-next/Button';
 import Grid from 'material-ui-next/Grid';
+import md5 from 'md5.js';
 
 const styles = theme => ({
   container: {
@@ -17,7 +18,8 @@ const styles = theme => ({
     flexWrap: 'wrap',
   },
   formControl: {
-    width: '100%'
+    width: '100%',
+    marginTop: 20
   },
   inputLabelFocused: {
     color: 'blue',
@@ -87,15 +89,21 @@ class RegisterForm extends React.Component {
       var email = $('#email').val();
       var data = {type: "Register", firstName: firstName, lastName: lastName, username: username, password: password, email: email};
 
-      $.post( "https://enyc-m.herokuapp.com/createuser", JSON.stringify(data))
-       .done(function( response ) {
-         if(response == "True"){
-           alert("Registered Successfully!");
-         }
-         else {
-           alert("Registration Failed!");
-         }
-      });
+      $.ajax({
+        url:"https://experiencenyc.herokuapp.com/createuser",
+        type:"POST",
+        data: JSON.stringify(data),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json",
+        success: function(response){
+          if(response == "True"){
+            alert("Registered Successfully!");
+          }
+          else {
+            alert("Registration Failed!");
+          }
+        }
+      })
     })
   }
 
@@ -158,7 +166,9 @@ class RegisterForm extends React.Component {
         <FormControl className={classes.formControl} style={{marginTop: 25}}>
           <Grid container>
             <Grid item md={4}>
-              <a href="#">Forgot Username or Password?</a>
+              <Typography>
+                <a href="#" style={{textDecoration: "none"}}>Forgot Username or Password?</a>
+              </Typography>
             </Grid>
             <Grid item md={4} style={{textAlign: "center"}}>
               <Button href="#" id="register" className={classes.button} style={{width: '25%',color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>

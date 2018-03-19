@@ -17,11 +17,13 @@ const styles = {
 class SimpleBottomNavigation extends React.Component {
   state = {
     value: 0,
-    marginRight: 300
+    marginRight: 300,
+    pageKeys: {0 : 'search', 1 : 'favorites', 2 : 'trips'}
   };
 
   handleChange = (event, value) => {
-    this.setState({ value });
+
+    this.props.pageChange(this.state.pageKeys[value]);
   };
 
   render() {
