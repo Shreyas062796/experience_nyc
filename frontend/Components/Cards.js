@@ -64,7 +64,9 @@ class Cards extends React.Component {
 
   componentDidMount = () => {
 
-    $.get( "https://enyc-m.herokuapp.com/topbars/10")
+    var data = {address: "nyc",amount: 10};
+    //$.get( "https://experiencenyc.herokuapp.com/querybars/2/3/10") - Shrey's booty code
+    $.get( "https://experiencenyc.herokuapp.com/topbar", data)
      .done((response) => {
        //
        // console.log(response['price_level']);
@@ -76,7 +78,7 @@ class Cards extends React.Component {
 
        const { classes } = this.props;
        const result = response.map((value) =>
-       (<Grid item xl={3} lg={3} md={6} sm={12} xs={9}>
+       (<Grid item xl={3} lg={4} md={6} sm={12} xs={9}>
          <Card className={this.props.card}>
            <CardHeader classes={{subheader: classes.subheader}}
              avatar={
@@ -106,7 +108,7 @@ class Cards extends React.Component {
                </IconButton>
              </div>
              <div style={{width: '25%', textAlign: 'right'}}>
-               <Button href={"http://maps.google.com/?q=" + value['formatted_address']} target="_blank" color="primary" style={{minWidth: '0px', color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
+               <Button href={"http://maps.google.com/?q=" + value['name']} target="_blank" color="primary" style={{minWidth: '0px', color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
                 GO
                </Button>
              </div>

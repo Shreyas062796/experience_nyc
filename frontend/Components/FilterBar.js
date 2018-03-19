@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from 'material-ui-next/styles';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -24,7 +24,20 @@ const names = [
   'Clubs'
 ];
 
-export default class FilterBar extends React.Component {
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+  },
+  grid: {
+    width: '100%',
+    paddingLeft: 15,
+    paddingBottom: 20,
+    marginTop: '2%',
+    textAlign: 'center'
+  }
+});
+
+class FilterBar extends React.Component {
   state = {
     catagories: [],
     price: ''
@@ -33,6 +46,26 @@ export default class FilterBar extends React.Component {
 
   handleChangeCatagories = (event, index, catagories) => this.setState({catagories});
   handlePriceChange = (event, index, price) => this.setState({price});
+
+  handleSubmit = () => {
+    var search = $('#search').val();
+    var catagory = this.state.catagories;
+    var distance = $('#distance').val();
+    var price = this.state.price;
+    var date = $('#date').val();
+
+    var data = {search: search,catagory: catagory, distance: distance, price: price, date: date};
+    $.ajax({
+      url:"https://experiencenyc.herokuapp.com/topbar",
+      type:"GET",
+      data: JSON.stringify(data),
+      contentType:"application/json; charset=utf-8",
+      dataType:"json",
+      success: function(response){
+        console.log(response)
+      }
+    })
+  }
 
   menuItems(catagories) {
     return names.map((name) => (
@@ -50,60 +83,83 @@ export default class FilterBar extends React.Component {
     const { catagories } = this.state;
     const { classes } = this.props;
 
-    const style = {
-      width: '100%',
-      paddingLeft: 15,
-      paddingBottom: 20,
-      display: 'inline-block',
-      marginTop: '5%',
-      textAlign: 'center'
-    };
     return (
 
-      <Paper style={style} zDepth={1} rounded={false}>
-        <TextField
-          style={{marginRight: 10, marginLeft:20}}
-          hintText="Search"
-          floatingLabelText="Search"
-        />
-        <SelectField
-          multiple={true}
-          hintText="Catagory"
-          value={this.state.catagories}
-          onChange={this.handleChangeCatagories}
-          style={{verticalAlign: 'bottom', width: 200, marginRight: 10}}
-        >
-          {this.menuItems(catagories)}
-        </SelectField>
-        <TextField
-          style={{marginRight: 10, width: 150}}
-          hintText="Distance"
-          floatingLabelText="Distance (miles)"
-        />
-        <SelectField style={{verticalAlign: 'bottom', width: 100, marginRight: 10}}
-          floatingLabelText="Price"
-          value={this.state.price}
-          onChange={this.handlePriceChange}
-        >
-          <MenuItem value={1} primaryText="$" />
-          <MenuItem value={2} primaryText="$$" />
-          <MenuItem value={3} primaryText="$$$" />
-        </SelectField>
+      <Paper className={classes.root} zDepth={1} rounded={false}>
+        <Grid  className={classes.grid} container spacing={16}>
+          <Grid item xl={3} lg={3} md={4}>
+            <TextField
+              id='search'
+              fullWidth={true}
+              hintText="Search"
+              floatingLabelText="Search"
+            />
+          </Grid>
 
-        <TextField
-          style={{width: 150, marginRight: 10}}
-          id="date"
-          label="Date"
-          type="date"
-          defaultValue="Today"
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
-        <Button color="primary" style={{color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
-            Submit
-        </Button>
+          <Grid item xl={3} lg={3} md={3}>
+            <SelectField
+              id='catagory'
+              fullWidth={true}
+              multiple={true}
+              hintText="Catagory"
+              value={this.state.catagories}
+              onChange={this.handleChangeCatagories}
+            >
+              {this.menuItems(catagories)}
+            </SelectField>
+          </Grid>
+
+          <Grid item xl={2} lg={2} md={3}>
+            <TextField
+              id='distance'
+              fullWidth={true}
+              hintText="Distance"
+              floatingLabelText="Distance (miles)"
+            />
+          </Grid>
+
+          <Grid item xl={1} lg={1} md={2}>
+            <SelectField
+              id='price'
+              fullWidth={true}
+              floatingLabelText="Price"
+              value={this.state.price}
+              onChange={this.handlePriceChange}
+            >
+              <MenuItem value={1} primaryText="$" />
+              <MenuItem value={2} primaryText="$$" />
+              <MenuItem value={3} primaryText="$$$" />
+            </SelectField>
+          </Grid>
+
+          <Grid item xl={2} lg={2}>
+            <TextField
+              id='date'
+              fullWidth={true}
+              id="date"
+              label="Date"
+              type="date"
+              defaultValue="Today"
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          </Grid>
+
+          <Grid item xl={2} lg={2} md={3} sm={10} xs={10}>
+            <Button  onClick={this.handleSubmit} color="primary" style={{color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
+                Submit
+            </Button>
+          </Grid>
+
+        </Grid>
       </Paper>
     );
   }
 }
+
+FilterBar.propTypes = {
+  classes: PropTypes.object.isRequired
+};
+
+export default withStyles(styles)(FilterBar);
