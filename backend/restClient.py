@@ -49,7 +49,9 @@ def activate_job():
 #{"type":"Register","firstName":"Alex","lastName":"Markenzon","username":"testUsername","password":"","email":"testemail@gmial.com"}:
 @restClient.route('/createuser', methods = ['POST'])
 def addUser():
-	info = request.get_json()
+	print(request.is_json)
+	info = request.get_json() 
+	print(info)
 	info['verify'] = False
 	info['user_unique_id'] = mail.sendMail("experiencenycco@gmail.com","anotherone_44").generateCode(info['email'])
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
@@ -94,6 +96,7 @@ def getTopBars(amount):
 	defaultlat  = 40.7831
 	defaultlong = 73.9712
 	myobj = filtering.Filtering(defaultlat, defaultlong)
+	print(type(jsonify(myobj.getTopBars(int(amount)))))
 	return jsonify(myobj.getTopBars(int(amount)))
 
 #temporary for testing geochange
@@ -120,9 +123,9 @@ def getTopBar():
 			lat, lng = place['lat'], place['lng']
 			myobj = filtering.Filtering(lat,lng)
 
-			outdata = myobj.getTopBars(int(amount), output='json')
+			outdata = myobj.getTopBars(int(amount))
 			CACHE.addToCache(location, outdata)
-			return outdata
+			return jsonify(outdata)
 
 	else:
 		return "<h1> Error </h1>"
