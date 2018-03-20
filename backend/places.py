@@ -9,7 +9,11 @@ this is for later
 for other than bars and restaurants
 there are more, these are the relevant ones
 '''
+<<<<<<< HEAD
+google_types = ['amusement_park', 'bakery', 'cafe', 'clothing_store', 'convenience_store', 'department_store', 'florist', 'hair_care', 'library', 'movie_theater', 'museum', 'night_club', 'bar', 'restaurant', 'stadium', 'store', 'zoo']
+=======
 
+>>>>>>> 37ff80fd04574e31bbd42da84f83fa1359d270d8
 
 google_types = ['amusement_park', 'bakery', 'cafe', 'clothing_store', 'convenience_store', 'department_store', 'florist', 'hair_care', 'library', 'movie_theater', 'museum', 'night_club', 'bar', 'restaurant', 'stadium', 'store', 'zoo']
 class NYCPlaces:
@@ -20,15 +24,26 @@ class NYCPlaces:
 	def setClient(self):
 		gmap = googlemaps.Client(key="AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o")
 		return(gmap)
+<<<<<<< HEAD
+
+=======
 	
 	def getNYCRestaurants(self):
 		gmap = setClient()
 		return(gmap.places("restaurant",location=[40.7831,-73.9712],type="restaurant"))
 	
+>>>>>>> 37ff80fd04574e31bbd42da84f83fa1359d270d8
 	def getNYCRestaurants(self):
 		gmap = setClient()
 		return(gmap.places("restaurant",location=[40.7831,-73.9712],type="restaurant"))
 
+<<<<<<< HEAD
+	def getNYCRestaurants():
+		gmap = setClient()
+		return(gmap.places("restaurant",location=[40.7831,-73.9712],type="restaurant"))
+
+=======
+>>>>>>> 37ff80fd04574e31bbd42da84f83fa1359d270d8
 	# get restaurants in a area based on coordinates
 	def getNYCRestaurantsByLoc(self,coor_list, aradius=5000):
 		gmap = setClient()
