@@ -7,13 +7,13 @@ import json
 import datetime
 import reccomendations as rec
 import filtering
-from caching import Chacher
+from caching import Cacher
 from maps.geo import addressToGeo
 import lib.sendmail as mail
 
 
 DEBUG = True
-CACHE = Chacher()
+CACHE = Cacher()
 
 restClient = Flask(__name__)
 CORS(restClient)
@@ -35,11 +35,11 @@ def activate_job():
 		# keep checking when you reach the end of the first hour
 		while hour == datetime.datetime.now().hour:
 			time.sleep(60)
-			print('minute notification')
 		while True:
 			# updateEvents()	#write this later
 			# updatePlaces()	#write this later
 
+			print('Hour Notification')
 			time.sleep(900) # sleep for an hour
 	#==============================================
 	# This is for the caching of data
@@ -56,7 +56,9 @@ def activate_job():
 #{"firstName":"Alex","lastName":"Markenzon","username":"testUsername","password":"","email":"testemail@gmial.com"}:
 @restClient.route('/createuser', methods = ['POST'])
 def addUser():
-	info = request.get_json()
+	print(request.is_json)
+	info = request.get_json() 
+	print(info)
 	info['verify'] = False
 	info['user_unique_id'] = mail.sendMail("experiencenycco@gmail.com","anotherone_44").generateCode(info['email'])
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
@@ -91,6 +93,7 @@ def verify():
 # 	#query db for bars and get a certain amount
 # 	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryBars(cost,rating,num))
 
+<<<<<<< HEAD
 @restClient.route('/queryplaces', methods=['GET'])
 def getPlaces():
 	info = request.get_json()
@@ -102,13 +105,21 @@ def getPlaces():
 		info['num'] = None
 	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(info['types'],info['price_level'],info['num']))
 
+=======
+>>>>>>> 869b8789090f03aacbc35c3cd6bec2adf7ce31ec
 # gets bars that right now have preset coordinates
 @restClient.route('/topbars/<amount>', methods = ['GET'])#have some parameters
 def getTopBars(amount):
 	defaultlat  = 40.7831
 	defaultlong = 73.9712
 	myobj = filtering.Filtering(defaultlat, defaultlong)
+	print(type(jsonify(myobj.getTopBars(int(amount)))))
 	return jsonify(myobj.getTopBars(int(amount)))
+
+
+
+
+
 
 #temporary for testing geochange
 # and everything will be passed as a querystrin
@@ -118,25 +129,52 @@ def getReccomendations(user):
 	reccomendations = rec.placeReccomendations(user).getTrips()
 	return(reccomendations)
 
+@restClient.route('/topplace', methods=['GET'])
+def getTopPlace():
+	def getkey(a_str, a_request):
+		try:
+			return a_request.args[a_str]
+		except KeyError:
+			return None
+
+	if request.method == 'GET':
+		types = getkey('types', request)
+		address = getkey('address', request)
+		amount = getkey('amount', request)
+		print('got in get key')
+
+		# check if they all have a value, therefore 
+		# data was passed in correctly
+		if all([types, address, amount]):
+			geocode = addressToGeo(address)
+			lat, lng = geocode['lat'], geocode['lng']
+			myobj = filtering.Filtering(lat, lng, types)			
+
+			outdata = myobj.getLocationJson()
+			return jsonify(outdata)
+
+		else:
+			return "Invalid credentials"
+
 
 @restClient.route('/topbar', methods=['GET'])
 def getTopBar():
 	if request.method == 'GET':	
 		amount = request.args['amount']
-		location = request.args['address']
+		address = request.args['address']
 
-		data = CACHE.retrieveJson(location)
+		data = CACHE.retrieveJson(address)
 		if data is not None:
-			# print
-			return data 
+			print("Data is in cache, it is working congrats pls take down later")
+			return jsonify(data) 
 		else:
-			place = addressToGeo(location)	
+			place = addressToGeo(address)	
 			lat, lng = place['lat'], place['lng']
 			myobj = filtering.Filtering(lat,lng)
 
-			outdata = myobj.getTopBars(int(amount), output='json')
-			CACHE.addToCache(location, outdata)
-			return outdata
+			outdata = myobj.getTopBars(int(amount))
+			CACHE.addToCache(address, outdata)
+			return jsonify(outdata)
 
 	else:
 		return "<h1> Error </h1>"
@@ -170,6 +208,8 @@ def getEvents():
 		jsonString = json.dumps(returndic)
 
 	return(jsonString)
+
+
 
 
 @restClient.route('/auth/<string:code>')

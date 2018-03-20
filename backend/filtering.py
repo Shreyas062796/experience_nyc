@@ -8,12 +8,13 @@ DEBUG = False
 
 
 class Filtering:
-	def __init__(self, latitude, longitude):
+	def __init__(self, latitude, longitude, loc_type="bar"):
 		# self.bars = dict()
 		self.bars = places.getNYCBars()['results']
 		self.restaurants = dict()
 		self.latitude = latitude
 		self.longitude = longitude
+		self.type = loc_type
 
 
 	def getBars(self):
@@ -75,9 +76,29 @@ class Filtering:
 		return top_places
 		# returns a dictionary with each popular as a key and their score as a value
 
+	# updating filtering as of now it only works for bars
+	def filterPlaces(self, location_list):
+		
+		top_places = dict()
+		for place in location_list:
+			d_id = place['place_id']
+			lng = place['geometry']['location']['lng']
+			lat = place['geometry']['location']['lat']
+			distance = self.coorDistance(lat, lng, units='miles')
+			rating = float(place['rating'])
+
+			place_score = self.score(rating, distance)
+			top_places[d_id] = place_score
+		return top_places
+
+
+	def getLocationJson(self):
+		return places.getPlaceByLoc(self.type, [self.latitude, self.longitude])
+
 	# return the list of places as a json for the frontend
 	def getBarsJson(self):
 		return json.dumps(self.bars)
+
 
 	def getTopRestaurantsJson(self):
 		return json.dumps(self.restaurants)
