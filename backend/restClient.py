@@ -96,11 +96,11 @@ def verify():
 @restClient.route('/queryplaces', methods=['GET'])
 def getPlaces():
 	info = request.get_json()
-	if(info['types'] == ''):
+	if(request.args['types'] == ''):
 		info['types'] = None
-	if(info['price_level'] == ''):
+	if(request.args['price_level'] == ''):
 		info['price_level'] = None
-	if(info['num'] == ''):
+	if(request.args['num'] == ''):
 		info['num'] = None
 	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(info['types'],info['price_level'],info['num']))
 
