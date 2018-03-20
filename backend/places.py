@@ -37,7 +37,7 @@ class NYCPlaces:
 		gmap = setClient()
 		return(gmap.places("restaurant",location=[40.7831,-73.9712],type="restaurant"))
 
-# get restaurants in a area based on coordinates
+	# get restaurants in a area based on coordinates
 	def getNYCRestaurantsByLoc(self,coor_list, aradius=5000):
 		gmap = setClient()
 		return(gmap.places('restaurant', location=coor_list,type="restaurant", radius=aradius))
