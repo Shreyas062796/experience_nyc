@@ -122,7 +122,7 @@ def getTopBar():
 		data = CACHE.retrieveJson(location)
 		if data is not None:
 			print("Data is in cache, it is working congrats pls take down later")
-			return data 
+			return jsonify(data) 
 		else:
 			place = addressToGeo(location)	
 			lat, lng = place['lat'], place['lng']
