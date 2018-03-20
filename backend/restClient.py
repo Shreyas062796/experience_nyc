@@ -71,9 +71,9 @@ def addUser():
 def auth():
 	info = request.get_json()
 	if(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").authenticateLogin(info["username"],info["password"])):
-		return("True")
+		return(jsonify({"response":"True"}))
 	else:
-		return("False")
+		return(jsonify({"response":"False"}))
 
 
 @restClient.route('/verify', methods = ['POST'])
