@@ -58,7 +58,7 @@ class MongoConnector:
 	#populates login table with json data
 	def populateLogin(self,login):
 		db = self.clientConnect()
-		login['password'] = hashlib.md5(login['password']).hexdigest()
+		login['password'] = hashlib.md5(login['password'].encode('utf-8')).hexdigest()
 		db.users.insert_one(login)
 
 	def authenticateLogin(self,username,password):
@@ -75,14 +75,22 @@ class MongoConnector:
 		for tag in tags:
 			db.tags.insert_one(tag)
 
-	def queryPlaces(self,types=None,price=None,num=None):
+	def queryPlaces(self,types,price,num):
+		db = self.clientConnect()
 		params = {}
-		if types not None:
+		count = 0
+		queriedPlaces = []
+		if types is not None:
 			params['types'] = types
-		if price not None:
+		if price is not None:
 			params['price_level'] = price
-		if num not None:
-			params['num'] = num
+		print(params)
+		for place in db.places.find(params):
+			if(count == num):
+				return(queriedPlaces)
+			queriedPlaces.append(place)
+			count += 1
+		return(queriedPlaces)
 	# def getRestaurants(self):
 	# 	allRestaurants = []
 	# 	db = self.clientConnect()
@@ -167,6 +175,7 @@ if __name__ == "__main__":
 	# Experience.getBars()
 	# Experience.getRestaurants()
 	# pprint(Experience.QueryRestaurants(2,2,2))
+	# pprint(Experience.queryPlaces('restaurant',2))
 	# pprint(Experience.QueryBars(2,2,2))
 	# Experience.getPlaces()
 	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']

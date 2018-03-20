@@ -22,11 +22,12 @@ CORS(restClient)
 # this way whenever the server loads up you have data for the 
 # user to work with and will keep updating hourly
 
-def isNotNull(str):
+def isNotNull(str,request):
    try:
-      return(requests.args[str])
+      return(request.args[str])
    except KeyError:
-       print(False)
+       return(None)
+
 @restClient.before_first_request
 def activate_job():
 	def get_data():
@@ -52,7 +53,7 @@ def activate_job():
 
 #any personal or important info is a post request
 #any other information is get request
-#{"type":"Register","firstName":"Alex","lastName":"Markenzon","username":"testUsername","password":"","email":"testemail@gmial.com"}:
+#{"firstName":"Alex","lastName":"Markenzon","username":"testUsername","password":"","email":"testemail@gmial.com"}:
 @restClient.route('/createuser', methods = ['POST'])
 def addUser():
 	info = request.get_json()
@@ -92,9 +93,15 @@ def verify():
 
 @restClient.route('/queryplaces', methods=['GET'])
 def getPlaces():
-	types = isNotNull('types')
-	price = isNotNull('price_level')
-	num = isNotNull('num')
+	info = request.get_json()
+	if(info['types'] == ''):
+		info['types'] = None
+	if(info['price_level'] == ''):
+		info['price_level'] = None
+	if(info['num'] == ''):
+		info['num'] = None
+	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(info['types'],info['price_level'],info['num']))
+
 # gets bars that right now have preset coordinates
 @restClient.route('/topbars/<amount>', methods = ['GET'])#have some parameters
 def getTopBars(amount):
