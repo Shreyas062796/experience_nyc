@@ -89,7 +89,6 @@ def getBars(cost,rating,num):
 	#query db for bars and get a certain amount
 	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryBars(cost,rating,num))
 
-
 # gets bars that right now have preset coordinates
 @restClient.route('/topbars/<amount>', methods = ['GET'])#have some parameters
 def getTopBars(amount):
@@ -112,24 +111,51 @@ def getReccomendations(user):
 	reccomendations = rec.placeReccomendations(user).getTrips()
 	return(reccomendations)
 
+@restClient.route('/topplace', methods=['GET'])
+def getTopPlace():
+	def getkey(a_str, a_request):
+		try:
+			return a_request.args[a_str]
+		except KeyError:
+			return None
+
+	if request.method == 'GET':
+		types = getkey('types', request)
+		address = getkey('address', request)
+		amount = getkey('amount', request)
+		print('got in get key')
+
+		# check if they all have a value, therefore 
+		# data was passed in correctly
+		if all([types, address, amount]):
+			geocode = addressToGeo(address)
+			lat, lng = geocode['lat'], geocode['lng']
+			myobj = filtering.Filtering(lat, lng, types)			
+
+			outdata = myobj.getLocationJson()
+			return jsonify(outdata)
+
+		else:
+			return "Invalid credentials"
+
 
 @restClient.route('/topbar', methods=['GET'])
 def getTopBar():
 	if request.method == 'GET':	
 		amount = request.args['amount']
-		location = request.args['address']
+		address = request.args['address']
 
-		data = CACHE.retrieveJson(location)
+		data = CACHE.retrieveJson(address)
 		if data is not None:
 			print("Data is in cache, it is working congrats pls take down later")
 			return jsonify(data) 
 		else:
-			place = addressToGeo(location)	
+			place = addressToGeo(address)	
 			lat, lng = place['lat'], place['lng']
 			myobj = filtering.Filtering(lat,lng)
 
 			outdata = myobj.getTopBars(int(amount))
-			CACHE.addToCache(location, outdata)
+			CACHE.addToCache(address, outdata)
 			return jsonify(outdata)
 
 	else:
@@ -164,6 +190,8 @@ def getEvents():
 		jsonString = json.dumps(returndic)
 
 	return(jsonString)
+
+
 
 
 @restClient.route('/auth/<string:code>')
