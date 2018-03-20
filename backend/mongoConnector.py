@@ -65,7 +65,7 @@ class MongoConnector:
 		db = self.clientConnect()
 		login = db.users.find_one({"username": username})
 		if(login):
-			if(login["password"] == hashlib.md5(password).hexdigest()):
+			if(login["password"] == hashlib.md5(password.encode('utf-8')).hexdigest()):
 				return(True)
 		return(False)
 		#authenticate login and return true or false
