@@ -11,15 +11,6 @@ there are more, these are the relevant ones
 '''
 google_types = ['amusement_park', 'bakery', 'cafe', 'clothing_store', 'convenience_store', 'department_store', 'florist', 'hair_care', 'library', 'movie_theater', 'museum', 'night_club', 'bar', 'restaurant', 'stadium', 'store', 'zoo']
 
-def setClient():
-	gmap = googlemaps.Client(key="AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o")
-	return(gmap)
-
-
-def getPlaceByLoc(place="bar", loc=[40.7831,-73.9712]):
-	gmap = setClient()
-	return(gmap.places(place,location=loc,type=place))
-
 class NYCPlaces:
 	def __init__(self,key,lat,lng):
 		self.key = key
