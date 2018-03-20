@@ -21,6 +21,12 @@ CORS(restClient)
 # this works, it may not be the best way to do it, but works
 # this way whenever the server loads up you have data for the 
 # user to work with and will keep updating hourly
+
+def isNotNull(str):
+   try:
+      return(requests.args[str])
+   except KeyError:
+       print(False)
 @restClient.before_first_request
 def activate_job():
 	def get_data():
@@ -53,7 +59,6 @@ def addUser():
 	info['verify'] = False
 	info['user_unique_id'] = mail.sendMail("experiencenycco@gmail.com","anotherone_44").generateCode(info['email'])
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
-
 	print("login data was populated")
 	#creates session when the person creates account
 	return "<h1>User: {}</h1>".format(info['email'])
@@ -75,17 +80,21 @@ def verify():
 		pass
 	#username,unique_id,email
 
-@restClient.route('/queryrestaurants/<cost>/<rating>/<num>', methods=['GET']) #have some parameters
-def getRestaurants(cost,rating,num):
-	#query db and return json to the front end
-	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryRestaurants(cost,rating,num))
+# @restClient.route('/queryrestaurants/<cost>/<rating>/<num>', methods=['GET']) #have some parameters
+# def getRestaurants(cost,rating,num):
+# 	#query db and return json to the front end
+# 	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryRestaurants(cost,rating,num))
 
-@restClient.route('/querybars/<cost>/<rating>/<num>', methods = ['GET'])#have some parameters
-def getBars(cost,rating,num):
-	#query db for bars and get a certain amount
-	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryBars(cost,rating,num))
+# @restClient.route('/querybars/<cost>/<rating>/<num>', methods = ['GET'])#have some parameters
+# def getBars(cost,rating,num):
+# 	#query db for bars and get a certain amount
+# 	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryBars(cost,rating,num))
 
-
+@restClient.route('/queryplaces', methods=['GET'])
+def getPlaces():
+	types = isNotNull('types')
+	price = isNotNull('price_level')
+	num = isNotNull('num')
 # gets bars that right now have preset coordinates
 @restClient.route('/topbars/<amount>', methods = ['GET'])#have some parameters
 def getTopBars(amount):

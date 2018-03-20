@@ -41,12 +41,12 @@ class MongoConnector:
 			db.places.insert_one(bar)
 
 	#test to see if you can get all the bar data in database
-	def getBars(self):
-		allBars = []
-		db = self.clientConnect()
-		for document in db.places.find({'types': 'bar'}):
-			allBars.append(document)
-		return(allBars)
+	# def getBars(self):
+	# 	allBars = []
+	# 	db = self.clientConnect()
+	# 	for document in db.places.find({'types': 'bar'}):
+	# 		allBars.append(document)
+	# 	return(allBars)
 
 	def getPlaces(self):
 		allPlaces = []
@@ -60,7 +60,6 @@ class MongoConnector:
 		db = self.clientConnect()
 		login['password'] = hashlib.md5(login['password']).hexdigest()
 		db.users.insert_one(login)
-
 
 	def authenticateLogin(self,username,password):
 		db = self.clientConnect()
@@ -76,34 +75,42 @@ class MongoConnector:
 		for tag in tags:
 			db.tags.insert_one(tag)
 
-	def getRestaurants(self):
-		allRestaurants = []
-		db = self.clientConnect()
-		for document in db.places.find({'types': 'restaurant'}):
-			allRestaurants.append(document)
-		return(allRestaurants)
+	def queryPlaces(self,types=None,price=None,num=None):
+		params = {}
+		if types not None:
+			params['types'] = types
+		if price not None:
+			params['price_level'] = price
+		if num not None:
+			params['num'] = num
+	# def getRestaurants(self):
+	# 	allRestaurants = []
+	# 	db = self.clientConnect()
+	# 	for document in db.places.find({'types': 'restaurant'}):
+	# 		allRestaurants.append(document)
+	# 	return(allRestaurants)
 
-	def QueryRestaurants(self,cost,rating,num):
-		queriedRestaurant = []
-		count = 0
-		for restaurant in self.getRestaurants():
-			if('price_level' in restaurant and 'rating' in restaurant):
-				if(restaurant['rating'] >= float(rating) and restaurant['price_level'] >= float(cost)):
-					queriedRestaurant.append(restaurant)
-			if(len(queriedRestaurant) == int(num)):
-				break
-		return(queriedRestaurant)
+	# def QueryRestaurants(self,cost,rating,num):
+	# 	queriedRestaurant = []
+	# 	count = 0
+	# 	for restaurant in self.getRestaurants():
+	# 		if('price_level' in restaurant and 'rating' in restaurant):
+	# 			if(restaurant['rating'] >= float(rating) and restaurant['price_level'] >= float(cost)):
+	# 				queriedRestaurant.append(restaurant)
+	# 		if(len(queriedRestaurant) == int(num)):
+	# 			break
+	# 	return(queriedRestaurant)
 
-	def QueryBars(self,cost,rating,num):
-		queriedBars = []
-		count = 0
-		for bar in self.getBars():
-			if('price_level' in bar and 'rating' in bar):
-				if(bar['rating'] >= float(rating) and bar['price_level'] >= float(cost)):
-					queriedBars.append(bar)
-			if(len(queriedBars) == int(num)):
-				break
-		return(queriedBars)
+	# def QueryBars(self,cost,rating,num):
+	# 	queriedBars = []
+	# 	count = 0
+	# 	for bar in self.getBars():
+	# 		if('price_level' in bar and 'rating' in bar):
+	# 			if(bar['rating'] >= float(rating) and bar['price_level'] >= float(cost)):
+	# 				queriedBars.append(bar)
+	# 		if(len(queriedBars) == int(num)):
+	# 			break
+	# 	return(queriedBars)
 
 # 	{
 #   trip_id:"1242112",
