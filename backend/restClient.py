@@ -62,7 +62,7 @@ def addUser():
 	info['verify'] = False
 	info['user_unique_id'] = mail.sendMail("experiencenycco@gmail.com","anotherone_44").generateCode(info['email'])
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
-	return("True")
+	return(jsonify({"response":"True"}))
 	#creates session when the person creates account
 	# return "<h1>User: {}</h1>".format(info['email'])
 
