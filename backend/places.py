@@ -24,26 +24,15 @@ class NYCPlaces:
 	def setClient(self):
 		gmap = googlemaps.Client(key="AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o")
 		return(gmap)
-<<<<<<< HEAD
 
-=======
-	
-	def getNYCRestaurants(self):
-		gmap = setClient()
-		return(gmap.places("restaurant",location=[40.7831,-73.9712],type="restaurant"))
-	
->>>>>>> 37ff80fd04574e31bbd42da84f83fa1359d270d8
 	def getNYCRestaurants(self):
 		gmap = setClient()
 		return(gmap.places("restaurant",location=[40.7831,-73.9712],type="restaurant"))
 
-<<<<<<< HEAD
-	def getNYCRestaurants():
+	def getNYCRestaurants(self):
 		gmap = setClient()
 		return(gmap.places("restaurant",location=[40.7831,-73.9712],type="restaurant"))
 
-=======
->>>>>>> 37ff80fd04574e31bbd42da84f83fa1359d270d8
 	# get restaurants in a area based on coordinates
 	def getNYCRestaurantsByLoc(self,coor_list, aradius=5000):
 		gmap = setClient()
@@ -57,7 +46,6 @@ class NYCPlaces:
 	def getNYCBarsByLoc(self,coor_list, aradius=5000):
 		gmap = setClient()
 		return(gmap.places("bar",location=coor_list,type="bar", radius=aradius))
-
 
 if __name__ == "__main__":
 	getNYCRestaurants()
