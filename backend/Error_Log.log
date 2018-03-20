@@ -179,3 +179,204 @@ INFO:werkzeug: * Restarting with stat
 WARNING:werkzeug: * Debugger is active!
 INFO:werkzeug: * Debugger PIN: 133-629-587
 INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\caching.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:46:21] "GET / HTTP/1.1" 200 -
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/place/textsearch/json?location=40.7831%2C-73.9712&maxprice=None&minprice=None&query=bar&type=bar&key=AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o HTTP/1.1" 200 10053
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:46:34] "GET /topbars/3 HTTP/1.1" 200 -
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/geocode/json?address=33rd%25street%25clifton&key=AIzaSyDcnc92jRlww69hL1IA_CXHyh7xo-D9VeI HTTP/1.1" 200 731
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/place/textsearch/json?location=40.7831%2C-73.9712&maxprice=None&minprice=None&query=bar&type=bar&key=AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o HTTP/1.1" 200 10061
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:46:39] "GET /topbar?address=33rd%street%clifton&amount=5 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:46:45] "GET /topbar?address=33rd%street%clifton&amount=5 HTTP/1.1" 500 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:46:45] "GET /topbar?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:46:45] "GET /topbar?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:46:45] "GET /topbar?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:46:45] "GET /topbar?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:46:46] "GET /topbar?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:46:46] "GET /topbar?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\restClient.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/geocode/json?address=33rd%25street%25clifton&key=AIzaSyDcnc92jRlww69hL1IA_CXHyh7xo-D9VeI HTTP/1.1" 200 731
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/place/textsearch/json?location=40.7831%2C-73.9712&maxprice=None&minprice=None&query=bar&type=bar&key=AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o HTTP/1.1" 200 10057
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:19] "GET /topbar?address=33rd%street%clifton&amount=5 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:22] "GET /topbar?address=33rd%street%clifton&amount=5 HTTP/1.1" 500 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:22] "GET /topbar?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:22] "GET /topbar?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:22] "GET /topbar?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:22] "GET /topbar?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:22] "GET /topbar?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:23] "GET /topbar?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:25] "GET /topbar?address=33rd%street%clifton&amount=5 HTTP/1.1" 500 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:25] "GET /topbar?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:25] "GET /topbar?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:25] "GET /topbar?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:25] "GET /topbar?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:25] "GET /topbar?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:25] "GET /topbar?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:26] "GET /topbar?address=33rd%street%clifton&amount=5 HTTP/1.1" 500 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:26] "GET /topbar?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:26] "GET /topbar?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:26] "GET /topbar?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:26] "GET /topbar?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:26] "GET /topbar?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:26] "GET /topbar?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\restClient.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/geocode/json?address=33rd%25street%25clifton&key=AIzaSyDcnc92jRlww69hL1IA_CXHyh7xo-D9VeI HTTP/1.1" 200 731
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/place/textsearch/json?location=40.7831%2C-73.9712&maxprice=None&minprice=None&query=bar&type=bar&key=AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o HTTP/1.1" 200 9703
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:43] "GET /topbar?address=33rd%street%clifton&amount=5 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:47] "GET /topbar?address=33rd%street%clifton&amount=5 HTTP/1.1" 500 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:47] "GET /topbar?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:47] "GET /topbar?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:47] "GET /topbar?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:47] "GET /topbar?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:47] "GET /topbar?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:47:47] "GET /topbar?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\restClient.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\restClient.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/geocode/json?address=33rd%25street%25clifton&key=AIzaSyDcnc92jRlww69hL1IA_CXHyh7xo-D9VeI HTTP/1.1" 200 731
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/place/textsearch/json?location=40.7831%2C-73.9712&maxprice=None&minprice=None&query=bar&type=bar&key=AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o HTTP/1.1" 200 9729
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:49:40] "GET /topbar?address=33rd%street%clifton&amount=5 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:49:43] "GET /topbar?address=33rd%street%clifton&amount=5 HTTP/1.1" 500 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:49:43] "GET /topbar?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:49:43] "GET /topbar?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:49:43] "GET /topbar?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:49:43] "GET /topbar?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:49:43] "GET /topbar?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:49:43] "GET /topbar?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:50:00] "GET /topbar?address=33rd%street%clifton&amount=5 HTTP/1.1" 500 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:50:00] "GET /topbar?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:50:00] "GET /topbar?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:50:00] "GET /topbar?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:50:00] "GET /topbar?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:50:00] "GET /topbar?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:50:00] "GET /topbar?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\restClient.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/geocode/json?address=33rd%25street%25clifton&key=AIzaSyDcnc92jRlww69hL1IA_CXHyh7xo-D9VeI HTTP/1.1" 200 731
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/place/textsearch/json?location=40.7831%2C-73.9712&maxprice=None&minprice=None&query=bar&type=bar&key=AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o HTTP/1.1" 200 10056
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:50:27] "GET /topbar?address=33rd%street%clifton&amount=5 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:50:37] "GET /topbar?address=33rd%street%clifton&amount=5 HTTP/1.1" 500 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:50:37] "GET /topbar?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:50:37] "GET /topbar?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:50:37] "GET /topbar?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:50:37] "GET /topbar?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:50:38] "GET /topbar?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:50:38] "GET /topbar?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\restClient.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/geocode/json?address=33rd%25street%25clifton&key=AIzaSyDcnc92jRlww69hL1IA_CXHyh7xo-D9VeI HTTP/1.1" 200 731
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/place/textsearch/json?location=40.7831%2C-73.9712&maxprice=None&minprice=None&query=bar&type=bar&key=AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o HTTP/1.1" 200 10060
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:51:25] "GET /topbar?address=33rd%street%clifton&amount=5 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:51:26] "GET /topbar?address=33rd%street%clifton&amount=5 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:51:27] "GET /topbar?address=33rd%street%clifton&amount=5 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:51:28] "GET /topbar?address=33rd%street%clifton&amount=5 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:51:28] "GET /topbar?address=33rd%street%clifton&amount=5 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:51:29] "GET /topbar?address=33rd%street%clifton&amount=5 HTTP/1.1" 200 -
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/geocode/json?address=33rd%25street%25ny&key=AIzaSyDcnc92jRlww69hL1IA_CXHyh7xo-D9VeI HTTP/1.1" 200 795
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/place/textsearch/json?location=40.7831%2C-73.9712&maxprice=None&minprice=None&query=bar&type=bar&key=AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o HTTP/1.1" 200 9714
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:51:37] "GET /topbar?address=33rd%street%ny&amount=5 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:51:39] "GET /topbar?address=33rd%street%ny&amount=5 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Mar/2018 20:51:39] "GET /topbar?address=33rd%street%ny&amount=5 HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\places.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\filtering.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2018 17:15:22] "GET / HTTP/1.1" 200 -
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/geocode/json?address=nyc&key=AIzaSyDcnc92jRlww69hL1IA_CXHyh7xo-D9VeI HTTP/1.1" 200 430
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/place/textsearch/json?location=40.7831%2C-73.9712&maxprice=None&minprice=None&query=bar&type=bar&key=AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o HTTP/1.1" 200 10121
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/place/textsearch/json?location=40.712775%2C-74.005973&maxprice=None&minprice=None&query=bar&type=bar&key=AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o HTTP/1.1" 200 9025
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2018 17:17:37] "GET /topplace?types=bar&address=nyc&amount=5 HTTP/1.1" 200 -
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/geocode/json?address=nyc&key=AIzaSyDcnc92jRlww69hL1IA_CXHyh7xo-D9VeI HTTP/1.1" 200 430
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/place/textsearch/json?location=40.7831%2C-73.9712&maxprice=None&minprice=None&query=bar&type=bar&key=AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o HTTP/1.1" 200 10113
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/place/textsearch/json?location=40.712775%2C-74.005973&maxprice=None&minprice=None&query=cafe&type=cafe&key=AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o HTTP/1.1" 200 9625
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2018 17:17:46] "GET /topplace?types=cafe&address=nyc&amount=5 HTTP/1.1" 200 -
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/geocode/json?address=nyc&key=AIzaSyDcnc92jRlww69hL1IA_CXHyh7xo-D9VeI HTTP/1.1" 200 430
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/place/textsearch/json?location=40.7831%2C-73.9712&maxprice=None&minprice=None&query=bar&type=bar&key=AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o HTTP/1.1" 200 10210
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/place/textsearch/json?location=40.712775%2C-74.005973&maxprice=None&minprice=None&query=cafe&type=cafe&key=AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o HTTP/1.1" 200 9997
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2018 17:34:41] "GET /topplace?types=cafe&address=nyc&amount=5 HTTP/1.1" 200 -
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/geocode/json?address=ny&key=AIzaSyDcnc92jRlww69hL1IA_CXHyh7xo-D9VeI HTTP/1.1" 200 430
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/place/textsearch/json?location=40.7831%2C-73.9712&maxprice=None&minprice=None&query=bar&type=bar&key=AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o HTTP/1.1" 200 10207
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): maps.googleapis.com
+DEBUG:urllib3.connectionpool:https://maps.googleapis.com:443 "GET /maps/api/place/textsearch/json?location=40.712775%2C-74.005973&maxprice=None&minprice=None&query=cafe&type=cafe&key=AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o HTTP/1.1" 200 10011
+INFO:werkzeug:127.0.0.1 - - [20/Mar/2018 17:34:50] "GET /topplace?types=cafe&address=ny&amount=5 HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\restClient.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\restClient.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\restClient.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\restClient.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)

@@ -89,7 +89,6 @@ def getBars(cost,rating,num):
 	#query db for bars and get a certain amount
 	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryBars(cost,rating,num))
 
-
 # gets bars that right now have preset coordinates
 @restClient.route('/topbars/<amount>', methods = ['GET'])#have some parameters
 def getTopBars(amount):
@@ -135,7 +134,6 @@ def getTopPlace():
 
 			outdata = myobj.getLocationJson()
 			return jsonify(outdata)
-
 
 		else:
 			return "Invalid credentials"
@@ -192,6 +190,8 @@ def getEvents():
 		jsonString = json.dumps(returndic)
 
 	return(jsonString)
+
+
 
 
 @restClient.route('/auth/<string:code>')
