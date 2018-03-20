@@ -16,7 +16,7 @@ def setClient():
 	gmap = googlemaps.Client(key="AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o")
 	return(gmap)
 
-
+# NEW 
 def getPlaceByLoc(place="bar", loc=[40.7831,-73.9712]):
 	gmap = setClient()
 	return(gmap.places(place,location=loc,type=place))
@@ -25,6 +25,7 @@ def getPlaceByLoc(place="bar", loc=[40.7831,-73.9712]):
 def getNYCRestaurants():
 	gmap = setClient()
 	return(gmap.places("restaurant",location=[40.7831,-73.9712],type="restaurant"))
+
 
 # get restaurants in a area based on coordinates
 def getNYCRestaurantsByLoc(coor_list, aradius=5000):

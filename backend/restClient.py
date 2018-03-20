@@ -58,7 +58,6 @@ def addUser():
 
 	print("login data was populated")
 	#creates session when the person creates account
-	session['user'] = info['username']
 
 	return "<h1>User: {}</h1>".format(info['email'])
 
@@ -190,8 +189,6 @@ def getEvents():
 		jsonString = json.dumps(returndic)
 
 	return(jsonString)
-
-
 
 
 @restClient.route('/auth/<string:code>')

@@ -58,7 +58,7 @@ class MongoConnector:
 	#populates login table with json data
 	def populateLogin(self,login):
 		db = self.clientConnect()
-		login['password'] = hashlib.md5(login['password']).hexdigest()
+		login['password'] = hashlib.md5(login['password'].encode('utf8')).hexdigest()
 		db.users.insert_one(login)
 
 
