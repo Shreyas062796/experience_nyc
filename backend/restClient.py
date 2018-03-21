@@ -94,17 +94,27 @@ def verify():
 # 	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryBars(cost,rating,num))
 
 @restClient.route('/queryplaces', methods=['GET'])
-def getPlaces():
-	info = request.get_json()
-	# if request.method == 'GET':	
+def queryplaces():
+	# info = request.get_json()
+	# print("useigiusehfugihserulhgirtghligwherluihgwliergluwuier")
+
+	if request.method == 'GET':	
+		num = request.args['num']
+		price_level = request.args['price_level']
+		types= request.args['types']
+		print("{}:{}\n{}:{}\n{}:{}".format(num,type(num), price_level,type(price_level), types,type(types)))
+
 	# 	types = request.args['types']
 	# 	price_level = request.args['price_level']
 	# 	num = request.args['num']
-	places = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(info['types'],info['price_level'],info['num'])
-	if(places):
-		return(jsonify(places))
-	else:
-		print(jsonify({"response":"There is no values"}))
+		places = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(types,price_level,int(num))
+		# print(places)
+		# return "ayy lmao"
+		if(places):
+			return(jsonify(places))
+		else:
+			print(jsonify({"response":"There is no values"}))
+	# return "aylmao"
 
 # gets bars that right now have preset coordinates
 @restClient.route('/topbars/<amount>', methods = ['GET'])#have some parameters
@@ -218,7 +228,7 @@ def authenticate(code):
 	where the user can click, make it timeout after a
 	certain amount of time
 	'''
-	return "OK"
+	return("OK")
 
 
 @restClient.route('/')

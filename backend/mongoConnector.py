@@ -37,6 +37,7 @@ class MongoConnector:
 		for bar in bars['results']:
 			#keeping it random for now but for production its going to start as none
 			# bar['user_rating'] = None
+			bar['']
 			bar['user_rating'] = round(random.uniform(1,5), 2)
 			db.places.insert_one(bar)
 
@@ -87,6 +88,7 @@ class MongoConnector:
 		for place in db.places.find(params):
 			if(count == int(num)):
 				return(queriedPlaces)
+			place['_id'] = str(place['_id'])
 			queriedPlaces.append(place)
 			count += 1
 		return(queriedPlaces)
@@ -167,14 +169,14 @@ class MongoConnector:
 	def updatePlaceRating(self,tripId,placeId,rating):
 		db = self.clientConnect()
 
-if __name__ == "__main__":
-	Experience = MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
-	# Experience.populateBars()
-	# Experience.populateRestaurants()
-	# Experience.getBars()
-	# Experience.getRestaurants()
-	# pprint(Experience.QueryRestaurants(2,2,2))
-	pprint(Experience.queryPlaces('restaurant','2','2'))
+# if __name__ == "__main__":
+# 	Experience = MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
+# 	# Experience.populateBars()
+# 	# Experience.populateRestaurants()
+# 	# Experience.getBars()
+# 	# Experience.getRestaurants()
+# 	# pprint(Experience.QueryRestaurants(2,2,2))
+# 	pprint(Experience.queryPlaces("restaurant",'2','2'))
 	# pprint(Experience.QueryBars(2,2,2))
 	# Experience.getPlaces()
 	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
