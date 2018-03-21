@@ -83,15 +83,19 @@ def verify():
 		pass
 	#username,unique_id,email
 
-# @restClient.route('/queryrestaurants/<cost>/<rating>/<num>', methods=['GET']) #have some parameters
-# def getRestaurants(cost,rating,num):
-# 	#query db and return json to the front end
-# 	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryRestaurants(cost,rating,num))
+# I'll need a function from you (addToFavorites) that will take a unique place id as a single param and inserts it into the db as a list of favorite places
+# I'll also need you to write a function that will retreive the favorites returned as a json list
+@restClient.route('/addfavoriteplaces', methods=['POST'])
+def addfavoriteplaces():
+	info = request.get_json()
+	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").addFavoritePlaces(info['username'],info['place_id'])
 
-# @restClient.route('/querybars/<cost>/<rating>/<num>', methods = ['GET'])#have some parameters
-# def getBars(cost,rating,num):
-# 	#query db for bars and get a certain amount
-# 	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryBars(cost,rating,num))
+@restClient.route('/getfavoriteplaces', methods=['POST'])
+def addfavoriteplaces():
+	info = request.get_json()
+	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getFavoritePlaces(info['username'])
+
+
 
 @restClient.route('/queryplaces', methods=['GET'])
 def queryplaces():
@@ -118,11 +122,6 @@ def getTopBars(amount):
 	myobj = filtering.Filtering(defaultlat, defaultlong)
 	print(type(jsonify(myobj.getTopBars(int(amount)))))
 	return jsonify(myobj.getTopBars(int(amount)))
-
-
-
-
-
 
 #temporary for testing geochange
 # and everything will be passed as a querystrin
