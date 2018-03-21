@@ -22,7 +22,7 @@ class getEvents:
 	# force the location to decrese the amount of results
 	# have some of this data cached but allow the user to query
 	# some of it themselves
-	def setParams(self, latitude, longitude, within=5, pages=1,  query=None, sortby= None, price=None, period_start=None, period_end=None):
+	def setParams(self, latitude, longitude, within=5, amount=10,  query=None, sortby= None, price=None, period_start=None, period_end=None):
 		global WEB_LINK
 
 		# need to sanitize these inputs to raise error if param is invalid
@@ -48,7 +48,7 @@ class getEvents:
 		data = requests.get(WEB_LINK)
 		events = data.json()['events']
 
-		return events
+		return events[:10]
 
 	# gets address and information about a specific venue
 	def getVenueInfo(self, venue_id):
