@@ -11,6 +11,7 @@ from caching import Cacher
 from maps.geo import addressToGeo
 import lib.sendmail as mail
 
+from events import events
 
 DEBUG = True
 CACHE = Cacher()
@@ -179,8 +180,38 @@ def getTopBar():
 		return "<h1> Error </h1>"
 
 
-@restClient.route('/events', methods = ['GET'])
+
+@restClient.route('/getevents_temp')
 def getEvents():
+	# Checks if key exists, work this out later
+	def getkey(a_str, a_request):
+		try:
+			return a_request.args[a_str]
+		except KeyError:
+			return None
+	
+	#default lat long for now
+	lat = 40.7831
+	lon = -73.9712
+
+	gevents = events.getEvents()
+
+	if request.method== 'GET':
+		q = getkey('q', request)
+		address = getkey('address', request)
+
+		place = addressToGeo(address)	
+		lat, lng = place['lat'], place['lng']
+
+
+		eb_events = gevents.setParams(lat, lng, 2)		
+		# print(type(eb_events))
+		return jsonify(eb_events)
+
+	return 'Not calling the proper method'
+
+@restClient.route('/events_old', methods = ['GET'])
+def getEvents_old():
 	#temporary just for front testing
 
 	# this block is for heroku

@@ -25,3 +25,140 @@ INFO:werkzeug: * Restarting with stat
 INFO:werkzeug: * Debugger PIN: 471-509-110
 INFO:werkzeug:127.0.0.1 - - [20/Mar/2018 23:13:53] "GET /queryplaces?num=2 HTTP/1.1" 400 -
 >>>>>>> master
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug:127.0.0.1 - - [21/Mar/2018 12:13:28] "GET /getevents?q=dance HTTP/1.1" 500 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\restClient.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug:127.0.0.1 - - [21/Mar/2018 12:13:43] "GET /getevents?q=dance HTTP/1.1" 500 -
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug:127.0.0.1 - - [21/Mar/2018 12:14:24] "GET /getevents?q=dance HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\restClient.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\restClient.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): www.eventbriteapi.com
+DEBUG:urllib3.connectionpool:https://www.eventbriteapi.com:443 "GET /v3/events/search/?token=3PLRBVBROECU3VJOPGUY&location.latitude=40.7831&location.longitude=-73.9712&location.within=2mi HTTP/1.1" 200 64128
+INFO:werkzeug:127.0.0.1 - - [21/Mar/2018 12:15:13] "GET /getevents?q=dance HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\events\\events.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): www.eventbriteapi.com
+DEBUG:urllib3.connectionpool:https://www.eventbriteapi.com:443 "GET /v3/events/search/?token=3PLRBVBROECU3VJOPGUY&location.latitude=40.7831&location.longitude=-73.9712&location.within=2mi HTTP/1.1" 200 64128
+INFO:werkzeug:127.0.0.1 - - [21/Mar/2018 12:15:30] "GET /getevents?q=dance HTTP/1.1" 500 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\restClient.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): www.eventbriteapi.com
+DEBUG:urllib3.connectionpool:https://www.eventbriteapi.com:443 "GET /v3/events/search/?token=3PLRBVBROECU3VJOPGUY&location.latitude=40.7831&location.longitude=-73.9712&location.within=2mi HTTP/1.1" 200 63084
+INFO:werkzeug:127.0.0.1 - - [21/Mar/2018 13:21:41] "GET /getevents?q=dance HTTP/1.1" 500 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\events\\events.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): www.eventbriteapi.com
+DEBUG:urllib3.connectionpool:https://www.eventbriteapi.com:443 "GET /v3/events/search/?token=3PLRBVBROECU3VJOPGUY&location.latitude=40.7831&location.longitude=-73.9712&location.within=2mi HTTP/1.1" 200 63083
+INFO:werkzeug:127.0.0.1 - - [21/Mar/2018 13:22:38] "GET /getevents?q=dance HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\events\\events.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): www.eventbriteapi.com
+DEBUG:urllib3.connectionpool:https://www.eventbriteapi.com:443 "GET /v3/events/search/?token=3PLRBVBROECU3VJOPGUY&location.latitude=40.7831&location.longitude=-73.9712&location.within=2mi HTTP/1.1" 200 63083
+INFO:werkzeug:127.0.0.1 - - [21/Mar/2018 13:23:09] "GET /getevents?q=dance HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\restClient.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): www.eventbriteapi.com
+DEBUG:urllib3.connectionpool:https://www.eventbriteapi.com:443 "GET /v3/events/search/?token=3PLRBVBROECU3VJOPGUY&location.latitude=40.7831&location.longitude=-73.9712&location.within=2mi HTTP/1.1" 200 63083
+INFO:werkzeug:127.0.0.1 - - [21/Mar/2018 13:23:24] "GET /getevents?q=dance HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\restClient.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): www.eventbriteapi.com
+DEBUG:urllib3.connectionpool:https://www.eventbriteapi.com:443 "GET /v3/events/search/?token=3PLRBVBROECU3VJOPGUY&location.latitude=40.7831&location.longitude=-73.9712&location.within=2mi HTTP/1.1" 200 63083
+INFO:werkzeug:127.0.0.1 - - [21/Mar/2018 13:23:40] "GET /getevents?q=dance HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\restClient.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\events\\events.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): www.eventbriteapi.com
+DEBUG:urllib3.connectionpool:https://www.eventbriteapi.com:443 "GET /v3/events/search/?token=3PLRBVBROECU3VJOPGUY&location.latitude=40.7831&location.longitude=-73.9712&location.within=2mi HTTP/1.1" 200 63083
+INFO:werkzeug:127.0.0.1 - - [21/Mar/2018 13:24:18] "GET /getevents?q=dance HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\events\\events.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): www.eventbriteapi.com
+DEBUG:urllib3.connectionpool:https://www.eventbriteapi.com:443 "GET /v3/events/search/?token=3PLRBVBROECU3VJOPGUY&location.latitude=40.7831&location.longitude=-73.9712&location.within=2mi HTTP/1.1" 200 63083
+INFO:werkzeug:127.0.0.1 - - [21/Mar/2018 13:25:03] "GET /getevents?q=dance HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\events\\events.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): www.eventbriteapi.com
+DEBUG:urllib3.connectionpool:https://www.eventbriteapi.com:443 "GET /v3/events/search/?token=3PLRBVBROECU3VJOPGUY&location.latitude=40.7831&location.longitude=-73.9712&location.within=2mi HTTP/1.1" 200 63083
+INFO:werkzeug:127.0.0.1 - - [21/Mar/2018 13:25:14] "GET /getevents?q=dance HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\events\\events.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\events\\events.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\events\\events.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): www.eventbriteapi.com
+DEBUG:urllib3.connectionpool:https://www.eventbriteapi.com:443 "GET /v3/events/search/?token=3PLRBVBROECU3VJOPGUY&location.latitude=40.7831&location.longitude=-73.9712&location.within=2mi HTTP/1.1" 200 63083
+INFO:werkzeug:127.0.0.1 - - [21/Mar/2018 13:25:59] "GET /getevents?q=dance HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\events\\events.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): www.eventbriteapi.com
+DEBUG:urllib3.connectionpool:https://www.eventbriteapi.com:443 "GET /v3/events/search/?token=3PLRBVBROECU3VJOPGUY&location.latitude=40.7831&location.longitude=-73.9712&location.within=2mi HTTP/1.1" 200 63078
+INFO:werkzeug:127.0.0.1 - - [21/Mar/2018 13:40:39] "GET /getevents?q=dance HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'C:\\Users\\Steven\\GitProjects\\ExperienceNYC\\backend\\restClient.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 133-629-587
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
