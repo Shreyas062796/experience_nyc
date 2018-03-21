@@ -93,16 +93,14 @@ def verify():
 # 	#query db for bars and get a certain amount
 # 	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryBars(cost,rating,num))
 
-@restClient.route('/queryplaces', methods=['GET'])
+@restClient.route('/queryplaces', methods=['POST'])
 def getPlaces():
-	info = request.get_json()
-	if(request.args['types'] == ''):
-		info['types'] = None
-	if(request.args['price_level'] == ''):
-		info['price_level'] = None
-	if(request.args['num'] == ''):
-		info['num'] = None
-	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(info['types'],info['price_level'],info['num']))
+	info = request.get_json(force = True)
+	places = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(info['types'],info['price_level'],info['num'])
+	if(places):
+		return(places)
+	else:
+		print("places is none")
 
 # gets bars that right now have preset coordinates
 @restClient.route('/topbars/<amount>', methods = ['GET'])#have some parameters
