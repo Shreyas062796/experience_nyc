@@ -169,6 +169,7 @@ class MongoConnector:
 	def updatePlaceRating(self,tripId,placeId,rating):
 		db = self.clientConnect()
 
+<<<<<<< HEAD
 if __name__ == "__main__":
 	Experience = MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
 	# Experience.populateBars()
@@ -185,3 +186,21 @@ if __name__ == "__main__":
 	# 	Experience.populateTrip(trip)
 	# pprint(Experience.queryTrip('goat'))
 	#QueryRestaurants(3,4)
+=======
+# if __name__ == "__main__":
+# 	Experience = MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
+# 	# Experience.populateBars()
+# 	# Experience.populateRestaurants()
+# 	# Experience.getBars()
+# 	# Experience.getRestaurants()
+# 	# pprint(Experience.QueryRestaurants(2,2,2))
+# 	pprint(Experience.queryPlaces("restaurant",'2','2'))
+# pprint(Experience.QueryBars(2,2,2))
+# Experience.getPlaces()
+# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
+# for i in tripnames:
+# 	trip = Experience.createTrip(3,i)
+# 	Experience.populateTrip(trip)
+# pprint(Experience.queryTrip('goat'))
+#QueryRestaurants(3,4)
+>>>>>>> 9031d544e4623196a8846766c0511ed0892b2e01
