@@ -54,7 +54,7 @@ class getEvents:
 	def getVenueInfo(self, venue_id):
 		useful_data = dict()
 
-		venue = VENUE_LINK.replace(':id': str(venue_id))
+		venue = VENUE_LINK.replace(':id', str(venue_id))
 		data = requests.get(venue)
 
 		useful_data['address'] = data['address']['localized_address_display']
