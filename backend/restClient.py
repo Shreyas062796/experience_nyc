@@ -95,11 +95,12 @@ def verify():
 
 @restClient.route('/queryplaces', methods=['GET'])
 def getPlaces():
-	if request.method == 'GET':	
-		types = request.args['types']
-		price_level = request.args['price_level']
-		num = request.args['num']
-	places = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(types,price_level,num)
+	info = request.get_json()
+	# if request.method == 'GET':	
+	# 	types = request.args['types']
+	# 	price_level = request.args['price_level']
+	# 	num = request.args['num']
+	places = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(info['types'],info['price_level'],info['num'])
 	if(places):
 		return(jsonify(places))
 	else:
