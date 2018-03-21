@@ -55,6 +55,13 @@ class MongoConnector:
 			allPlaces.append(document)
 		return(allPlaces)
 
+		def getPlacesByLoc(self,lat,long):
+		allPlaces = []
+		db = self.clientConnect()
+		for document in db.places.find({}):
+			allPlaces.append(document)
+		return(allPlaces)
+
 	#populates login table with json data
 	def populateLogin(self,login):
 		db = self.clientConnect()
@@ -67,6 +74,14 @@ class MongoConnector:
 		if(login):
 			if(login["password"] == hashlib.md5(password.encode('utf-8')).hexdigest()):
 				return(True)
+		return(False)
+
+	def verifyEmail(self,username,unique_id):
+		db = self.clientConnect()
+		user = db.users.find_one({"username": username})
+		if(user['user_unique_id'] == unique_id):
+			user['verify'] = True
+			return(True)
 		return(False)
 		#authenticate login and return true or false
 	def addFavoritePlaces(self,username,place_id):

@@ -64,7 +64,7 @@ def addUser():
 	info['favorite_places'] = []
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
 	return(jsonify({"response":"True"}))
-	
+
 #authenticates user for database
 @restClient.route('/authenticate', methods = ['POST'])
 def auth():
@@ -78,8 +78,10 @@ def auth():
 @restClient.route('/verify', methods = ['POST'])
 def verify():
 	info = request.get_json()
-	if(info['username']):
-		pass
+	if(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").verifyEmail(info['username'],info['unique_id']) == True):
+		return(jsonify({"response":"The email was verified"}))
+	else:
+		return(jsonify({"response":"The email was not verified try again"}))
 	#username,unique_id,email
 
 # I'll need a function from you (addToFavorites) that will take a unique place id as a single param and inserts it into the db as a list of favorite places
@@ -92,7 +94,7 @@ def addfavoriteplaces():
 @restClient.route('/getfavoriteplaces', methods=['POST'])
 def addfavoriteplaces():
 	info = request.get_json()
-	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getFavoritePlaces(info['username'])
+	return(jsonify(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getFavoritePlaces(info['username'])))
 
 
 
