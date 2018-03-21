@@ -55,7 +55,7 @@ class MongoConnector:
 			allPlaces.append(document)
 		return(allPlaces)
 
-		def getPlacesByLoc(self,lat,long):
+	def getPlacesByLoc(self,lat,long):
 		allPlaces = []
 		db = self.clientConnect()
 		for document in db.places.find({}):

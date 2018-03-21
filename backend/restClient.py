@@ -92,7 +92,7 @@ def addfavoriteplaces():
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").addFavoritePlaces(info['username'],info['place_id'])
 
 @restClient.route('/getfavoriteplaces', methods=['POST'])
-def addfavoriteplaces():
+def getfavoriteplaces():
 	info = request.get_json()
 	return(jsonify(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getFavoritePlaces(info['username'])))
 
