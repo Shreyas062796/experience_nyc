@@ -170,7 +170,6 @@ class MongoConnector:
 	def updatePlaceRating(self,tripId,placeId,rating):
 		db = self.clientConnect()
 
-
 if __name__ == "__main__":
 	Experience = MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
 	# Experience.populateBars()
