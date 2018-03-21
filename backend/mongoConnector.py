@@ -80,13 +80,12 @@ class MongoConnector:
 		params = {}
 		count = 0
 		queriedPlaces = []
-		if types is not None:
+		if types != '':
 			params['types'] = types
-		if price is not None:
-			params['price_level'] = price
-		print(params)
+		if price != '':
+			params['price_level'] = int(price)
 		for place in db.places.find(params):
-			if(count == num):
+			if(count == int(num)):
 				return(queriedPlaces)
 			queriedPlaces.append(place)
 			count += 1
@@ -175,7 +174,7 @@ if __name__ == "__main__":
 	# Experience.getBars()
 	# Experience.getRestaurants()
 	# pprint(Experience.QueryRestaurants(2,2,2))
-	# pprint(Experience.queryPlaces('restaurant',2))
+	pprint(Experience.queryPlaces('restaurant','2','2'))
 	# pprint(Experience.QueryBars(2,2,2))
 	# Experience.getPlaces()
 	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
