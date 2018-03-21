@@ -82,6 +82,15 @@ class Main extends React.Component {
     })
   }
 
+  handleLogin = () => {
+    this.setState({username: sessionStorage.getItem('username'), loginClick: ''})
+  }
+
+  handleLogout = () => {
+    this.setState({username: ''})
+    sessionStorage.setItem('username', '')
+  }
+
   handlePageDisplay = (page) => {
     if(page == this.state.currentPage){
       return 'block';
@@ -154,7 +163,9 @@ class Main extends React.Component {
           </AppBar>
           <div style={{display: this.handlePageDisplay('search')}}>
             <FilterBar />
-            <LoginModal clicked={this.state.loginClick}/>
+              <LoginModal
+                clicked={this.state.loginClick}
+                loggedIn={this.handleLogin}/>
             <Cards />
           </div>
           <div style={{display: this.handlePageDisplay('favorites')}}>

@@ -113,10 +113,6 @@ class Main extends React.Component {
 
   }
 
-  componentDidMount = () => {
-    //this.setState({ username: sessionStorage.getItem(username); });
-  }
-
   handleDrawerOpen = () => {
     this.setState({ open: true });
   };
@@ -137,6 +133,16 @@ class Main extends React.Component {
     this.setState({ anchorEl: null });
   };
 
+  handleLogin = () => {
+    this.setState({username: sessionStorage.getItem('username'), loginClick: ''})
+  }
+
+  handleLogout = () => {
+    this.setState({username: ''})
+    sessionStorage.setItem('username', '')
+    alert("Logged Out!")
+  }
+
   render() {
     const { classes, theme  } = this.props;
     const { open, username, anchorEl } = this.state;
@@ -145,8 +151,10 @@ class Main extends React.Component {
 
     let userAppbarOption = null;
 
-    if(this.state.username){
-      userAppbarOption = (<div><Typography style={{color: 'white', display: 'inline-block'}}>{this.state.username}</Typography><IconButton
+    if(this.state.username != ''){
+      console.log(sessionStorage.getItem('username'))
+      userAppbarOption = (<div><Typography style={{color: 'white', display: 'inline-block'}}>{this.state.username}</Typography>
+                          <IconButton
                             aria-owns={menuOpen ? 'menu-appbar' : null}
                             aria-haspopup="true"
                             onClick={this.handleMenu}
@@ -169,7 +177,7 @@ class Main extends React.Component {
                           >
                             <MenuItem onClick={this.handleClose}>Profile</MenuItem>
                             <MenuItem onClick={this.handleClose}>My account</MenuItem>
-                            <MenuItem onClick={this.handleClose}>Logout</MenuItem>
+                            <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
                           </Menu></div>);
     }
     else {
@@ -229,7 +237,9 @@ class Main extends React.Component {
           >
             <div className={classes.drawerHeader} />
             <FilterBar />
-            <LoginModal clicked={this.state.loginClick}/>
+            <LoginModal
+              clicked={this.state.loginClick}
+              loggedIn={this.handleLogin}/>
             <Cards />
           </main>
           <Drawer

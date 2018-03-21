@@ -10,6 +10,9 @@ import Visibility from 'material-ui-icons/Visibility';
 import VisibilityOff from 'material-ui-icons/VisibilityOff';
 import Button from 'material-ui-next/Button';
 import Grid from 'material-ui-next/Grid';
+import Snackbar from 'material-ui-next/Snackbar';
+import Tooltip from 'material-ui-next/Tooltip';
+import Info from 'material-ui-icons/Info';
 import md5 from 'md5.js';
 
 const styles = theme => ({
@@ -61,7 +64,15 @@ class RegisterForm extends React.Component {
 
   state = {
     display: 'none',
-    showPassword: false
+    showPassword: false,
+    open: false,
+    message: [],
+    first_nameError: false,
+    last_nameError: false,
+    emailError: false,
+    usernameError: false,
+    passwordError: false,
+    tooltipOpen: false
   }
 
   componentWillReceiveProps(nextProps) {
@@ -80,75 +91,166 @@ class RegisterForm extends React.Component {
     this.setState({ showPassword: !this.state.showPassword });
   };
 
-  componentDidMount = () => {
-    $('#register').on('click', function() {
-      var firstName = $('#first_name').val();
-      var lastName = $('#last_name').val();
-      var username = $('#username').val();
-      var password = $('#password').val();
-      var email = $('#email').val();
-      var data = {type: "Register", firstName: firstName, lastName: lastName, username: username, password: password, email: email};
+  handleRegister = () => {
+
+      var data = this.validation();
+
+      if(data == false){
+        return;
+      }
 
       $.ajax({
         url:"https://experiencenyc.herokuapp.com/createuser",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
-        dataType:"json",
-        success: function(response){
-          if(response == "True"){
+        dataType:"json"})
+        .done((response) => {
+          if(response['response'] == "True"){
             alert("Registered Successfully!");
           }
           else {
             alert("Registration Failed!");
           }
-        }
-      })
-    })
+        })
   }
 
-  login(data){
+  validation = () => {
+    let missingFields = false;
+    this.setState({message :[], first_nameError: false, last_nameError: false, emailError: false, passwordError: false, usernameError: false})
 
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+
+    var firstName = $('#first_name').val();
+    if(!firstName){
+      missingFields = true;
+      this.setState({first_nameError: true})
+      //this.state.message.push(<span>username</span>)
+    }
+
+    var lastName = $('#last_name').val();
+    if(!lastName){
+      missingFields = true;
+      this.setState({last_nameError: true})
+      //this.state.message.push(<span>username</span>)
+    }
+
+    var email = $('#email').val();
+    if(!email || !re.test(String(email).toLowerCase())){
+      missingFields = true;
+      this.setState({emailError: true})
+      //this.state.message.push(<span>username</span>)
+    }
+
+    var username = $('#username').val();
+    if(!username){
+      missingFields = true;
+      this.setState({usernameError: true})
+      //this.state.message.push(<span>username</span>)
+    }
+
+    var password = $('#registerPassword').val();
+    if(!this.isOkPass(password)){
+      missingFields = true;
+      this.setState({passwordError: true})
+      //this.state.message.push(<span>password</span>)
+    }
+
+    if(missingFields){
+      console.log(this.state.message)
+      this.setState({open: true})
+      return false;
+    }
+
+    var data = {firstName: firstName, lastName: lastName, username: username, password: password, email: email};
+
+    return data;
   }
+
+  isOkPass(p){
+    var anUpperCase = /[A-Z]/;
+    var aLowerCase = /[a-z]/;
+    var aNumber = /\d/;
+    var aSpecial = /[!|@|#|$|%|^|&|*|(|)|-|_]/;
+    if( (p.length < 8)  || !anUpperCase.test(p) || !aLowerCase.test(p) || !aNumber.test(p) || !aSpecial.test(p) ){
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+
+  handleMessage = () => {
+    return this.state.message;
+  }
+
+  handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ open: false });
+  };
+
+  handleTooltipClose = () => {
+    this.setState({ tooltipOpen: false });
+  };
+
+  handleTooltipOpen = () => {
+    this.setState({ tooltipOpen: true });
+  };
 
   render() {
     const { classes } = this.props;
 
     return (
       <div className={classes.container} style={{display: this.state.display, marginTop: 10}}>
-
-        <FormControl className={classes.formControl} style={{width: '50%'}}>
+        <Snackbar
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                  }}
+                  open={this.state.open}
+                  onClose={this.handleClose}
+                  autoHideDuration={2000}
+                  SnackbarContentProps={{
+                    'aria-describedby': 'message-id',
+                  }}
+                  message={this.handleMessage()}
+                />
+              <FormControl className={classes.formControl} style={{width: '50%'}} error={this.state.first_nameError}>
           <InputLabel FormControlClasses={{focused: classes.inputLabelFocused}} htmlFor="custom-color-input">
             First Name
           </InputLabel>
           <Input classes={{inkbar: classes.inputInkbar}} id="first_name" />
         </FormControl>
 
-        <FormControl className={classes.formControl} style={{width: '50%'}}>
+        <FormControl className={classes.formControl} style={{width: '50%'}} error={this.state.last_nameError}>
           <InputLabel FormControlClasses={{focused: classes.inputLabelFocused}} htmlFor="custom-color-input">
             Last Name
           </InputLabel>
           <Input classes={{inkbar: classes.inputInkbar}} id="last_name" />
         </FormControl>
 
-        <FormControl className={classes.formControl} >
+        <FormControl className={classes.formControl} error={this.state.emailError}>
           <InputLabel FormControlClasses={{focused: classes.inputLabelFocused}} htmlFor="custom-color-input">
             Email
           </InputLabel>
           <Input classes={{inkbar: classes.inputInkbar}} id="email" />
         </FormControl>
 
-        <FormControl className={classes.formControl} >
+        <FormControl className={classes.formControl} error={this.state.usernameError}>
           <InputLabel FormControlClasses={{focused: classes.inputLabelFocused}} htmlFor="custom-color-input">
             Username
           </InputLabel>
           <Input classes={{inkbar: classes.inputInkbar}} id="username" />
         </FormControl>
 
-        <FormControl className={classes.formControl} >
+        <FormControl className={classes.formControl} error={this.state.passwordError}>
           <InputLabel htmlFor="password">Password</InputLabel>
             <Input
-              id="password"
+              id="registerPassword"
               type={this.state.showPassword ? 'text' : 'password'}
               value={this.state.password}
               endAdornment={
@@ -159,9 +261,24 @@ class RegisterForm extends React.Component {
                   >
                     {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
+                  <Tooltip
+                  id="tooltip-controlled"
+                  title="Password needs to be at least 8 characters long and must contain an upper case, lower case, number, and special character."
+                  onClose={this.handleTooltipClose}
+                  enterDelay={200}
+                  leaveDelay={200}
+                  onOpen={this.handleTooltipOpen}
+                  open={this.state.tooltipOpen}
+                  placement="top"
+                >
+                  <IconButton aria-label="Delete">
+                    <Info />
+                  </IconButton>
+                </Tooltip>
                 </InputAdornment>
               }
             />
+
         </FormControl>
         <FormControl className={classes.formControl} style={{marginTop: 25}}>
           <Grid container>
@@ -171,7 +288,7 @@ class RegisterForm extends React.Component {
               </Typography>
             </Grid>
             <Grid item md={4} style={{textAlign: "center"}}>
-              <Button href="#" id="register" className={classes.button} style={{width: '25%',color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
+              <Button id="register" className={classes.button} onClick={this.handleRegister} style={{width: '25%',color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
                 Register
               </Button>
             </Grid>

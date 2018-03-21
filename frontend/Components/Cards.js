@@ -64,18 +64,18 @@ class Cards extends React.Component {
 
   componentDidMount = () => {
 
-    var data = {address: "nyc",amount: 10};
-    //$.get( "https://experiencenyc.herokuapp.com/querybars/2/3/10") - Shrey's booty code
-    $.get( "https://experiencenyc.herokuapp.com/topbar", data)
-     .done((response) => {
-       //
-       // console.log(response['price_level']);
-       // for(var i=0; i < parseInt(response['price_level']); i++){
-       //   console.log('test');
-       //   price += <AttachMoney style={{color: 'rgb(0, 188, 212)', width: '40px'}}/>
-       // }
-       // console.log(price);
-
+    //var data = {types: 'cafe', address: "nyc", amount: 10};
+    var data = {types: 'restaurant', price_level: 2, num: 10};
+    //$.get( "https://experiencenyc.herokuapp.com/queryplaces", JSON.stringify(data))
+    //$.get( "https://experiencenyc.herokuapp.com/topplace", data)
+    // .done((response) => {
+    $.ajax({
+      url:"https://experiencenyc.herokuapp.com/queryplaces",
+      type:"GET",
+      data: data,
+      contentType:"application/json; charset=utf-8",
+      dataType:"json"})
+      .done((response) => {
        const { classes } = this.props;
        const result = response.map((value) =>
        (<Grid item xl={3} lg={4} md={6} sm={12} xs={9}>
@@ -88,7 +88,7 @@ class Cards extends React.Component {
              subheader={value['formatted_address']}
            />
          <div style={{overflow:'hidden'}}>
-            <img className="image" style={{maxHeight: '226px', objectFit: 'cover'}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyB7Hu52lUJ-yM-BHHbHqRYdUezLMGVpn0I"}/>
+            <img className="image" style={{maxHeight: '226px', objectFit: 'cover'}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyDWcObQRHPivQogKgpAlWdJtzNjkP1qbmo"}/>
           </div>
            <CardActions className={this.props.actions} disableActionSpacing>
              <div style={{width: '25%'}}>
