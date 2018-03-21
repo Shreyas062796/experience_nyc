@@ -218,7 +218,7 @@ def authenticate(code):
 	where the user can click, make it timeout after a
 	certain amount of time
 	'''
-	return "OK"
+	return("OK")
 
 
 @restClient.route('/')
