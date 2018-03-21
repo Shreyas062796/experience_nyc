@@ -27,6 +27,9 @@ class placeReccomendations:
 		# print(newtripdf)
 		print(newplacedf)
 		return(newtripdf)
+	#filter places by lattitude and longitude for the places and give like a 2 mile location
+
+
 
 if __name__ == "__main__":
 	reccomender = placeReccomendations('goat')

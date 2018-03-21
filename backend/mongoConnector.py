@@ -37,16 +37,17 @@ class MongoConnector:
 		for bar in bars['results']:
 			#keeping it random for now but for production its going to start as none
 			# bar['user_rating'] = None
+			bar['']
 			bar['user_rating'] = round(random.uniform(1,5), 2)
 			db.places.insert_one(bar)
 
 	#test to see if you can get all the bar data in database
-	def getBars(self):
-		allBars = []
-		db = self.clientConnect()
-		for document in db.places.find({'types': 'bar'}):
-			allBars.append(document)
-		return(allBars)
+	# def getBars(self):
+	# 	allBars = []
+	# 	db = self.clientConnect()
+	# 	for document in db.places.find({'types': 'bar'}):
+	# 		allBars.append(document)
+	# 	return(allBars)
 
 	def getPlaces(self):
 		allPlaces = []
@@ -58,15 +59,15 @@ class MongoConnector:
 	#populates login table with json data
 	def populateLogin(self,login):
 		db = self.clientConnect()
-		login['password'] = hashlib.md5(login['password'].encode('utf8')).hexdigest()
-		db.users.insert_one(login)
 
+		login['password'] = hashlib.md5(login['password'].encode('utf-8')).hexdigest()
+		db.users.insert_one(login)
 
 	def authenticateLogin(self,username,password):
 		db = self.clientConnect()
 		login = db.users.find_one({"username": username})
 		if(login):
-			if(login["password"] == hashlib.md5(password).hexdigest()):
+			if(login["password"] == hashlib.md5(password.encode('utf-8')).hexdigest()):
 				return(True)
 		return(False)
 		#authenticate login and return true or false
@@ -76,34 +77,50 @@ class MongoConnector:
 		for tag in tags:
 			db.tags.insert_one(tag)
 
-	def getRestaurants(self):
-		allRestaurants = []
+	def queryPlaces(self,types,price,num):
 		db = self.clientConnect()
-		for document in db.places.find({'types': 'restaurant'}):
-			allRestaurants.append(document)
-		return(allRestaurants)
-
-	def QueryRestaurants(self,cost,rating,num):
-		queriedRestaurant = []
+		params = {}
 		count = 0
-		for restaurant in self.getRestaurants():
-			if('price_level' in restaurant and 'rating' in restaurant):
-				if(restaurant['rating'] >= float(rating) and restaurant['price_level'] >= float(cost)):
-					queriedRestaurant.append(restaurant)
-			if(len(queriedRestaurant) == int(num)):
-				break
-		return(queriedRestaurant)
+		queriedPlaces = []
+		if types != '':
+			params['types'] = types
+		if price != '':
+			params['price_level'] = int(price)
+		for place in db.places.find(params):
+			if(count == int(num)):
+				return(queriedPlaces)
+			place['_id'] = str(place['_id'])
+			queriedPlaces.append(place)
+			count += 1
+		return(queriedPlaces)
+	# def getRestaurants(self):
+	# 	allRestaurants = []
+	# 	db = self.clientConnect()
+	# 	for document in db.places.find({'types': 'restaurant'}):
+	# 		allRestaurants.append(document)
+	# 	return(allRestaurants)
 
-	def QueryBars(self,cost,rating,num):
-		queriedBars = []
-		count = 0
-		for bar in self.getBars():
-			if('price_level' in bar and 'rating' in bar):
-				if(bar['rating'] >= float(rating) and bar['price_level'] >= float(cost)):
-					queriedBars.append(bar)
-			if(len(queriedBars) == int(num)):
-				break
-		return(queriedBars)
+	# def QueryRestaurants(self,cost,rating,num):
+	# 	queriedRestaurant = []
+	# 	count = 0
+	# 	for restaurant in self.getRestaurants():
+	# 		if('price_level' in restaurant and 'rating' in restaurant):
+	# 			if(restaurant['rating'] >= float(rating) and restaurant['price_level'] >= float(cost)):
+	# 				queriedRestaurant.append(restaurant)
+	# 		if(len(queriedRestaurant) == int(num)):
+	# 			break
+	# 	return(queriedRestaurant)
+
+	# def QueryBars(self,cost,rating,num):
+	# 	queriedBars = []
+	# 	count = 0
+	# 	for bar in self.getBars():
+	# 		if('price_level' in bar and 'rating' in bar):
+	# 			if(bar['rating'] >= float(rating) and bar['price_level'] >= float(cost)):
+	# 				queriedBars.append(bar)
+	# 		if(len(queriedBars) == int(num)):
+	# 			break
+	# 	return(queriedBars)
 
 # 	{
 #   trip_id:"1242112",
@@ -153,6 +170,7 @@ class MongoConnector:
 	def updatePlaceRating(self,tripId,placeId,rating):
 		db = self.clientConnect()
 
+
 if __name__ == "__main__":
 	Experience = MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
 	# Experience.populateBars()
@@ -160,6 +178,7 @@ if __name__ == "__main__":
 	# Experience.getBars()
 	# Experience.getRestaurants()
 	# pprint(Experience.QueryRestaurants(2,2,2))
+	pprint(Experience.queryPlaces('restaurant','2','5'))
 	# pprint(Experience.QueryBars(2,2,2))
 	# Experience.getPlaces()
 	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']

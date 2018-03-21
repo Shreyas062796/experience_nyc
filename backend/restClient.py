@@ -21,6 +21,13 @@ CORS(restClient)
 # this works, it may not be the best way to do it, but works
 # this way whenever the server loads up you have data for the 
 # user to work with and will keep updating hourly
+
+def isNotNull(str,request):
+   try:
+      return(request.args[str])
+   except KeyError:
+       return(None)
+
 @restClient.before_first_request
 def activate_job():
 	def get_data():
@@ -46,7 +53,7 @@ def activate_job():
 
 #any personal or important info is a post request
 #any other information is get request
-#{"type":"Register","firstName":"Alex","lastName":"Markenzon","username":"testUsername","password":"","email":"testemail@gmial.com"}:
+#{"firstName":"Alex","lastName":"Markenzon","username":"testUsername","password":"","email":"testemail@gmial.com"}:
 @restClient.route('/createuser', methods = ['POST'])
 def addUser():
 	print(request.is_json)
@@ -55,20 +62,18 @@ def addUser():
 	info['verify'] = False
 	info['user_unique_id'] = mail.sendMail("experiencenycco@gmail.com","anotherone_44").generateCode(info['email'])
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
-
-	print("login data was populated")
+	return(jsonify({"response":"True"}))
 	#creates session when the person creates account
-
-	return "<h1>User: {}</h1>".format(info['email'])
+	# return "<h1>User: {}</h1>".format(info['email'])
 
 #authenticates user for database
 @restClient.route('/authenticate', methods = ['POST'])
 def auth():
-	info = requests.get_json()
+	info = request.get_json()
 	if(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").authenticateLogin(info["username"],info["password"])):
-		return(True)
+		return(jsonify({"response":"True"}))
 	else:
-		return(False)
+		return(jsonify({"response":"False"}))
 
 
 @restClient.route('/verify', methods = ['POST'])
@@ -78,15 +83,32 @@ def verify():
 		pass
 	#username,unique_id,email
 
-@restClient.route('/queryrestaurants/<cost>/<rating>/<num>', methods=['GET']) #have some parameters
-def getRestaurants(cost,rating,num):
-	#query db and return json to the front end
-	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryRestaurants(cost,rating,num))
+# @restClient.route('/queryrestaurants/<cost>/<rating>/<num>', methods=['GET']) #have some parameters
+# def getRestaurants(cost,rating,num):
+# 	#query db and return json to the front end
+# 	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryRestaurants(cost,rating,num))
 
-@restClient.route('/querybars/<cost>/<rating>/<num>', methods = ['GET'])#have some parameters
-def getBars(cost,rating,num):
-	#query db for bars and get a certain amount
-	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryBars(cost,rating,num))
+# @restClient.route('/querybars/<cost>/<rating>/<num>', methods = ['GET'])#have some parameters
+# def getBars(cost,rating,num):
+# 	#query db for bars and get a certain amount
+# 	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").QueryBars(cost,rating,num))
+
+@restClient.route('/queryplaces', methods=['GET'])
+def queryplaces():
+	# info = request.get_json()
+	# print("useigiusehfugihserulhgirtghligwherluihgwliergluwuier")
+
+	if request.method == 'GET':	
+		num = request.args['num']
+		price_level = request.args['price_level']
+		types= request.args['types']
+		# print("{}:{}\n{}:{}\n{}:{}".format(num,type(num), price_level,type(price_level), types,type(types)))
+
+		places = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(types,price_level,int(num))
+		if(places):
+			return(jsonify(places))
+		else:
+			return(jsonify({"response":"There is no values"}))
 
 # gets bars that right now have preset coordinates
 @restClient.route('/topbars/<amount>', methods = ['GET'])#have some parameters
@@ -96,10 +118,6 @@ def getTopBars(amount):
 	myobj = filtering.Filtering(defaultlat, defaultlong)
 	print(type(jsonify(myobj.getTopBars(int(amount)))))
 	return jsonify(myobj.getTopBars(int(amount)))
-
-
-
-
 
 
 #temporary for testing geochange
@@ -147,7 +165,7 @@ def getTopBar():
 		data = CACHE.retrieveJson(address)
 		if data is not None:
 			print("Data is in cache, it is working congrats pls take down later")
-			return data 
+			return jsonify(data) 
 		else:
 			place = addressToGeo(address)	
 			lat, lng = place['lat'], place['lng']
@@ -198,7 +216,7 @@ def authenticate(code):
 	where the user can click, make it timeout after a
 	certain amount of time
 	'''
-	return "OK"
+	return("OK")
 
 
 @restClient.route('/')
