@@ -176,7 +176,7 @@ if __name__ == "__main__":
 	# Experience.getBars()
 	# Experience.getRestaurants()
 	# pprint(Experience.QueryRestaurants(2,2,2))
-	pprint(Experience.queryPlaces("restaurant",'2','2'))
+	pprint(Experience.queryPlaces('restaurant','2','5'))
 	# pprint(Experience.QueryBars(2,2,2))
 	# Experience.getPlaces()
 	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']

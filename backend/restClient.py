@@ -104,7 +104,7 @@ def getPlaces():
 	if(places):
 		return(jsonify(places))
 	else:
-		print(jsonify({"response":"There is no values"}))
+		return(jsonify({"response":"There is no values"}))
 
 # gets bars that right now have preset coordinates
 @restClient.route('/topbars/<amount>', methods = ['GET'])#have some parameters
