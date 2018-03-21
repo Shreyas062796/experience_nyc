@@ -18,10 +18,23 @@ import Button from 'material-ui-next/Button';
 import Input, { InputLabel } from 'material-ui-next/Input';
 
 const names = [
-  'Bars',
-  'Restaurants',
-  'Museums',
-  'Clubs'
+  'amusement_park',
+  'bakery',
+  'cafe',
+  'clothing_store',
+  'convenience_store',
+  'department_store',
+  'florist',
+  'hair_care',
+  'library',
+  'movie_theater',
+  'museum',
+  'night_club',
+  'bar',
+  'restaurant',
+  'stadium',
+  'store',
+  'zoo'
 ];
 
 const styles = theme => ({
@@ -43,7 +56,6 @@ class FilterBar extends React.Component {
     price: ''
   };
 
-
   handleChangeCatagories = (event, index, catagories) => this.setState({catagories});
   handlePriceChange = (event, index, price) => this.setState({price});
 
@@ -54,11 +66,11 @@ class FilterBar extends React.Component {
     var price = this.state.price;
     var date = $('#date').val();
 
-    var data = {search: search,catagory: catagory, distance: distance, price: price, date: date};
+    var data = {search: search, address: 'nyc', amount: '10', types: catagory[0], distance: distance, price: price, date: date};
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/topbar",
+      url:"https://experiencenyc.herokuapp.com/topplace",
       type:"GET",
-      data: JSON.stringify(data),
+      data: data,
       contentType:"application/json; charset=utf-8",
       dataType:"json",
       success: function(response){
@@ -87,7 +99,7 @@ class FilterBar extends React.Component {
 
       <Paper className={classes.root} zDepth={1} rounded={false}>
         <Grid  className={classes.grid} container spacing={16}>
-          <Grid item xl={3} lg={3} md={4}>
+          <Grid item xl={3} lg={3} md={4} sm={6} xs={6}>
             <TextField
               id='search'
               fullWidth={true}
@@ -96,8 +108,9 @@ class FilterBar extends React.Component {
             />
           </Grid>
 
-          <Grid item xl={3} lg={3} md={3}>
+          <Grid item xl={3} lg={3} md={3} sm={6} xs={6}>
             <SelectField
+              style={{height: '97%'}}
               id='catagory'
               fullWidth={true}
               multiple={true}
@@ -109,7 +122,7 @@ class FilterBar extends React.Component {
             </SelectField>
           </Grid>
 
-          <Grid item xl={2} lg={2} md={3}>
+          <Grid item xl={2} lg={2} md={2} sm={2} xs={4}>
             <TextField
               id='distance'
               fullWidth={true}
@@ -118,7 +131,7 @@ class FilterBar extends React.Component {
             />
           </Grid>
 
-          <Grid item xl={1} lg={1} md={2}>
+          <Grid item xl={1} lg={1} md={2} sm={2} xs={4}>
             <SelectField
               id='price'
               fullWidth={true}
@@ -132,8 +145,9 @@ class FilterBar extends React.Component {
             </SelectField>
           </Grid>
 
-          <Grid item xl={2} lg={2}>
+          <Grid item xl={2} lg={2} md={2} sm={3} xs={4}>
             <TextField
+              style={{height: '97%'}}
               id='date'
               fullWidth={true}
               id="date"
