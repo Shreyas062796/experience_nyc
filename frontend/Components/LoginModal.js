@@ -48,7 +48,11 @@ class LoginModal extends React.Component {
       this.setState({loginForm: 'none',
                      registerForm: 'block'})
     }
-  };
+  }
+
+  handleLogin = () => {
+    this.props.loggedIn();
+  }
 
   render() {
     const { classes } = this.props;
@@ -72,7 +76,7 @@ class LoginModal extends React.Component {
               <Tab label="Login" />
               <Tab label="Register" />
             </Tabs>
-              <LoginForm display={this.state.loginForm}/>
+              <LoginForm display={this.state.loginForm} loggedIn={this.handleLogin}/>
               <RegisterForm display={this.state.registerForm}/>
           </div>
         </Modal>

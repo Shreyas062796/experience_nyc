@@ -1,5 +1,5 @@
 from pymongo import *
-from places import *
+import places as ps
 from bson.objectid import *
 import random
 import json
@@ -22,7 +22,7 @@ class MongoConnector:
 		return(client)
 
 	def populateRestaurants(self):
-		restaurants = getNYCRestaurants()
+		restaurants = ps.NYCPlaces('AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o',40.7831,-73.9712).getNYCRestaurants()
 		db = self.clientConnect()
 		for restaurant in restaurants['results']:
 			#keeping it random for now but for production its going to start as none
@@ -32,22 +32,22 @@ class MongoConnector:
 
 	#adds initital Bars data to database
 	def populateBars(self):
-		bars = getNYCBars()
+		bars = ps.NYCPlaces('AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o',40.7831,-73.9712).getNYCBars()
 		db = self.clientConnect()
 		for bar in bars['results']:
 			#keeping it random for now but for production its going to start as none
 			# bar['user_rating'] = None
-			bar['']
 			bar['user_rating'] = round(random.uniform(1,5), 2)
 			db.places.insert_one(bar)
 
-	#test to see if you can get all the bar data in database
-	# def getBars(self):
-	# 	allBars = []
-	# 	db = self.clientConnect()
-	# 	for document in db.places.find({'types': 'bar'}):
-	# 		allBars.append(document)
-	# 	return(allBars)
+	def populateCafe(self):
+		cafes = ps.NYCPlaces('AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o',40.7831,-73.9712).getNYCCafes()
+		db = self.clientConnect()
+		for cafe in cafes['results']:
+			#keeping it random for now but for production its going to start as none
+			# bar['user_rating'] = None
+			cafe['user_rating'] = round(random.uniform(1,5), 2)
+			db.places.insert_one(bar)
 
 	def getPlaces(self):
 		allPlaces = []
@@ -71,6 +71,14 @@ class MongoConnector:
 				return(True)
 		return(False)
 		#authenticate login and return true or false
+	def addFavoritePlaces(self,username,place_id):
+		db = self.clientConnect()
+		db.users.update_one({'username': username},{'$push':{'favorite_places':place_id}})
+
+	def getFavoritePlaces(self,username):
+		db = self.clientConnect()
+		user = db.users.find_one({"username": username})
+		return(user['favorite_places'])
 
 	def populateTags(self,tags):
 		db = self.clientConnect()
@@ -93,35 +101,6 @@ class MongoConnector:
 			queriedPlaces.append(place)
 			count += 1
 		return(queriedPlaces)
-	# def getRestaurants(self):
-	# 	allRestaurants = []
-	# 	db = self.clientConnect()
-	# 	for document in db.places.find({'types': 'restaurant'}):
-	# 		allRestaurants.append(document)
-	# 	return(allRestaurants)
-
-	# def QueryRestaurants(self,cost,rating,num):
-	# 	queriedRestaurant = []
-	# 	count = 0
-	# 	for restaurant in self.getRestaurants():
-	# 		if('price_level' in restaurant and 'rating' in restaurant):
-	# 			if(restaurant['rating'] >= float(rating) and restaurant['price_level'] >= float(cost)):
-	# 				queriedRestaurant.append(restaurant)
-	# 		if(len(queriedRestaurant) == int(num)):
-	# 			break
-	# 	return(queriedRestaurant)
-
-	# def QueryBars(self,cost,rating,num):
-	# 	queriedBars = []
-	# 	count = 0
-	# 	for bar in self.getBars():
-	# 		if('price_level' in bar and 'rating' in bar):
-	# 			if(bar['rating'] >= float(rating) and bar['price_level'] >= float(cost)):
-	# 				queriedBars.append(bar)
-	# 		if(len(queriedBars) == int(num)):
-	# 			break
-	# 	return(queriedBars)
-
 # 	{
 #   trip_id:"1242112",
 #   trip_name:"bored in nyc",

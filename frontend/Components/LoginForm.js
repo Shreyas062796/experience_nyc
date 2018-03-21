@@ -11,6 +11,8 @@ import VisibilityOff from 'material-ui-icons/VisibilityOff';
 import Button from 'material-ui-next/Button';
 import Grid from 'material-ui-next/Grid';
 import md5 from 'md5.js';
+import Snackbar from 'material-ui-next/Snackbar';
+import CloseIcon from 'material-ui-icons/Close';
 import $ from 'jquery';
 //import {md5} from 'js-md5';
 
@@ -55,6 +57,7 @@ const styles = theme => ({
   }
 });
 
+
 class LoginForm extends React.Component {
   constructor(props) {
     super(props);
@@ -63,8 +66,16 @@ class LoginForm extends React.Component {
 
   state = {
     display: 'block',
-    showPassword: false
+    showPassword: false,
+    open: false,
+    message: [],
+    usernameError: false,
+    passwordError: false
   }
+
+  handleLoggedIn = (event, value) => {
+    this.props.loggedIn();
+  };
 
   componentWillReceiveProps(nextProps) {
     this.setState({display: nextProps.display});
@@ -77,53 +88,102 @@ class LoginForm extends React.Component {
   handleClickShowPasssword = () => {
     this.setState({ showPassword: !this.state.showPassword });
   };
-  componentDidMount = () => {
-    $('#login').on('click', function() {
 
-      var user = $('#user').val();
-      var password = $('#password').val();
-      var data = {type: "Login", password: password, user: user};
+  handleLogin = () => {
+    var data = this.validation();
 
-      $.ajax({
-        url:"https://experiencenyc.herokuapp.com/authenticate",
-        type:"POST",
-        data: JSON.stringify(data),
-        contentType:"application/json; charset=utf-8",
-        dataType:"json",
-        success: function(response){
-          if(response == "True"){
-            //sessionStorage.setItem('username', username);
-            alert("Logged In!");
-          }
-          else {
-            alert("Incorrect Credentials!");
-          }
+    if(data == false){
+      return;
+    }
+
+    $.ajax({
+      url:"https://experiencenyc.herokuapp.com/authenticate",
+      type:"POST",
+      data: JSON.stringify(data),
+      contentType:"application/json; charset=utf-8",
+      dataType:"json"})
+      .done((response) => {
+        if(response['response'] == "True"){
+          sessionStorage.setItem('username', data['username']);
+          this.handleLoggedIn();
+          alert("Logged In!");
+        }
+        else {
+          alert("Incorrect Credentials!");
         }
       })
-    })
   }
 
-  login(data){
+  validation = () => {
+    let missingFields = false;
+    this.setState({message :[], passwordError: false, usernameError: false})
 
+    var user = $('#user').val();
+    if(!user){
+      missingFields = true;
+      this.setState({usernameError: true})
+      this.state.message.push(<span>username</span>)
+    }
+
+    var password = $('#loginPassword').val();
+    if(!password){
+      missingFields = true;
+      this.setState({passwordError: true})
+      this.state.message.push(<span>password</span>)
+    }
+
+    if(missingFields){
+      console.log(this.state.message)
+      this.setState({open: true})
+      return false;
+    }
+
+    var data = {password: password, username: user};
+
+    return data;
   }
+
+  handleMessage = () => {
+    return this.state.message;
+  }
+
+  handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ open: false });
+  };
 
   render() {
     const { classes } = this.props;
 
     return (
       <div className={classes.container} style={{display: this.state.display, marginTop: 10}}>
-
-        <FormControl className={classes.formControl} >
+        <Snackbar
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                  }}
+                  open={this.state.open}
+                  onClose={this.handleClose}
+                  autoHideDuration={2000}
+                  SnackbarContentProps={{
+                    'aria-describedby': 'message-id',
+                  }}
+                  message={this.handleMessage()}
+                />
+              <FormControl className={classes.formControl} error={this.state.usernameError}>
           <InputLabel FormControlClasses={{focused: classes.inputLabelFocused}} htmlFor="custom-color-input">
-            User Name or Email
+            User Name
           </InputLabel>
           <Input classes={{inkbar: classes.inputInkbar}} id="user" />
         </FormControl>
 
-        <FormControl className={classes.formControl} >
+        <FormControl className={classes.formControl} error={this.state.passwordError}>
           <InputLabel htmlFor="password">Password</InputLabel>
             <Input
-              id="password"
+              id="loginPassword"
               type={this.state.showPassword ? 'text' : 'password'}
               value={this.state.password}
               endAdornment={
@@ -146,7 +206,7 @@ class LoginForm extends React.Component {
               </Typography>
             </Grid>
             <Grid item md={4} style={{textAlign: "center"}}>
-              <Button id='login' className={classes.button} style={{width: '25%',color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
+              <Button id='login' className={classes.button} onClick={this.handleLogin} style={{width: '25%',color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
                 Login
               </Button>
             </Grid>
