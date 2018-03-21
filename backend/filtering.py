@@ -7,6 +7,10 @@ from math import sin, cos, sqrt, atan2, radians
 DEBUG = False
 
 
+
+obj = places.NYCPlaces('AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o',40.7831,-73.9712)
+
+
 class Filtering:
 	def __init__(self, latitude, longitude, loc_type="bar"):
 		# self.bars = dict()
