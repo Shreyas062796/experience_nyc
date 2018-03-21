@@ -95,12 +95,15 @@ def verify():
 
 @restClient.route('/queryplaces', methods=['GET'])
 def getPlaces():
-	info = request.get_json()
-	places = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(request.args['types'],request.args['price_level'],request.args['num'])
+	if request.method == 'GET':	
+		types = request.args['types']
+		price_level = request.args['price_level']
+		num = request.args['num']
+	places = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(types,price_level,num)
 	if(places):
-		return(places)
+		return(jsonify(places))
 	else:
-		print("places is none")
+		print(jsonify({"response":"There is no values"}))
 
 # gets bars that right now have preset coordinates
 @restClient.route('/topbars/<amount>', methods = ['GET'])#have some parameters
