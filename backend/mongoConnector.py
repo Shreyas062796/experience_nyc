@@ -5,16 +5,15 @@ import random
 import json
 import hashlib
 
-class MongoConnector:
+places = ps.NYCPlaces('AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o',40.7831,-73.9712)
 
-	# client = MongoClient('mongodb://localhost:27017/')
+class MongoConnector:
 	def __init__(self,clientHost,clientPort,username,password,database):
 		self.clientHost = clientHost
 		self.clientPort = clientPort
 		self.username = username
 		self.password = password
 		self.database = database
-	
 
 	def clientConnect(self):
 		connection = 'mongodb://' + str(self.username) + ':' + str(self.password) + '@' + str(self.clientHost) + ':' + str(self.clientPort) + '/' + str(self.database)
@@ -22,7 +21,7 @@ class MongoConnector:
 		return(client)
 
 	def populateRestaurants(self):
-		restaurants = ps.NYCPlaces('AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o',40.7831,-73.9712).getNYCRestaurants()
+		restaurants = places.getNYCRestaurants()
 		db = self.clientConnect()
 		for restaurant in restaurants['results']:
 			#keeping it random for now but for production its going to start as none
@@ -32,7 +31,7 @@ class MongoConnector:
 
 	#adds initital Bars data to database
 	def populateBars(self):
-		bars = ps.NYCPlaces('AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o',40.7831,-73.9712).getNYCBars()
+		bars = places.getNYCBars()
 		db = self.clientConnect()
 		for bar in bars['results']:
 			#keeping it random for now but for production its going to start as none
@@ -41,7 +40,7 @@ class MongoConnector:
 			db.places.insert_one(bar)
 
 	def populateCafe(self):
-		cafes = ps.NYCPlaces('AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o',40.7831,-73.9712).getNYCCafes()
+		cafes = places.getNYCCafes()
 		db = self.clientConnect()
 		for cafe in cafes['results']:
 			#keeping it random for now but for production its going to start as none
@@ -150,12 +149,12 @@ class MongoConnector:
 
 if __name__ == "__main__":
 	Experience = MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
-	# Experience.populateBars()
-	# Experience.populateRestaurants()
+	Experience.populateBars()
+	Experience.populateRestaurants()
 	# Experience.getBars()
 	# Experience.getRestaurants()
 	# pprint(Experience.QueryRestaurants(2,2,2))
-	pprint(Experience.queryPlaces('restaurant','2','5'))
+	# pprint(Experience.queryPlaces('restaurant','2','5'))
 	# pprint(Experience.QueryBars(2,2,2))
 	# Experience.getPlaces()
 	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
