@@ -90,12 +90,13 @@ def verify():
 def addfavoriteplaces():
 	info = request.get_json()
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").addFavoritePlaces(info['username'],info['place_id'])
+	return "True"
 
 @restClient.route('/getfavoriteplaces', methods=['POST'])
-def addfavoriteplaces():
+def getfavoriteplaces():
 	info = request.get_json()
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getFavoritePlaces(info['username'])
-
+	return "True"
 
 
 @restClient.route('/queryplaces', methods=['GET'])
@@ -132,55 +133,6 @@ def getReccomendations(user):
 	reccomendations = rec.placeReccomendations(user).getTrips()
 	return(reccomendations)
 
-@restClient.route('/topplace', methods=['GET'])
-def getTopPlace():
-	def getkey(a_str, a_request):
-		try:
-			return a_request.args[a_str]
-		except KeyError:
-			return None
-
-	if request.method == 'GET':
-		types = getkey('types', request)
-		address = getkey('address', request)
-		amount = getkey('amount', request)
-		print('got in get key')
-
-		# check if they all have a value, therefore 
-		# data was passed in correctly
-		if all([types, address, amount]):
-			geocode = addressToGeo(address)
-			lat, lng = geocode['lat'], geocode['lng']
-			myobj = filtering.Filtering(lat, lng, types)			
-
-			outdata = myobj.getLocationJson()
-			return jsonify(outdata)
-
-		else:
-			return "Invalid credentials"
-
-
-@restClient.route('/topbar', methods=['GET'])
-def getTopBar():
-	if request.method == 'GET':	
-		amount = request.args['amount']
-		address = request.args['address']
-
-		data = CACHE.retrieveJson(address)
-		if data is not None:
-			print("Data is in cache, it is working congrats pls take down later")
-			return jsonify(data) 
-		else:
-			place = addressToGeo(address)	
-			lat, lng = place['lat'], place['lng']
-			myobj = filtering.Filtering(lat,lng)
-
-			outdata = myobj.getTopBars(int(amount))
-			CACHE.addToCache(address, outdata)
-			return jsonify(outdata)
-
-	else:
-		return "<h1> Error </h1>"
 
 
 
@@ -241,16 +193,6 @@ def getEvents_old():
 		jsonString = json.dumps(returndic)
 
 	return(jsonString)
-
-
-@restClient.route('/auth/<string:code>')
-def authenticate(code):
-	'''
-	check the code againts something in mongo 
-	where the user can click, make it timeout after a
-	certain amount of time
-	'''
-	return("OK")
 
 
 @restClient.route('/')
