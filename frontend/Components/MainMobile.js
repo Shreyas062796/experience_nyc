@@ -150,12 +150,12 @@ class Main extends React.Component {
 
           >
             <Toolbar disableGutters={!open}>
-              <div style={{width: '50%'}}>
+              <div style={{width: '60%'}}>
                 <Typography variant="title" color="inherit" noWrap>
                   Experience NYC
                 </Typography>
               </div>
-              <div style={{width: '50%', alignItems: 'center', justifyContent: 'flex-end', display: 'flex'}}>
+              <div style={{width: '40%', alignItems: 'center', justifyContent: 'flex-end', display: 'flex'}}>
                 {userAppbarOption}
               </div>
             </Toolbar>

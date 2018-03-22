@@ -81,7 +81,7 @@ class Cards extends React.Component {
   componentDidMount = () => {
 
     //var data = {types: 'cafe', address: "nyc", amount: 10};
-    var data = {types: 'restaurant', price_level: 2, num: 10};
+    var data = {types: 'restaurant', price_level: 2, num: 50};
     //$.get( "https://experiencenyc.herokuapp.com/queryplaces", JSON.stringify(data))
     //$.get( "https://experiencenyc.herokuapp.com/topplace", data)
     // .done((response) => {
@@ -107,7 +107,7 @@ class Cards extends React.Component {
             <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A"}/>
           </div>
            <CardActions className={this.props.actions} disableActionSpacing>
-             <div style={{width: '25%'}}>
+             <div style={{width: '20%'}}>
                <IconButton aria-label="Add to favorites">
                  <FavoriteIcon />
                </IconButton>
@@ -117,13 +117,13 @@ class Cards extends React.Component {
                  {this.returnPriceLevel(value['price_level'])}
                </IconButton>
              </div>
-             <div style={{width: '25%', textAlign: 'center', display: 'flex'}}>
+             <div style={{width: '35%', textAlign: 'center', display: 'flex'}}>
                <Typography style={{marginTop: '14px', marginRight: '5px', }}>{value['rating']}</Typography>
                <IconButton style={{flex: 'auto'}}>
                  {this.returnRatingLevel(value['rating'])}
                </IconButton>
              </div>
-             <div style={{width: '50%', textAlign: 'right'}}>
+             <div style={{width: '25%', textAlign: 'right'}}>
                <Button href={"http://maps.google.com/?q=" + value['name']} target="_blank" color="primary" style={{minWidth: '0px', color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
                 GO
                </Button>
