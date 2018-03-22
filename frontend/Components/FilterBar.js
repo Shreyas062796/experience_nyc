@@ -124,8 +124,8 @@ class FilterBar extends React.Component {
             </div>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-              <Grid  className={classes.grid} item container spacing={24}>
-                  <Grid item xl={3} lg={3} md={4} sm={6} xs={6}>
+              <Grid  className={classes.grid} item container spacing={16}>
+                  <Grid item xl={3} lg={3} md={4} sm={12} xs={12}>
                     <TextField
                       id='search'
                       fullWidth={true}
@@ -134,7 +134,7 @@ class FilterBar extends React.Component {
                     />
                   </Grid>
 
-                  <Grid item xl={3} lg={3} md={3} sm={6} xs={6}>
+                  <Grid item xl={3} lg={3} md={3} sm={12} xs={12}>
                     <SelectField
                       style={{height: '72px'}}
                       id='catagory'

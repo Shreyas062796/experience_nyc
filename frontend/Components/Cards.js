@@ -74,6 +74,10 @@ class Cards extends React.Component {
     return ratingStars;
   }
 
+  cardWidth = () => {
+    return $(card).width();
+  }
+
   componentDidMount = () => {
 
     //var data = {types: 'cafe', address: "nyc", amount: 10};
@@ -100,7 +104,7 @@ class Cards extends React.Component {
              subheader={value['formatted_address']}
            />
          <div style={{overflow:'hidden'}}>
-            <img className="image" style={{maxHeight: '226px', objectFit: 'cover'}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyDWcObQRHPivQogKgpAlWdJtzNjkP1qbmo"}/>
+            <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A"}/>
           </div>
            <CardActions className={this.props.actions} disableActionSpacing>
              <div style={{width: '25%'}}>
