@@ -161,12 +161,12 @@ class Main extends React.Component {
             </Toolbar>
 
           </AppBar>
-          <div style={{display: this.handlePageDisplay('search')}}>
+          <div style={{display: this.handlePageDisplay('search'), marginTop: '4em'}}>
             <FilterBar />
-              <LoginModal
-                clicked={this.state.clicked}
-                onClose={this.handleModalClose}
-              />
+            <LoginModal
+              clicked={this.state.clicked}
+              onClose={this.handleModalClose}
+            />
             <Cards />
           </div>
           <div style={{display: this.handlePageDisplay('favorites')}}>
