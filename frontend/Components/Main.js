@@ -80,6 +80,7 @@ const styles = theme => ({
   },
   content: {
     flexGrow: 1,
+    marginTop: '4em',
     backgroundColor: theme.palette.background.default,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
