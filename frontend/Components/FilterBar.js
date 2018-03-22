@@ -45,7 +45,7 @@ const styles = theme => ({
     width: '100%',
     paddingLeft: 15,
     paddingBottom: 20,
-    marginTop: '1.5em',
+    marginTop: '3em',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
