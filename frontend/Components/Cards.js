@@ -139,7 +139,7 @@ class Cards extends React.Component {
 
 
     return (
-      <div style={{margin: 10, height: '75vh',overflowY: 'auto', overflowX: 'hidden'}}>
+      <div style={{margin: '1em', height: '75vh',overflowY: 'auto', overflowX: 'hidden'}}>
         <Grid container spacing={40} justify={'center'} style={{padding: 25}}>
           {this.state.items}
         </Grid>
