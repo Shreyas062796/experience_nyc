@@ -49,23 +49,18 @@ class Main extends React.Component {
     this.handlePage = this.handlePage.bind(this)
   }
   state = {
-    loginClick: '',
+    clicked: '',
     username: '',
     anchorEl: null,
     currentPage: 'search'
   };
 
-
-  handleUserLoggedIn = () => {
-
-  }
-
-  componentDidMount = () => {
-    //this.setState({ username: sessionStorage.getItem(username); });
-  }
-
   handleLoginClick = () => {
-    this.setState({loginClick: true});
+    this.setState({clicked: 0});
+  }
+
+  handleRegisterClick = () => {
+    this.setState({clicked: 1});
   }
 
   handleMenu = event => {
@@ -82,6 +77,10 @@ class Main extends React.Component {
     })
   }
 
+  handleModalClose = () => {
+    this.setState({clicked: ''})
+  }
+
   handleLogin = () => {
     this.setState({username: sessionStorage.getItem('username'), loginClick: ''})
   }
@@ -89,6 +88,7 @@ class Main extends React.Component {
   handleLogout = () => {
     this.setState({username: ''})
     sessionStorage.setItem('username', '')
+    alert("Logged Out!")
   }
 
   handlePageDisplay = (page) => {
@@ -132,13 +132,13 @@ class Main extends React.Component {
                           >
                             <MenuItem onClick={this.handleClose}>Profile</MenuItem>
                             <MenuItem onClick={this.handleClose}>My account</MenuItem>
-                            <MenuItem onClick={this.handleClose}>Logout</MenuItem>
+                            <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
                           </Menu></div>);
     }
     else {
-      userAppbarOption = (<Typography onClick={this.handleLoginClick} style={{color: 'white', cursor: 'pointer'}}>
-                                Login | Signup
-                              </Typography>);
+      userAppbarOption = (<Typography style={{color: 'white', cursor: 'pointer'}}>
+                            <a onClick={this.handleLoginClick}>Login</a> | <a onClick={this.handleRegisterClick}>Signup</a>
+                          </Typography>);
 
     }
 
@@ -164,8 +164,9 @@ class Main extends React.Component {
           <div style={{display: this.handlePageDisplay('search')}}>
             <FilterBar />
               <LoginModal
-                clicked={this.state.loginClick}
-                loggedIn={this.handleLogin}/>
+                clicked={this.state.clicked}
+                onClose={this.handleModalClose}
+              />
             <Cards />
           </div>
           <div style={{display: this.handlePageDisplay('favorites')}}>
