@@ -15,6 +15,7 @@ import MoreVertIcon from 'material-ui-icons/MoreVert';
 import Grid from 'material-ui-next/Grid';
 import Button from 'material-ui-next/Button';
 import Star from 'material-ui-icons/Star';
+import StarHalf from 'material-ui-icons/StarHalf';
 import Send from 'material-ui-icons/Send';
 import AttachMoney from 'material-ui-icons/AttachMoney';
 
@@ -62,6 +63,21 @@ class Cards extends React.Component {
     return price;
   }
 
+  returnRatingLevel = (items) => {
+    let ratingStars = [];
+    for(var i=0; i < Math.floor(items); i++){
+      ratingStars.push(<Star style={{color: 'rgb(0, 188, 212)', height: '', width: '75px'}}/>);
+    }
+    if((items % 1) > 0.2){
+      ratingStars.push(<StarHalf style={{color: 'rgb(0, 188, 212)', height: '', width: '75px'}}/>);
+    }
+    return ratingStars;
+  }
+
+  cardWidth = () => {
+    return $(card).width();
+  }
+
   componentDidMount = () => {
 
     //var data = {types: 'cafe', address: "nyc", amount: 10};
@@ -78,7 +94,7 @@ class Cards extends React.Component {
       .done((response) => {
        const { classes } = this.props;
        const result = response.map((value) =>
-       (<Grid item xl={3} lg={4} md={6} sm={12} xs={9}>
+       (<Grid item xl={3} lg={4} md={6} sm={12} xs={12}>
          <Card className={this.props.card}>
            <CardHeader classes={{subheader: classes.subheader}}
              avatar={
@@ -88,7 +104,7 @@ class Cards extends React.Component {
              subheader={value['formatted_address']}
            />
          <div style={{overflow:'hidden'}}>
-            <img className="image" style={{maxHeight: '226px', objectFit: 'cover'}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyDWcObQRHPivQogKgpAlWdJtzNjkP1qbmo"}/>
+            <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A"}/>
           </div>
            <CardActions className={this.props.actions} disableActionSpacing>
              <div style={{width: '25%'}}>
@@ -104,10 +120,10 @@ class Cards extends React.Component {
              <div style={{width: '25%', textAlign: 'center', display: 'flex'}}>
                <Typography style={{marginTop: '14px', marginRight: '5px', }}>{value['rating']}</Typography>
                <IconButton style={{flex: 'auto'}}>
-                 <Star style={{color: 'rgb(0, 188, 212)', height: '', width: '75px'}}/><Star style={{color: 'rgb(0, 188, 212)', width: '75px'}}/><Star style={{color: 'rgb(0, 188, 212)', width: '75px'}}/><Star style={{color: 'rgb(0, 188, 212)', width: '75px'}}/><Star style={{color: 'rgb(0, 188, 212)', width: '75px'}}/>
+                 {this.returnRatingLevel(value['rating'])}
                </IconButton>
              </div>
-             <div style={{width: '25%', textAlign: 'right'}}>
+             <div style={{width: '50%', textAlign: 'right'}}>
                <Button href={"http://maps.google.com/?q=" + value['name']} target="_blank" color="primary" style={{minWidth: '0px', color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
                 GO
                </Button>
