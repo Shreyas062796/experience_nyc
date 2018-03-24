@@ -55,12 +55,12 @@ class MongoConnector:
 			allPlaces.append(document)
 		return(allPlaces)
 
-	def getPlacesByLoc(self,lat,long):
-		allPlaces = []
-		db = self.clientConnect()
-		for document in db.places.find({}):
-			allPlaces.append(document)
-		return(allPlaces)
+	# def getPlacesInRadius(self,lat,lng,radius):
+	# 	allPlaces = []
+	# 	db = self.clientConnect()
+	# 	for document in db.places.find({location:{$geoWithin:{ $centerSphere: [ ['lat':-73.93414657,'lng':40.82302903 ], 5 / 3963.2 ] } } }):
+	# 		allPlaces.append(document)
+	# 	return(allPlaces)
 
 	#populates login table with json data
 	def populateLogin(self,login):
@@ -164,8 +164,9 @@ class MongoConnector:
 
 if __name__ == "__main__":
 	Experience = MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
-	Experience.populateBars()
-	Experience.populateRestaurants()
+	# Experience.populateBars()
+	# Experience.populateRestaurants()
+	# Experience.getPlacesInRadius(40.7733125,-73.9837555,2)
 	# Experience.getBars()
 	# Experience.getRestaurants()
 	# pprint(Experience.QueryRestaurants(2,2,2))
