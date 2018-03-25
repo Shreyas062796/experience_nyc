@@ -19,7 +19,7 @@ def addressToGeo(addressStr):
 	returnLoc['name'] = location['formatted_address']
 
 	# print(returnLoc)
-	return returnLoc
+	return(returnLoc)
 
 # addressToGeo(sys.argv[1])
 

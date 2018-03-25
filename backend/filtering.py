@@ -91,7 +91,7 @@ class Filtering:
 			rating = float(place['rating'])
 			place_score = self.score(rating, distance)
 			top_places[d_id] = place_score
-		return top_places
+		return(top_places)
 
 	def getLocationJson(self):
 		return(obj.getPlaceByLoc(self.type, [self.latitude, self.longitude]))

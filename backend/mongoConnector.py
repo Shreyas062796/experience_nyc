@@ -4,6 +4,7 @@ from bson.objectid import *
 import random
 import json
 import hashlib
+from pprint import pprint
 
 places = ps.NYCPlaces('AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o',40.7831,-73.9712)
 
@@ -17,7 +18,8 @@ class MongoConnector:
 
 	def clientConnect(self):
 		connection = 'mongodb://' + str(self.username) + ':' + str(self.password) + '@' + str(self.clientHost) + ':' + str(self.clientPort) + '/' + str(self.database)
-		client = MongoClient(connection).experience_nyc
+		client = MongoClient(connection).experience_nyc #places and users database
+		# client = MongoClient(connection).enyc #events database
 		return(client)
 
 	def populateRestaurants(self):
@@ -53,14 +55,15 @@ class MongoConnector:
 		db = self.clientConnect()
 		for document in db.places.find({}):
 			allPlaces.append(document)
+			print(document)
 		return(allPlaces)
 
-	def getPlacesByLoc(self,lat,long):
-		allPlaces = []
-		db = self.clientConnect()
-		for document in db.places.find({}):
-			allPlaces.append(document)
-		return(allPlaces)
+	# def getPlacesInRadius(self,lat,lng,radius):
+	# 	allPlaces = []
+	# 	db = self.clientConnect()
+	# 	for document in db.places.find({location:{$geoWithin:{ $centerSphere: [ ['lat':-73.93414657,'lng':40.82302903 ], 5 / 3963.2 ] } } }):
+	# 		allPlaces.append(document)
+	# 	return(allPlaces)
 
 	#populates login table with json data
 	def populateLogin(self,login):
@@ -89,11 +92,20 @@ class MongoConnector:
 		db = self.clientConnect()
 		db.users.update_one({'username': username},{'$push':{'favorite_places':place_id}})
 
-	def getFavoritePlaces(self,username):
+	def getFavoritePlacesIds(self,username):
 		db = self.clientConnect()
 		user = db.users.find_one({"username": username})
 		return(user['favorite_places'])
 
+	def getFavoritePlaces(self,username):
+		db = self.clientConnect()
+		favoritePlaces = []
+		user = db.users.find_one({"username": username})
+		for placeId in user['favorite_places']:
+			place = db.places.find_one({"place_id": placeId})
+			favoritePlaces.append(place)
+		return(favoritePlaces)
+			
 	def populateTags(self,tags):
 		db = self.clientConnect()
 		for tag in tags:
@@ -165,14 +177,16 @@ class MongoConnector:
 
 if __name__ == "__main__":
 	Experience = MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
-	Experience.populateBars()
-	Experience.populateRestaurants()
+	# Experience = MongoConnector('ds123619.mlab.com', '23619', 'admin', 'admin', 'enyc'
+	# Experience.populateBars()
+	# Experience.populateRestaurants()
+	# Experience.getPlacesInRadius(40.7733125,-73.9837555,2)
 	# Experience.getBars()
 	# Experience.getRestaurants()
 	# pprint(Experience.QueryRestaurants(2,2,2))
 	# pprint(Experience.queryPlaces('restaurant','2','5'))
 	# pprint(Experience.QueryBars(2,2,2))
-	# Experience.getPlaces()
+	Experience.getPlaces()
 	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
 	# for i in tripnames:
 	# 	trip = Experience.createTrip(3,i)
