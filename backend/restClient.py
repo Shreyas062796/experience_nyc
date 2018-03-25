@@ -118,10 +118,8 @@ def getfavoriteplacesIds():
 
 @restClient.route('/getfavoriteplaces', methods=['POST'])
 def getfavoriteplaces():
-	# info = request.get_json()
-	if request.method == 'POST':
-		username = request.args['username']
-	return(jsonify(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getFavoritePlaces(str(username))))
+	info = request.get_json()
+	return(jsonify(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getFavoritePlaces(info['username'])))
 
 @restClient.route('/queryplaces', methods=['GET'])
 def queryplaces():
