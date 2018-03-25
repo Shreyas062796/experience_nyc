@@ -7,7 +7,7 @@ import json
 import datetime
 import reccomendations as rec
 import filtering
-from caching import Cacher
+from lib.caching import Cacher
 from maps.geo import addressToGeo
 import lib.sendmail as mail
 
@@ -23,11 +23,11 @@ CORS(restClient)
 # this way whenever the server loads up you have data for the 
 # user to work with and will keep updating hourly
 
-def isNotNull(str,request):
-   try:
-      return(request.args[str])
-   except KeyError:
-       return(None)
+def isNotNull(astr,request):
+	try:
+		return request.args[astr]
+	except KeyError:
+		return None
 
 @restClient.before_first_request
 def activate_job():
@@ -37,8 +37,8 @@ def activate_job():
 		while hour == datetime.datetime.now().hour:
 			time.sleep(60)
 		while True:
-			# updateEvents()	#write this later
-			# updatePlaces()	#write this later
+			# updateEvents()    #write this later
+			# updatePlaces()    #write this later
 
 			print('Hour Notification')
 			time.sleep(900) # sleep for an hour
@@ -47,7 +47,6 @@ def activate_job():
 	# sets up the data for when the first first goes up
 	# updateEvents()
 	# updatePlaces()
-
 	thread = threading.Thread(target=get_data)
 	thread.start()
 
@@ -105,7 +104,7 @@ def queryplaces():
 	# info = request.get_json()
 	# print("useigiusehfugihserulhgirtghligwherluihgwliergluwuier")
 
-	if request.method == 'GET':	
+	if request.method == 'GET': 
 		num = request.args['num']
 		price_level = request.args['price_level']
 		types= request.args['types']
@@ -156,11 +155,11 @@ def getEvents():
 		q = getkey('q', request)
 		address = getkey('address', request)
 
-		place = addressToGeo(address)	
+		place = addressToGeo(address)   
 		lat, lng = place['lat'], place['lng']
 
 
-		eb_events = gevents.setParams(lat, lng, 2)		
+		eb_events = gevents.setParams(lat, lng, 2)      
 		# print(type(eb_events))
 		return jsonify(eb_events)
 

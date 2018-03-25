@@ -30,9 +30,10 @@ class placeReccomendations:
 
 	#filter places by lattitude and longitude for the places and give like a 2 mile location
 	def train():
-
+		pass
 
 if __name__ == "__main__":
+
 	reccomender = placeReccomendations('goat')
 	reccomender.getTrips()
 
