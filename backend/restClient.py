@@ -114,7 +114,7 @@ def removefavoriteplaces():
 @restClient.route('/getfavoriteplacesIds', methods=['POST'])
 def getfavoriteplacesIds():
 	info = request.get_json()
-	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getFavoritePlacesIds(info['username']))
+	return(jsonify(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getFavoritePlacesIds(info['username'])))
 
 @restClient.route('/getfavoriteplaces', methods=['POST'])
 def getfavoriteplaces():
