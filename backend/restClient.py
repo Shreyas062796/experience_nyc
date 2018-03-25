@@ -1,20 +1,26 @@
+# python libraries
 from flask import Flask, render_template, request, redirect, session, jsonify
 from flask_cors import CORS
 import random, json
-import mongoConnector as mg
-import sys, os, time, threading
+import sys, os, time, threading, requests
 import json
 import datetime
+
+# our libraries
+import mongoConnector as mg
 import reccomendations as rec
 import filtering
-from lib.caching import Cacher
-from maps.geo import addressToGeo
 import lib.sendmail as mail
+from events import events, events_script
+from maps.geo import addressToGeo
+from lib.caching import Cacher, EventCacher
 
-from events import events
 
 DEBUG = True
 CACHE = Cacher()
+EVENT_CACHE = EventCacher()
+
+
 
 restClient = Flask(__name__)
 CORS(restClient)
@@ -32,6 +38,7 @@ def isNotNull(astr,request):
 @restClient.before_first_request
 def activate_job():
 	def get_data():
+		# events_script.initialPopulate()
 		hour = datetime.datetime.now().hour # for first setup
 		# keep checking when you reach the end of the first hour
 		while hour == datetime.datetime.now().hour:
@@ -40,13 +47,19 @@ def activate_job():
 			# updateEvents()    #write this later
 			# updatePlaces()    #write this later
 
+			time.sleep(810) # sleep for an hour
+			requests.get('https://experiencenyc.herokuapp.com/')
+			time.sleep(90)
 			print('Hour Notification')
-			time.sleep(900) # sleep for an hour
+			EVENT_CACHE.setTopToday(events_script.getEvents().getEventsOfTheDay())
+
+
 	#==============================================
 	# This is for the caching of data
 	# sets up the data for when the first first goes up
 	# updateEvents()
 	# updatePlaces()
+	EVENT_CACHE.setTopToday(events_script.getEvents().getEventsOfTheDay())
 	thread = threading.Thread(target=get_data)
 	thread.start()
 
@@ -115,6 +128,14 @@ def queryplaces():
 			return(jsonify(places))
 		else:
 			return(jsonify({"response":"There is no values"}))
+
+@restClient.route('/todayevents', methods=['GET'])
+def getTopEvents():
+	if request.method == "GET":
+		n = int(request.args['amount'])
+		return jsonify(EVENT_CACHE.getTopN())
+
+
 
 # gets bars that right now have preset coordinates
 @restClient.route('/topbars/<amount>', methods = ['GET'])#have some parameters
