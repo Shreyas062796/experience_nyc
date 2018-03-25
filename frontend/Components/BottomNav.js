@@ -23,7 +23,7 @@ class SimpleBottomNavigation extends React.Component {
   };
 
   handleChange = (event, value) => {
-
+    this.setState({ value });
     this.props.pageChange(this.state.pageKeys[value]);
   };
 

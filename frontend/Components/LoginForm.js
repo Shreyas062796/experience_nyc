@@ -133,7 +133,6 @@ class LoginForm extends React.Component {
     }
 
     if(missingFields){
-      console.log(this.state.message)
       this.setState({open: true})
       return false;
     }
