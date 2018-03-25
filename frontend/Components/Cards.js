@@ -125,7 +125,9 @@ class Cards extends React.Component {
       contentType:"application/json; charset=utf-8",
       dataType:"json"})
       .done((response) => {
-
+        if(response['response'] == "True"){
+          this.searchPlaces();
+        }
       })
   }
 
@@ -140,7 +142,9 @@ class Cards extends React.Component {
       contentType:"application/json; charset=utf-8",
       dataType:"json"})
       .done((response) => {
-
+        if(response['response'] == "True"){
+          this.searchPlaces();
+        }
       })
   }
 

@@ -57,11 +57,6 @@ const styles = theme => ({
 });
 
 class RegisterForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.setState({display: 'none'})
-  }
-
   state = {
     display: 'none',
     showPassword: false,
@@ -72,7 +67,8 @@ class RegisterForm extends React.Component {
     emailError: false,
     usernameError: false,
     passwordError: false,
-    tooltipOpen: false
+    tooltipOpen: false,
+    confirmPasswordError: false
   }
 
   componentWillReceiveProps(nextProps) {
@@ -89,6 +85,10 @@ class RegisterForm extends React.Component {
 
   handleClickShowPasssword = () => {
     this.setState({ showPassword: !this.state.showPassword });
+  };
+
+  handleRegistered = (event, value) => {
+    this.props.registered();
   };
 
   handleRegister = () => {
@@ -108,6 +108,7 @@ class RegisterForm extends React.Component {
         .done((response) => {
           if(response['response'] == "True"){
             alert("Registered Successfully!");
+            this.handleRegistered();
           }
           else {
             alert("Registration Failed!");
@@ -117,7 +118,7 @@ class RegisterForm extends React.Component {
 
   validation = () => {
     let missingFields = false;
-    this.setState({message :[], first_nameError: false, last_nameError: false, emailError: false, passwordError: false, usernameError: false})
+    this.setState({message :[], first_nameError: false, last_nameError: false, emailError: false, passwordError: false, usernameError: false, confirmPasswordError: false})
 
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -154,6 +155,13 @@ class RegisterForm extends React.Component {
     if(!this.isOkPass(password)){
       missingFields = true;
       this.setState({passwordError: true})
+      //this.state.message.push(<span>password</span>)
+    }
+
+    var confirmPassword = $('#confirmPassword').val();
+    if(password != confirmPassword){
+      missingFields = true;
+      this.setState({confirmPasswordError: true})
       //this.state.message.push(<span>password</span>)
     }
 
@@ -279,19 +287,36 @@ class RegisterForm extends React.Component {
             />
 
         </FormControl>
-        <FormControl className={classes.formControl} style={{marginTop: 25}}>
-          <Grid container>
+        <FormControl className={classes.formControl} error={this.state.confirmPasswordError}>
+          <InputLabel htmlFor="confirm password">Confirm Password</InputLabel>
+            <Input
+              id="confirmPassword"
+              type={this.state.showPassword ? 'text' : 'password'}
+              value={this.state.password}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={this.handleClickShowPasssword}
+                    onMouseDown={this.handleMouseDownPassword}
+                  >
+                    {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+
+        </FormControl>
+        <FormControl className={classes.formControl}>
             <Grid item md={4}>
               <Typography>
                 <a href="#" style={{textDecoration: "none"}}>Forgot Username or Password?</a>
               </Typography>
             </Grid>
-            <Grid item md={4} style={{textAlign: "center"}}>
+            <div style={{textAlign: "center"}}>
               <Button id="register" className={classes.button} onClick={this.handleRegister} style={{width: '25%',color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
                 Register
               </Button>
-            </Grid>
-          </Grid>
+            </div>
         </FormControl>
       </div>
     );
