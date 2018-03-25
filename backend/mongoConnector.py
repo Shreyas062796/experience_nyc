@@ -111,6 +111,7 @@ class MongoConnector:
 		user = db.users.find_one({"username": username})
 		for placeId in user['favorite_places']:
 			place = db.places.find_one({"id": placeId})
+			place['_id'] = str(place['_id'])
 			favoritePlaces.append(place)
 		return(favoritePlaces)
 			
