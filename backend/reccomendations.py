@@ -48,9 +48,6 @@ class placeReccomendations:
 					testdata.append(place)
 		pprint(testdata)
 
-	def reccomendations(self):
-		pass
-
 if __name__ == "__main__":
 	reccomender = placeReccomendations('goat','269 Amsterdam Ave, New York, NY 10023')
 	reccomender.getTripsandPlaces()
