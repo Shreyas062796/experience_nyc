@@ -7,7 +7,7 @@ import json
 import datetime
 import reccomendations as rec
 import filtering
-from caching import Cacher
+from lib.caching import Cacher
 from maps.geo import addressToGeo
 import lib.sendmail as mail
 
