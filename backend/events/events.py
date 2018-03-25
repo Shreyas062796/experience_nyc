@@ -46,7 +46,15 @@ class getEvents:
 
 		# print(WEB_LINK)
 		data = requests.get(WEB_LINK)
+
+		header = data.json()['pagination']
 		events = data.json()['events']
+
+		# Unpacking info
+		# page_size = HEADER['page_size']
+		# page_count = HEADER['page_count']
+		# page_number = HEADER['page_number']
+		# object_count = HEADER['object_count']
 
 		return events[:10]
 
@@ -64,6 +72,7 @@ class getEvents:
 		useful_data['name'] = data['name']
 
 		return useful_data
+
 
 
 

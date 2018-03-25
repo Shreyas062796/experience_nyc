@@ -47,8 +47,7 @@ def activate_job():
 	# sets up the data for when the first first goes up
 	# updateEvents()
 	# updatePlaces()
-
-	thread = threading.Thread(target=get_data)
+ thread = threading.Thread(target=get_data)
 	thread.start()
 
 
