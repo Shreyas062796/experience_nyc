@@ -31,3 +31,25 @@ class Cacher:
 			self._data.popitem()
 		self._data[address] = ajson
 
+
+class EventCacher:
+
+
+	def __init__(self):
+		self._topToday = list()
+
+
+	def curr_len(self):
+		return len(self._topToday)
+
+
+	def setTopToday(self, alist):
+		self._topToday = alist
+
+
+	def getTopToday(self):
+		return self._topToday
+
+	def getTopN(self, n=10):
+		return self._topToday[:n]
+

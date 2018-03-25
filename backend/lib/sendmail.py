@@ -30,6 +30,7 @@ class sendMail:
 		message = (base_msg+base_url+unique_code)
 		return message, unique_code
 
+
 	def _sendmail(self, to_email, subject, message):
 		text = MIMEText(message.encode('utf-8'), 'plain', 'utf-8')
 
