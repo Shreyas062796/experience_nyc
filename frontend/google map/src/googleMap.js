@@ -15,8 +15,7 @@ class GoogleMap extends Component{
 		
         style={{height : '50hv'}}
       />	  
-    );
-	
+    );	
   }
 }
 
