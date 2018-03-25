@@ -20,7 +20,6 @@ import StarHalf from 'material-ui-icons/StarHalf';
 import StarBorder from 'material-ui-icons/StarBorder';
 import Send from 'material-ui-icons/Send';
 import AttachMoney from 'material-ui-icons/AttachMoney';
-import Tooltip from 'material-ui-next/Tooltip';
 
 const styles = theme => ({
   card: {
@@ -52,18 +51,12 @@ const styles = theme => ({
 });
 
 class Cards extends React.Component {
-  state = { expanded: false,
-            items: [],
-            favorites: [],
-            filter: {types: '', price_level: '', num: '10'},
-            username: sessionStorage.getItem('username')
-          };
+  state = { expanded: false, items: []};
 
   handleExpandClick = () => {
     this.setState({ expanded: !this.state.expanded });
   };
 
-  //generate list of dollar sign components based on passed price level
   returnPriceLevel = (items) => {
     let price = [];
     for(var i=0; i < items; i++){
@@ -72,7 +65,6 @@ class Cards extends React.Component {
     return price;
   }
 
-  //generate list of star components based on passed rating
   returnRatingLevel = (items) => {
     let ratingStars = [];
     let floor = Math.floor(items)
@@ -97,36 +89,10 @@ class Cards extends React.Component {
     return $(card).width();
   }
 
-  //set list of favorites for current user
-  setFavorites = () => {
-    var data = {username: sessionStorage.getItem('username')};
-
-    if(data['username']){
-      $.ajax({
-        url:"https://experiencenyc.herokuapp.com/getfavoriteplacesIds",
-        type:"POST",
-        data: JSON.stringify(data),
-        contentType:"application/json; charset=utf-8",
-        dataType:"json"})
-        .done((response) => {
-          this.setState({favorites: response})
-        })
+  componentDidMount = () => {
+    if(sessionStorage.getItem('username')){
+      this.getFavorites();
     }
-  }
-
-  //add passed id to favorites for current user
-  addFavorite = (id) => {
-    var data = {username: sessionStorage.getItem('username'), place_id: id};
-
-    $.ajax({
-      url:"https://experiencenyc.herokuapp.com/addfavoriteplaces",
-      type:"POST",
-      data: JSON.stringify(data),
-      contentType:"application/json; charset=utf-8",
-      dataType:"json"})
-      .done((response) => {
-
-      })
   }
 
   //remove passed id from user's favorites
@@ -140,51 +106,20 @@ class Cards extends React.Component {
       contentType:"application/json; charset=utf-8",
       dataType:"json"})
       .done((response) => {
-
+        if(response['response'] == "True"){
+          this.getFavorites();
+        }
       })
   }
 
-  //check favorite list for passed id and return either a filler in or empty heart component
-  isFavorite = (id) => {
-    var button = ''
-
-    if(this.state.favorites.includes(id) && (sessionStorage.getItem('username'))){
-      button = (<Tooltip id="tooltip-bottom" title="Remove Favorite" placement="bottom">
-                  <IconButton aria-label="Remove from favorites" onClick={() => { this.removeFavorite(id) }}>
-                      <Favorite />
-                  </IconButton>
-                </Tooltip>);
-    }
-    else if(sessionStorage.getItem('username')) {
-      button = (<Tooltip id="tooltip-bottom" title="Add Favorite" placement="bottom">
-                  <IconButton aria-label="Add to favorites" onClick={() => { this.addFavorite(id) }}>
-                    <FavoriteBorder />
-                  </IconButton>
-                </Tooltip>);
-    }
-    console.log(button);
-    return button;
-  }
-
-  //listen for new props
-  componentWillReceiveProps(nextProps) {
-      this.setState({filter: nextProps.filter}, function() {
-        this.searchPlaces();
-      });
-  }
-
-  //search for places
-  searchPlaces = () => {
-
-    //set list of favorites for current user
-    this.setFavorites();
-
-    var data = this.state.filter;
+  //get favorites and display
+  getFavorites = () => {
+    var data = {username: sessionStorage.getItem('username')};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/queryplaces",
-      type:"GET",
-      data: data,
+      url:"https://experiencenyc.herokuapp.com/getfavoriteplaces",
+      type:"POST",
+      data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
       dataType:"json"})
       .done((response) => {
@@ -204,7 +139,7 @@ class Cards extends React.Component {
           </div>
            <CardActions className={this.props.actions} disableActionSpacing>
              <div style={{width: '20%'}}>
-                 {this.isFavorite(value['id'])}
+                 <IconButton aria-label="Remove from favorites" onClick={() => { this.removeFavorite(value['id']) }}><Favorite /></IconButton>
              </div>
              <div style={{width: '25%', textAlign: 'center', display: 'flex'}}>
                <IconButton>
@@ -239,13 +174,8 @@ class Cards extends React.Component {
        );
 
        this.setState({items: result});
-
-    })
-  }
-
-  //Load places when component mounts
-  componentDidMount = () => {
-    this.searchPlaces();
+       //console.log(result);
+    });
   }
 
   render() {
@@ -254,7 +184,7 @@ class Cards extends React.Component {
 
 
     return (
-      <div style={{margin: '1em', height: '75vh',overflowY: 'auto', overflowX: 'hidden'}}>
+      <div style={{margin: '1em', height: '90vh',overflowY: 'auto', overflowX: 'hidden'}}>
         <Grid container spacing={40} justify={'center'} style={{padding: 25}}>
           {this.state.items}
         </Grid>

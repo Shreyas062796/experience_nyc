@@ -22,6 +22,10 @@ import Button from 'material-ui-next/Button';
 import LoginModal from './LoginModal';
 import AccountCircle from 'material-ui-icons/AccountCircle';
 import Menu, { MenuItem } from 'material-ui-next/Menu';
+import Tabs from './Tabs'
+import Trips from './Trips.js';
+//import Events from './Events.js';
+import Favorites from './Favorites.js';
 
 
 const drawerWidth = 300;
@@ -61,8 +65,8 @@ const styles = theme => ({
     marginRight: drawerWidth,
   },
   menuButton: {
-    marginLeft: -12,
     marginRight: 20,
+    marginLeft: 10
   },
   hide: {
     display: 'none',
@@ -109,8 +113,10 @@ class Main extends React.Component {
   state = {
     drawerOpen: true,
     clicked: '',
-    username: '',
-    anchorEl: null
+    username: sessionStorage.getItem('username'),
+    anchorEl: null,
+    filter: {types: '', price_level: '', num: '10'},
+    currentPage: 'Places'
   };
 
   handleDrawerOpen = () => {
@@ -142,13 +148,32 @@ class Main extends React.Component {
   }
 
   handleLogout = () => {
-    this.setState({username: ''})
+    this.setState({username: '', clicked: '', favorites: [], filter: {types: '', price_level: '', num: '10'}})
     sessionStorage.setItem('username', '')
     alert("Logged Out!")
   }
 
   handleModalClose = () => {
     this.setState({clicked: ''})
+  }
+
+  setFilter = (response) => {
+    this.setState({filter: response})
+  }
+
+  handlePageDisplay = (page) => {
+    if(page == this.state.currentPage){
+      return 'block';
+    }
+    else{
+      return 'none';
+    }
+  }
+
+  handlePage = (page) => {
+    this.setState({
+      currentPage: page
+    })
   }
 
   render() {
@@ -159,9 +184,8 @@ class Main extends React.Component {
 
     let userAppbarOption = null;
 
-    if(this.state.username != ''){
-      console.log(sessionStorage.getItem('username'))
-      userAppbarOption = (<div><Typography style={{color: 'white', display: 'inline-block'}}>{this.state.username}</Typography>
+    if(sessionStorage.getItem('username')){
+      userAppbarOption = (<div><Typography style={{color: 'white', display: 'inline-block'}}>{sessionStorage.getItem('username')}</Typography>
                           <IconButton
                             aria-owns={menuOpen ? 'menu-appbar' : null}
                             aria-haspopup="true"
@@ -232,11 +256,13 @@ class Main extends React.Component {
               </div>
               <div style={{width: '50%', alignItems: 'center', justifyContent: 'flex-end', display: 'flex'}}>
                 {userAppbarOption}
+
                 <IconButton
                   aria-label="open drawer"
                   onClick={this.handleDrawerOpen}
                   className={classNames(classes.menuButton, drawerOpen && classes.hide)}
                 >
+                  <Typography style={{color: 'white'}}>Trips</Typography>
                   <Place color="white" />
                 </IconButton>
               </div>
@@ -250,12 +276,22 @@ class Main extends React.Component {
             })}
           >
             <div className={classes.drawerHeader} />
-            <FilterBar />
-            <LoginModal
-              clicked={this.state.clicked}
-              onClose={this.handleModalClose}
-            />
-            <Cards />
+            <Tabs pageChange={this.handlePage}/>
+              <div style={{display: this.handlePageDisplay('Places')}}>
+                <FilterBar setFilter={this.setFilter}/>
+                <LoginModal
+                  clicked={this.state.clicked}
+                  onClose={this.handleModalClose}
+                  loggedIn={this.handleLogin}
+                />
+                <Cards filter={this.state.filter}/>
+              </div>
+              <div style={{display: this.handlePageDisplay('Events')}}>
+
+              </div>
+              <div style={{display: this.handlePageDisplay('Favorites')}}>
+                <Favorites />
+              </div>
           </main>
           <Drawer
             variant="persistent"

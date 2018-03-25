@@ -23,6 +23,7 @@ import LoginModal from './LoginModal';
 import AccountCircle from 'material-ui-icons/AccountCircle';
 import Menu, { MenuItem } from 'material-ui-next/Menu';
 import Trips from './Trips.js';
+import Favorites from './Favorites.js';
 
 const styles = theme => ({
   root: {
@@ -50,9 +51,10 @@ class Main extends React.Component {
   }
   state = {
     clicked: '',
-    username: '',
+    username: sessionStorage.getItem('username'),
     anchorEl: null,
-    currentPage: 'search'
+    currentPage: 'search',
+    filter: {types: '', price_level: '', num: '10'}
   };
 
   handleLoginClick = () => {
@@ -86,7 +88,7 @@ class Main extends React.Component {
   }
 
   handleLogout = () => {
-    this.setState({username: ''})
+    this.setState({username: '', clicked: ''})
     sessionStorage.setItem('username', '')
     alert("Logged Out!")
   }
@@ -100,6 +102,10 @@ class Main extends React.Component {
     }
   }
 
+  setFilter = (response) => {
+    this.setState({filter: response})
+  }
+
   render() {
     const { classes, theme  } = this.props;
     const { username, anchorEl } = this.state;
@@ -108,8 +114,8 @@ class Main extends React.Component {
 
     let userAppbarOption = null;
 
-    if(this.state.username){
-      userAppbarOption = (<div><Typography style={{color: 'white', display: 'inline-block'}}>{this.state.username}</Typography><IconButton
+    if(sessionStorage.getItem('username')){
+      userAppbarOption = (<div><Typography style={{color: 'white', display: 'inline-block'}}>{sessionStorage.getItem('username')}</Typography><IconButton
                             aria-owns={menuOpen ? 'menu-appbar' : null}
                             aria-haspopup="true"
                             onClick={this.handleMenu}
@@ -162,15 +168,16 @@ class Main extends React.Component {
 
           </AppBar>
           <div style={{display: this.handlePageDisplay('search'), marginTop: '4em'}}>
-            <FilterBar />
+            <FilterBar setFilter={this.setFilter}/>
             <LoginModal
               clicked={this.state.clicked}
               onClose={this.handleModalClose}
+              loggedIn={this.handleLogin}
             />
-            <Cards />
+            <Cards filter={this.state.filter}/>
           </div>
           <div style={{display: this.handlePageDisplay('favorites')}}>
-
+            <Favorites />
           </div>
           <div style={{display: this.handlePageDisplay('trips')}}>
             <Trips />
