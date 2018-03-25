@@ -4,6 +4,7 @@ from bson.objectid import *
 import random
 import json
 import hashlib
+import uuid
 from pprint import pprint
 
 places = ps.NYCPlaces('AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o',40.7831,-73.9712)
@@ -27,8 +28,6 @@ class MongoConnector:
 		db = self.clientConnect()
 		for restaurant in restaurants['results']:
 			#keeping it random for now but for production its going to start as none
-			# restaurant['user_rating'] = None
-			restaurant['user_rating'] = round(random.uniform(1,5), 2)
 			db.places.insert_one(restaurant)
 
 	#adds initital Bars data to database
@@ -37,8 +36,6 @@ class MongoConnector:
 		db = self.clientConnect()
 		for bar in bars['results']:
 			#keeping it random for now but for production its going to start as none
-			# bar['user_rating'] = None
-			bar['user_rating'] = round(random.uniform(1,5), 2)
 			db.places.insert_one(bar)
 
 	def populateCafe(self):
@@ -47,8 +44,7 @@ class MongoConnector:
 		for cafe in cafes['results']:
 			#keeping it random for now but for production its going to start as none
 			# bar['user_rating'] = None
-			cafe['user_rating'] = round(random.uniform(1,5), 2)
-			db.places.insert_one(bar)
+			db.places.insert_one(cafe)
 
 	def getPlaces(self):
 		allPlaces = []
@@ -69,7 +65,6 @@ class MongoConnector:
 	#populates login table with json data
 	def populateLogin(self,login):
 		db = self.clientConnect()
-
 		login['password'] = hashlib.md5(login['password'].encode('utf-8')).hexdigest()
 		db.users.insert_one(login)
 
@@ -91,8 +86,11 @@ class MongoConnector:
 		#authenticate login and return true or false
 	def addFavoritePlaces(self,username,place_id):
 		db = self.clientConnect()
-		db.users.update_one({'username': username},{'$push':{'favorite_places':place_id}})
-		print("added")
+		if(place_id not in db.users.find({'username': username})):
+			db.users.update_one({'username': username},{'$push':{'favorite_places':place_id}})
+			return("Added")
+		else:
+			return("Already Exists")
 
 	def removeFavoritePlaces(self,username,place_id):
 		db = self.clientConnect()
@@ -157,7 +155,9 @@ class MongoConnector:
 		db = self.clientConnect()
 		places = self.getPlaces()
 		for i in range(numofplaces):
-			tripPlaces.append(places[random.randint(1,len(places)-1)])
+			place = places[random.randint(1,len(places)-1)]
+			place['user_rating'] = round(random.uniform(1,5), 2)
+			tripPlaces.append(place)
 		trip['trip_id'] = str(uuid.uuid4())
 		trip['user'] = 'goat'
 		trip['trip_name'] = tripName
@@ -190,8 +190,9 @@ if __name__ == "__main__":
 	# Experience = MongoConnector('ds123619.mlab.com', '23619', 'admin', 'admin', 'enyc'
 	# Experience.populateBars()
 	# Experience.populateRestaurants()
+	# Experience.populateCafe()
 	# pprint(Experience.getPlacesInRadius(40.7733125,-73.9837555,2))
-	print(Experience.getFavoritePlaces('test1'))
+	# print(Experience.getFavoritePlaces('test1'))
 	# Experience.getBars()
 	# Experience.getRestaurants()
 	# pprint(Experience.QueryRestaurants(2,2,2))

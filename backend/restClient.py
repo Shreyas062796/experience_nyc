@@ -102,8 +102,11 @@ def verify():
 @restClient.route('/addfavoriteplaces', methods=['POST'])
 def addfavoriteplaces():
 	info = request.get_json()
-	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").addFavoritePlaces(info['username'],info['place_id'])
-	return(jsonify({"response":"True"}))
+	favorite = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").addFavoritePlaces(info['username'],info['place_id'])
+	if(favorite == "Added"):
+		return(jsonify({"response":"True"}))
+	else:
+		return(jsonify({"response":"Place already Exists"}))
 
 @restClient.route('/removefavoriteplaces', methods=['POST'])
 def removefavoriteplaces():
