@@ -144,7 +144,11 @@ class Main extends React.Component {
   };
 
   handleLogin = () => {
-    this.setState({username: sessionStorage.getItem('username'), loginClick: ''})
+    this.setState({username: sessionStorage.getItem('username'), loginClick: '', clicked: ''})
+  }
+
+  handleRegister = () => {
+    this.setState({clicked: 0});
   }
 
   handleLogout = () => {
@@ -283,6 +287,7 @@ class Main extends React.Component {
                   clicked={this.state.clicked}
                   onClose={this.handleModalClose}
                   loggedIn={this.handleLogin}
+                  registered={this.handleRegister}
                 />
                 <Cards filter={this.state.filter}/>
               </div>
