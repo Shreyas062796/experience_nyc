@@ -57,11 +57,6 @@ const styles = theme => ({
 });
 
 class RegisterForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.setState({display: 'none'})
-  }
-
   state = {
     display: 'none',
     showPassword: false,
@@ -311,19 +306,17 @@ class RegisterForm extends React.Component {
             />
 
         </FormControl>
-        <FormControl className={classes.formControl} style={{marginTop: 25}}>
-          <Grid container>
+        <FormControl className={classes.formControl}>
             <Grid item md={4}>
               <Typography>
                 <a href="#" style={{textDecoration: "none"}}>Forgot Username or Password?</a>
               </Typography>
             </Grid>
-            <Grid item md={4} style={{textAlign: "center"}}>
+            <div style={{textAlign: "center"}}>
               <Button id="register" className={classes.button} onClick={this.handleRegister} style={{width: '25%',color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
                 Register
               </Button>
-            </Grid>
-          </Grid>
+            </div>
         </FormControl>
       </div>
     );

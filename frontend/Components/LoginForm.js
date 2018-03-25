@@ -59,11 +59,6 @@ const styles = theme => ({
 
 
 class LoginForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.setState({display: 'block'})
-  }
-
   state = {
     display: 'block',
     showPassword: false,
@@ -197,19 +192,17 @@ class LoginForm extends React.Component {
               }
             />
         </FormControl>
-        <FormControl className={classes.formControl} style={{marginTop: 25}}>
-          <Grid container>
+        <FormControl className={classes.formControl}>
             <Grid item md={4}>
               <Typography>
                 <a href="#" style={{textDecoration: "none"}}>Forgot Username or Password?</a>
               </Typography>
             </Grid>
-            <Grid item md={4} style={{textAlign: "center"}}>
+            <div style={{textAlign: "center"}}>
               <Button id='login' className={classes.button} onClick={this.handleLogin} style={{width: '25%',color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
                 Login
               </Button>
-            </Grid>
-          </Grid>
+            </div>
         </FormControl>
       </div>
     );
