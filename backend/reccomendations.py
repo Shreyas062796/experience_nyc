@@ -5,9 +5,8 @@ from maps.geo import addressToGeo
 
 connector = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
 class placeReccomendations:
-	def __init__(self,user,address):
+	def __init__(self,user):
 		self.user = user
-		self.address = address
 
 	def getTripsandPlaces(self):
 		trips = connector.queryTrip(self.user)
@@ -35,15 +34,17 @@ class placeReccomendations:
 
 	#run the machine learning for all the places and if its in a 2 mile radius then it should
 	#return
-	def getReccomendedPlaces(self):
+
+	
+	def getPlacesInRadius(self,address):
 		reccomendedplaces = []
-		curCoordinates = addressToGeo(self.address)
+		curCoordinates = addressToGeo(address)
 		print(curCoordinates)
 		places = connector.getPlacesInRadius(curCoordinates['lat'],curCoordinates['lng'],2)
 		userplaces = self.getTripsandPlaces()[1]
 		for place in places:
 			for userplaceid in userplaces['id']:
-				if(place['id'] != userplaceid):
+				if(place['id'] != userplaceid and place not in reccomendedplaces):
 					reccomendedplaces.append(place)
 		pprint(reccomendedplaces)
 		return(reccomendedplaces)
@@ -52,5 +53,5 @@ class placeReccomendations:
 	#user likes based on what they like
 
 if __name__ == "__main__":
-	reccomender = placeReccomendations('goat','269 Amsterdam Ave, New York, NY 10023')
-	reccomender.getTestingPlaces()
+	reccomender = placeReccomendations('goat')
+	reccomender.getPlacesInRadius('269 Amsterdam Ave, New York, NY 10023')
