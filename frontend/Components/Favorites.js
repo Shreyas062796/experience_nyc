@@ -20,6 +20,7 @@ import StarHalf from 'material-ui-icons/StarHalf';
 import StarBorder from 'material-ui-icons/StarBorder';
 import Send from 'material-ui-icons/Send';
 import AttachMoney from 'material-ui-icons/AttachMoney';
+import Tooltip from 'material-ui-next/Tooltip';
 
 const styles = theme => ({
   card: {
@@ -52,6 +53,12 @@ const styles = theme => ({
 
 class Cards extends React.Component {
   state = { expanded: false, items: []};
+
+  componentWillReceiveProps = (nextProps) => {
+    if(nextProps.page == "Favorites"){
+      this.getFavorites();
+    }
+  }
 
   handleExpandClick = () => {
     this.setState({ expanded: !this.state.expanded });
@@ -139,7 +146,11 @@ class Cards extends React.Component {
           </div>
            <CardActions className={this.props.actions} disableActionSpacing>
              <div style={{width: '20%'}}>
-                 <IconButton aria-label="Remove from favorites" onClick={() => { this.removeFavorite(value['id']) }}><Favorite /></IconButton>
+                <Tooltip id="tooltip-bottom" title="Remove Favorite" placement="bottom">
+                  <IconButton aria-label="Remove from favorites" onClick={() => { this.removeFavorite(value['id']) }}>
+                    <Favorite />
+                  </IconButton>
+                </Tooltip>
              </div>
              <div style={{width: '25%', textAlign: 'center', display: 'flex'}}>
                <IconButton>
