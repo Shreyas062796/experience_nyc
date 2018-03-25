@@ -89,8 +89,14 @@ def verify():
 @restClient.route('/addfavoriteplaces', methods=['POST'])
 def addfavoriteplaces():
 	info = request.get_json()
-	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").addFavoritePlaces(info['username'],info['place_id'])
-	return "True"
+	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").addFavoritePlaces(info['username'],int(info['place_id']))
+	return("True")
+
+@restClient.route('/removefavoriteplaces', methods=['POST'])
+def removefavoriteplaces():
+	info = request.get_json()
+	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").removeFavoritePlaces(info['username'],int(info['place_id']))
+	return("True")
 
 @restClient.route('/getfavoriteplacesIds', methods=['POST'])
 def getfavoriteplacesIds():
@@ -101,7 +107,6 @@ def getfavoriteplacesIds():
 def getfavoriteplaces():
 	info = request.get_json()
 	return(jsonify(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getFavoritePlaces(info['username'])))
-
 
 @restClient.route('/queryplaces', methods=['GET'])
 def queryplaces():

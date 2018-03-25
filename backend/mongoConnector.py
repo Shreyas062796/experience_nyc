@@ -91,6 +91,12 @@ class MongoConnector:
 	def addFavoritePlaces(self,username,place_id):
 		db = self.clientConnect()
 		db.users.update_one({'username': username},{'$push':{'favorite_places':place_id}})
+		print("added")
+
+	def removeFavoritePlaces(self,username,place_id):
+		db = self.clientConnect()
+		db.users.update_one({'username': username},{'$pull':{'favorite_places':place_id}})
+		print("added")
 
 	def getFavoritePlacesIds(self,username):
 		db = self.clientConnect()
@@ -186,7 +192,7 @@ if __name__ == "__main__":
 	# pprint(Experience.QueryRestaurants(2,2,2))
 	# pprint(Experience.queryPlaces('restaurant','2','5'))
 	# pprint(Experience.QueryBars(2,2,2))
-	Experience.getPlaces()
+	Experience.addFavoritePlaces("testUser",134)
 	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
 	# for i in tripnames:
 	# 	trip = Experience.createTrip(3,i)
