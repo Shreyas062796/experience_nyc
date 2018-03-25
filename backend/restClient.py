@@ -97,19 +97,19 @@ def verify():
 		return(jsonify({"response":"The email was not verified try again"}))
 	#username,unique_id,email
 
-# I'll need a function from you (addToFavorites) that will take a unique place id as a single param and inserts it into the db as a list of favorite places
+# I'll need a function from you (addToFavorites) tha will take a unique place id as a single param and inserts it into the db as a list of favorite places
 # I'll also need you to write a function that will retreive the favorites returned as a json list
 @restClient.route('/addfavoriteplaces', methods=['POST'])
 def addfavoriteplaces():
 	info = request.get_json()
-	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").addFavoritePlaces(info['username'],int(info['place_id']))
-	return("True")
+	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").addFavoritePlaces(info['username'],info['place_id'])
+	return(jsonify({"response":"True"}))
 
 @restClient.route('/removefavoriteplaces', methods=['POST'])
 def removefavoriteplaces():
 	info = request.get_json()
-	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").removeFavoritePlaces(info['username'],int(info['place_id']))
-	return("True")
+	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").removeFavoritePlaces(info['username'],info['place_id'])
+	return(jsonify({"response":"True"}))
 
 @restClient.route('/getfavoriteplacesIds', methods=['POST'])
 def getfavoriteplacesIds():
