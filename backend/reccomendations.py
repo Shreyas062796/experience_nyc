@@ -35,7 +35,8 @@ class placeReccomendations:
 		return(newtripdf,newplacedf)
 
 	#filter places by lattitude and longitude for the places and give like a 2 mile location
-	def 
+	def filter():
+		pass
 
 	def getTestingPlaces(self):
 		testdata = []
@@ -48,11 +49,7 @@ class placeReccomendations:
 					testdata.append(place)
 		pprint(testdata)
 
-	def reccomendations(self):
-		pass
-
 if __name__ == "__main__":
 	reccomender = placeReccomendations('goat','269 Amsterdam Ave, New York, NY 10023')
 	reccomender.getTripsandPlaces()
 	# reccomender.train()
-

@@ -22,8 +22,9 @@ const styles = theme => ({
 
 class LoginModal extends React.Component {
   componentWillReceiveProps(nextProps) {
-      this.setState({open: nextProps['clicked'], value: 0});
-      console.log(this.state.open);
+      if((nextProps['clicked'] == '0') || (nextProps['clicked'] == '1')){
+          this.setState({open: true, value: nextProps['clicked']});
+      }
   }
 
   state = {
@@ -34,11 +35,11 @@ class LoginModal extends React.Component {
   }
 
   handleClose = () => {
-    this.setState({ open: '' });
+    this.setState({ open: ''});
+    this.props.onClose();
   };
 
   handleTabChange = (event, value) => {
-    console.log(value);
     this.setState({ value });
     if(this.state.value == 1){
       this.setState({loginForm: 'block',
@@ -48,7 +49,11 @@ class LoginModal extends React.Component {
       this.setState({loginForm: 'none',
                      registerForm: 'block'})
     }
-  };
+  }
+
+  handleLogin = () => {
+    this.props.loggedIn();
+  }
 
   render() {
     const { classes } = this.props;
@@ -72,7 +77,7 @@ class LoginModal extends React.Component {
               <Tab label="Login" />
               <Tab label="Register" />
             </Tabs>
-              <LoginForm display={this.state.loginForm}/>
+              <LoginForm display={this.state.loginForm} loggedIn={this.handleLogin}/>
               <RegisterForm display={this.state.registerForm}/>
           </div>
         </Modal>

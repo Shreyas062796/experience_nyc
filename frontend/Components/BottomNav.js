@@ -10,7 +10,8 @@ const styles = {
   root: {
     width: '100%',
     position: 'absolute',
-    bottom: 0
+    bottom: 0,
+    boxShadow: '0px -0.5px 2px 0px rgba(51,51,51,0.25)'
   }
 };
 
