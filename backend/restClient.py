@@ -102,31 +102,31 @@ def verify():
 @restClient.route('/addfavoriteplaces', methods=['POST'])
 def addfavoriteplaces():
 	info = request.get_json()
-	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").addFavoritePlaces(info['username'],info['place_id'])
-	return "True"
+	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").addFavoritePlaces(info['username'],int(info['place_id']))
+	return("True")
+
+@restClient.route('/removefavoriteplaces', methods=['POST'])
+def removefavoriteplaces():
+	info = request.get_json()
+	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").removeFavoritePlaces(info['username'],int(info['place_id']))
+	return("True")
 
 @restClient.route('/getfavoriteplacesIds', methods=['POST'])
 def getfavoriteplacesIds():
 	info = request.get_json()
-	return(jsonify(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getFavoritePlacesIds(info['username'])))
+	return(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getFavoritePlacesIds(info['username']))
 
 @restClient.route('/getfavoriteplaces', methods=['POST'])
 def getfavoriteplaces():
 	info = request.get_json()
 	return(jsonify(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getFavoritePlaces(info['username'])))
 
-
 @restClient.route('/queryplaces', methods=['GET'])
 def queryplaces():
-	# info = request.get_json()
-	# print("useigiusehfugihserulhgirtghligwherluihgwliergluwuier")
-
 	if request.method == 'GET': 
 		num = request.args['num']
 		price_level = request.args['price_level']
 		types= request.args['types']
-		# print("{}:{}\n{}:{}\n{}:{}".format(num,type(num), price_level,type(price_level), types,type(types)))
-
 		places = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(types,price_level,int(num))
 		if(places):
 			return(jsonify(places))
@@ -157,9 +157,6 @@ def getTopBars(amount):
 def getReccomendations(user):
 	reccomendations = rec.placeReccomendations(user).getTrips()
 	return(reccomendations)
-
-
-
 
 @restClient.route('/getevents_temp')
 def getEvents():
@@ -219,11 +216,9 @@ def getEvents_old():
 
 	return(jsonString)
 
-
 @restClient.route('/')
 def index():
 	return '<h1>Flask Client is up and running</h1>'
-
 
 if __name__ == '__main__':
 	restClient.run(debug=DEBUG)

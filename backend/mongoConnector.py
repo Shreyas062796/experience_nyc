@@ -55,15 +55,17 @@ class MongoConnector:
 		db = self.clientConnect()
 		for document in db.places.find({}):
 			allPlaces.append(document)
-			print(document)
 		return(allPlaces)
 
-	# def getPlacesInRadius(self,lat,lng,radius):
-	# 	allPlaces = []
-	# 	db = self.clientConnect()
-	# 	for document in db.places.find({location:{$geoWithin:{ $centerSphere: [ ['lat':-73.93414657,'lng':40.82302903 ], 5 / 3963.2 ] } } }):
-	# 		allPlaces.append(document)
-	# 	return(allPlaces)
+	def getPlacesInRadius(self,lat,lng,radius):
+		allPlaces = []
+		db = self.clientConnect()
+		# db.places.find({'geometry.location':{'$geoWithin':{'$centerSphere': [[-73.93414657,40.82302903], 5]}}})
+		for document in db.places.find({'geometry.location':{'nearSphere':[40.82302903,-73.93414657],'$maxDistance':5*1609}}):
+			# allPlaces.append(document)
+			print(document)
+		# pprint(allPlaces)
+		return(allPlaces)
 
 	#populates login table with json data
 	def populateLogin(self,login):
@@ -91,10 +93,17 @@ class MongoConnector:
 	def addFavoritePlaces(self,username,place_id):
 		db = self.clientConnect()
 		db.users.update_one({'username': username},{'$push':{'favorite_places':place_id}})
+		print("added")
+
+	def removeFavoritePlaces(self,username,place_id):
+		db = self.clientConnect()
+		db.users.update_one({'username': username},{'$pull':{'favorite_places':place_id}})
+		print("added")
 
 	def getFavoritePlacesIds(self,username):
 		db = self.clientConnect()
 		user = db.users.find_one({"username": username})
+		print(user['favorite_places'])
 		return(user['favorite_places'])
 
 	def getFavoritePlaces(self,username):
@@ -102,7 +111,7 @@ class MongoConnector:
 		favoritePlaces = []
 		user = db.users.find_one({"username": username})
 		for placeId in user['favorite_places']:
-			place = db.places.find_one({"place_id": placeId})
+			place = db.places.find_one({"id": placeId})
 			favoritePlaces.append(place)
 		return(favoritePlaces)
 			
@@ -181,12 +190,13 @@ if __name__ == "__main__":
 	# Experience.populateBars()
 	# Experience.populateRestaurants()
 	# Experience.getPlacesInRadius(40.7733125,-73.9837555,2)
+	Experience.getFavoritePlaces('test1')
 	# Experience.getBars()
 	# Experience.getRestaurants()
 	# pprint(Experience.QueryRestaurants(2,2,2))
 	# pprint(Experience.queryPlaces('restaurant','2','5'))
 	# pprint(Experience.QueryBars(2,2,2))
-	Experience.getPlaces()
+	# Experience.addFavoritePlaces("testUser",134)
 	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
 	# for i in tripnames:
 	# 	trip = Experience.createTrip(3,i)
