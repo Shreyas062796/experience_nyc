@@ -53,7 +53,7 @@ class Main extends React.Component {
     clicked: '',
     username: sessionStorage.getItem('username'),
     anchorEl: null,
-    currentPage: 'search',
+    currentPage: 'Search',
     filter: {types: '', price_level: '', num: '10'}
   };
 
@@ -84,11 +84,11 @@ class Main extends React.Component {
   }
 
   handleLogin = () => {
-    this.setState({username: sessionStorage.getItem('username'), loginClick: ''})
+    this.setState({username: sessionStorage.getItem('username'), loginClick: '', clicked: ''})
   }
 
   handleLogout = () => {
-    this.setState({username: '', clicked: ''})
+    this.setState({username: '', clicked: '', favorites: [], filter: {types: '', price_level: '', num: '10'}})
     sessionStorage.setItem('username', '')
     alert("Logged Out!")
   }
@@ -167,7 +167,7 @@ class Main extends React.Component {
             </Toolbar>
 
           </AppBar>
-          <div style={{display: this.handlePageDisplay('search'), marginTop: '4em'}}>
+          <div style={{display: this.handlePageDisplay('Search'), marginTop: '4em'}}>
             <FilterBar setFilter={this.setFilter}/>
             <LoginModal
               clicked={this.state.clicked}
@@ -176,10 +176,10 @@ class Main extends React.Component {
             />
             <Cards filter={this.state.filter}/>
           </div>
-          <div style={{display: this.handlePageDisplay('favorites')}}>
+          <div style={{display: this.handlePageDisplay('Favorites')}}>
             <Favorites page={this.state.currentPage}/>
           </div>
-          <div style={{display: this.handlePageDisplay('trips')}}>
+          <div style={{display: this.handlePageDisplay('Trips')}}>
             <Trips />
           </div>
           <BottomNav pageChange={this.handlePage}/>
