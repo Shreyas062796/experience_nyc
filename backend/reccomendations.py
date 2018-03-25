@@ -23,7 +23,6 @@ class placeReccomendations:
 		newtripdf = tripdf[['rating','trip_name','distance']].copy()
 		newplacedf = placesdf[['price_level','name','types','user_rating','id']].copy()
 		x = newplacedf.groupby(["types"]).mean()
-		print(x)
 		# print(newtripdf.shape)
 		# print(newplacedf.shape)
 		# print(newtripdf.columns)
@@ -35,21 +34,19 @@ class placeReccomendations:
 		return(newtripdf,newplacedf)
 
 	#filter places by lattitude and longitude for the places and give like a 2 mile location
-	def filter():
-		pass
-
 	def getTestingPlaces(self):
 		testdata = []
-		curCoordinates = addressToGeo(address)
+		curCoordinates = addressToGeo(self.address)
+		print(curCoordinates)
 		places = connector.getPlaces()
 		userplaces = self.getTripsandPlaces()[1]
 		for place in places:
 			for userplaceid in userplaces['id']:
 				if(place['id'] != userplaceid):
 					testdata.append(place)
-		pprint(testdata)
+		# pprint(testdata)
+		return(testdata)
 
 if __name__ == "__main__":
 	reccomender = placeReccomendations('goat','269 Amsterdam Ave, New York, NY 10023')
-	reccomender.getTripsandPlaces()
-	# reccomender.train()
+	reccomender.getTestingPlaces()
