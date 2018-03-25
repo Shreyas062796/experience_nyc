@@ -19,7 +19,7 @@ class SimpleBottomNavigation extends React.Component {
   state = {
     value: 0,
     marginRight: 300,
-    pageKeys: {0 : 'search', 1 : 'favorites', 2 : 'trips'}
+    pageKeys: {0 : 'Search', 1 : 'Favorites', 2 : 'Trips'}
   };
 
   handleChange = (event, value) => {
