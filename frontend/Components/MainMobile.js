@@ -177,7 +177,7 @@ class Main extends React.Component {
             <Cards filter={this.state.filter}/>
           </div>
           <div style={{display: this.handlePageDisplay('favorites')}}>
-            <Favorites />
+            <Favorites page={this.state.currentPage}/>
           </div>
           <div style={{display: this.handlePageDisplay('trips')}}>
             <Trips />

@@ -295,7 +295,7 @@ class Main extends React.Component {
 
               </div>
               <div style={{display: this.handlePageDisplay('Favorites')}}>
-                <Favorites />
+                <Favorites page={this.state.currentPage}/>
               </div>
           </main>
           <Drawer
