@@ -61,9 +61,8 @@ class MongoConnector:
 		allPlaces = []
 		db = self.clientConnect()
 		# db.places.find({'geometry.location':{'$geoWithin':{'$centerSphere': [[-73.93414657,40.82302903], 5]}}})
-		for document in db.places.find({'geometry.location':{'nearSphere':[40.82302903,-73.93414657],'$maxDistance':5*1609}}):
-			# allPlaces.append(document)
-			print(document)
+		for document in db.places.find({'geometry.location':{'$nearSphere':[lng,lat],'$maxDistance':radius*1609}}):
+			allPlaces.append(document)
 		# pprint(allPlaces)
 		return(allPlaces)
 
@@ -189,8 +188,8 @@ if __name__ == "__main__":
 	# Experience = MongoConnector('ds123619.mlab.com', '23619', 'admin', 'admin', 'enyc'
 	# Experience.populateBars()
 	# Experience.populateRestaurants()
-	# Experience.getPlacesInRadius(40.7733125,-73.9837555,2)
-	Experience.getFavoritePlaces('test1')
+	# pprint(Experience.getPlacesInRadius(40.7733125,-73.9837555,2))
+	print(Experience.getFavoritePlaces('test1'))
 	# Experience.getBars()
 	# Experience.getRestaurants()
 	# pprint(Experience.QueryRestaurants(2,2,2))
