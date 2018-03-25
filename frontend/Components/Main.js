@@ -38,6 +38,11 @@ const styles = theme => ({
     display: 'flex',
     width: '100%',
   },
+  hover: {
+    ':hover': {
+      opacity: 0.5
+    }
+  },
   appBar: {
     position: 'absolute',
     transition: theme.transitions.create(['margin', 'width'], {
@@ -75,8 +80,8 @@ const styles = theme => ({
   },
   content: {
     flexGrow: 1,
+    marginTop: '4em',
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -102,31 +107,26 @@ const styles = theme => ({
 
 class Main extends React.Component {
   state = {
-    open: true,
-    loginClick: '',
+    drawerOpen: true,
+    clicked: '',
     username: '',
-    anchorEl: null,
+    anchorEl: null
   };
 
-
-  handleUserLoggedIn = () => {
-
-  }
-
-  componentDidMount = () => {
-    //this.setState({ username: sessionStorage.getItem(username); });
-  }
-
   handleDrawerOpen = () => {
-    this.setState({ open: true });
+    this.setState({ drawerOpen: true });
   };
 
   handleDrawerClose = () => {
-    this.setState({ open: false });
+    this.setState({ drawerOpen: false });
   };
 
   handleLoginClick = () => {
-    this.setState({loginClick: true});
+    this.setState({clicked: 0});
+  }
+
+  handleRegisterClick = () => {
+    this.setState({clicked: 1});
   }
 
   handleMenu = event => {
@@ -137,16 +137,32 @@ class Main extends React.Component {
     this.setState({ anchorEl: null });
   };
 
+  handleLogin = () => {
+    this.setState({username: sessionStorage.getItem('username'), loginClick: ''})
+  }
+
+  handleLogout = () => {
+    this.setState({username: ''})
+    sessionStorage.setItem('username', '')
+    alert("Logged Out!")
+  }
+
+  handleModalClose = () => {
+    this.setState({clicked: ''})
+  }
+
   render() {
     const { classes, theme  } = this.props;
-    const { open, username, anchorEl } = this.state;
+    const { drawerOpen, username, anchorEl } = this.state;
 
     const menuOpen = Boolean(anchorEl);
 
     let userAppbarOption = null;
 
-    if(this.state.username){
-      userAppbarOption = (<div><Typography style={{color: 'white', display: 'inline-block'}}>{this.state.username}</Typography><IconButton
+    if(this.state.username != ''){
+      console.log(sessionStorage.getItem('username'))
+      userAppbarOption = (<div><Typography style={{color: 'white', display: 'inline-block'}}>{this.state.username}</Typography>
+                          <IconButton
                             aria-owns={menuOpen ? 'menu-appbar' : null}
                             aria-haspopup="true"
                             onClick={this.handleMenu}
@@ -169,13 +185,19 @@ class Main extends React.Component {
                           >
                             <MenuItem onClick={this.handleClose}>Profile</MenuItem>
                             <MenuItem onClick={this.handleClose}>My account</MenuItem>
-                            <MenuItem onClick={this.handleClose}>Logout</MenuItem>
+                            <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
                           </Menu></div>);
     }
     else {
-      userAppbarOption = (<Typography onClick={this.handleLoginClick} style={{color: 'white', cursor: 'pointer'}}>
-                                Login | Signup
-                              </Typography>);
+      userAppbarOption = (<Typography style={{color: 'white', cursor: 'pointer'}}>
+                            <a className={classes.hover}
+                               onClick={this.handleLoginClick}>
+                               Login
+                            </a> | <a className={classes.hover}
+                               onClick={this.handleRegisterClick}>
+                               Signup
+                            </a>
+                          </Typography>);
 
     }
     const tripCards = (<Card className={classes.card} style={{margin: '5%'}}>
@@ -197,8 +219,8 @@ class Main extends React.Component {
         <div className={classes.appFrame}>
           <AppBar
             className={classNames(classes.appBar, {
-              [classes.appBarShift]: open,
-              [classes[`appBarShift-right`]]: open,
+              [classes.appBarShift]: drawerOpen,
+              [classes[`appBarShift-right`]]: drawerOpen,
             })}
 
           >
@@ -213,7 +235,7 @@ class Main extends React.Component {
                 <IconButton
                   aria-label="open drawer"
                   onClick={this.handleDrawerOpen}
-                  className={classNames(classes.menuButton, open && classes.hide)}
+                  className={classNames(classes.menuButton, drawerOpen && classes.hide)}
                 >
                   <Place color="white" />
                 </IconButton>
@@ -223,19 +245,22 @@ class Main extends React.Component {
           </AppBar>
           <main
             className={classNames(classes.content, classes[`content-right`], {
-              [classes.contentShift]: open,
-              [classes[`contentShift-right`]]: open,
+              [classes.contentShift]: drawerOpen,
+              [classes[`contentShift-right`]]: drawerOpen,
             })}
           >
             <div className={classes.drawerHeader} />
             <FilterBar />
-            <LoginModal clicked={this.state.loginClick}/>
+            <LoginModal
+              clicked={this.state.clicked}
+              onClose={this.handleModalClose}
+            />
             <Cards />
           </main>
           <Drawer
             variant="persistent"
             anchor={'right'}
-            open={open}
+            open={drawerOpen}
             classes={{
               paper: classes.drawerPaper,
             }}

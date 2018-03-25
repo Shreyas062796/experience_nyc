@@ -7,10 +7,11 @@ import json
 import datetime
 import reccomendations as rec
 import filtering
-from caching import Cacher
+from lib.caching import Cacher
 from maps.geo import addressToGeo
 import lib.sendmail as mail
 
+from events import events
 
 DEBUG = True
 CACHE = Cacher()
@@ -22,11 +23,11 @@ CORS(restClient)
 # this way whenever the server loads up you have data for the 
 # user to work with and will keep updating hourly
 
-def isNotNull(str,request):
-   try:
-      return(request.args[str])
-   except KeyError:
-       return(None)
+def isNotNull(astr,request):
+	try:
+		return request.args[astr]
+	except KeyError:
+		return None
 
 @restClient.before_first_request
 def activate_job():
@@ -36,8 +37,8 @@ def activate_job():
 		while hour == datetime.datetime.now().hour:
 			time.sleep(60)
 		while True:
-			# updateEvents()	#write this later
-			# updatePlaces()	#write this later
+			# updateEvents()    #write this later
+			# updatePlaces()    #write this later
 
 			print('Hour Notification')
 			time.sleep(900) # sleep for an hour
@@ -46,7 +47,6 @@ def activate_job():
 	# sets up the data for when the first first goes up
 	# updateEvents()
 	# updatePlaces()
-
 	thread = threading.Thread(target=get_data)
 	thread.start()
 
@@ -90,6 +90,7 @@ def verify():
 def addfavoriteplaces():
 	info = request.get_json()
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").addFavoritePlaces(info['username'],info['place_id'])
+	return "True"
 
 @restClient.route('/getfavoriteplacesIds', methods=['POST'])
 def getfavoriteplacesIds():
@@ -107,7 +108,7 @@ def queryplaces():
 	# info = request.get_json()
 	# print("useigiusehfugihserulhgirtghligwherluihgwliergluwuier")
 
-	if request.method == 'GET':	
+	if request.method == 'GET': 
 		num = request.args['num']
 		price_level = request.args['price_level']
 		types= request.args['types']
@@ -136,59 +137,40 @@ def getReccomendations(user):
 	reccomendations = rec.placeReccomendations(user).getTrips()
 	return(reccomendations)
 
-@restClient.route('/topplace', methods=['GET'])
-def getTopPlace():
+
+
+
+@restClient.route('/getevents_temp')
+def getEvents():
+	# Checks if key exists, work this out later
 	def getkey(a_str, a_request):
 		try:
 			return a_request.args[a_str]
 		except KeyError:
 			return None
+	
+	#default lat long for now
+	lat = 40.7831
+	lon = -73.9712
 
-	if request.method == 'GET':
-		types = getkey('types', request)
+	gevents = events.getEvents()
+
+	if request.method== 'GET':
+		q = getkey('q', request)
 		address = getkey('address', request)
-		amount = getkey('amount', request)
-		print('got in get key')
 
-		# check if they all have a value, therefore 
-		# data was passed in correctly
-		if all([types, address, amount]):
-			geocode = addressToGeo(address)
-			lat, lng = geocode['lat'], geocode['lng']
-			myobj = filtering.Filtering(lat, lng, types)			
-
-			outdata = myobj.getLocationJson()
-			return jsonify(outdata)
-
-		else:
-			return "Invalid credentials"
+		place = addressToGeo(address)   
+		lat, lng = place['lat'], place['lng']
 
 
-@restClient.route('/topbar', methods=['GET'])
-def getTopBar():
-	if request.method == 'GET':	
-		amount = request.args['amount']
-		address = request.args['address']
+		eb_events = gevents.setParams(lat, lng, 2)      
+		# print(type(eb_events))
+		return jsonify(eb_events)
 
-		data = CACHE.retrieveJson(address)
-		if data is not None:
-			print("Data is in cache, it is working congrats pls take down later")
-			return jsonify(data) 
-		else:
-			place = addressToGeo(address)	
-			lat, lng = place['lat'], place['lng']
-			myobj = filtering.Filtering(lat,lng)
+	return 'Not calling the proper method'
 
-			outdata = myobj.getTopBars(int(amount))
-			CACHE.addToCache(address, outdata)
-			return jsonify(outdata)
-
-	else:
-		return "<h1> Error </h1>"
-
-
-@restClient.route('/events', methods = ['GET'])
-def getEvents():
+@restClient.route('/events_old', methods = ['GET'])
+def getEvents_old():
 	#temporary just for front testing
 
 	# this block is for heroku
@@ -215,18 +197,6 @@ def getEvents():
 		jsonString = json.dumps(returndic)
 
 	return(jsonString)
-
-
-
-
-@restClient.route('/auth/<string:code>')
-def authenticate(code):
-	'''
-	check the code againts something in mongo 
-	where the user can click, make it timeout after a
-	certain amount of time
-	'''
-	return("OK")
 
 
 @restClient.route('/')

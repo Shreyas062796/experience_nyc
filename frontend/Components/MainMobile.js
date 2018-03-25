@@ -49,23 +49,18 @@ class Main extends React.Component {
     this.handlePage = this.handlePage.bind(this)
   }
   state = {
-    loginClick: '',
+    clicked: '',
     username: '',
     anchorEl: null,
     currentPage: 'search'
   };
 
-
-  handleUserLoggedIn = () => {
-
-  }
-
-  componentDidMount = () => {
-    //this.setState({ username: sessionStorage.getItem(username); });
-  }
-
   handleLoginClick = () => {
-    this.setState({loginClick: true});
+    this.setState({clicked: 0});
+  }
+
+  handleRegisterClick = () => {
+    this.setState({clicked: 1});
   }
 
   handleMenu = event => {
@@ -80,6 +75,20 @@ class Main extends React.Component {
     this.setState({
       currentPage: page
     })
+  }
+
+  handleModalClose = () => {
+    this.setState({clicked: ''})
+  }
+
+  handleLogin = () => {
+    this.setState({username: sessionStorage.getItem('username'), loginClick: ''})
+  }
+
+  handleLogout = () => {
+    this.setState({username: ''})
+    sessionStorage.setItem('username', '')
+    alert("Logged Out!")
   }
 
   handlePageDisplay = (page) => {
@@ -123,13 +132,13 @@ class Main extends React.Component {
                           >
                             <MenuItem onClick={this.handleClose}>Profile</MenuItem>
                             <MenuItem onClick={this.handleClose}>My account</MenuItem>
-                            <MenuItem onClick={this.handleClose}>Logout</MenuItem>
+                            <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
                           </Menu></div>);
     }
     else {
-      userAppbarOption = (<Typography onClick={this.handleLoginClick} style={{color: 'white', cursor: 'pointer'}}>
-                                Login | Signup
-                              </Typography>);
+      userAppbarOption = (<Typography style={{color: 'white', cursor: 'pointer'}}>
+                            <a onClick={this.handleLoginClick}>Login</a> | <a onClick={this.handleRegisterClick}>Signup</a>
+                          </Typography>);
 
     }
 
@@ -141,20 +150,23 @@ class Main extends React.Component {
 
           >
             <Toolbar disableGutters={!open}>
-              <div style={{width: '50%'}}>
+              <div style={{width: '60%'}}>
                 <Typography variant="title" color="inherit" noWrap>
                   Experience NYC
                 </Typography>
               </div>
-              <div style={{width: '50%', alignItems: 'center', justifyContent: 'flex-end', display: 'flex'}}>
+              <div style={{width: '40%', alignItems: 'center', justifyContent: 'flex-end', display: 'flex'}}>
                 {userAppbarOption}
               </div>
             </Toolbar>
 
           </AppBar>
-          <div style={{display: this.handlePageDisplay('search')}}>
+          <div style={{display: this.handlePageDisplay('search'), marginTop: '4em'}}>
             <FilterBar />
-            <LoginModal clicked={this.state.loginClick}/>
+            <LoginModal
+              clicked={this.state.clicked}
+              onClose={this.handleModalClose}
+            />
             <Cards />
           </div>
           <div style={{display: this.handlePageDisplay('favorites')}}>
