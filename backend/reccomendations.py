@@ -35,7 +35,6 @@ class placeReccomendations:
 		return(newtripdf,newplacedf)
 
 	#filter places by lattitude and longitude for the places and give like a 2 mile location
-	def 
 
 	def getTestingPlaces(self):
 		testdata = []
