@@ -51,6 +51,8 @@ class getEvents:
 
 			today_events.extend(new_data.json()['events'])
 
+		today_events = [event for event in today_events if event['start']['timezone']=='America/New_York']
+
 		return today_events
 
 

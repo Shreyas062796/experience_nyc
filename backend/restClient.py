@@ -140,7 +140,7 @@ def queryplaces():
 def getTopEvents():
 	if request.method == "GET":
 		n = int(request.args['amount'])
-		return jsonify(EVENT_CACHE.getTopN())
+		return jsonify(EVENT_CACHE.getTopN(n))
 
 
 
