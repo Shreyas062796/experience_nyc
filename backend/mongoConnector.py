@@ -4,6 +4,7 @@ from bson.objectid import *
 import random
 import json
 import hashlib
+import uuid
 from pprint import pprint
 
 places = ps.NYCPlaces('AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o',40.7831,-73.9712)
@@ -27,8 +28,6 @@ class MongoConnector:
 		db = self.clientConnect()
 		for restaurant in restaurants['results']:
 			#keeping it random for now but for production its going to start as none
-			# restaurant['user_rating'] = None
-			restaurant['user_rating'] = round(random.uniform(1,5), 2)
 			db.places.insert_one(restaurant)
 
 	#adds initital Bars data to database
@@ -37,8 +36,6 @@ class MongoConnector:
 		db = self.clientConnect()
 		for bar in bars['results']:
 			#keeping it random for now but for production its going to start as none
-			# bar['user_rating'] = None
-			bar['user_rating'] = round(random.uniform(1,5), 2)
 			db.places.insert_one(bar)
 
 	def populateCafe(self):
@@ -47,28 +44,27 @@ class MongoConnector:
 		for cafe in cafes['results']:
 			#keeping it random for now but for production its going to start as none
 			# bar['user_rating'] = None
-			cafe['user_rating'] = round(random.uniform(1,5), 2)
-			db.places.insert_one(bar)
+			db.places.insert_one(cafe)
 
 	def getPlaces(self):
 		allPlaces = []
 		db = self.clientConnect()
 		for document in db.places.find({}):
 			allPlaces.append(document)
-			print(document)
 		return(allPlaces)
 
-	# def getPlacesInRadius(self,lat,lng,radius):
-	# 	allPlaces = []
-	# 	db = self.clientConnect()
-	# 	for document in db.places.find({location:{$geoWithin:{ $centerSphere: [ ['lat':-73.93414657,'lng':40.82302903 ], 5 / 3963.2 ] } } }):
-	# 		allPlaces.append(document)
-	# 	return(allPlaces)
+	def getPlacesInRadius(self,lat,lng,radius):
+		allPlaces = []
+		db = self.clientConnect()
+		# db.places.find({'geometry.location':{'$geoWithin':{'$centerSphere': [[-73.93414657,40.82302903], 5]}}})
+		for document in db.places.find({'geometry.location':{'$nearSphere':[lng,lat],'$maxDistance':radius*1609}}):
+			allPlaces.append(document)
+		# pprint(allPlaces)
+		return(allPlaces)
 
 	#populates login table with json data
 	def populateLogin(self,login):
 		db = self.clientConnect()
-
 		login['password'] = hashlib.md5(login['password'].encode('utf-8')).hexdigest()
 		db.users.insert_one(login)
 
@@ -90,11 +86,21 @@ class MongoConnector:
 		#authenticate login and return true or false
 	def addFavoritePlaces(self,username,place_id):
 		db = self.clientConnect()
-		db.users.update_one({'username': username},{'$push':{'favorite_places':place_id}})
+		if(place_id not in db.users.find({'username': username})):
+			db.users.update_one({'username': username},{'$push':{'favorite_places':place_id}})
+			return("Added")
+		else:
+			return("Already Exists")
+
+	def removeFavoritePlaces(self,username,place_id):
+		db = self.clientConnect()
+		db.users.update_one({'username': username},{'$pull':{'favorite_places':place_id}})
+		print("added")
 
 	def getFavoritePlacesIds(self,username):
 		db = self.clientConnect()
 		user = db.users.find_one({"username": username})
+		print(user['favorite_places'])
 		return(user['favorite_places'])
 
 	def getFavoritePlaces(self,username):
@@ -102,8 +108,10 @@ class MongoConnector:
 		favoritePlaces = []
 		user = db.users.find_one({"username": username})
 		for placeId in user['favorite_places']:
-			place = db.places.find_one({"place_id": placeId})
-			favoritePlaces.append(place)
+			place = db.places.find_one({"id": placeId})
+			if(place is not None):
+				place['_id'] = str(place['_id'])
+				favoritePlaces.append(place)
 		return(favoritePlaces)
 			
 	def populateTags(self,tags):
@@ -147,7 +155,9 @@ class MongoConnector:
 		db = self.clientConnect()
 		places = self.getPlaces()
 		for i in range(numofplaces):
-			tripPlaces.append(places[random.randint(1,len(places)-1)])
+			place = places[random.randint(1,len(places)-1)]
+			place['user_rating'] = round(random.uniform(1,5), 2)
+			tripPlaces.append(place)
 		trip['trip_id'] = str(uuid.uuid4())
 		trip['user'] = 'goat'
 		trip['trip_name'] = tripName
@@ -180,13 +190,15 @@ if __name__ == "__main__":
 	# Experience = MongoConnector('ds123619.mlab.com', '23619', 'admin', 'admin', 'enyc'
 	# Experience.populateBars()
 	# Experience.populateRestaurants()
-	# Experience.getPlacesInRadius(40.7733125,-73.9837555,2)
+	# Experience.populateCafe()
+	# pprint(Experience.getPlacesInRadius(40.7733125,-73.9837555,2))
+	# print(Experience.getFavoritePlaces('test1'))
 	# Experience.getBars()
 	# Experience.getRestaurants()
 	# pprint(Experience.QueryRestaurants(2,2,2))
 	# pprint(Experience.queryPlaces('restaurant','2','5'))
 	# pprint(Experience.QueryBars(2,2,2))
-	Experience.getPlaces()
+	# Experience.addFavoritePlaces("testUser",134)
 	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
 	# for i in tripnames:
 	# 	trip = Experience.createTrip(3,i)

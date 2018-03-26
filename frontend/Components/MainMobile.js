@@ -23,6 +23,7 @@ import LoginModal from './LoginModal';
 import AccountCircle from 'material-ui-icons/AccountCircle';
 import Menu, { MenuItem } from 'material-ui-next/Menu';
 import Trips from './Trips.js';
+import Favorites from './Favorites.js';
 
 const styles = theme => ({
   root: {
@@ -50,9 +51,10 @@ class Main extends React.Component {
   }
   state = {
     clicked: '',
-    username: '',
+    username: sessionStorage.getItem('username'),
     anchorEl: null,
-    currentPage: 'search'
+    currentPage: 'Search',
+    filter: {types: '', price_level: '', num: '10'}
   };
 
   handleLoginClick = () => {
@@ -82,11 +84,11 @@ class Main extends React.Component {
   }
 
   handleLogin = () => {
-    this.setState({username: sessionStorage.getItem('username'), loginClick: ''})
+    this.setState({username: sessionStorage.getItem('username'), loginClick: '', clicked: ''})
   }
 
   handleLogout = () => {
-    this.setState({username: ''})
+    this.setState({username: '', clicked: '', favorites: [], filter: {types: '', price_level: '', num: '10'}})
     sessionStorage.setItem('username', '')
     alert("Logged Out!")
   }
@@ -100,6 +102,10 @@ class Main extends React.Component {
     }
   }
 
+  setFilter = (response) => {
+    this.setState({filter: response})
+  }
+
   render() {
     const { classes, theme  } = this.props;
     const { username, anchorEl } = this.state;
@@ -108,8 +114,8 @@ class Main extends React.Component {
 
     let userAppbarOption = null;
 
-    if(this.state.username){
-      userAppbarOption = (<div><Typography style={{color: 'white', display: 'inline-block'}}>{this.state.username}</Typography><IconButton
+    if(sessionStorage.getItem('username')){
+      userAppbarOption = (<div><Typography style={{color: 'white', display: 'inline-block'}}>{sessionStorage.getItem('username')}</Typography><IconButton
                             aria-owns={menuOpen ? 'menu-appbar' : null}
                             aria-haspopup="true"
                             onClick={this.handleMenu}
@@ -161,18 +167,19 @@ class Main extends React.Component {
             </Toolbar>
 
           </AppBar>
-          <div style={{display: this.handlePageDisplay('search'), marginTop: '4em'}}>
-            <FilterBar />
+          <div style={{display: this.handlePageDisplay('Search'), marginTop: '4em'}}>
+            <FilterBar setFilter={this.setFilter}/>
             <LoginModal
               clicked={this.state.clicked}
               onClose={this.handleModalClose}
+              loggedIn={this.handleLogin}
             />
-            <Cards />
+            <Cards filter={this.state.filter}/>
           </div>
-          <div style={{display: this.handlePageDisplay('favorites')}}>
-
+          <div style={{display: this.handlePageDisplay('Favorites')}}>
+            <Favorites page={this.state.currentPage}/>
           </div>
-          <div style={{display: this.handlePageDisplay('trips')}}>
+          <div style={{display: this.handlePageDisplay('Trips')}}>
             <Trips />
           </div>
           <BottomNav pageChange={this.handlePage}/>
