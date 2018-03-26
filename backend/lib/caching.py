@@ -1,3 +1,4 @@
+from datetime import datetime
 
 class Cacher:
 	'''
@@ -43,13 +44,17 @@ class EventCacher:
 		return len(self._topToday)
 
 
-	def setTopToday(self, alist):
+	def setTopToday(self, alist):		
 		self._topToday = alist
+		header = {"total_size": self.curr_len(), "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+		self._topToday.insert(0, header)
 
 
 	def getTopToday(self):
 		return self._topToday
 
+
 	def getTopN(self, n=10):
-		return self._topToday[:n]
+		print("n={}".format(n))
+		return self._topToday[:n+1]
 
