@@ -97,13 +97,22 @@ def verify():
 		return(jsonify({"response":"The email was not verified try again"}))
 	#username,unique_id,email
 
-# I'll need a function from you (addToFavorites) that will take a unique place id as a single param and inserts it into the db as a list of favorite places
+# I'll need a function from you (addToFavorites) tha will take a unique place id as a single param and inserts it into the db as a list of favorite places
 # I'll also need you to write a function that will retreive the favorites returned as a json list
 @restClient.route('/addfavoriteplaces', methods=['POST'])
 def addfavoriteplaces():
 	info = request.get_json()
-	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").addFavoritePlaces(info['username'],info['place_id'])
-	return "True"
+	favorite = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").addFavoritePlaces(info['username'],info['place_id'])
+	if(favorite == "Added"):
+		return(jsonify({"response":"True"}))
+	else:
+		return(jsonify({"response":"Place already Exists"}))
+
+@restClient.route('/removefavoriteplaces', methods=['POST'])
+def removefavoriteplaces():
+	info = request.get_json()
+	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").removeFavoritePlaces(info['username'],info['place_id'])
+	return(jsonify({"response":"True"}))
 
 @restClient.route('/getfavoriteplacesIds', methods=['POST'])
 def getfavoriteplacesIds():
@@ -115,18 +124,12 @@ def getfavoriteplaces():
 	info = request.get_json()
 	return(jsonify(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getFavoritePlaces(info['username'])))
 
-
 @restClient.route('/queryplaces', methods=['GET'])
 def queryplaces():
-	# info = request.get_json()
-	# print("useigiusehfugihserulhgirtghligwherluihgwliergluwuier")
-
 	if request.method == 'GET': 
 		num = request.args['num']
 		price_level = request.args['price_level']
 		types= request.args['types']
-		# print("{}:{}\n{}:{}\n{}:{}".format(num,type(num), price_level,type(price_level), types,type(types)))
-
 		places = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(types,price_level,int(num))
 		if(places):
 			return(jsonify(places))
@@ -137,7 +140,7 @@ def queryplaces():
 def getTopEvents():
 	if request.method == "GET":
 		n = int(request.args['amount'])
-		return jsonify(EVENT_CACHE.getTopN())
+		return jsonify(EVENT_CACHE.getTopN(n))
 
 
 
@@ -157,9 +160,6 @@ def getTopBars(amount):
 def getReccomendations(user):
 	reccomendations = rec.placeReccomendations(user).getTrips()
 	return(reccomendations)
-
-
-
 
 @restClient.route('/getevents_temp')
 def getEvents():
@@ -219,11 +219,9 @@ def getEvents_old():
 
 	return(jsonString)
 
-
 @restClient.route('/')
 def index():
 	return '<h1>Flask Client is up and running</h1>'
-
 
 if __name__ == '__main__':
 	restClient.run(debug=DEBUG)
