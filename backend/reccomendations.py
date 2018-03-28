@@ -29,13 +29,12 @@ class placeReccomendations:
 		# print(newtripdf.info())
 		# print(newplacedf.info())
 		# print(newtripdf)
-		# print(newplacedf)
+		print(newplacedf)
 		return(newtripdf,newplacedf)
 
 	#run the machine learning for all the places and if its in a 2 mile radius then it should
 	#return
 
-	
 	def getPlacesInRadius(self,address):
 		reccomendedplaces = []
 		curCoordinates = addressToGeo(address)
@@ -54,4 +53,5 @@ class placeReccomendations:
 
 if __name__ == "__main__":
 	reccomender = placeReccomendations('goat')
-	reccomender.getPlacesInRadius('269 Amsterdam Ave, New York, NY 10023')
+	# reccomender.getPlacesInRadius('269 Amsterdam Ave, New York, NY 10023')
+	reccomender.getTripsandPlaces()
