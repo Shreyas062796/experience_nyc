@@ -148,12 +148,13 @@ class MongoConnector:
 			params['price_level'] = int(price)
 		for place in db.places.find(params):
 			if(count == int(num)):
+				pprint(queriedPlaces)
 				return(queriedPlaces)
 			place['_id'] = str(place['_id'])
-			if('photos' not in place):
-				place['photos'][0]['photo_reference'] = 'CnRvAAAAwMpdHeWlXl-lH0vp7lez4znKPIWSWvgvZFISdKx45AwJVP1Qp37YOrH7sqHMJ8C-vBDC546decipPHchJhHZL94RcTUfPa1jWzo-rSHaTlbNtjh-N68RkcToUCuY9v2HNpo5mziqkir37WU8FJEqVBIQ4k938TI3e7bf8xq-uwDZcxoUbO_ZJzPxremiQurAYzCTwRhE_V0'
-			queriedPlaces.append(place)
-			count += 1
+			if('photos' in place):
+				# place['photos'][0]['photo_reference'] = 'CnRvAAAAwMpdHeWlXl-lH0vp7lez4znKPIWSWvgvZFISdKx45AwJVP1Qp37YOrH7sqHMJ8C-vBDC546decipPHchJhHZL94RcTUfPa1jWzo-rSHaTlbNtjh-N68RkcToUCuY9v2HNpo5mziqkir37WU8FJEqVBIQ4k938TI3e7bf8xq-uwDZcxoUbO_ZJzPxremiQurAYzCTwRhE_V0'
+				queriedPlaces.append(place)
+				count += 1
 		return(queriedPlaces)
 # 	{
 #   trip_id:"1242112",
