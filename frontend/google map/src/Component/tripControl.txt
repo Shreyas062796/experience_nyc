@@ -1,0 +1,21 @@
+import React, { Component } from 'react';
+
+class AddLocationToTrip extends Component{	
+	submitForm(e){		
+		console.log('Submitted')
+		e.preventDefault();
+	}
+  render() {
+    return (
+	<div>
+		<form onSubmit = {this.submitForm}> 
+			<div>
+				<input type = "submit"  value = "Add Selected to Trip"/>
+			</div>		
+		</form>
+	</div>
+    );
+  }
+}
+
+export default AddLocationToTrip
