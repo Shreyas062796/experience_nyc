@@ -47,10 +47,10 @@ class placeReccomendations:
 					reccomendedplaces.append(place)
 		pprint(reccomendedplaces)
 		return(reccomendedplaces)
-
 	#every user is going to have an address and filter what the 
 	#user likes based on what they like
 
+	
 if __name__ == "__main__":
 	reccomender = placeReccomendations('goat')
 	# reccomender.getPlacesInRadius('269 Amsterdam Ave, New York, NY 10023')
