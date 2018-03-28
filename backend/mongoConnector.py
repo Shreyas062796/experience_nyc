@@ -7,7 +7,7 @@ import hashlib
 import uuid
 from pprint import pprint
 
-places = ps.NYCPlaces('AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o',40.7831,-73.9712)
+places = ps.NYCPlaces('AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A',40.7831,-73.9712)
 
 class MongoConnector:
 	def __init__(self,clientHost,clientPort,username,password,database):
@@ -22,29 +22,18 @@ class MongoConnector:
 		client = MongoClient(connection).experience_nyc #places and users database
 		# client = MongoClient(connection).enyc #events database
 		return(client)
-
-	def populateRestaurants(self):
-		restaurants = places.getNYCRestaurants()
+		
+	def populatePlaces(self):
+		allplaces = places.getAllPlaces()
 		db = self.clientConnect()
-		for restaurant in restaurants['results']:
-			#keeping it random for now but for production its going to start as none
-			db.places.insert_one(restaurant)
-
-	#adds initital Bars data to database
-	def populateBars(self):
-		bars = places.getNYCBars()
-		db = self.clientConnect()
-		for bar in bars['results']:
-			#keeping it random for now but for production its going to start as none
-			db.places.insert_one(bar)
-
-	def populateCafe(self):
-		cafes = places.getNYCCafes()
-		db = self.clientConnect()
-		for cafe in cafes['results']:
-			#keeping it random for now but for production its going to start as none
-			# bar['user_rating'] = None
-			db.places.insert_one(cafe)
+		count = 0
+		for placeId in allplaces:
+			for place in allplaces[placeId]['results']:
+				try:
+					db.places.insert_one(place)
+					print("populated")
+				except:
+					continue
 
 	def getPlaces(self):
 		allPlaces = []
@@ -130,11 +119,12 @@ class MongoConnector:
 			params['price_level'] = int(price)
 		for place in db.places.find(params):
 			if(count == int(num)):
+				random.shuffle(queriedPlaces)
 				return(queriedPlaces)
 			place['_id'] = str(place['_id'])
-			queriedPlaces.append(place)
-			count += 1
-		return(queriedPlaces)
+			if('photos' in place):
+				queriedPlaces.append(place)
+				count += 1
 # 	{
 #   trip_id:"1242112",
 #   trip_name:"bored in nyc",
@@ -188,15 +178,13 @@ class MongoConnector:
 if __name__ == "__main__":
 	Experience = MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
 	# Experience = MongoConnector('ds123619.mlab.com', '23619', 'admin', 'admin', 'enyc'
-	# Experience.populateBars()
-	# Experience.populateRestaurants()
-	# Experience.populateCafe()
+	# Experience.populatePlaces()
 	# pprint(Experience.getPlacesInRadius(40.7733125,-73.9837555,2))
 	# print(Experience.getFavoritePlaces('test1'))
 	# Experience.getBars()
 	# Experience.getRestaurants()
 	# pprint(Experience.QueryRestaurants(2,2,2))
-	# pprint(Experience.queryPlaces('restaurant','2','5'))
+	Experience.queryPlaces('','',10)
 	# pprint(Experience.QueryBars(2,2,2))
 	# Experience.addFavoritePlaces("testUser",134)
 	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']

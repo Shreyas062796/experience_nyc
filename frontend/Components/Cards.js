@@ -20,7 +20,9 @@ import StarHalf from 'material-ui-icons/StarHalf';
 import StarBorder from 'material-ui-icons/StarBorder';
 import Send from 'material-ui-icons/Send';
 import AttachMoney from 'material-ui-icons/AttachMoney';
+import Add from 'material-ui-icons/Add';
 import Tooltip from 'material-ui-next/Tooltip';
+import cyan from 'material-ui-next/colors/cyan';
 
 const styles = theme => ({
   card: {
@@ -55,7 +57,8 @@ class Cards extends React.Component {
   state = { expanded: false,
             items: [],
             favorites: [],
-            filter: {types: '', price_level: '', num: '10'},
+            trip: [],
+            filter: {types: '', price_level: '', num: '100'},
             username: sessionStorage.getItem('username')
           };
 
@@ -148,25 +151,39 @@ class Cards extends React.Component {
       })
   }
 
+  addToTrip(id, button){
+    let xtempArr = this.state.trip;
+    tempArr.push(id);
+    this.setState({trip: tempArr}, function(){
+      console.log(this.state.trip);
+    })
+  }
+
   //check favorite list for passed id and return either a filler in or empty heart component
   isFavorite = (id) => {
     var button = ''
 
-    if(this.state.favorites.includes(id) && (sessionStorage.getItem('username'))){
+    if(this.state.favorites.includes(id) && (sessionStorage.getItem('username')) && (this.props.tripMode == false)){
       button = (<Tooltip id="tooltip-bottom" title="Remove Favorite" placement="bottom">
-                  <IconButton aria-label="Remove from favorites" onClick={() => { this.removeFavorite(id) }}>
+                  <IconButton aria-label="Remove from Favorites" onClick={() => { this.removeFavorite(id) }}>
                       <Favorite />
                   </IconButton>
                 </Tooltip>);
     }
-    else if(sessionStorage.getItem('username')) {
+    else if(sessionStorage.getItem('username') && (this.props.tripMode == false)) {
       button = (<Tooltip id="tooltip-bottom" title="Add Favorite" placement="bottom">
-                  <IconButton aria-label="Add to favorites" onClick={() => { this.addFavorite(id) }}>
+                  <IconButton aria-label="Add to Favorites" onClick={() => { this.addFavorite(id) }}>
                     <FavoriteBorder />
                   </IconButton>
                 </Tooltip>);
     }
-    console.log(button);
+    else if(this.props.tripMode == true){
+      button = (<Tooltip id="tooltip-bottom" title="Add to Trip" placement="bottom">
+                  <IconButton aria-label="Add to Trip" onClick={() => { this.addToTrip(id, this) }}>
+                    <Add  />
+                  </IconButton>
+                </Tooltip>);
+    }
     return button;
   }
 
@@ -192,6 +209,7 @@ class Cards extends React.Component {
       contentType:"application/json; charset=utf-8",
       dataType:"json"})
       .done((response) => {
+        console.log(response);
        const { classes } = this.props;
        const result = response.map((value) =>
        (<Grid item xl={3} lg={4} md={6} sm={12} xs={12}>
@@ -216,7 +234,7 @@ class Cards extends React.Component {
                </IconButton>
              </div>
              <div style={{width: '35%', textAlign: 'center', display: 'flex'}}>
-               <Typography style={{marginTop: '14px', marginRight: '5px', }}>{value['rating'].toFixed(1)}</Typography>
+               <Typography style={{marginTop: '14px', marginRight: '5px', }}>{value['rating']}</Typography>
                <IconButton style={{flex: 'auto'}}>
                  {this.returnRatingLevel(value['rating'])}
                </IconButton>
@@ -227,17 +245,6 @@ class Cards extends React.Component {
                </Button>
              </div>
            </CardActions>
-           <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-             <CardContent>
-               <Typography paragraph variant="body2">
-                 Method:
-               </Typography>
-               <Typography paragraph>
-                 Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10
-                 minutes.
-               </Typography>
-             </CardContent>
-           </Collapse>
          </Card>
        </Grid>)
        );
