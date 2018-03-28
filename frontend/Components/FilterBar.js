@@ -69,11 +69,16 @@ class FilterBar extends React.Component {
   state = {
     catagories: [],
     price: '',
-    expanded: null
+    expanded: null,
+    filter: {types: '', price_level: '', num: '10'}
   };
 
   handleChangeCatagories = (event, index, catagories) => this.setState({catagories});
   handlePriceChange = (event, index, price) => this.setState({price});
+
+  handleFilterChange = () => {
+    this.props.setFilter(this.state.filter);
+  }
 
   handleChange = panel => (event, expanded) => {
    this.setState({
@@ -81,23 +86,18 @@ class FilterBar extends React.Component {
    });
  };
 
+  //on submit click grab values and change filter state
   handleSubmit = () => {
     var search = $('#search').val();
-    var catagory = this.state.catagories;
+    var catagory = this.state.catagories[0];
     var distance = $('#distance').val();
     var price = this.state.price;
 
-    var data = {search: search, address: 'nyc', amount: '10', types: catagory[0], distance: distance, price: price};
-    $.ajax({
-      url:"https://experiencenyc.herokuapp.com/topplace",
-      type:"GET",
-      data: data,
-      contentType:"application/json; charset=utf-8",
-      dataType:"json",
-      success: function(response){
-        console.log(response)
-      }
-    })
+    var data = {types: catagory, price_level: price, num: '100'}
+
+    this.setState({filter: data}, function () {
+        this.handleFilterChange();
+    });
   }
 
   menuItems(catagories) {

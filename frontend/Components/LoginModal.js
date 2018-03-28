@@ -13,7 +13,6 @@ import RegisterForm from './RegisterForm';
 const styles = theme => ({
   paper: {
     position: 'absolute',
-    width: theme.spacing.unit * 50,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing.unit * 4,
@@ -21,17 +20,27 @@ const styles = theme => ({
 });
 
 class LoginModal extends React.Component {
-  componentWillReceiveProps(nextProps) {
-      if((nextProps['clicked'] == '0') || (nextProps['clicked'] == '1')){
-          this.setState({open: true, value: nextProps['clicked']});
-      }
-  }
-
   state = {
     open: '',
-    value: 0,
+    value: '0',
     loginForm: 'block',
-    registerForm: 'none'
+    registerForm: 'none',
+    modalWidth: '400px'
+  }
+
+  componentDidMount() {
+    window.addEventListener("resize", this.resize.bind(this));
+    this.resize();
+  }
+
+  resize() {
+    this.setState({modalWidth: window.innerWidth <= 760 ? '90%' : '400px'});
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+      if((nextProps.clicked == '0') || (nextProps.clicked == '1')){
+          this.setState({value: nextProps.clicked, open: true})
+      }
   }
 
   handleClose = () => {
@@ -39,20 +48,29 @@ class LoginModal extends React.Component {
     this.props.onClose();
   };
 
-  handleTabChange = (event, value) => {
-    this.setState({ value });
-    if(this.state.value == 1){
-      this.setState({loginForm: 'block',
-                     registerForm: 'none'})
+  changeDisplay = () => {
+    if(this.state.value == 0){
+      this.setState({loginForm: 'block', registerForm: 'none'})
     }
-    else if(this.state.value == 0){
-      this.setState({loginForm: 'none',
-                     registerForm: 'block'})
+    else if(this.state.value == 1){
+      this.setState({loginForm: 'none', registerForm: 'block'});
     }
   }
 
+  handleTabChange = (event, value) => {
+    this.setState({ value }, function(){
+      this.changeDisplay();
+    })
+  }
+
   handleLogin = () => {
+    this.setState({open: ''});
     this.props.loggedIn();
+  }
+
+  handleRegister = () => {
+    this.setState({open: ''});
+    this.props.registered();
   }
 
   render() {
@@ -60,13 +78,15 @@ class LoginModal extends React.Component {
 
     return (
       <div>
-        <Modal style={{justifyContent: 'center', alignItems: 'center'}}
+        <Modal
+          style={{justifyContent: 'center', alignItems: 'center'}}
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
           open={this.state.open}
           onClose={this.handleClose}
+          onRendered={this.changeDisplay}
         >
-          <div className={classes.paper}>
+          <div className={classes.paper} style={{width: this.state.modalWidth}}>
             <Tabs
               value={this.state.value}
               indicatorColor="primary"
@@ -78,7 +98,7 @@ class LoginModal extends React.Component {
               <Tab label="Register" />
             </Tabs>
               <LoginForm display={this.state.loginForm} loggedIn={this.handleLogin}/>
-              <RegisterForm display={this.state.registerForm}/>
+              <RegisterForm display={this.state.registerForm} registered={this.handleRegister}/>
           </div>
         </Modal>
       </div>

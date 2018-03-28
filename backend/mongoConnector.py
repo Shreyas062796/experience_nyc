@@ -22,7 +22,7 @@ class MongoConnector:
 		client = MongoClient(connection).experience_nyc #places and users database
 		# client = MongoClient(connection).enyc #events database
 		return(client)
-
+		
 	def populatePlaces(self):
 		allplaces = places.getAllPlaces()
 		db = self.clientConnect()
@@ -34,7 +34,7 @@ class MongoConnector:
 					print("populated")
 				except:
 					continue
-					
+
 	def getPlaces(self):
 		allPlaces = []
 		db = self.clientConnect()

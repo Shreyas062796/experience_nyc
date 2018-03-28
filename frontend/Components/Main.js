@@ -22,7 +22,12 @@ import Button from 'material-ui-next/Button';
 import LoginModal from './LoginModal';
 import AccountCircle from 'material-ui-icons/AccountCircle';
 import Menu, { MenuItem } from 'material-ui-next/Menu';
-
+import Tabs from './Tabs'
+import Trips from './Trips.js';
+import Events from './Events.js';
+import Favorites from './Favorites.js';
+import Switch from 'material-ui-next/Switch';
+import cyan from 'material-ui-next/colors/cyan';
 
 const drawerWidth = 300;
 
@@ -61,8 +66,8 @@ const styles = theme => ({
     marginRight: drawerWidth,
   },
   menuButton: {
-    marginLeft: -12,
     marginRight: 20,
+    marginLeft: 10
   },
   hide: {
     display: 'none',
@@ -103,14 +108,24 @@ const styles = theme => ({
   'contentShift-right': {
     marginRight: 0,
   },
+  checked: {
+    color: cyan[500],
+    '& + $bar': {
+      backgroundColor: cyan[500],
+    },
+  },
+  bar: {}
 });
 
 class Main extends React.Component {
   state = {
     drawerOpen: true,
     clicked: '',
-    username: '',
-    anchorEl: null
+    username: sessionStorage.getItem('username'),
+    anchorEl: null,
+    filter: {types: '', price_level: '', num: '100'},
+    currentPage: 'Places',
+    tripMode: false
   };
 
   handleDrawerOpen = () => {
@@ -138,11 +153,15 @@ class Main extends React.Component {
   };
 
   handleLogin = () => {
-    this.setState({username: sessionStorage.getItem('username'), loginClick: ''})
+    this.setState({username: sessionStorage.getItem('username'), loginClick: '', clicked: ''})
+  }
+
+  handleRegister = () => {
+    this.setState({clicked: 0});
   }
 
   handleLogout = () => {
-    this.setState({username: ''})
+    this.setState({username: '', clicked: '', favorites: [], filter: {types: '', price_level: '', num: '100'}})
     sessionStorage.setItem('username', '')
     alert("Logged Out!")
   }
@@ -150,6 +169,29 @@ class Main extends React.Component {
   handleModalClose = () => {
     this.setState({clicked: ''})
   }
+
+  setFilter = (response) => {
+    this.setState({filter: response})
+  }
+
+  handlePageDisplay = (page) => {
+    if(page == this.state.currentPage){
+      return 'block';
+    }
+    else{
+      return 'none';
+    }
+  }
+
+  handlePage = (page) => {
+    this.setState({
+      currentPage: page
+    })
+  }
+
+  handleTripSwitch = name => event => {
+    this.setState({ [name]: event.target.checked });
+  };
 
   render() {
     const { classes, theme  } = this.props;
@@ -159,34 +201,35 @@ class Main extends React.Component {
 
     let userAppbarOption = null;
 
-    if(this.state.username != ''){
-      console.log(sessionStorage.getItem('username'))
-      userAppbarOption = (<div><Typography style={{color: 'white', display: 'inline-block'}}>{this.state.username}</Typography>
-                          <IconButton
-                            aria-owns={menuOpen ? 'menu-appbar' : null}
-                            aria-haspopup="true"
-                            onClick={this.handleMenu}
-                          >
-                            <AccountCircle color="white"/>
-                          </IconButton>
-                          <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorEl}
-                            anchorOrigin={{
-                              vertical: 'top',
-                              horizontal: 'right',
-                            }}
-                            transformOrigin={{
-                              vertical: 'top',
-                              horizontal: 'right',
-                            }}
-                            open={menuOpen}
-                            onClose={this.handleClose}
-                          >
-                            <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                            <MenuItem onClick={this.handleClose}>My account</MenuItem>
-                            <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
-                          </Menu></div>);
+    if(sessionStorage.getItem('username')){
+      userAppbarOption = (<div>
+                            <Typography style={{color: 'white', display: 'inline-block'}}>{sessionStorage.getItem('username')}</Typography>
+                            <IconButton
+                              aria-owns={menuOpen ? 'menu-appbar' : null}
+                              aria-haspopup="true"
+                              onClick={this.handleMenu}
+                            >
+                              <AccountCircle color="white"/>
+                            </IconButton>
+                            <Menu
+                              id="menu-appbar"
+                              anchorEl={anchorEl}
+                              anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                              }}
+                              transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                              }}
+                              open={menuOpen}
+                              onClose={this.handleClose}
+                            >
+                              <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+                              <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                              <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
+                            </Menu>
+                          </div>);
     }
     else {
       userAppbarOption = (<Typography style={{color: 'white', cursor: 'pointer'}}>
@@ -225,18 +268,32 @@ class Main extends React.Component {
 
           >
             <Toolbar disableGutters={!open}>
-              <div style={{width: '50%'}}>
+              <div style={{width: '33%'}}>
                 <Typography variant="title" color="inherit" noWrap>
                   Experience NYC
                 </Typography>
               </div>
-              <div style={{width: '50%', alignItems: 'center', justifyContent: 'flex-end', display: 'flex'}}>
+              <div style={{display: 'inline-block', width: '34%', textAlign: 'center'}}>
+                <Typography style={{color: 'white', display: 'inline-block'}}>Trip Mode</Typography>
+                <Switch
+                  checked={this.state.tripMode}
+                  onChange={this.handleTripSwitch('tripMode')}
+                  value=""
+                  classes={{
+                    checked: classes.checked,
+                    bar: classes.bar,
+                  }}
+                />
+              </div>
+              <div style={{width: '33%', alignItems: 'center', justifyContent: 'flex-end', display: 'flex'}}>
                 {userAppbarOption}
+
                 <IconButton
                   aria-label="open drawer"
                   onClick={this.handleDrawerOpen}
                   className={classNames(classes.menuButton, drawerOpen && classes.hide)}
                 >
+                  <Typography style={{color: 'white'}}>Trips</Typography>
                   <Place color="white" />
                 </IconButton>
               </div>
@@ -250,12 +307,26 @@ class Main extends React.Component {
             })}
           >
             <div className={classes.drawerHeader} />
-            <FilterBar />
-            <LoginModal
-              clicked={this.state.clicked}
-              onClose={this.handleModalClose}
-            />
-            <Cards />
+            <Tabs pageChange={this.handlePage}/>
+              <div style={{display: this.handlePageDisplay('Places')}}>
+                <FilterBar setFilter={this.setFilter}/>
+                <LoginModal
+                  clicked={this.state.clicked}
+                  onClose={this.handleModalClose}
+                  loggedIn={this.handleLogin}
+                  registered={this.handleRegister}
+                />
+                <Cards
+                  filter={this.state.filter}
+                  tripMode={this.state.tripMode}
+                />
+              </div>
+              <div style={{display: this.handlePageDisplay('Events')}}>
+                <Events />
+              </div>
+              <div style={{display: this.handlePageDisplay('Favorites')}}>
+                <Favorites page={this.state.currentPage}/>
+              </div>
           </main>
           <Drawer
             variant="persistent"

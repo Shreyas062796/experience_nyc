@@ -53,11 +53,10 @@ const styles = theme => ({
   }
 });
 
-class Cards extends React.Component {
+class Events extends React.Component {
   state = { expanded: false,
             items: [],
             favorites: [],
-            trip: [],
             filter: {types: '', price_level: '', num: '100'},
             username: sessionStorage.getItem('username')
           };
@@ -151,12 +150,8 @@ class Cards extends React.Component {
       })
   }
 
-  addToTrip(id, button){
-    let tempArr = this.state.trip;
-    tempArr.push(id);
-    this.setState({trip: tempArr}, function(){
-      console.log(this.state.trip);
-    })
+  addTrip(id){
+
   }
 
   //check favorite list for passed id and return either a filler in or empty heart component
@@ -179,7 +174,7 @@ class Cards extends React.Component {
     }
     else if(this.props.tripMode == true){
       button = (<Tooltip id="tooltip-bottom" title="Add to Trip" placement="bottom">
-                  <IconButton aria-label="Add to Trip" onClick={() => { this.addToTrip(id, this) }}>
+                  <IconButton aria-label="Add to Trip" onClick={() => { this.addTrip(id) }}>
                     <Add  />
                   </IconButton>
                 </Tooltip>);
@@ -188,22 +183,22 @@ class Cards extends React.Component {
   }
 
   //listen for new props
-  componentWillReceiveProps(nextProps) {
+  /*componentWillReceiveProps(nextProps) {
       this.setState({filter: nextProps.filter}, function() {
         this.searchPlaces();
       });
-  }
+  }*/
 
   //search for places
-  searchPlaces = () => {
+  searchEvents = () => {
 
     //set list of favorites for current user
-    this.setFavorites();
+    //this.setFavorites();
 
-    var data = this.state.filter;
+    var data = {q: 'dance', address: 'nyc'};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/queryplaces",
+      url:"https://experiencenyc.herokuapp.com/getevents_temp",
       type:"GET",
       data: data,
       contentType:"application/json; charset=utf-8",
@@ -214,48 +209,8 @@ class Cards extends React.Component {
        const result = response.map((value) =>
        (<Grid item xl={3} lg={4} md={6} sm={12} xs={12}>
          <Card className={this.props.card}>
-           <CardHeader classes={{subheader: classes.subheader}}
-             avatar={
-               <Avatar aria-label="Recipe" src={value['icon']} className={this.props.avatar}/>
-             }
-             title={value['name']}
-             subheader={value['formatted_address']}
-           />
-         <div style={{overflow:'hidden'}}>
-            <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A"}/>
-          </div>
-           <CardActions className={this.props.actions} disableActionSpacing>
-             <div style={{width: '20%'}}>
-                 {this.isFavorite(value['id'])}
-             </div>
-             <div style={{width: '25%', textAlign: 'center', display: 'flex'}}>
-               <IconButton>
-                 {this.returnPriceLevel(value['price_level'])}
-               </IconButton>
-             </div>
-             <div style={{width: '35%', textAlign: 'center', display: 'flex'}}>
-               <Typography style={{marginTop: '14px', marginRight: '5px', }}>{value['rating']}</Typography>
-               <IconButton style={{flex: 'auto'}}>
-                 {this.returnRatingLevel(value['rating'])}
-               </IconButton>
-             </div>
-             <div style={{width: '25%', textAlign: 'right'}}>
-               <Button href={"http://maps.google.com/?q=" + value['name']} target="_blank" color="primary" style={{minWidth: '0px', color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
-                GO
-               </Button>
-             </div>
-           </CardActions>
-           <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-             <CardContent>
-               <Typography paragraph variant="body2">
-                 Method:
-               </Typography>
-               <Typography paragraph>
-                 Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10
-                 minutes.
-               </Typography>
-             </CardContent>
-           </Collapse>
+           <div dangerouslySetInnerHTML={{ __html: value['description']['html']}}/>
+
          </Card>
        </Grid>)
        );
@@ -267,7 +222,7 @@ class Cards extends React.Component {
 
   //Load places when component mounts
   componentDidMount = () => {
-    this.searchPlaces();
+    //this.searchEvents();
   }
 
   render() {
@@ -285,10 +240,10 @@ class Cards extends React.Component {
   }
 }
 
-Cards.propTypes = {
+Events.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const cardsWrapped = withStyles(styles)(Cards);
+const cardsWrapped = withStyles(styles)(Events);
 
 export default cardsWrapped;
