@@ -9,7 +9,8 @@ there are more, these are the relevant ones
 '''
 
 def getNYCBars():
-	obj = NYCPlaces("AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o", 40,-73)
+	# AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o
+	obj = NYCPlaces("AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A", 40,-73)
 	return(obj.getNYCBars())
 
 
@@ -26,17 +27,24 @@ class NYCPlaces:
 		gmap = googlemaps.Client(key=self.key)
 		return(gmap)
 
-	def getNYCRestaurants(self):
+	def getAllPlaces(self):
 		gmap = self.setClient()
-		return(gmap.places("restaurant",location=[self.lat,self.lng],type="restaurant"))
+		allPlaces = {}
+		placeType = ['amusement_park','bakery','cafe','clothing_store','convenience_store','department_store','florist','hair_care','library','movie_theater','museum','night_club','bar','restaurant','stadium','store','zoo']
+		for place in placeType:
+			allPlaces[place] = gmap.places(place,location=[self.lat,self.lng],type=place)
+		return(allPlaces)
+	# def getNYCRestaurants(self):
+	# 	gmap = self.setClient()
+	# 	return(gmap.places("restaurant",location=[self.lat,self.lng],type="restaurant"))
 
-	def getNYCCafes(self):
-		gmap = self.setClient()
-		return(gmap.places("cafe",location=[self.lat,self.lng],type="cafe"))
+	# def getNYCCafes(self):
+	# 	gmap = self.setClient()
+	# 	return(gmap.places("cafe",location=[self.lat,self.lng],type="cafe"))
 
-	def getNYCBars(self):
-		gmap = self.setClient()
-		return(gmap.places("bar",location=[self.lat,self.lng],type="bar"))
+	# def getNYCBars(self):
+	# 	gmap = self.setClient()
+	# 	return(gmap.places("bar",location=[self.lat,self.lng],type="bar"))
 
 	# get restaurants in a area based on coordinates
 	def getNYCRestaurantsByLoc(self,coor_list, aradius=5000):
@@ -53,6 +61,7 @@ class NYCPlaces:
 		return(gmap.places("bar",location=coor_list,type="bar", radius=aradius))
 
 if __name__ == "__main__":
-	places = NYCPlaces('AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o',40.7831,-73.9712)
-	places.getNYCRestaurants()
-	places.getNYCBars()
+	places = NYCPlaces('AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A',40.7831,-73.9712)
+	# places.getNYCRestaurants()
+	# places.getNYCBars()
+	places.getAllPlaces()
