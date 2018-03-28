@@ -24,6 +24,7 @@ import AccountCircle from 'material-ui-icons/AccountCircle';
 import Menu, { MenuItem } from 'material-ui-next/Menu';
 import Trips from './Trips.js';
 import Favorites from './Favorites.js';
+import Events from './Events.js';
 
 const styles = theme => ({
   root: {
@@ -53,8 +54,8 @@ class Main extends React.Component {
     clicked: '',
     username: sessionStorage.getItem('username'),
     anchorEl: null,
-    currentPage: 'Search',
-    filter: {types: '', price_level: '', num: '10'}
+    currentPage: 'Places',
+    filter: {types: '', price_level: '', num: '100'}
   };
 
   handleLoginClick = () => {
@@ -167,14 +168,17 @@ class Main extends React.Component {
             </Toolbar>
 
           </AppBar>
-          <div style={{display: this.handlePageDisplay('Search'), marginTop: '4em'}}>
+          <LoginModal
+            clicked={this.state.clicked}
+            onClose={this.handleModalClose}
+            loggedIn={this.handleLogin}
+          />
+          <div style={{display: this.handlePageDisplay('Places'), marginTop: '4em'}}>
             <FilterBar setFilter={this.setFilter}/>
-            <LoginModal
-              clicked={this.state.clicked}
-              onClose={this.handleModalClose}
-              loggedIn={this.handleLogin}
-            />
             <Cards filter={this.state.filter}/>
+          </div>
+          <div style={{display: this.handlePageDisplay('Events'), marginTop: '4em'}}>
+            <Events />
           </div>
           <div style={{display: this.handlePageDisplay('Favorites')}}>
             <Favorites page={this.state.currentPage}/>

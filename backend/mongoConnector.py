@@ -22,7 +22,7 @@ class MongoConnector:
 		client = MongoClient(connection).experience_nyc #places and users database
 		# client = MongoClient(connection).enyc #events database
 		return(client)
-
+		
 	def populatePlaces(self):
 		allplaces = places.getAllPlaces()
 		db = self.clientConnect()
@@ -34,35 +34,6 @@ class MongoConnector:
 					print("populated")
 				except:
 					continue
-
-			# count += 1
-			# print(count)
-			# print(allplaces[place])
-			# db.places.insert_one(place)
-			# count += 1
-			# print(count)
-	# def populateRestaurants(self):
-	# 	restaurants = places.getNYCRestaurants()
-	# 	db = self.clientConnect()
-	# 	for restaurant in restaurants['results']:
-	# 		#keeping it random for now but for production its going to start as none
-	# 		db.places.insert_one(restaurant)
-
-	# #adds initital Bars data to database
-	# def populateBars(self):
-	# 	bars = places.getNYCBars()
-	# 	db = self.clientConnect()
-	# 	for bar in bars['results']:
-	# 		#keeping it random for now but for production its going to start as none
-	# 		db.places.insert_one(bar)
-
-	# def populateCafe(self):
-	# 	cafes = places.getNYCCafes()
-	# 	db = self.clientConnect()
-	# 	for cafe in cafes['results']:
-	# 		#keeping it random for now but for production its going to start as none
-	# 		# bar['user_rating'] = None
-	# 		db.places.insert_one(cafe)
 
 	def getPlaces(self):
 		allPlaces = []
@@ -148,14 +119,12 @@ class MongoConnector:
 			params['price_level'] = int(price)
 		for place in db.places.find(params):
 			if(count == int(num)):
-				pprint(queriedPlaces)
+				random.shuffle(queriedPlaces)
 				return(queriedPlaces)
 			place['_id'] = str(place['_id'])
 			if('photos' in place):
-				# place['photos'][0]['photo_reference'] = 'CnRvAAAAwMpdHeWlXl-lH0vp7lez4znKPIWSWvgvZFISdKx45AwJVP1Qp37YOrH7sqHMJ8C-vBDC546decipPHchJhHZL94RcTUfPa1jWzo-rSHaTlbNtjh-N68RkcToUCuY9v2HNpo5mziqkir37WU8FJEqVBIQ4k938TI3e7bf8xq-uwDZcxoUbO_ZJzPxremiQurAYzCTwRhE_V0'
 				queriedPlaces.append(place)
 				count += 1
-		return(queriedPlaces)
 # 	{
 #   trip_id:"1242112",
 #   trip_name:"bored in nyc",
@@ -215,7 +184,7 @@ if __name__ == "__main__":
 	# Experience.getBars()
 	# Experience.getRestaurants()
 	# pprint(Experience.QueryRestaurants(2,2,2))
-	Experience.queryPlaces('','',200)
+	Experience.queryPlaces('','',10)
 	# pprint(Experience.QueryBars(2,2,2))
 	# Experience.addFavoritePlaces("testUser",134)
 	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
