@@ -34,36 +34,7 @@ class MongoConnector:
 					print("populated")
 				except:
 					continue
-
-			# count += 1
-			# print(count)
-			# print(allplaces[place])
-			# db.places.insert_one(place)
-			# count += 1
-			# print(count)
-	# def populateRestaurants(self):
-	# 	restaurants = places.getNYCRestaurants()
-	# 	db = self.clientConnect()
-	# 	for restaurant in restaurants['results']:
-	# 		#keeping it random for now but for production its going to start as none
-	# 		db.places.insert_one(restaurant)
-
-	# #adds initital Bars data to database
-	# def populateBars(self):
-	# 	bars = places.getNYCBars()
-	# 	db = self.clientConnect()
-	# 	for bar in bars['results']:
-	# 		#keeping it random for now but for production its going to start as none
-	# 		db.places.insert_one(bar)
-
-	# def populateCafe(self):
-	# 	cafes = places.getNYCCafes()
-	# 	db = self.clientConnect()
-	# 	for cafe in cafes['results']:
-	# 		#keeping it random for now but for production its going to start as none
-	# 		# bar['user_rating'] = None
-	# 		db.places.insert_one(cafe)
-
+					
 	def getPlaces(self):
 		allPlaces = []
 		db = self.clientConnect()
