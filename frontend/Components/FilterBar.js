@@ -93,7 +93,7 @@ class FilterBar extends React.Component {
     var distance = $('#distance').val();
     var price = this.state.price;
 
-    var data = {types: catagory, price_level: price, num: '10'}
+    var data = {types: catagory, price_level: price, num: '100'}
 
     this.setState({filter: data}, function () {
         this.handleFilterChange();

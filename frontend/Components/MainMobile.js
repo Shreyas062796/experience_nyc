@@ -54,7 +54,7 @@ class Main extends React.Component {
     username: sessionStorage.getItem('username'),
     anchorEl: null,
     currentPage: 'Search',
-    filter: {types: '', price_level: '', num: '10'}
+    filter: {types: '', price_level: '', num: '100'}
   };
 
   handleLoginClick = () => {
