@@ -19,9 +19,11 @@ BOTTOM_RIGHT = [40.687712, -74.002422]
 
 # Remove the token later on
 EVENT_LINK = "https://www.eventbriteapi.com/v3/events/search/?token=3PLRBVBROECU3VJOPGUY"
-VANUE_LINK = "https://www.eventbriteapi.com/v3/venues/:id/?token=3PLRBVBROECU3VJOPGUY"
+VENUE_LINK = "https://www.eventbriteapi.com/v3/venues/:id/?token=3PLRBVBROECU3VJOPGUY"
 
 DEFAULT_KEYWORDS = ['music', 'dance', 'convention', 'exercise', 'sports', 'concerts']
+
+
 
 
 class getEvents:
@@ -35,17 +37,34 @@ class getEvents:
 		today_events = list()
 		rectangle = self.geocode.format(TOP_LEFT[0], TOP_LEFT[1], BOTTOM_RIGHT[0], BOTTOM_RIGHT[1])
 		request_link = EVENT_LINK + "&start_date.keyword=today&sort_by=best"
+
 		data = requests.get(request_link)
 		events = data.json()
+
 		pages = events['pagination']['page_count']
 		documents = events['pagination']['object_count']
 		today_events.extend(events['events'])
+
+		print("pages: {}".format(pages))
+		print("documents: {}".format(documents))
+
+
+		# for page in range(2, pages+1):
+		# 	print("Page number is #{} and size of db is: {}".format(page, len(self.events)))
+
+		# 	new_request = request_link+"&page={}".format(page)
+		# 	new_data = requests.get(new_request)
+
+		# 	today_events.extend(new_data.json()['events'])
+		# 	time.sleep(0.01)
+
 		# get at max 100 events less if there is not that much
 		if int(pages)>1:
 			new_request = request_link+"&page=".format(2)
 			new_data = requests.get(new_request)
 
 			today_events.extend(new_data.json()['events'])
+			time.sleep(0.01)
 
 		today_events = [event for event in today_events if event['start']['timezone']=='America/New_York']
 
@@ -93,6 +112,10 @@ class getEvents:
 		# cm.initialPopulate(self.events)
 		# cm.seeIf()
 
+	def venueInfo(self, venue_id):
+		return requests.get(VENUE_LINK.replace(":id", str(venue_id))).json()
+
+
 
 # this is for testing, repeating old code
 class ConnectMongo:
@@ -121,10 +144,10 @@ class ConnectMongo:
 # this is to initialize the event data
 def initialPopulate():
 	ge = getEvents()
-	ge.getEverythingIn()
+	# print(ge.getEverythingIn())
 	# ge.seeIf()
 
-
-
+# initialPopulate()
+# print(getEvents().getEventsOfTheDay())
 
 

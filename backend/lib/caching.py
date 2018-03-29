@@ -12,7 +12,6 @@ class Cacher:
 
 	def curr_len(self):
 		return len(self._data)
-
 	
 	def _isIn(self, address):
 		return address in self._data.keys()
@@ -35,11 +34,13 @@ class Cacher:
 
 class EventCacher:
 
-
 	def __init__(self):
 		self._topToday = list()
 
+	def __len__(self):
+		return len(self._topToday)
 
+	# change code that depends on this and delete it.
 	def curr_len(self):
 		return len(self._topToday)
 
@@ -55,6 +56,5 @@ class EventCacher:
 
 
 	def getTopN(self, n=10):
-		print("n={}".format(n))
+		# print("n={}".format(n))
 		return self._topToday[:n+1]
-
