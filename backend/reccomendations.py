@@ -2,7 +2,6 @@ import pandas as pd
 import mongoConnector as mg
 from pprint import pprint
 import lib.getKeywords as key
-import
 from maps.geo import addressToGeo
 
 connector = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
