@@ -141,18 +141,18 @@ def addtripplaces():
 		return(jsonify({"response":"Place already Exists"}))
 
 @restClient.route('/removetripplaces', methods=['POST'])
-def removefavoriteplaces():
+def removetripplaces():
 	info = request.get_json()
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").removeTripPlaces(info['username'],info['place_id'])
 	return(jsonify({"response":"True"}))
 
 @restClient.route('/gettripplacesIds', methods=['POST'])
-def getfavoriteplacesIds():
+def gettripplacesIds():
 	info = request.get_json()
 	return(jsonify(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getTripPlacesIds(info['username'])))
 
 @restClient.route('/gettripplaces', methods=['POST'])
-def getfavoriteplaces():
+def gettripplaces():
 	info = request.get_json()
 	return(jsonify(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getTripPlaces(info['username'])))
 
