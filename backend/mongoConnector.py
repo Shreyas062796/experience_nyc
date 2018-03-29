@@ -17,12 +17,14 @@ class MongoConnector:
 		self.password = password
 		self.database = database
 
+	#connects to mongo server based on parameters
 	def clientConnect(self):
 		connection = 'mongodb://' + str(self.username) + ':' + str(self.password) + '@' + str(self.clientHost) + ':' + str(self.clientPort) + '/' + str(self.database)
 		client = MongoClient(connection).experience_nyc #places and users database
 		# client = MongoClient(connection).enyc #events database
 		return(client)
 
+	#adds all places to places collection in database
 	def populatePlaces(self):
 		allplaces = places.getAllPlaces()
 		db = self.clientConnect()
@@ -35,6 +37,7 @@ class MongoConnector:
 				except:
 					continue
 
+	#gets all documents from places collection
 	def getPlaces(self):
 		allPlaces = []
 		db = self.clientConnect()
@@ -42,6 +45,7 @@ class MongoConnector:
 			allPlaces.append(document)
 		return(allPlaces)
 
+	#gets all the places in a certain radius around a coordinate
 	def getPlacesInRadius(self,lat,lng,radius):
 		allPlaces = []
 		db = self.clientConnect()
@@ -51,12 +55,13 @@ class MongoConnector:
 		# pprint(allPlaces)
 		return(allPlaces)
 
-	#populates login table with json data
+	#populates user collection with user information
 	def populateLogin(self,login):
 		db = self.clientConnect()
 		login['password'] = hashlib.md5(login['password'].encode('utf-8')).hexdigest()
 		db.users.insert_one(login)
 
+	#authenticating login given a username and password
 	def authenticateLogin(self,username,password):
 		db = self.clientConnect()
 		login = db.users.find_one({"username": username})
