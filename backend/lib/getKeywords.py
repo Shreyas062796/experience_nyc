@@ -28,20 +28,19 @@ class GetKeywords:
 	def getData(self, place_id):
 		self._createURL(place_id)
 		json_data = requests.get(self.url).json()
-		return json_data['result']['reviews']
-
+		if('reviews' in json_data['result']):
+			print(json_data)
+			# return(json_data['result']['reviews'])
 
 	# gets adjectives based off the user reviews
 	def getAdjectives(self, reviews):
 		adjectives = list()
-
 		for review in reviews:
 			line = nltk.word_tokenize(review['text'])
 			adj = [word for (word,pos) in nltk.pos_tag(line) if pos[:2]=='JJ']
 			for word in adj:
 				if word not in adjectives:
 					adjectives.append(word)
-		
 		return adjectives
 
 
