@@ -61,6 +61,7 @@ class MongoConnector:
 		login['password'] = hashlib.md5(login['password'].encode('utf-8')).hexdigest()
 		db.users.insert_one(login)
 
+	#authenticating login given a username and password
 	def authenticateLogin(self,username,password):
 		db = self.clientConnect()
 		login = db.users.find_one({"username": username})
