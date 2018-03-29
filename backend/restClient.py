@@ -81,6 +81,7 @@ def addUser():
 	info['verify'] = False
 	info['user_unique_id'] = mail.sendMail("experiencenycco@gmail.com","anotherone_44").generateCode(info['email'])
 	info['favorite_places'] = []
+	info['current_trip_places'] = []
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
 	return(jsonify({"response":"True"}))
 
@@ -129,6 +130,31 @@ def getfavoriteplacesIds():
 def getfavoriteplaces():
 	info = request.get_json()
 	return(jsonify(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getFavoritePlaces(info['username'])))
+
+@restClient.route('/addtripplaces', methods=['POST'])
+def addtripplaces():
+	info = request.get_json()
+	favorite = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").addTripPlaces(info['username'],info['place_id'])
+	if(favorite == "Added"):
+		return(jsonify({"response":"True"}))
+	else:
+		return(jsonify({"response":"Place already Exists"}))
+
+@restClient.route('/removetripplaces', methods=['POST'])
+def removefavoriteplaces():
+	info = request.get_json()
+	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").removeTripPlaces(info['username'],info['place_id'])
+	return(jsonify({"response":"True"}))
+
+@restClient.route('/gettripplacesIds', methods=['POST'])
+def getfavoriteplacesIds():
+	info = request.get_json()
+	return(jsonify(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getTripPlacesIds(info['username'])))
+
+@restClient.route('/gettripplaces', methods=['POST'])
+def getfavoriteplaces():
+	info = request.get_json()
+	return(jsonify(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getTripPlaces(info['username'])))
 
 @restClient.route('/queryplaces', methods=['GET'])
 def queryplaces():

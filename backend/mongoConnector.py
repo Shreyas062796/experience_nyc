@@ -22,7 +22,7 @@ class MongoConnector:
 		client = MongoClient(connection).experience_nyc #places and users database
 		# client = MongoClient(connection).enyc #events database
 		return(client)
-		
+
 	def populatePlaces(self):
 		allplaces = places.getAllPlaces()
 		db = self.clientConnect()
@@ -103,8 +103,35 @@ class MongoConnector:
 				favoritePlaces.append(place)
 		return(favoritePlaces)
 
-	# sorry shrey highjacking your code but doing this to 
-	# give Addae something to work on
+	def addTripPlaces(self,username,place_id):
+		db = self.clientConnect()
+		if(place_id not in db.users.find({'username': username})):
+			db.users.update_one({'username': username},{'$push':{'current_trip_places':place_id}})
+			return("Added")
+		else:
+			return("Already Exists")
+
+	def removeTripPlaces(self,username,place_id):
+		db = self.clientConnect()
+		db.users.update_one({'username': username},{'$pull':{'current_trip_places':place_id}})
+		print("added")
+
+	def getTripPlacesIds(self,username):
+		db = self.clientConnect()
+		user = db.users.find_one({"username": username})
+		return(user['current_trip_places'])
+
+	def getTripPlaces(self,username):
+		db = self.clientConnect()
+		TripPlaces = []
+		user = db.users.find_one({"username": username})
+		for placeId in user['current_trip_places']:
+			place = db.places.find_one({"id": placeId})
+			if(place is not None):
+				place['_id'] = str(place['_id'])
+				TripPlaces.append(place)
+		return(TripPlaces)
+
 	def getUserInfo(self, username):
 		db = self.clientConnect()
 		user = db.users.find_one({"username": username})
@@ -136,7 +163,6 @@ class MongoConnector:
 				count += 1
 # 	{
 #   trip_id:"1242112",
-#   trip_name:"bored in nyc",
 #   user:"bored kid on speed",
 #   num_places:3,
 #   public: true/false,
@@ -148,23 +174,23 @@ class MongoConnector:
 #   ],
 #   add some more stuff whatever you feel is important
 # }
-	def createTrip(self,numofplaces,tripName):
+	def createTrip(self,placeIds,trip_id,user,distance):
 		tripPlaces = []
 		trip = {}
 		db = self.clientConnect()
 		places = self.getPlaces()
-		for i in range(numofplaces):
-			place = places[random.randint(1,len(places)-1)]
-			place['user_rating'] = round(random.uniform(1,5), 2)
-			tripPlaces.append(place)
-		trip['trip_id'] = str(uuid.uuid4())
-		trip['user'] = 'goat'
-		trip['trip_name'] = tripName
+		for place_id in placeIds:
+			place = db.places.find_one({"id": place_id})
+			place['user_rating'] = None
+			tripPlaces.append()
+		trip['trip_id'] = trip_id
+		trip['user'] = user
 		trip['number_of_places'] = numofplaces
 		trip['public'] = False
 		trip['rating'] = None
-		trip['distance'] = round(random.uniform(1,3), 2)
+		trip['distance'] = distance
 		trip['places'] = tripPlaces
+		print(trip)
 		return(trip)
 
 	def populateTrip(self,trip):
@@ -194,7 +220,7 @@ if __name__ == "__main__":
 	# Experience.getBars()
 	# Experience.getRestaurants()
 	# pprint(Experience.QueryRestaurants(2,2,2))
-	Experience.queryPlaces('','',10)
+	# Experience.queryPlaces('','',10)
 	# pprint(Experience.QueryBars(2,2,2))
 	# Experience.addFavoritePlaces("testUser",134)
 	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
