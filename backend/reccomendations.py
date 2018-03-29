@@ -2,6 +2,7 @@ import pandas as pd
 import mongoConnector as mg
 from pprint import pprint
 import lib.getKeywords as key
+import
 from maps.geo import addressToGeo
 
 connector = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
@@ -11,6 +12,7 @@ class Reccomendations:
 		self.user = username
 		self.address = address
 
+	#creates dataframes for places and trips that is going to be used for machine learning
 	def getTripsandPlaces(self):
 		trips = connector.queryTrip(self.user)
 		alltrips = []
@@ -25,19 +27,13 @@ class Reccomendations:
 		newtripdf = tripdf[['rating','trip_name','distance']].copy()
 		newplacedf = placesdf[['price_level','name','types','user_rating','id','rating']].copy()
 		newplacedf['counts'] = newplacedf.groupby('types')['rating'].transform('count')
-		# print(newtripdf.shape)
-		# print(newplacedf.shape)
-		# print(newtripdf.columns)
-		# print(newplacedf.columns)
-		# print(newtripdf.info())
-		# print(newplacedf.info())
-		# print(newtripdf)
 		return(newtripdf,newplacedf)
 
 
 	#run the machine learning for all the places and if its in a 2 mile radius then it should
 	#return
 
+	#gets all the places with a given radius and address
 	def getPlacesInRadius(self):
 		reccomendedplaces = []
 		curCoordinates = addressToGeo(self.address)
@@ -52,6 +48,7 @@ class Reccomendations:
 	#every user is going to have an address and filter what the 
 	#user likes based on what they like
 
+	# Reccomends places based on machine learning algorithm as well as places in a certain radius
 	def PlaceReccomendation(self):
 		typescores = {}
 		radiusPlaces = reccomender.getPlacesInRadius()
