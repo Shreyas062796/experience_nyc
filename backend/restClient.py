@@ -44,21 +44,13 @@ def activate_job():
 		while hour == datetime.datetime.now().hour:
 			time.sleep(60)
 		while True:
-			# updateEvents()    #write this later
-			# updatePlaces()    #write this later
 
 			time.sleep(810) # sleep for an hour
-			requests.get('https://experiencenyc.herokuapp.com/')
+			requests.get('https://experiencenyc.herokuapp.com/') # ping so it doesn't fall sleep
 			time.sleep(90)
 			print('Hour Notification')
 			EVENT_CACHE.setTopToday(events_script.getEvents().getEventsOfTheDay())
 
-
-	#==============================================
-	# This is for the caching of data
-	# sets up the data for when the first first goes up
-	# updateEvents()
-	# updatePlaces()
 	EVENT_CACHE.setTopToday(events_script.getEvents().getEventsOfTheDay())
 	thread = threading.Thread(target=get_data)
 	thread.start()
@@ -258,3 +250,4 @@ def index():
 
 if __name__ == '__main__':
 	restClient.run(debug=DEBUG)
+
