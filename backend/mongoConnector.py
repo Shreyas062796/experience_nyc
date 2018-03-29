@@ -137,7 +137,7 @@ class MongoConnector:
 		user = db.users.find_one({"username": username})
 		print(user)
 		user['_id'] = str(user['_id'])
-		return user
+		return(user)
 			
 	def populateTags(self,tags):
 		db = self.clientConnect()
