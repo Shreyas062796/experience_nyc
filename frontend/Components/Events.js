@@ -29,8 +29,7 @@ const styles = theme => ({
     maxWidth: 400,
   },
   subheader: {
-    display: 'block',
-    height: '2rem'
+    height: '5em'
   },
   media: {
     height: 150,
@@ -64,36 +63,6 @@ class Events extends React.Component {
   handleExpandClick = () => {
     this.setState({ expanded: !this.state.expanded });
   };
-
-  //generate list of dollar sign components based on passed price level
-  returnPriceLevel = (items) => {
-    let price = [];
-    for(var i=0; i < items; i++){
-      price.push(<AttachMoney style={{color: 'rgb(0, 188, 212)', width: '40px'}}/>);
-    }
-    return price;
-  }
-
-  //generate list of star components based on passed rating
-  returnRatingLevel = (items) => {
-    let ratingStars = [];
-    let floor = Math.floor(items)
-    for(var i=0; i < floor; i++){
-      ratingStars.push(<Star style={{color: 'rgb(0, 188, 212)', height: '', width: '75px'}}/>);
-    }
-    if((items % 1) > 0.2){
-      ratingStars.push(<StarHalf style={{color: 'rgb(0, 188, 212)', height: '', width: '75px'}}/>);
-      for(var i = 0; i < (4-floor); i++){
-        ratingStars.push(<StarBorder style={{color: 'rgb(0, 188, 212)', height: '', width: '75px'}}/>);
-      }
-    }
-    else{
-      for(var i = 0; i < (5-floor); i++){
-        ratingStars.push(<StarBorder style={{color: 'rgb(0, 188, 212)', height: '', width: '75px'}}/>);
-      }
-    }
-    return ratingStars;
-  }
 
   cardWidth = () => {
     return $(card).width();
@@ -182,6 +151,16 @@ class Events extends React.Component {
     return button;
   }
 
+  isFree(value){
+    if(value == true){
+      return <Typography style={{fontSize: '1.5rem'}}>Free</Typography>;
+    }
+    else{
+      return <Typography style={{fontSize: '1.5rem'}}>Not Free</Typography>;
+    }
+
+  }
+
   //listen for new props
   /*componentWillReceiveProps(nextProps) {
       this.setState({filter: nextProps.filter}, function() {
@@ -195,22 +174,44 @@ class Events extends React.Component {
     //set list of favorites for current user
     //this.setFavorites();
 
-    var data = {q: 'dance', address: 'nyc'};
+    var data = {amount: '15'};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/getevents_temp",
+      url:"https://experiencenyc.herokuapp.com/todayevents",
       type:"GET",
       data: data,
       contentType:"application/json; charset=utf-8",
       dataType:"json"})
       .done((response) => {
-        console.log(response);
        const { classes } = this.props;
+
+       response.shift();
        const result = response.map((value) =>
        (<Grid item xl={3} lg={4} md={6} sm={12} xs={12}>
          <Card className={this.props.card}>
-           <div dangerouslySetInnerHTML={{ __html: value['description']['html']}}/>
-
+           <CardHeader classes={{root: classes.subheader}}
+             avatar={
+               <Avatar aria-label="Recipe" src={value['logo']['original']['url']} className={this.props.avatar}/>
+             }
+             title={value['name']['text']}
+             subheader="Address"
+           />
+         <div style={{overflow:'hidden'}}>
+            <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={value['logo']['url']}/>
+          </div>
+           <CardActions className={this.props.actions} disableActionSpacing>
+             <div style={{width: '25%'}}>
+                 {this.isFavorite(value['id'])}
+             </div>
+             <div style={{width: '50%', textAlign: 'center'}}>
+                {this.isFree(value['is_free'])}
+             </div>
+             <div style={{width: '25%', textAlign: 'right'}}>
+               <Button href={"http://maps.google.com/?q=" + value['name']['text']} target="_blank" color="primary" style={{minWidth: '0px', color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
+                GO
+               </Button>
+             </div>
+           </CardActions>
          </Card>
        </Grid>)
        );
@@ -222,7 +223,7 @@ class Events extends React.Component {
 
   //Load places when component mounts
   componentDidMount = () => {
-    //this.searchEvents();
+    this.searchEvents();
   }
 
   render() {

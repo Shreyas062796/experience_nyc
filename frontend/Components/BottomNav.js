@@ -19,7 +19,7 @@ class SimpleBottomNavigation extends React.Component {
   state = {
     value: 0,
     marginRight: 300,
-    pageKeys: {0 : 'Search', 1 : 'Favorites', 2 : 'Trips'}
+    pageKeys: {0 : 'Places', 1 : 'Events', 2 : 'Favorites', 3 : 'Trips'}
   };
 
   handleChange = (event, value) => {
@@ -38,7 +38,8 @@ class SimpleBottomNavigation extends React.Component {
         showLabels
         className={classes.root}
       >
-        <BottomNavigationAction label="Search" icon={<Search />} />
+        <BottomNavigationAction label="Places" icon={<Search />} />
+        <BottomNavigationAction label="Events" icon={<Search />} />
         <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
         <BottomNavigationAction label="Trips" icon={<LocationOnIcon />} />
       </BottomNavigation>

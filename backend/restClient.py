@@ -63,7 +63,13 @@ def activate_job():
 	thread = threading.Thread(target=get_data)
 	thread.start()
 
-
+@restClient.route('/getuserdata', methods=['GET'])
+def getUserData():
+	username = request.get_json()['username']
+	# print(info)
+	# info = request.args['username']
+	userinfo = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getUserInfo(username)
+	return jsonify(userinfo)
 #any personal or important info is a post request
 #any other information is get request
 #{"firstName":"Alex","lastName":"Markenzon","username":"testUsername","password":"","email":"testemail@gmial.com"}:
@@ -140,7 +146,7 @@ def queryplaces():
 def getTopEvents():
 	if request.method == "GET":
 		n = int(request.args['amount'])
-		return jsonify(EVENT_CACHE.getTopN())
+		return jsonify(EVENT_CACHE.getTopN(n))
 
 
 

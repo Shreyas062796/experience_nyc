@@ -152,7 +152,7 @@ class Cards extends React.Component {
   }
 
   addToTrip(id, button){
-    let tempArr = this.state.trip;
+    let xtempArr = this.state.trip;
     tempArr.push(id);
     this.setState({trip: tempArr}, function(){
       console.log(this.state.trip);
@@ -245,17 +245,6 @@ class Cards extends React.Component {
                </Button>
              </div>
            </CardActions>
-           <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-             <CardContent>
-               <Typography paragraph variant="body2">
-                 Method:
-               </Typography>
-               <Typography paragraph>
-                 Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10
-                 minutes.
-               </Typography>
-             </CardContent>
-           </Collapse>
          </Card>
        </Grid>)
        );

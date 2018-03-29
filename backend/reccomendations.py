@@ -32,6 +32,7 @@ class Reccomendations:
 		# print(newtripdf)
 		return(newtripdf,newplacedf)
 
+
 	#run the machine learning for all the places and if its in a 2 mile radius then it should
 	#return
 

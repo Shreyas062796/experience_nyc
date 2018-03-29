@@ -102,6 +102,15 @@ class MongoConnector:
 				place['_id'] = str(place['_id'])
 				favoritePlaces.append(place)
 		return(favoritePlaces)
+
+	# sorry shrey highjacking your code but doing this to 
+	# give Addae something to work on
+	def getUserInfo(self, username):
+		db = self.clientConnect()
+		user = db.users.find_one({"username": username})
+		print(user)
+		user['_id'] = str(user['_id'])
+		return user
 			
 	def populateTags(self,tags):
 		db = self.clientConnect()
@@ -177,6 +186,7 @@ class MongoConnector:
 
 if __name__ == "__main__":
 	Experience = MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
+	Experience.getUserInfo('test1')
 	# Experience = MongoConnector('ds123619.mlab.com', '23619', 'admin', 'admin', 'enyc'
 	# Experience.populatePlaces()
 	# pprint(Experience.getPlacesInRadius(40.7733125,-73.9837555,2))
