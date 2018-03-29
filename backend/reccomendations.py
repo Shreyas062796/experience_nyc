@@ -2,9 +2,11 @@ import pandas as pd
 import mongoConnector as mg
 from pprint import pprint
 import lib.getKeywords as key
+import events.events_script as events
 from maps.geo import addressToGeo
 
-connector = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
+placesconnector = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
+eventsconnector = mg.MongoConnector("ds123619.mlab.com", "23619", "admin","admin","enyc")
 keywords = key.GetKeywords("AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o")
 class Reccomendations:
 	def __init__(self,username,address):
@@ -13,7 +15,7 @@ class Reccomendations:
 
 	#creates dataframes for places and trips that is going to be used for machine learning
 	def getTripsandPlaces(self):
-		trips = connector.queryTrip(self.user)
+		trips = placesconnector.queryTrip(self.user)
 		alltrips = []
 		places = []
 		for trip in trips:
@@ -28,7 +30,6 @@ class Reccomendations:
 		newplacedf['counts'] = newplacedf.groupby('types')['rating'].transform('count')
 		return(newtripdf,newplacedf)
 
-
 	#run the machine learning for all the places and if its in a 2 mile radius then it should
 	#return
 
@@ -36,8 +37,8 @@ class Reccomendations:
 	def getPlacesInRadius(self):
 		reccomendedplaces = []
 		curCoordinates = addressToGeo(self.address)
-		print(curCoordinates)
-		places = connector.getPlacesInRadius(curCoordinates['lat'],curCoordinates['lng'],5)
+		# print(curCoordinates)
+		places = placesconnector.getPlacesInRadius(curCoordinates['lat'],curCoordinates['lng'],5)
 		userplaces = self.getTripsandPlaces()[1]
 		for place in places:
 			for userplaceid in userplaces['id']:
@@ -75,10 +76,14 @@ class Reccomendations:
 
 	def EventReccomendations(self):
 		reccomendedplaces = self.PlaceReccomendation()
-		for place in reccomendedplaces:
-			print(keywords.getData())
+		db = eventsconnector.EventsclientConnect()
+		for x in db.events.find({}):
+			
+		# for place in reccomendedplaces:
+			
 if __name__ == "__main__":
 	reccomender = Reccomendations('goat','269 Amsterdam Ave, New York, NY 10023')
 	# reccomender.getPlacesInRadius('269 Amsterdam Ave, New York, NY 10023')
-	reccomender.PlaceReccomendation()
+	# reccomender.PlaceReccomendation()
 	# reccomender.getTripsandPlaces()
+	reccomender.EventReccomendations()

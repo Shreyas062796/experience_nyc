@@ -35,15 +35,11 @@ class getEvents:
 		today_events = list()
 		rectangle = self.geocode.format(TOP_LEFT[0], TOP_LEFT[1], BOTTOM_RIGHT[0], BOTTOM_RIGHT[1])
 		request_link = EVENT_LINK + "&start_date.keyword=today&sort_by=best"
-
 		data = requests.get(request_link)
 		events = data.json()
-
 		pages = events['pagination']['page_count']
 		documents = events['pagination']['object_count']
-
 		today_events.extend(events['events'])
-
 		# get at max 100 events less if there is not that much
 		if int(pages)>1:
 			new_request = request_link+"&page=".format(2)

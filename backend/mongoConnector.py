@@ -24,6 +24,10 @@ class MongoConnector:
 		# client = MongoClient(connection).enyc #events database
 		return(client)
 
+	def EventsclientConnect(self):
+		connection = 'mongodb://' + str(self.username) + ':' + str(self.password) + '@' + str(self.clientHost) + ':' + str(self.clientPort) + '/' + str(self.database)
+		client = MongoClient(connection).enyc #events database
+		return(client)
 	#adds all places to places collection in database
 	def populatePlaces(self):
 		allplaces = places.getAllPlaces()
@@ -61,7 +65,7 @@ class MongoConnector:
 		login['password'] = hashlib.md5(login['password'].encode('utf-8')).hexdigest()
 		db.users.insert_one(login)
 
-	#authenticating login given a username and password
+	#authenticating login given a username and
 	def authenticateLogin(self,username,password):
 		db = self.clientConnect()
 		login = db.users.find_one({"username": username})
@@ -217,7 +221,7 @@ class MongoConnector:
 
 if __name__ == "__main__":
 	Experience = MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
-	Experience.getUserInfo('test1')
+	# Experience.getUserInfo('test1')
 	# Experience = MongoConnector('ds123619.mlab.com', '23619', 'admin', 'admin', 'enyc'
 	# Experience.populatePlaces()
 	# pprint(Experience.getPlacesInRadius(40.7733125,-73.9837555,2))
@@ -225,7 +229,7 @@ if __name__ == "__main__":
 	# Experience.getBars()
 	# Experience.getRestaurants()
 	# pprint(Experience.QueryRestaurants(2,2,2))
-	# Experience.queryPlaces('','',10)
+	Experience.queryPlaces('','',10)
 	# pprint(Experience.QueryBars(2,2,2))
 	# Experience.addFavoritePlaces("testUser",134)
 	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
