@@ -7,8 +7,10 @@ from maps.geo import addressToGeo
 connector = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
 keywords = key.GetKeywords("AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o")
 class Reccomendations:
-	def __init__(self,user):
-		self.user = user
+	def __init__(self,username,address):
+		self.user = username
+		self.address = address
+
 	def getTripsandPlaces(self):
 		trips = connector.queryTrip(self.user)
 		alltrips = []
@@ -36,9 +38,9 @@ class Reccomendations:
 	#run the machine learning for all the places and if its in a 2 mile radius then it should
 	#return
 
-	def getPlacesInRadius(self,address):
+	def getPlacesInRadius(self):
 		reccomendedplaces = []
-		curCoordinates = addressToGeo(address)
+		curCoordinates = addressToGeo(self.address)
 		print(curCoordinates)
 		places = connector.getPlacesInRadius(curCoordinates['lat'],curCoordinates['lng'],5)
 		userplaces = self.getTripsandPlaces()[1]
@@ -52,7 +54,7 @@ class Reccomendations:
 
 	def PlaceReccomendation(self):
 		typescores = {}
-		radiusPlaces = reccomender.getPlacesInRadius('269 Amsterdam Ave, New York, NY 10023')
+		radiusPlaces = reccomender.getPlacesInRadius()
 		placesdf = self.getTripsandPlaces()[1]
 		df = placesdf.groupby(["types"]).mean()
 		reccomendedplaces = []
@@ -80,7 +82,7 @@ class Reccomendations:
 		for place in reccomendedplaces:
 			print(keywords.getData())
 if __name__ == "__main__":
-	reccomender = Reccomendations('goat')
+	reccomender = Reccomendations('goat','269 Amsterdam Ave, New York, NY 10023')
 	# reccomender.getPlacesInRadius('269 Amsterdam Ave, New York, NY 10023')
 	reccomender.PlaceReccomendation()
 	# reccomender.getTripsandPlaces()
