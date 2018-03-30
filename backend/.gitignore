@@ -10,7 +10,10 @@ build/
 dist/
 
 # logging
+Error_Log.log
+*/Error_Log.log
 ghostdriver.log
 
 #testdata
 data.txt
+cache.json
