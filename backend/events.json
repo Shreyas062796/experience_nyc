@@ -1,0 +1,713 @@
+[{
+	"place_id": "ChIJKW53HYZYwokRPfCYxGT9zb8",
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.97920112989272,
+				"lat": 40.78262747010727
+			},
+			"northeast": {
+				"lng": -73.97650147010728,
+				"lat": 40.78532712989271
+			}
+		},
+		"location": {
+			"lng": -73.977947,
+			"lat": 40.784017
+		}
+	},
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 960,
+		"height": 684,
+		"photo_reference": "CmRaAAAA7WwcQX9i1bVfIKVYe9TbQcJn8tppiffixqjjxgLc_U8-ACFw9IkIu6ctXNNGTD5MkmUdac3VVtrg7UdZbrziMo-9DG018aHgb5_OW4aJdFshaCTLVLmVKOvBVSpvxFECEhA8wEx2_BdYapiRMc27rxkSGhQQLVJugrzO-CgG2lyhL2bc2CIGUQ"
+	}],
+	"formatted_address": "420 Amsterdam Ave, New York, NY 10024",
+	"rating": 4.6,
+	"types": ["night_club", "bar", "restaurant", "food", "point_of_interest", "establishment"],
+	"reference": "CmRbAAAAjv90d23D7-jevE5XCV2nAwHl5zV1f82qaKxtW2CpWHRNcrfFncqp8qKfAN_mM1D_4phvjMfDlKzPjE8p8sWxoE-sWVHwl1jl_CIfu36YuWtUWWcB-2DgiXckh6icUK3vEhBqzvczDZArLYBkXQmUWJxJGhQyIXIbTpRvu01uqjJt8frg5R7CVA",
+	"name": "Olma",
+	"price_level": 2,
+	"opening_hours": {
+		"open_now": false,
+		"weekday_text": []
+	},
+	"id": "95b682badc996b2d9a19d647b83ddd9f893ae111",
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png"
+}, {
+	"place_id": "ChIJYRdWlotYwokRat39bGC-kAQ",
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.9799139298927,
+				"lat": 40.77605362010728
+			},
+			"northeast": {
+				"lng": -73.97721427010727,
+				"lat": 40.77875327989273
+			}
+		},
+		"location": {
+			"lng": -73.9785151,
+			"lat": 40.7774702
+		}
+	},
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 2048,
+		"height": 1365,
+		"photo_reference": "CmRaAAAAbQTo5sm4Xcx1RUymwUhPM1wLUn4Wwpl1eNTkSAhnLGdK21P-9z_llbeKLvMXIR7AqnErsgB1SwpnGwiPJG1mL8PT4x9wQn7kJLWq7o4WloYLorNFlBMGa9JnnUzAh7GXEhCzHe-bLeDIcixpcH1Uo7N9GhTw5HDQSmLV_o2w21Hmo6IYo_cnJQ"
+	}],
+	"formatted_address": "53 W 72nd St, New York, NY 10023",
+	"rating": 3.8,
+	"types": ["bar", "restaurant", "food", "point_of_interest", "establishment"],
+	"reference": "CmRbAAAAQWp6quy2dlfiQ6pLSc_18IjedXdyvdq6XtmlsIcLCC7Fv5W87CpbEwV0YNxKZeody-trk4upBeW6kGr2wnkhH0NxmBUf66kQDfYd_7qJGraWSTRHpP5F_D3Kyl_-IMgPEhCzd0bl0V0GyGNWRf-HsmZSGhTWRsOjnxx-n2E4KWGawWAs9yveZQ",
+	"name": "The Dakota Bar",
+	"price_level": 2,
+	"opening_hours": {
+		"open_now": false,
+		"weekday_text": []
+	},
+	"id": "633af56bdd931f2f05630db680dbc0672f144632",
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/bar-71.png"
+}, {
+	"place_id": "ChIJi9zckANZwokRwVvF58erwVc",
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.97655617989271,
+				"lat": 40.74820157010728
+			},
+			"northeast": {
+				"lng": -73.97385652010726,
+				"lat": 40.75090122989273
+			}
+		},
+		"location": {
+			"lng": -73.97509889999999,
+			"lat": 40.749506
+		}
+	},
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 3600,
+		"height": 2400,
+		"photo_reference": "CmRaAAAA_JOEveVKUW801l_UWiqDF4FJiQ1Gq4k16rZFNNwzp7sSiLyY1bliPwsfKUG0O1BXfPZUzofv_BYoFr_lbGAQKtDvQ3tHb6l75nbXkgWuneAgBEMb_3DGsBlFV2cBg6cXEhAXvIGib-9IDrFIEsm-2AwvGhTqZK0lPc67x9TiDlVJLu1veitNRg"
+	}],
+	"formatted_address": "633 3rd Ave, New York, NY 10017",
+	"rating": 4.1,
+	"types": ["bar", "restaurant", "food", "point_of_interest", "establishment"],
+	"reference": "CmRbAAAAZSRPWsHE6vwPQm5SvhgdfDNBkdYwznVB17giiKjlGQnBEqyL3aXkR7I8uSOZZ_XoWV5dNHT3p_IRGWO9bAvFzXLr6TUZxzu_4AFK-EtaYyIhzqSYiw4hwGlxdyVR8FVIEhAAbkvwjfBFlwhIctuQ7R6AGhRy2fEJCM7IIOPwseBoF2YHK_HXOQ",
+	"name": "Docks",
+	"price_level": 3,
+	"opening_hours": {
+		"open_now": true,
+		"weekday_text": []
+	},
+	"id": "4ba00124c329493e43dd47f4e4d4f2cde4a12588",
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png"
+}, {
+	"place_id": "ChIJCcAxi5RYwokRxXGqEwkAUU8",
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.96521952989272,
+				"lat": 40.77310977010728
+			},
+			"northeast": {
+				"lng": -73.96251987010727,
+				"lat": 40.77580942989272
+			}
+		},
+		"location": {
+			"lng": -73.9638997,
+			"lat": 40.7744189
+		}
+	},
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 4767,
+		"height": 3207,
+		"photo_reference": "CmRaAAAAoAGrLtVlSl-DlE9ZngucGKLho9qMW7TXH7rYGMUif4a55F3zJOowBPtV9pzMP6wBt1ANfBO2hM6ORnTPb6OipRiN5p13Eci79qrWPtXMQyYxVd0XIifDzfhFDOJirMgqEhBRJ5XkkX-1nFNSqtBT9gQDGhQsB9lKX_xPAMr9BSs3RNIASSZ_eg"
+	}],
+	"formatted_address": "20 E 76th St, New York, NY 10021",
+	"rating": 4.1,
+	"types": ["bar", "restaurant", "food", "point_of_interest", "establishment"],
+	"reference": "CmRbAAAA-T4IZVFKBI_pv1SrPNKFr5ZzuyMMC6JCIH4EqjrKlmVK9Ae-aKh_fA8Jn0UyKXEROBSOFSVew2zTCBVusEAOxRFzZ_3LyOKfNKijo5L4EpvI_FT0VMHYN_xE1jJuc-QvEhDJcE25tb6v_-RfccwAPMb0GhRgQecCFOpMJpYNLaAyPcF8ieb1vA",
+	"name": "Bar Pleiades",
+	"price_level": 1,
+	"opening_hours": {
+		"open_now": false,
+		"weekday_text": []
+	},
+	"id": "408409a60baa66ae5714fb10de1edeec0aa52047",
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/bar-71.png"
+}, {
+	"id": "4c13d231cca2673401d1e1dfeb30adb86f7d10d2",
+	"name": "Mark Bar",
+	"place_id": "ChIJQ5paRJRYwokR0gfLLcxag8Q",
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 2000,
+		"height": 1000,
+		"photo_reference": "CmRaAAAAmBo198ThHZPSChlIWn8L64erJcKsraBa0FRJnRKpeYUqbcCaYGMnDSiR3OfX2jy9oWvWtv4myHHpQsv6dgGTU1oxjm-_2DpbfdLGLhACFsleE54jRhvAaCYPj8OuajtmEhB0sYCTPHoHOwm4NWd1pOI4GhSFCHUn82CDvvi-Fkmg3FN4HzqU9A"
+	}],
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.96465812989273,
+				"lat": 40.77394017010727
+			},
+			"northeast": {
+				"lng": -73.96195847010728,
+				"lat": 40.77663982989272
+			}
+		},
+		"location": {
+			"lng": -73.9633083,
+			"lat": 40.77529
+		}
+	},
+	"opening_hours": {
+		"open_now": true,
+		"weekday_text": []
+	},
+	"formatted_address": "Madison Avenue at 77th St, New York, NY 10075",
+	"rating": 3.9,
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/bar-71.png",
+	"reference": "CmRbAAAAaYmZuKezQNGaVDdC1_oy14dcwMM2_4MkzkAC22sxHdu3afcyqmtDNdkCzQHdNFeJ98pMdSpPXYWd9A_fFwTdUTYjS8DOWGGc7ofQxzhyo4Eyg33l-L4znzqMhl1mRbGcEhBA6-ao9bOE4ADMx1ULHtSZGhTg2mW1VPkK1YcD-CYq0QMen4D4Xw",
+	"types": ["bar", "night_club", "point_of_interest", "establishment"]
+}, {
+	"place_id": "ChIJC-i7Fij2wokRiM8ZmIee2B0",
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.97416482989273,
+				"lat": 40.79261317010727
+			},
+			"northeast": {
+				"lng": -73.97146517010728,
+				"lat": 40.79531282989272
+			}
+		},
+		"location": {
+			"lng": -73.972815,
+			"lat": 40.793963
+		}
+	},
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 2988,
+		"height": 5312,
+		"photo_reference": "CmRZAAAAYS7gEDZ-H_TYJPlnEXBxO1Uxi7SbOtdT57PJCWxizyglS4L-ALVgAPj1SwWBUSxXUuOSVjaIzzOqNIHhAKKrbm3GESQo8j2HpNPBvfvS4Hw9JViMh-C8Fv2WsXzazY3sEhBFgsnd3rik2QF7Z1XqviycGhQsuvnVBzJhkfICCWcMcVIIP2a8zw"
+	}],
+	"formatted_address": "2537 Broadway, Lower Level, New York, NY 10025",
+	"rating": 4,
+	"types": ["bar", "night_club", "restaurant", "food", "point_of_interest", "establishment"],
+	"reference": "CmRbAAAAw3CRqJozhsjGlTDkTc39f-cuhjtJFYdVMJvLVybuWfl30Ajd9KLtAvgqEIANMqtVCVbAzgOfRGXqZnrhmI1l77ONjfLnrjdzN08AEioPJ5TeF1bh9aLS3xqUaTjpDmFdEhCQmw2IgbOLkQq8Nha27f3OGhQhaCTlpGVbMuHICD0rXVDWv16s0Q",
+	"name": "Bar Thalia",
+	"price_level": 1,
+	"opening_hours": {
+		"open_now": false,
+		"weekday_text": []
+	},
+	"id": "4ee4de75e0f2c4633b00060e6b2f1f97dd0e5681",
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/bar-71.png"
+}, {
+	"id": "c41e58bb718a7b8c6936092f4f0158ff8034e945",
+	"name": "Eli's Essentials And Wine Bar",
+	"place_id": "ChIJXdBIUqJYwokRSwWT1Yphyqg",
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 1280,
+		"height": 853,
+		"photo_reference": "CmRaAAAAANCXoYKt6wR5v0dwU1Hbtn9n2CZUJH1OlXWAg2ICdxdVBOoizG0DiBaPJLRvQ3pHBqrZsKG8G2ABBqZ7g51EPB0nnh4jTvW4-i4mhFxjDP52LHHRP8T9glQiwPpsXoliEhDMVO6Kj3lMfDsQLaU4z6kgGhQI0917Ki__K22RUrKbkjEBg_sIzQ"
+	}],
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.95815802989272,
+				"lat": 40.78261977010728
+			},
+			"northeast": {
+				"lng": -73.95545837010728,
+				"lat": 40.78531942989272
+			}
+		},
+		"location": {
+			"lng": -73.9568082,
+			"lat": 40.7839696
+		}
+	},
+	"opening_hours": {
+		"open_now": true,
+		"weekday_text": []
+	},
+	"formatted_address": "1270 Madison Ave, New York, NY 10028",
+	"rating": 3.9,
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/bar-71.png",
+	"reference": "CmRbAAAA8bYJbgcMBjKpU3K9OQlrhACZmO4PypN9GCD1hfJ0B7lm_XEdEr-xa-H-r7q-yPIyzGRRhQz7Xk3AbB63tF0V8uErCLqHbRCvOK14iCWgZoBDMqm274pEgv5lm7L0Zq02EhCZOTEcXgFU8b678jpWu2LkGhSiVrmJPyBU5D5VgqjAWANTX0Tqog",
+	"types": ["cafe", "bar", "restaurant", "food", "point_of_interest", "establishment"]
+}, {
+	"place_id": "ChIJG8Pwm_VYwokRtPc8Rwrhdpg",
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.98322092989272,
+				"lat": 40.77039207010728
+			},
+			"northeast": {
+				"lng": -73.98052127010729,
+				"lat": 40.77309172989272
+			}
+		},
+		"location": {
+			"lng": -73.9816842,
+			"lat": 40.7717202
+		}
+	},
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 2048,
+		"height": 1536,
+		"photo_reference": "CmRaAAAAGUSSWVLbTEuIIt3ov2dzNTRiFoqtx-aulI8axQ2ggQUR6X8dkGVN5ZMMY3Dd8UATR0sbfXdJmbp3zwZPZHmX5FTKvrbRJcR5k2qBIuhtwPuBAdeMie_KTNbqHKrq6eopEhCgwUNH3mLrN8N8nmQBc8GTGhTB9Ti74GPW6D4IJis5gtYTsiLyWA"
+	}],
+	"formatted_address": "1900 Broadway, New York, NY 10023",
+	"rating": 4.1,
+	"types": ["bar", "restaurant", "food", "point_of_interest", "establishment"],
+	"reference": "CmRbAAAACuIuKTUBV0ZCtxbW44mZHX77EbKIZrczU7ZPAPT4XYhhsmBTr9JjpLTEjyt2TCjFX10OBNwuYM_VOQJfBXK-0-C7PxVL6s_hqyf-FuK372tR5DkGh-B2wS3cb2-s4kDwEhAzbWYvDR0Dgjqhx9Z-XyBNGhROaTSnlohKUFK6o8-CiT_pic180Q",
+	"name": "Bar Boulud",
+	"price_level": 3,
+	"opening_hours": {
+		"open_now": true,
+		"weekday_text": []
+	},
+	"id": "fd3c13244eb29fc9cd1106901b58187b16a1c59d",
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png"
+}, {
+	"place_id": "ChIJ8cZGQ75YwokREig1SG7_h68",
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.95848047989273,
+				"lat": 40.77323442010729
+			},
+			"northeast": {
+				"lng": -73.95578082010728,
+				"lat": 40.77593407989273
+			}
+		},
+		"location": {
+			"lng": -73.95710199999999,
+			"lat": 40.774572
+		}
+	},
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 4608,
+		"height": 3072,
+		"photo_reference": "CmRaAAAAGw5QTQOqvM09qQYf0xgTdnBiCcuD45ls8MffdGBiGclMwBFxxgLIbT-gzYu57xFPr-yArH_XIVq69NOSR-gQCU7kxw4TkW1-D1fomxmZ1ZfOmA4fXRQd_bvHDGwNQ4G0EhAYKToB-jdwCLjjiPwIxf1RGhRj84Nx1JTvGteUYAIbxlL3G8KvPA"
+	}],
+	"formatted_address": "0538, 1394 3rd Ave, New York, NY 10075",
+	"rating": 4.1,
+	"types": ["bar", "restaurant", "food", "point_of_interest", "establishment"],
+	"reference": "CmRbAAAAC6ItYftoxccYKSA7K6Nb0SyW9iEjgNIDrBEShhPYj1O0kWwdUwAArunH9Y8-812m6Yan6QT1u1TyXxXq0U0OkzNqouG6eBDJ-5WkbWRE2gZk4r4SfeEDfnK7OEwxG6ZBEhBzQZ038BPR4pVMOiyhggcwGhRsSBKTtdFgTRrbQjG87BGfM8LN2g",
+	"name": "Luke's Bar & Grill",
+	"price_level": 2,
+	"opening_hours": {
+		"open_now": true,
+		"weekday_text": []
+	},
+	"id": "212b93d8d5a1ade5f329b846f85a034491052e40",
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png"
+}, {
+	"id": "bfd38dd7cc866f2c968191621bd0f534210aff69",
+	"name": "Mel's Burger Bar",
+	"place_id": "ChIJqQMTgMBYwokR7HZwBu8zGu4",
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 2048,
+		"height": 1363,
+		"photo_reference": "CmRaAAAAG1E4m30DzjMrZZSybN-VIuHL6Oe3s4Ub1x1vRW7Xw_xig55fUg9xp_wWRrvle91K8aYihrrCj9qjaGPtUjhgWhHsHSArW5aREdYqw3MGH9D4BoBJbH7fogqDxDgijPaFEhB2kiwstzVzVHgRfX0VSM49GhQV2Fx0ADZrANBKL8A30nD4fscaUw"
+	}],
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.95794402989272,
+				"lat": 40.76970847010727
+			},
+			"northeast": {
+				"lng": -73.95524437010727,
+				"lat": 40.77240812989272
+			}
+		},
+		"location": {
+			"lng": -73.9564969,
+			"lat": 40.7710183
+		}
+	},
+	"opening_hours": {
+		"open_now": true,
+		"weekday_text": []
+	},
+	"formatted_address": "1450 2nd Ave, New York, NY 10021",
+	"rating": 4.2,
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png",
+	"reference": "CmRbAAAA15Rcb85glsInZ1cxA2nTX1AhX1Am5qw4iptPVvm4F4DWBN6IwtPgGCiBYGhzpXQRtZsP4haotTYMqfIpXqilbYrn6DtN2XHFswjXV7Cvtv27BoPCLkm5mDA8-SOabNi2EhCHeWBXZY9Qwdb3pYO_Wf06GhQnzArwNdRSAaAmSRT0igCYKIkIew",
+	"types": ["bar", "restaurant", "food", "point_of_interest", "establishment"]
+}, {
+	"place_id": "ChIJX42AoFhYwokRAgVWpIMsAek",
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.98419502989272,
+				"lat": 40.76711867010728
+			},
+			"northeast": {
+				"lng": -73.98149537010728,
+				"lat": 40.76981832989272
+			}
+		},
+		"location": {
+			"lng": -73.9828452,
+			"lat": 40.7684685
+		}
+	},
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 4048,
+		"height": 3036,
+		"photo_reference": "CmRaAAAA8hSqEZevXVZetedx74Kw2iI713wKLuX8zJpCnVxtz4sP8v1ksqtf1nl2r4faDIXY0Hz_5UrUGfqk_bmgcyazkhpbJOwerZqri-FQ_zIFDAymI7GkQqP-gNJF0tq5CknPEhANaDOJF85UB9bD6HZ2aKhaGhR4xVGWleKCSU3nSwPVpojowaFD1A"
+	}],
+	"formatted_address": "10 Columbus Cir, New York, NY 10019",
+	"rating": 3.8,
+	"types": ["bar", "point_of_interest", "establishment"],
+	"reference": "CmRbAAAAQdNM45oXd0CU--VlHAuHmT_8hjakZJwowLt7W7BZ-Eem1-0oqZ1YxyHak_5yGLRW25Q9c6CFSAWFFBZtgHaalWAgZvRBUuoWmzitFigWRPRxvS9E3DXfdDGKWk7OBvu5EhAxJF5cv8tLO0vVy3y4IIF5GhScN7C883_TO7-IaQJ0n2r9d0e7SQ",
+	"name": "Center Bar",
+	"price_level": 2,
+	"opening_hours": {
+		"open_now": false,
+		"weekday_text": []
+	},
+	"id": "3a757a92ba64a198b2533a2fdb61bae07088dd16",
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/bar-71.png"
+}, {
+	"place_id": "ChIJmccYIPZYwokRKuPPvWm2I78",
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.98426392989272,
+				"lat": 40.76729937010727
+			},
+			"northeast": {
+				"lng": -73.98156427010727,
+				"lat": 40.76999902989272
+			}
+		},
+		"location": {
+			"lng": -73.9829141,
+			"lat": 40.7686492
+		}
+	},
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 4160,
+		"height": 3120,
+		"photo_reference": "CmRaAAAAGo8JijiZRRpryImRfQoWwcZFV8Dya640LwbAfUYGLSoLTkDuXAruiAS0AKPaqgfa7iz7_f_F92p6iQTlt5vSC_MAj5t8h33jj5xti0GsAdFrRuwoGgg-sofz-jYZswKiEhAj1p2PaOOJgBvdcWNzwdHPGhS33Z7irAG-TafuSd2DNkY0t2QJig"
+	}],
+	"formatted_address": "10 Columbus Cir, New York, NY 10019",
+	"rating": 4.4,
+	"types": ["bar", "restaurant", "food", "point_of_interest", "establishment"],
+	"reference": "CmRbAAAA9SwGxd0BgBOnUtmKACqmxGegkSnGm3Wr-Kx9HQmQv22tPi2CNuvHYmu9e5oHqVMULyR6wKHECeFywwjcmNXpMV03q5Di9EWrh6n4QHmZP5jyWQCthI7ar9qKHTA9XkQPEhBqpCzLmFAXrLaXNo8ctUioGhR1XhiPAFoLT9SW-4abImimsNwiug",
+	"name": "Bar Masa",
+	"price_level": 4,
+	"opening_hours": {
+		"open_now": true,
+		"weekday_text": []
+	},
+	"id": "435ed124ecf353663631643286d0b1eb656c3b21",
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/bar-71.png"
+}, {
+	"id": "d9797170c453effd0e3cecb1c5fc87700997686b",
+	"name": "Sky Terrace Rooftop Bar",
+	"place_id": "ChIJofh28VhYwokRp1jsAjWrq48",
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 960,
+		"height": 540,
+		"photo_reference": "CmRaAAAAjX_a7pSMHzVA_qjdxpUfrLST93G5xPAHp01-AmzH26s5tKCK55H4P23jMJCkKCF7HrGGuJYk2UCxB8rJ0vDTznVtBkMPBp-EqbUmHsO_VnpmzaLXAbqNB4C28UxRsJQAEhCXg3ab3NY8IHxCGcGPybUgGhQwBhRPidyZGmHnwA-JbpS1yGFc8g"
+	}],
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.98610432989273,
+				"lat": 40.76685352010728
+			},
+			"northeast": {
+				"lng": -73.98340467010728,
+				"lat": 40.76955317989272
+			}
+		},
+		"location": {
+			"lng": -73.9848622,
+			"lat": 40.7680495
+		}
+	},
+	"opening_hours": {
+		"open_now": false,
+		"weekday_text": []
+	},
+	"formatted_address": "358 W 58th St, New York, NY 10019",
+	"rating": 3.6,
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/bar-71.png",
+	"reference": "CmRbAAAAPi8SLHzjIa_QpX_Qdmrz_83DBGYRWsoJtpKUvm8kyqYf_ffpjtNbnTptdi9-PHhdQoEFYQtKjk6TyeLV7klAeWDnEzNlxLetHdIQNzAPzVJmESVrsQfQ6D65OFuwcUdbEhDIEuI4TYbj85wHHOA9iIw1GhTjHloWsXlhJ_hUOYFFrlE0Hbcxfw",
+	"types": ["bar", "night_club", "restaurant", "food", "point_of_interest", "establishment"]
+}, {
+	"place_id": "ChIJs8GaJvBYwokR_Zovni-dXlQ",
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.97325422989272,
+				"lat": 40.76395407010727
+			},
+			"northeast": {
+				"lng": -73.97055457010727,
+				"lat": 40.76665372989272
+			}
+		},
+		"location": {
+			"lng": -73.9718937,
+			"lat": 40.7651828
+		}
+	},
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 1334,
+		"height": 1331,
+		"photo_reference": "CmRaAAAAeM4ecqbsKU-gOV2Cb1SNP1y1ze6lr71qwXp7YpjNO8ebIZw0wRV-NcXOOHfP7kTEa8PGio9-SmskEVOLzQrsGNjLgEVcznr5RjLPmOcXsFw1D6XJN4rwnKtJvgDYlPH2EhD9fnzAZvZyvjUSWXAHC41hGhR7zhMlt01OJEv1b-AGy4xMS-q_9A"
+	}],
+	"formatted_address": "2 E 61st St, New York, NY 10065",
+	"rating": 4.3,
+	"types": ["bar", "cafe", "night_club", "restaurant", "food", "point_of_interest", "establishment"],
+	"reference": "CmRbAAAAtnNj_mVwKO3h70MwDvaiw60MPxbLTpQCjzCGdo6DCADZ8FOIL1uZWSqjmAf5nOFwmrf6G8r4TCV_AKFSL7tAxuG2yhFWcEohVdRR9dzWTy6XNWwy6aLDwEHlz44LBPsZEhAqhr7xW9NrMRYCWs1M8xB8GhRfMsgUrEdXmMXhRcehuBoDSuJiew",
+	"name": "Two E Bar/Lounge",
+	"price_level": 2,
+	"opening_hours": {
+		"open_now": false,
+		"weekday_text": []
+	},
+	"id": "6ead3d0e0d0f1a87de82ec7fb7a2b318c22a781d",
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/bar-71.png"
+}, {
+	"id": "cddc70a51d0e2423318efe6fe337185f6367da8b",
+	"name": "Side Park Cafe & Bar NYC",
+	"place_id": "ChIJbT0gUBz2wokRw5p0Xcbb7Ts",
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 1024,
+		"height": 800,
+		"photo_reference": "CmRaAAAAJhoCC2zBKZ4VqswApGchjL3iOHyh7rWyF6sUghZWrYnu7X77qfHQtugA0aHKgGpgmMFWorhpjdFgYGFSZjRLPdOZmKtatkTCbQAaeNkPQkllygksexdOJVQUdL-6CZ6MEhDHYs6sEnU6Xm6eO24c7Zq6GhSBWs8fBEIjLUlrCS5vEw18eLgLuQ"
+	}],
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.95321277989272,
+				"lat": 40.79169382010728
+			},
+			"northeast": {
+				"lng": -73.95051312010729,
+				"lat": 40.79439347989272
+			}
+		},
+		"location": {
+			"lng": -73.9517493,
+			"lat": 40.7929961
+		}
+	},
+	"opening_hours": {
+		"open_now": true,
+		"weekday_text": []
+	},
+	"formatted_address": "1230 5th Ave, New York, NY 10029",
+	"rating": 5,
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png",
+	"reference": "CmRbAAAA8VovExR8C7NcKl7A-ynkh7D0pIaCCgSJQgh1oXczRo_QIhjhQjAH6BSwcJd1FCE6vp3G0L_Z9go6ZR8R81vtAbb6GD_E6XBdvJxxIdoRU324uuWoMYWC4lWxO5kCNwg3EhCthw4mXhh_4Z-VtdQtN5OZGhT_U9gUcyRSpSDSta0fi28hPeoUrQ",
+	"types": ["cafe", "bar", "store", "restaurant", "food", "point_of_interest", "establishment"]
+}, {
+	"place_id": "ChIJNRLNve9YwokRMGWs6_iFKHg",
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.97037957989272,
+				"lat": 40.76309062010728
+			},
+			"northeast": {
+				"lng": -73.96767992010729,
+				"lat": 40.76579027989272
+			}
+		},
+		"location": {
+			"lng": -73.96919129999999,
+			"lat": 40.764509
+		}
+	},
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 1200,
+		"height": 800,
+		"photo_reference": "CmRaAAAAw6Yql1IqmRAL5tWI2eCkXOokR9VqfoiXrUegAR-4QcglicuXjaBpmpL5EMoUnYnGBbllOIC3YxIkKmRD5ZQyHQDuX8nNwQVz17_3WIwamCjiia1SvTD6HNT9u6D4qSpwEhBGut_2e1yPH0sgpfA2ChNrGhRbqaHgv0Xoa2uwz4m4VWCoiDZnnQ"
+	}],
+	"formatted_address": "540 Park Ave, New York, NY 10021",
+	"rating": 4.5,
+	"types": ["cafe", "bar", "store", "food", "point_of_interest", "establishment"],
+	"reference": "CmRbAAAAnLXWO-vlRg9b9ZlPX24DwLHbsboREikofXRvb9b4kvQGIyEfuMkRLZ1h9K5O2vclRM7Ixk5Wzjj5GzYaqJavMGs89Ndz9hjwpibh2wAs9emcFwppAqTyy7W2LtCQdiHUEhCS2jrkIzV7g2OAtYH_oA4iGhSTRHMT129FRfrLKrSvgQ6wikkXhQ",
+	"name": "Sant Ambroeus Coffee Bar at Loews Regency Hotel",
+	"price_level": 1,
+	"opening_hours": {
+		"open_now": true,
+		"weekday_text": []
+	},
+	"id": "db2f07a9d7f9a18e063f660d84df8ac1c199f319",
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/cafe-71.png"
+}, {
+	"id": "ed36a730d03d2d5420b57baca746f7ae57c0add9",
+	"name": "Olma Caviar Boutique & Bar",
+	"place_id": "ChIJZbSYh_BYwokRVbSGraozj5I",
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 590,
+		"height": 333,
+		"photo_reference": "CmRaAAAAlpk1f97EdOJlBcMasJEOv69wXtyZ3lmejZwQl_B7Bgi6iRU616-MbqEyj0oNRs9Bc-_tsvEuBvG-WpxbIzVhQ09fUlWSqi4wsoDKThmMHePBaNNCEWp2U9V3HV6MgH61EhCTf9N1t0vMJaQfctfDLgQ3GhQQeo08TiQcQxNSkU-QIOqDkvJhJA"
+	}],
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.97599537989272,
+				"lat": 40.76298797010728
+			},
+			"northeast": {
+				"lng": -73.97329572010727,
+				"lat": 40.76568762989272
+			}
+		},
+		"location": {
+			"lng": -73.9745386,
+			"lat": 40.7644854
+		}
+	},
+	"opening_hours": {
+		"open_now": true,
+		"weekday_text": []
+	},
+	"formatted_address": "1 W 58th St, New York, NY 10019",
+	"rating": 4.2,
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/lodging-71.png",
+	"reference": "CmRbAAAASEsBoZ9xBP7hZy6HxjjjC0wj39BCm_oI5ytOhyJrkK0n0nWn6UGUI4_UdZFOD1ViSBCzQmzrlma7URlojmsfALqMtF4QxI2W48TxJdiXbEPM7dvv-RTWKPpEnMypPVy_EhBbXtrnpekBxK8QSIh20m_eGhSPMAXg82tbUp9wGoWorINV18Ifug",
+	"types": ["cafe", "bar", "lodging", "restaurant", "food", "point_of_interest", "establishment"]
+}, {
+	"id": "c49bbd2371a39465aebd247b1b4d8d0f65d1f70b",
+	"name": "1020 Bar",
+	"place_id": "ChIJ7SZK6zz2wokRpjhEZIwDNLg",
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 4048,
+		"height": 3036,
+		"photo_reference": "CmRaAAAAH_uAWD5FjcbYuX1pOHyEx0qZDfTWWUErcjBNWkSSFv67kYVSP1yhifc8ku2WXWeOSAkCzU6MhHIx52hO4rN13-ZxGKB_UFq2VVHu7GHuLg4H64q8BidPvopNeaNkiKBdEhB_XMEIoTVbSTS6MSoBwDf2GhQtUR7GhCEpHkczMMF_hcNE4myQyw"
+	}],
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.96520112989272,
+				"lat": 40.80183562010728
+			},
+			"northeast": {
+				"lng": -73.96250147010727,
+				"lat": 40.80453527989273
+			}
+		},
+		"location": {
+			"lng": -73.9639598,
+			"lat": 40.8032289
+		}
+	},
+	"opening_hours": {
+		"open_now": false,
+		"weekday_text": []
+	},
+	"formatted_address": "1020 Amsterdam Ave, New York, NY 10025",
+	"rating": 4.2,
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/bar-71.png",
+	"reference": "CmRbAAAAQsX3Xv9eigGup2pYZ66iBc6U3EI61-FgKU6RwY0Epf8f8LLSsVN9cx4EbFpnqT40tblZRbLInNWUYvyhuKDYgYNbvYmjMNIbPUvuWmyHtpwJBWER6E1toXcXdwUzuwVkEhBFxhFrjjoXWc4gcea7ekz7GhR89jgOmVN-DVBjrVmkdIHVoc8dkQ",
+	"types": ["bar", "point_of_interest", "establishment"]
+}, {
+	"place_id": "ChIJT_kaUvpYwokRvHWcgFVsKZk",
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.97591657989271,
+				"lat": 40.76009577010728
+			},
+			"northeast": {
+				"lng": -73.97321692010726,
+				"lat": 40.76279542989273
+			}
+		},
+		"location": {
+			"lng": -73.97460099999999,
+			"lat": 40.7613821
+		}
+	},
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 1944,
+		"height": 2592,
+		"photo_reference": "CmRaAAAArQceTlBmrdVYXSsJ7uF0cM5tfHkHCp7HFplzf4DragIKMj5pXPww3JChXgYVVM9q0cNol0zlhmlAW8hC2Qn7CP3BDaNziXZxlfcIz_nCPwJaA3CBlV2fgMDrleCtIp3dEhDrQG02I8twDjh1GsKe8x9qGhRHfyHvQPjEd903DeldZ2vHSa-1mg"
+	}],
+	"formatted_address": "2 E 55th St, New York, NY 10022",
+	"rating": 4.2,
+	"types": ["bar", "restaurant", "food", "point_of_interest", "establishment"],
+	"reference": "CmRbAAAAVVZpV-qbsl17I9484db8KNFQ-p4uejtJqsMyFckf55soNO1No4V_jU7jCGUHC28X45E4f3BTDPQDnF8zc4DaT2SaBN9L41-khYgMxzt2tO_86MlAVUgzu5i88RYfBoBnEhDOtKN2Tv55sM3FV2gtR-IdGhQkf3iMEk8qF536a1AMZ0V8Xk-WGg",
+	"name": "King Cole Bar",
+	"price_level": 3,
+	"opening_hours": {
+		"open_now": true,
+		"weekday_text": []
+	},
+	"id": "bdc47765ba7f84aae89e05669f2e57733b05e1ed",
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/bar-71.png"
+}, {
+	"id": "417f583adb8b2bc4a1eebb72a35cb9178b1e69a0",
+	"name": "Bar Nine",
+	"place_id": "ChIJr3VP4FlYwokRcyikcDo79w8",
+	"photos": [{
+		"html_attributions": ["Photos are copyrighted by their owners"],
+		"width": 1920,
+		"height": 1080,
+		"photo_reference": "CmRaAAAAJiaQZ4rxCE8-wMmMLN4uwQkJc3JGBWiTle-ASnlrcGapLeroaW3O2uzwVPKJCHGST5mYxTcle5vVxxuUTarUzyxZspPN37cMVUvNExjeXXzDl1pSRucYnLuX3VxTRQ_KEhCdadqtiMXYY0e50o_uK9d0GhRVZrPohM0V1eOksn5hf7nkjbxPXA"
+	}],
+	"geometry": {
+		"viewport": {
+			"southwest": {
+				"lng": -73.98880337989273,
+				"lat": 40.76432717010727
+			},
+			"northeast": {
+				"lng": -73.98610372010728,
+				"lat": 40.76702682989271
+			}
+		},
+		"location": {
+			"lng": -73.9875357,
+			"lat": 40.765713
+		}
+	},
+	"opening_hours": {
+		"open_now": false,
+		"weekday_text": []
+	},
+	"formatted_address": "807 9th Ave, New York, NY 10019",
+	"rating": 3.8,
+	"icon": "https://maps.gstatic.com/mapfiles/place_api/icons/bar-71.png",
+	"reference": "CmRbAAAAeWP-YIB3lBZvyuywo-36nxApsINCC_fQ_AaPdoz81Nw6A0qE_uLZKASSt9XCFcPqHXCt9dv_oDuJKcEzykf1eYHVr7HnWXRg97yKRil9-lOHchHpsYN_-Z_KBZNB_XcOEhBpxXP9GyDH51Ed9X892ouAGhSzKDa_OfXjOFFn9k6Z517Ld-kxSg",
+	"types": ["bar", "point_of_interest", "establishment"]
+}]

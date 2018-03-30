@@ -1,0 +1,19 @@
+# json files used for testing
+*.json
+
+# general python 
+__pycache__
+tester.py
+*.pyc
+*.pyo
+build/
+dist/
+
+# logging
+Error_Log.log
+*/Error_Log.log
+ghostdriver.log
+
+#testdata
+data.txt
+cache.json

@@ -1,19 +1,67 @@
 import googlemaps
 from pprint import pprint
-
-def setClient():
-    gmap = googlemaps.Client(key="AIzaSyCK_P92YBIo04vU5ldaBiTnCtvi9kejAjw")
-    return(gmap)
-
-def getNYCRestaurants():
-    gmap = setClient()
-    return(gmap.places("restaurant",location=[40.7831,-73.9712],type="restaurant"))
+'''
+coor_list is a list of lat, long respectivly
+a radius is the radius (in meters) to a maximum of 50,000m/50 km
+this is for later
+for other than bars and restaurants
+there are more, these are the relevant ones
+'''
 
 def getNYCBars():
-	gmap = setClient()
-	return(gmap.places("bar",location=[40.7831,-73.9712],type="bar"))
+	# AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o
+	obj = NYCPlaces("AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A", 40,-73)
+	return(obj.getNYCBars())
 
+
+google_types = ['amusement_park', 'bakery', 'cafe', 'clothing_store', 'convenience_store', 'department_store', 'florist', 'hair_care', 'library', 'movie_theater', 'museum', 'night_club', 'bar', 'restaurant', 'stadium', 'store', 'zoo']
+class NYCPlaces:
+	def __init__(self,key,lat,lng):
+		self.key = key
+		self.lat = lat
+		self.lng = lng
+
+
+	def setClient(self):
+		#AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o
+		gmap = googlemaps.Client(key=self.key)
+		return(gmap)
+
+	def getAllPlaces(self):
+		gmap = self.setClient()
+		allPlaces = {}
+		placeType = ['amusement_park','bakery','cafe','clothing_store','convenience_store','department_store','florist','hair_care','library','movie_theater','museum','night_club','bar','restaurant','stadium','store','zoo']
+		for place in placeType:
+			allPlaces[place] = gmap.places(place,location=[self.lat,self.lng],type=place)
+		return(allPlaces)
+	# def getNYCRestaurants(self):
+	# 	gmap = self.setClient()
+	# 	return(gmap.places("restaurant",location=[self.lat,self.lng],type="restaurant"))
+
+	# def getNYCCafes(self):
+	# 	gmap = self.setClient()
+	# 	return(gmap.places("cafe",location=[self.lat,self.lng],type="cafe"))
+
+	# def getNYCBars(self):
+	# 	gmap = self.setClient()
+	# 	return(gmap.places("bar",location=[self.lat,self.lng],type="bar"))
+
+	# get restaurants in a area based on coordinates
+	def getNYCRestaurantsByLoc(self,coor_list, aradius=5000):
+		gmap = self.setClient()
+		return(gmap.places('restaurant', location=coor_list,type="restaurant", radius=aradius))
+
+	def getNYCByLoc(self,coor_list, aradius=5000):
+		gmap = self.setClient()
+		return(gmap.places('restaurant', location=coor_list,type="restaurant", radius=aradius))
+
+	# get bars in an area based on coordinates
+	def getNYCBarsByLoc(self,coor_list, aradius=5000):
+		gmap = self.setClient()
+		return(gmap.places("bar",location=coor_list,type="bar", radius=aradius))
 
 if __name__ == "__main__":
-   	getNYCRestaurants()
-   	getNYCBars()
+	places = NYCPlaces('AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A',40.7831,-73.9712)
+	# places.getNYCRestaurants()
+	# places.getNYCBars()
+	places.getAllPlaces()
