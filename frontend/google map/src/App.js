@@ -22,89 +22,78 @@ class App extends Component{
 			selectedLocationIndex : 0,
 			endTripIndex : 0
 		}
-		
+
 	}
-	
-	componentWillMount(){		
+
+	componentWillMount(){
+		let tempArray = this.props.locations;
+
 		this.setState({
-			locations : [
-			{
-				title: 42.8,
-				category: -71.6
-			},				
-			{
-				title: 42.5,
-				category: -71.1
-			}
-		],
-		trip : [
-			{
-				title: 42.1,
-				category: -71.8
-			}
-		],
+			locations : tempArray,
+		trip : tempArray,
 		selectedLocationIndex : 0,
 		endTripIndex : 0
 		})
+		console.log(this.state.locations);
 	}
-	
+
 	funcAddLocation(location){
 		let locations = this.state.locations
 		locations.push(location)
 		this.setState(locations)
 	}
-	
-	
-	funcAddLocationToTrip(location){		
+
+
+	funcAddLocationToTrip(location){
 		let trip = this.state.trip
 		trip.push(location)
 		this.setState({
 			trip : trip
 			})
-		
+
 	}
-	
+
 	funcClearTrip(location){
 		this.setState({trip : []})
 	}
-	
+
 	funcUpdateSelectedIndex(selectedIndex){
 		this.setState({
 			selectedLocationIndex : selectedIndex
 		})
 	}
-	
-	funcMoveDown(){		
-		
+
+	funcMoveDown(){
+
 	}
-	
+
   render(){
-    return (	
-      <div> 
-		
-		
-	  
-		<MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>  
-			
-		
-			
+    return (
+      <div>
+
+
+
+		<MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+
+
+
 			<AddLocation addLocation = {this.funcAddLocation.bind(this)}/>
 			<Locations locations = {this.state.locations} updateSelectedIndex = {this.funcUpdateSelectedIndex.bind(this)} />
-			
+
 			<AddLocationToTrip locations = {this.state.locations} selectedIndex = {this.state.selectedLocationIndex} addLocationToTrip = {this.funcAddLocationToTrip.bind(this)}/>
-			
+
 			<TripBuilder trip = {this.state.trip}/>
 			<TripControl trip = {this.state.trip} clearTrip = {this.funcClearTrip.bind(this)} moveDown = {this.funcMoveDown.bind(this)}/>
-			
+
 			<br/>
-			
+
 			<GoogleMap lat = {42.1} lng = {-71.8} trip = {this.state.trip}/>
 		</MuiThemeProvider>
-		
+
 	  </div>
     );
   }
-  
+
 }
 
 
