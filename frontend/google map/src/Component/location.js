@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 
 class Location extends Component{
-	
-	
+
+
   render() {
-	
-    return (			
+
+    return (
       <option className = "Location"> 	
-		
-		Lat: {this.props.location.title}, Lng: {this.props.location.category}
+
+		Lat: {this.props.location.lat}, Lng: {this.props.location.lng}
 	  </option>
     );
   }
