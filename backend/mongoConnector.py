@@ -156,7 +156,6 @@ class MongoConnector:
 	def queryPlaces(self,types,price,num):
 		db = self.clientConnect()
 		params = {}
-		count = 0
 		queriedPlaces = []
 		if types != '':
 			params['types'] = types
@@ -166,7 +165,6 @@ class MongoConnector:
 			place['_id'] = str(place['_id'])
 			if('photos' in place):
 				queriedPlaces.append(place)
-				count += 1
 		return(queriedPlaces[:num])
 # 	{
 #   trip_id:"1242112",
