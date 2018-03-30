@@ -115,8 +115,6 @@ class getEvents:
 	def venueInfo(self, venue_id):
 		return requests.get(VENUE_LINK.replace(":id", str(venue_id))).json()
 
-
-
 # this is for testing, repeating old code
 class ConnectMongo:
 	def __init__(self,clientHost,clientPort,username,password,database):

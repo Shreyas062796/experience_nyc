@@ -163,13 +163,11 @@ class MongoConnector:
 		if price != '':
 			params['price_level'] = int(price)
 		for place in db.places.find(params):
-			if(count == int(num)):
-				random.shuffle(queriedPlaces)
-				return(queriedPlaces)
 			place['_id'] = str(place['_id'])
 			if('photos' in place):
 				queriedPlaces.append(place)
 				count += 1
+		return(queriedPlaces[:num])
 # 	{
 #   trip_id:"1242112",
 #   user:"bored kid on speed",

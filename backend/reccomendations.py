@@ -2,12 +2,13 @@ import pandas as pd
 import mongoConnector as mg
 from pprint import pprint
 import lib.getKeywords as key
-import events.events_script as events
+import events.events_script as ev
 from maps.geo import addressToGeo
 
 placesconnector = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
 eventsconnector = mg.MongoConnector("ds123619.mlab.com", "23619", "admin","admin","enyc")
 keywords = key.GetKeywords("AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o")
+events = ev.getEvents()
 class Reccomendations:
 	def __init__(self,username,address):
 		self.user = username
@@ -77,9 +78,12 @@ class Reccomendations:
 	def EventReccomendations(self):
 		reccomendedplaces = self.PlaceReccomendation()
 		db = eventsconnector.EventsclientConnect()
+		curCoordinates = addressToGeo(self.address)
+		# print(curCoordinates['name'])
+		# for x in db.events.find({'address':{'$nearSphere':[curCoordinates['lng'],curCoordinates['lat']],'$maxDistance':3*1609}}):
+		# 	print(x)
 		for x in db.events.find({}):
-			
-		# for place in reccomendedplaces:
+			print(x)
 			
 if __name__ == "__main__":
 	reccomender = Reccomendations('goat','269 Amsterdam Ave, New York, NY 10023')
