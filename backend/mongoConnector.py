@@ -157,15 +157,21 @@ class MongoConnector:
 		db = self.clientConnect()
 		params = {}
 		queriedPlaces = []
-		if types != '':
-			params['types'] = types
-		if price != '':
-			params['price_level'] = int(price)
-		for place in db.places.find(params):
+		if types == []:
+			# params['types'][0]['$in'] = types
+			types = ['restaurant','cafe','bar','florist','amusement_park','bakery','clothing_store','convenience_store','department_store','hair_care','library','movie_theater','museum','night_club'
+			,'stadium','store','zoo']
+		if price == []:
+			price = [1,2,3]
+			# params['price_level'][1]['$in'] = int(price)
+			# db.places.find({'$and':[{'types':{'$in': types}},{'price':{'$in':price}}]})
+		for place in db.places.find({'$and':[{'types':{'$in': types},'price_level':{'$in':price}}]}):
 			place['_id'] = str(place['_id'])
 			if('photos' in place):
 				queriedPlaces.append(place)
+		pprint(queriedPlaces)
 		return(queriedPlaces[:num])
+
 # 	{
 #   trip_id:"1242112",
 #   user:"bored kid on speed",
@@ -225,7 +231,7 @@ if __name__ == "__main__":
 	# Experience.getBars()
 	# Experience.getRestaurants()
 	# pprint(Experience.QueryRestaurants(2,2,2))
-	Experience.queryPlaces('','',10)
+	Experience.queryPlaces([],[],10)
 	# pprint(Experience.QueryBars(2,2,2))
 	# Experience.addFavoritePlaces("testUser",134)
 	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
