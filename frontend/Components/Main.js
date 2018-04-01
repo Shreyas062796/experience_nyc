@@ -10,7 +10,6 @@ import Toolbar from 'material-ui-next/Toolbar';
 import List from 'material-ui-next/List';
 import Typography from 'material-ui-next/Typography';
 import TextField from 'material-ui-next/TextField';
-import Divider from 'material-ui-next/Divider';
 import IconButton from 'material-ui-next/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
@@ -28,6 +27,9 @@ import Events from './Events.js';
 import Favorites from './Favorites.js';
 import Switch from 'material-ui-next/Switch';
 import cyan from 'material-ui-next/colors/cyan';
+import Modal from 'material-ui-next/Modal';
+import Divider from 'material-ui-next/Divider';
+//import App from '../src/App'
 
 const drawerWidth = 300;
 
@@ -77,9 +79,7 @@ const styles = theme => ({
     width: drawerWidth,
   },
   drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
+    display: 'inline-block',
     padding: '0 8px',
     //...theme.mixins.toolbar,
   },
@@ -114,7 +114,13 @@ const styles = theme => ({
       backgroundColor: cyan[500],
     },
   },
-  bar: {}
+  bar: {},
+  paper: {
+    position: 'absolute',
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4,
+  }
 });
 
 class Main extends React.Component {
@@ -123,10 +129,22 @@ class Main extends React.Component {
     clicked: '',
     username: sessionStorage.getItem('username'),
     anchorEl: null,
-    filter: {types: '', price_level: '', num: '100'},
+    filter: {types: [''], price_level: [''], num: '100'},
     currentPage: 'Places',
-    tripMode: false
+    tripMode: false,
+    open: '',
+    tripButton: false,
+    tripLocations: [],
+    tripPlaces: [],
+    removeFromTrip: "",
+    loggedIn: false
   };
+
+  componentDidMount = () => {
+    if(sessionStorage.getItem('username')){
+      this.setState({loggedIn: true});
+    }
+  }
 
   handleDrawerOpen = () => {
     this.setState({ drawerOpen: true });
@@ -153,7 +171,8 @@ class Main extends React.Component {
   };
 
   handleLogin = () => {
-    this.setState({username: sessionStorage.getItem('username'), loginClick: '', clicked: ''})
+    this.setState({username: sessionStorage.getItem('username'), loginClick: '', clicked: '', loggedIn: true})
+    this.handleMenuClose();
   }
 
   handleRegister = () => {
@@ -161,7 +180,7 @@ class Main extends React.Component {
   }
 
   handleLogout = () => {
-    this.setState({username: '', clicked: '', favorites: [], filter: {types: '', price_level: '', num: '100'}})
+    this.setState({username: '', clicked: '', favorites: [], filter: {types: [''], price_level: [''], num: '100'}, removeFromTrip: "", tripPlaces: [], loggedIn: false})
     sessionStorage.setItem('username', '')
     alert("Logged Out!")
   }
@@ -190,8 +209,64 @@ class Main extends React.Component {
   }
 
   handleTripSwitch = name => event => {
-    this.setState({ [name]: event.target.checked });
+    this.setState({ [name]: event.target.checked }, function() {
+      if(this.state.tripMode){
+        this.setState({tripButton: true})
+      }
+      else{
+        this.setState({tripButton: false})
+      }
+    });
   };
+
+  //Test for map*************************
+  handleTripClose = () => {
+    this.setState({open: ''});
+    this.props.onClose();
+  };
+
+  openTripModal = () => {
+    this.setState({open: true});
+  }
+
+  updateTripLocations = (locations) => {
+    this.setState({tripLocations: locations});
+  }
+
+  updateTripPlaces = (places) => {
+    this.setState({tripPlaces: places});
+  }
+
+  removeFromTrip = (id) =>{
+    this.setState({removeFromTrip: id}, function(){
+      this.setState({removeFromTrip: ''});
+    })
+  }
+
+  handleTripButton = () => {
+    if(this.state.tripButton){
+      return (<Button style={{backgroundColor: 'rgb(0, 188, 212)'}} onClick={() => { this.openTripModal()}}>
+                <Typography style={{color: 'white', display: 'inline-block'}}>
+                  Start Trip
+                </Typography>
+              </Button>);
+    }
+  }
+
+  handleMenuClose = () => {
+    this.setState({ anchorEl: null });
+  };
+  //**************************************
+
+  getToolbarHeight = () => {
+    return $('.MuiToolbar-gutters-55').css('height');
+  }
+
+  shouldComponentUpdate(nextProps, nextState){
+    if(nextState.clicked == 0 || nextState.clicked == 1){
+      return true;
+    }
+  }
 
   render() {
     const { classes, theme  } = this.props;
@@ -223,10 +298,10 @@ class Main extends React.Component {
                                 horizontal: 'right',
                               }}
                               open={menuOpen}
-                              onClose={this.handleClose}
+                              onClose={this.handleMenuClose}
                             >
-                              <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                              <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                              <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
+                              <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
                               <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
                             </Menu>
                           </div>);
@@ -243,19 +318,6 @@ class Main extends React.Component {
                           </Typography>);
 
     }
-    const tripCards = (<Card className={classes.card} style={{margin: '5%'}}>
-                        <CardContent>
-                          <Typography className={classes.title}>The Broke College Kid</Typography>
-                          <Typography component="p">
-                            For a student on a budget
-                          </Typography>
-                        </CardContent>
-                        <CardActions>
-                          <Button color="primary" style={{width: '100%',color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
-                              View Trip
-                          </Button>
-                        </CardActions>
-                      </Card>);
 
     return (
       <div className={classes.root}>
@@ -284,6 +346,7 @@ class Main extends React.Component {
                     bar: classes.bar,
                   }}
                 />
+              {this.handleTripButton()}
               </div>
               <div style={{width: '33%', alignItems: 'center', justifyContent: 'flex-end', display: 'flex'}}>
                 {userAppbarOption}
@@ -306,6 +369,17 @@ class Main extends React.Component {
               [classes[`contentShift-right`]]: drawerOpen,
             })}
           >
+
+          <Modal
+            style={{justifyContent: 'center', alignItems: 'center'}}
+            open={this.state.open}
+            onClose={this.handleTripClose}
+          >
+            <div className={classes.paper} style={{width: '75%', height: '75%'}}>
+              {/*<App locations={this.state.tripLocations}/>*/}
+            </div>
+          </Modal>
+
             <div className={classes.drawerHeader} />
             <Tabs pageChange={this.handlePage}/>
               <div style={{display: this.handlePageDisplay('Places')}}>
@@ -319,6 +393,9 @@ class Main extends React.Component {
                 <Cards
                   filter={this.state.filter}
                   tripMode={this.state.tripMode}
+                  onAddPlaceToTrip={this.updateTripLocations}
+                  updateTripPlaces={this.updateTripPlaces}
+                  loggedIn={this.state.loggedIn}
                 />
               </div>
               <div style={{display: this.handlePageDisplay('Events')}}>
@@ -337,12 +414,19 @@ class Main extends React.Component {
             }}
           >
             <div className={classes.drawerHeader}>
-              <Typography variant="headline" component="h1" align="center">Trips</Typography>
-              <IconButton onClick={this.handleDrawerClose}>
-                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-              </IconButton>
+              <div style={{height: this.getToolbarHeight()}}>
+                <Typography variant="headline" component="h1" align="right">Trip Cart
+                  <IconButton onClick={this.handleDrawerClose}>
+                    {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                  </IconButton>
+                </Typography>
+
+              </div>
             </div>
-            {tripCards}
+            <Divider />
+            <div style={{overflowY: 'auto'}}>
+              {this.state.tripPlaces}
+            </div>
           </Drawer>
         </div>
       </div>

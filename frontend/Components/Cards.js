@@ -21,12 +21,22 @@ import StarBorder from 'material-ui-icons/StarBorder';
 import Send from 'material-ui-icons/Send';
 import AttachMoney from 'material-ui-icons/AttachMoney';
 import Add from 'material-ui-icons/Add';
+import Check from 'material-ui-icons/Check';
 import Tooltip from 'material-ui-next/Tooltip';
 import cyan from 'material-ui-next/colors/cyan';
 
 const styles = theme => ({
-  card: {
+  card1: {
     maxWidth: 400,
+  },
+  card2: {
+    maxWidth: 400,
+    boxShadow: '0px 0px 18px -1px rgba(0,208,255,1)'
+  },
+  button: {
+    backgroundColor: red[500],
+    minWidth: '0px',
+    color: 'white',
   },
   subheader: {
     display: 'block',
@@ -58,8 +68,10 @@ class Cards extends React.Component {
             items: [],
             favorites: [],
             trip: [],
-            filter: {types: '', price_level: '', num: '100'},
-            username: sessionStorage.getItem('username')
+            inTrip: [],
+            filter: {types: [''], price_level: [''], num: '100'},
+            username: sessionStorage.getItem('username'),
+            tripMode: false
           };
 
   handleExpandClick = () => {
@@ -129,7 +141,7 @@ class Cards extends React.Component {
       dataType:"json"})
       .done((response) => {
         if(response['response'] == "True"){
-          this.searchPlaces();
+          this.searchPlaces("addFavoritePlace");
         }
       })
   }
@@ -146,22 +158,146 @@ class Cards extends React.Component {
       dataType:"json"})
       .done((response) => {
         if(response['response'] == "True"){
-          this.searchPlaces();
+          this.searchPlaces("removeFavoritePlace");
         }
       })
   }
 
-  addToTrip(id, button){
-    let xtempArr = this.state.trip;
-    tempArr.push(id);
-    this.setState({trip: tempArr}, function(){
-      console.log(this.state.trip);
+  //get a list of the place IDs that the user is building a trip with
+  getTripIDs = () => {
+    var data = {username: sessionStorage.getItem('username')};
+
+    /*$.ajax({
+      url:"https://experiencenyc.herokuapp.com/gettripplacesids",
+      type:"POST",
+      data: JSON.stringify(data),
+      contentType:"application/json; charset=utf-8",
+      dataType:"json"})
+      .done((response) => {
+
+      })*/
+  }
+
+  getTripPlaces = () => {
+    console.log('done');
+    var data = {username: sessionStorage.getItem('username')};
+
+    $.ajax({
+      url:"https://experiencenyc.herokuapp.com/gettripplaces",
+      type:"POST",
+      data: JSON.stringify(data),
+      contentType:"application/json; charset=utf-8",
+      dataType:"json"})
+      .done((response) => {
+        const { classes } = this.props;
+
+        const result = response.map((value) =>
+        (
+          <Card style={{margin: '1em'}} className={this.inTrip(value['id'] && this.props.tripMode) ? classes.card2 : classes.card1}>
+            <CardHeader classes={{subheader: classes.subheader}}
+              avatar={
+                <Avatar aria-label="Recipe" src={value['icon']} className={this.props.avatar}/>
+              }
+              title={value['name']}
+              subheader={value['formatted_address']}
+            />
+          <div style={{overflow:'hidden'}}>
+             <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A"}/>
+           </div>
+            <CardActions className={this.props.actions} disableActionSpacing>
+              <div style={{width: '20%', textAlign: 'center', display: 'flex'}}>
+                <IconButton>
+                  {this.returnPriceLevel(value['price_level'])}
+                </IconButton>
+              </div>
+              <div style={{width: '40%', textAlign: 'center', display: 'flex'}}>
+                <Typography style={{marginTop: '14px', marginRight: '5px', }}>{value['rating']}</Typography>
+                <IconButton style={{flex: 'auto'}}>
+                  {this.returnRatingLevel(value['rating'])}
+                </IconButton>
+              </div>
+              <div style={{width: '40%', textAlign: 'right'}}>
+                <Button target="_blank" onClick={() => {this.removeFromTrip(value['id'])}} className={classes.button}>
+                 Remove
+                </Button>
+              </div>
+            </CardActions>
+          </Card>
+        ))
+
+
+        this.props.updateTripPlaces(result);
+      })
+  }
+
+  //adds the passed id to the database and adds the lat and lng to a list for the trip creation
+  addToTrip = (id) => {
+
+    if(sessionStorage.getItem('username')){
+      var data = {username: sessionStorage.getItem('username'), place_id: id};
+
+      $.ajax({
+        url:"https://experiencenyc.herokuapp.com/addtripplaces",
+        type:"POST",
+        data: JSON.stringify(data),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json"})
+        .done((response) => {
+          if(response['response'] == "True"){
+            this.getTripPlaces();
+          }
+        })
+    }
+
+    let tempArr = this.state.trip;
+    let tempInTrip = this.state.inTrip;
+    //tempArr.push({'lat': Number(lat), 'lng': Number(lng)});
+    //tempInTrip.push(id);
+    this.setState({inTrip: tempInTrip}, function(){
+      this.props.onAddPlaceToTrip(this.state.trip);
+      this.searchPlaces("addToTrip");
+    })
+  }
+
+  //removes the passed id and lat/lng from the db and from the trip id list
+  removeFromTrip = (id) => {
+
+    if(sessionStorage.getItem('username')){
+      var data = {username: sessionStorage.getItem('username'), place_id: id};
+
+      $.ajax({
+        url:"https://experiencenyc.herokuapp.com/removetripplaces",
+        type:"POST",
+        data: JSON.stringify(data),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json"})
+        .done((response) => {
+          if(response['response'] == "True"){
+            this.getTripPlaces();
+          }
+        })
+    }
+
+    //let tempArr = this.state.trip;
+    let tempInTrip = this.state.inTrip;
+
+    var index = tempInTrip.indexOf(id);
+    tempInTrip.splice(index, 1);
+
+    /*tempArr = $.grep(tempArr, function(e){
+     return (e.lat != lat && e.lng != lng);
+
+    });*/
+
+    this.setState({inTrip: tempInTrip}, function(){
+      this.searchPlaces('removeFromTrip');
     })
   }
 
   //check favorite list for passed id and return either a filler in or empty heart component
-  isFavorite = (id) => {
+  getIcon = (id) => {
     var button = ''
+
 
     if(this.state.favorites.includes(id) && (sessionStorage.getItem('username')) && (this.props.tripMode == false)){
       button = (<Tooltip id="tooltip-bottom" title="Remove Favorite" placement="bottom">
@@ -178,30 +314,65 @@ class Cards extends React.Component {
                 </Tooltip>);
     }
     else if(this.props.tripMode == true){
-      button = (<Tooltip id="tooltip-bottom" title="Add to Trip" placement="bottom">
-                  <IconButton aria-label="Add to Trip" onClick={() => { this.addToTrip(id, this) }}>
-                    <Add  />
+      button = (<Tooltip id="tooltip-bottom" title={this.inTrip(id) ? "Remove From Trip" : "Add To Trip"} placement="bottom">
+                  <IconButton aria-label="Add to Trip" onClick={() => {this.inTrip(id) ? this.removeFromTrip(id) : this.addToTrip(id)}}>
+                    {this.inTrip(id) ? <Check  /> : <Add  />}
                   </IconButton>
                 </Tooltip>);
     }
     return button;
   }
 
-  //listen for new props
-  componentWillReceiveProps(nextProps) {
-      this.setState({filter: nextProps.filter}, function() {
-        this.searchPlaces();
-      });
+  inTrip = (id) => {
+    if(this.state.inTrip.includes(id)){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 
   //search for places
-  searchPlaces = () => {
-
+  searchPlaces = (message) => {
+    var data = '';
+    console.log(message);
     //set list of favorites for current user
-    this.setFavorites();
+    if(message == "addFavoritePlace" || message == "removeFavoritePlace"){
+      this.setFavorites();
+      data = this.state.filter;
+      this.getPlaces(data);
+    }
+    if(message == ("tripMode")){
+      data = this.state.filter;
+      this.getPlaces(data);
+    }
 
-    var data = this.state.filter;
+    if(message == ("loggedIn")){
+      data = this.state.filter;
+      this.getPlaces(data);
+    }
 
+    if(message == "initial" || message == "filter"){
+      let tempArr = this.state.filter;
+
+      if(tempArr['types'].length == 0){
+        tempArr['types'].push('');
+      }
+
+      if(tempArr['price_level'].length == 0){
+        tempArr['price_level'].push('');
+      }
+      this.setState({filter: tempArr}, function() {
+        data = this.state.filter;
+        this.getPlaces(data);
+      })
+    }
+
+
+  }
+
+  //sends ajax request to get places data
+  getPlaces = (data) => {
     $.ajax({
       url:"https://experiencenyc.herokuapp.com/queryplaces",
       type:"GET",
@@ -209,55 +380,88 @@ class Cards extends React.Component {
       contentType:"application/json; charset=utf-8",
       dataType:"json"})
       .done((response) => {
-        console.log(response);
        const { classes } = this.props;
-       const result = response.map((value) =>
-       (<Grid item xl={3} lg={4} md={6} sm={12} xs={12}>
-         <Card className={this.props.card}>
-           <CardHeader classes={{subheader: classes.subheader}}
-             avatar={
-               <Avatar aria-label="Recipe" src={value['icon']} className={this.props.avatar}/>
-             }
-             title={value['name']}
-             subheader={value['formatted_address']}
-           />
-         <div style={{overflow:'hidden'}}>
-            <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A"}/>
-          </div>
-           <CardActions className={this.props.actions} disableActionSpacing>
-             <div style={{width: '20%'}}>
-                 {this.isFavorite(value['id'])}
-             </div>
-             <div style={{width: '25%', textAlign: 'center', display: 'flex'}}>
-               <IconButton>
-                 {this.returnPriceLevel(value['price_level'])}
-               </IconButton>
-             </div>
-             <div style={{width: '35%', textAlign: 'center', display: 'flex'}}>
-               <Typography style={{marginTop: '14px', marginRight: '5px', }}>{value['rating']}</Typography>
-               <IconButton style={{flex: 'auto'}}>
-                 {this.returnRatingLevel(value['rating'])}
-               </IconButton>
-             </div>
-             <div style={{width: '25%', textAlign: 'right'}}>
-               <Button href={"http://maps.google.com/?q=" + value['name']} target="_blank" color="primary" style={{minWidth: '0px', color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
-                GO
-               </Button>
-             </div>
-           </CardActions>
-         </Card>
-       </Grid>)
-       );
 
-       this.setState({items: result});
+       if(response['response'] != "There is no values"){
+         const result = response.map((value) =>
+         (<Grid item xl={3} lg={4} md={6} sm={12} xs={12}>
+           <Card className={this.inTrip(value['id'] && this.props.tripMode) ? classes.card2 : classes.card1}>
+             <CardHeader classes={{subheader: classes.subheader}}
+               avatar={
+                 <Avatar aria-label="Recipe" src={value['icon']} className={this.props.avatar}/>
+               }
+               title={value['name']}
+               subheader={value['formatted_address']}
+             />
+           <div style={{overflow:'hidden'}}>
+              <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A"}/>
+            </div>
+             <CardActions className={this.props.actions} disableActionSpacing>
+               <div style={{width: '20%'}}>
+                   {this.getIcon(value['id'])}
+               </div>
+               <div style={{width: '25%', textAlign: 'center', display: 'flex'}}>
+                 <IconButton>
+                   {this.returnPriceLevel(value['price_level'])}
+                 </IconButton>
+               </div>
+               <div style={{width: '35%', textAlign: 'center', display: 'flex'}}>
+                 <Typography style={{marginTop: '14px', marginRight: '5px', }}>{value['rating']}</Typography>
+                 <IconButton style={{flex: 'auto'}}>
+                   {this.returnRatingLevel(value['rating'])}
+                 </IconButton>
+               </div>
+               <div style={{width: '25%', textAlign: 'right'}}>
+                 <Button href={"https://www.google.com/maps/search/?api=1&query=Google&query_place_id=" + value['place_id']} target="_blank" color="primary" style={{minWidth: '0px', color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
+                  GO
+                 </Button>
+               </div>
+             </CardActions>
+           </Card>
+         </Grid>)
+       )
+        this.setState({items: result});
 
+       }
+       else{
+         alert('No data available for that filter!')
+         this.setState({filter: {types: [''], price_level: [''], num: '100'}});
+       }
     })
   }
 
   //Load places when component mounts
   componentDidMount = () => {
-    this.searchPlaces();
+    this.searchPlaces("initial");
+    if(sessionStorage.getItem('username')){
+      this.getTripPlaces();
+    }
   }
+
+  //listen for new props
+  componentWillReceiveProps(nextProps) {
+      if(JSON.stringify(nextProps.filter) != JSON.stringify(this.state.filter)){
+        this.setState({filter: nextProps.filter}, function() {
+          this.searchPlaces("filter");
+        });
+      }
+
+      if(nextProps.tripMode != this.props.tripMode){
+        this.searchPlaces("tripMode");
+      }
+
+      if(nextProps.loggedIn != this.props.loggedIn){
+        this.searchPlaces("loggedIn");
+        if(nextProps.loggedIn){
+          this.getTripPlaces();
+        }
+      }
+
+      if(nextProps.removeFromTrip){
+        this.removeFromTrip(nextProps.removeFromTrip);
+      }
+  }
+
 
   render() {
     const { classes } = this.props;
