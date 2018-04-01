@@ -210,7 +210,7 @@ class MongoConnector:
 		places = []
 		db = self.clientConnect()
 		for placeid in placeIds:
-			place = db.places.find({'place_id':placeid})
+			place = db.places.find({'id':placeid})
 			places.append(place)
 		return(places)
 # 	{
