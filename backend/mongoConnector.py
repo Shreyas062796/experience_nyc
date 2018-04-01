@@ -252,6 +252,7 @@ class MongoConnector:
 			trips.append(trip)
 		return(trips)
 
+	#code to update trips and make them public
 	def makeTripPublic(self,tripId):
 		db = self.clientConnect()
 		db.trips.update_one({'trip_id': tripId},{'public':True})
