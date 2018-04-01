@@ -74,6 +74,7 @@ def addUser():
 	info['user_unique_id'] = mail.sendMail("experiencenycco@gmail.com","anotherone_44").generateCode(info['email'])
 	info['favorite_places'] = []
 	info['current_trip_places'] = []
+	info['tags'] = []
 	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
 	return(jsonify({"response":"True"}))
 
@@ -148,17 +149,46 @@ def gettripplaces():
 	info = request.get_json()
 	return(jsonify(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getTripPlaces(info['username'])))
 
+@restClient.route('/addtags', methods=['POST'])
+def addTags():
+	info = request.get_json()
+	mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").addTags(info['username'],info['tags'])
+	return(jsonify({"response":"True"}))
+
+@restClient.route('/removetags', methods=['POST'])
+def removeTags():
+	info = request.get_json()
+	return(jsonify(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").removeTags(info['username'],info['tags'])))
+
+@restClient.route('/gettags', methods=['POST'])
+def getTags():
+	info = request.get_json()
+	return(jsonify(mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getTags(info['username'])))
+
 @restClient.route('/queryplaces', methods=['GET'])
 def queryplaces():
 	if request.method == 'GET': 
 		num = request.args['num']
-		price_level = request.args['price_level']
-		types= request.args['types']
+		price_level = request.args.getlist('price_level[]')
+		types = request.args.getlist('types[]')
+		print(num)
+		print(price_level)
+		print(types)
 		places = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(types,price_level,int(num))
 		if(places):
 			return(jsonify(places))
-		else:
+		elif(places == []):
 			return(jsonify({"response":"There is no values"}))
+
+	# info = request.get_json()
+	# print(info['price_level'])
+	# print(info['types'])
+	# print(info['num'])
+	# places = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(info['types'],info['price_level'],int(info['num']))
+	# if(places):
+	# 	return(jsonify(places))
+	# else:
+	# 	return(jsonify({"response":"There is no values"}))
 
 @restClient.route('/todayevents', methods=['GET'])
 def getTopEvents():
@@ -185,6 +215,24 @@ def getReccomendations():
 	info = request.get_json()
 	reccomendations = rec.placeReccomendations(info['username'],info['address']).PlaceReccomendation()
 	return(reccomendations)
+
+@restClient.route('/createTrip', methods=['POST','GET'])
+def createTrip():
+	#for if the user is not logged in
+	# placeIds,trip_id,user,distance
+	placeIds = request.args['placeIds']
+	trip_id = request.args['trip_id']
+	distance = request.args['types']
+	if(request.method == 'POST'):
+		username = request.args['username']
+	trip = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").createTrip()
+	populated = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateTrip(trip)
+	if(populated == "added"):
+		return(jsonify({"response":"Trip Added"}))
+
+@restClient.route('/queryTrips', methods=['POST','GET'])
+def queryTrip():
+	pass
 
 @restClient.route('/getevents_temp')
 def getEvents():
