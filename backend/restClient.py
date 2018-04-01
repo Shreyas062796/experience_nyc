@@ -167,7 +167,7 @@ def getTags():
 
 @restClient.route('/queryplaces', methods=['GET'])
 def queryplaces():
-	if request.method == 'GET': 
+	if request.method == 'GET':
 		num = request.args['num']
 		price_level = request.args.getlist('price_level[]')
 		types = request.args.getlist('types[]')
@@ -180,6 +180,15 @@ def queryplaces():
 		elif(places == []):
 			return(jsonify({"response":"There is no values"}))
 
+@restClient.route('/getqueryplaces', methods=['GET'])
+def queryplaces():
+	if request.method == 'GET':
+		placeIds = request.args.getlist('placeIds[]')
+		places = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getQueriedPlaces(placeIds)
+		if(places):
+			return(jsonify(places))
+		elif(places == []):
+			return(jsonify({"response":"There is no values"}))
 	# info = request.get_json()
 	# print(info['price_level'])
 	# print(info['types'])

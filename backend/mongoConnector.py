@@ -110,7 +110,7 @@ class MongoConnector:
 	def addFavoritePlaces(self,username,place_id):
 		db = self.clientConnect()
 		user = db.users.find({'username': username})
-		if(place_id not in db.users.find({'username': username}) and place_id not in user['favorite_places']):
+		if(place_id not in db.users.find({'username': username})):
 			db.users.update_one({'username': username},{'$push':{'favorite_places':place_id}})
 			return("Added")
 		else:
@@ -145,7 +145,7 @@ class MongoConnector:
 	def addTripPlaces(self,username,place_id):
 		db = self.clientConnect()
 		user = db.users.find({'username': username})
-		if(place_id not in db.users.find({'username': username}) and place_id not in user['current_trip_places']):
+		if(place_id not in db.users.find({'username': username})):
 			db.users.update_one({'username': username},{'$push':{'current_trip_places':place_id}})
 			return("Added")
 		else:
@@ -206,6 +206,13 @@ class MongoConnector:
 		x = queriedPlaces[:num]
 		return(x)
 
+	def getQueriedPlaces(self,placeIds):
+		places = []
+		db = self.clientConnect()
+		for placeid in placeIds:
+			place = db.places.find({'place_id':placeid})
+			places.append(place)
+		return(places)
 # 	{
 #   trip_id:"1242112",
 #   user:"bored kid on speed",
