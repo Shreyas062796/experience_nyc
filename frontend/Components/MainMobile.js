@@ -53,9 +53,9 @@ class Main extends React.Component {
   state = {
     clicked: '',
     username: sessionStorage.getItem('username'),
-    anchorEl: null,
     currentPage: 'Places',
-    filter: {types: '', price_level: '', num: '100'}
+    filter: {types: [], price_level: [], num: '100'},
+    tripMode: false
   };
 
   handleLoginClick = () => {
@@ -89,7 +89,7 @@ class Main extends React.Component {
   }
 
   handleLogout = () => {
-    this.setState({username: '', clicked: '', favorites: [], filter: {types: '', price_level: '', num: '10'}})
+    this.setState({username: '', clicked: '', favorites: [], filter: {types: '', price_level: '', num: '100'}})
     sessionStorage.setItem('username', '')
     alert("Logged Out!")
   }
@@ -172,12 +172,17 @@ class Main extends React.Component {
             clicked={this.state.clicked}
             onClose={this.handleModalClose}
             loggedIn={this.handleLogin}
+            registered={this.handleRegister}
           />
           <div style={{display: this.handlePageDisplay('Places'), marginTop: '4em'}}>
             <FilterBar setFilter={this.setFilter}/>
-            <Cards filter={this.state.filter}/>
+            <Cards
+              filter={this.state.filter}
+              tripMode={this.state.tripMode}
+            />
           </div>
           <div style={{display: this.handlePageDisplay('Events'), marginTop: '4em'}}>
+            <FilterBar setFilter={this.setFilter}/>
             <Events />
           </div>
           <div style={{display: this.handlePageDisplay('Favorites')}}>

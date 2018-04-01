@@ -49,6 +49,9 @@ const styles = theme => ({
   },
   avatar: {
     backgroundColor: red[500],
+  },
+  title: {
+    fontSize: '1vh',
   }
 });
 
@@ -189,7 +192,7 @@ class Events extends React.Component {
        const result = response.map((value) =>
        (<Grid item xl={3} lg={4} md={6} sm={12} xs={12}>
          <Card className={this.props.card}>
-           <CardHeader classes={{root: classes.subheader}}
+           <CardHeader classes={{root: classes.subheader, title: classes.title}}
              avatar={
                <Avatar aria-label="Recipe" src={value['logo']['original']['url']} className={this.props.avatar}/>
              }
