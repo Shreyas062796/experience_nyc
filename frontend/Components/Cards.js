@@ -164,18 +164,18 @@ class Cards extends React.Component {
   }
 
   //get a list of the place IDs that the user is building a trip with
-  getTripIDs = () => {
+  getTripPlacesIDs = () => {
     var data = {username: sessionStorage.getItem('username')};
 
-    /*$.ajax({
-      url:"https://experiencenyc.herokuapp.com/gettripplacesids",
+    $.ajax({
+      url:"https://experiencenyc.herokuapp.com/gettripplacesIds",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
       dataType:"json"})
       .done((response) => {
-
-      })*/
+        this.setState({inTrip: response});
+      })
   }
 
   getTripPlaces = () => {
@@ -251,7 +251,7 @@ class Cards extends React.Component {
     let tempArr = this.state.trip;
     let tempInTrip = this.state.inTrip;
     //tempArr.push({'lat': Number(lat), 'lng': Number(lng)});
-    //tempInTrip.push(id);
+    tempInTrip.push(id);
     this.setState({inTrip: tempInTrip}, function(){
       this.props.onAddPlaceToTrip(this.state.trip);
       this.searchPlaces("addToTrip");
@@ -313,8 +313,8 @@ class Cards extends React.Component {
                 </Tooltip>);
     }
     else if(this.props.tripMode == true){
-      button = (<Tooltip id="tooltip-bottom" title={this.inTrip(id) ? "Remove From Trip" : "Add To Trip"} placement="bottom">
-                  <IconButton aria-label="Add to Trip" onClick={() => {this.inTrip(id) ? this.removeFromTrip(id) : this.addToTrip(id)}}>
+      button = (<Tooltip id="tooltip-bottom" title={this.inTrip(id) ? "Remove From Trip" : "Add to Trip"} placement="bottom">
+                  <IconButton aria-label={this.inTrip(id) ? "Remove from Trip" : "Add to Trip"} onClick={() => {this.inTrip(id) ? this.removeFromTrip(id) : this.addToTrip(id)}}>
                     {this.inTrip(id) ? <Check  /> : <Add  />}
                   </IconButton>
                 </Tooltip>);
@@ -340,6 +340,12 @@ class Cards extends React.Component {
       data = this.state.filter;
       this.getPlaces(data);
     }
+
+    if(message == "removeFromTrip" || message == "addToTrip"){
+      data = this.state.filter;
+      this.getPlaces(data);
+    }
+
     if(message == ("tripMode")){
       data = this.state.filter;
       this.getPlaces(data);
@@ -433,6 +439,7 @@ class Cards extends React.Component {
     this.searchPlaces("initial");
     if(sessionStorage.getItem('username')){
       this.getTripPlaces();
+      this.getTripPlacesIDs();
     }
   }
 
