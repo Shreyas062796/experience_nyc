@@ -179,7 +179,6 @@ class Cards extends React.Component {
   }
 
   getTripPlaces = () => {
-    console.log('done');
     var data = {username: sessionStorage.getItem('username')};
 
     $.ajax({
@@ -335,7 +334,6 @@ class Cards extends React.Component {
   //search for places
   searchPlaces = (message) => {
     var data = '';
-    console.log(message);
     //set list of favorites for current user
     if(message == "addFavoritePlace" || message == "removeFavoritePlace"){
       this.setFavorites();
