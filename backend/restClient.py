@@ -171,9 +171,6 @@ def queryplaces():
 		num = request.args['num']
 		price_level = request.args.getlist('price_level[]')
 		types = request.args.getlist('types[]')
-		print(num)
-		print(price_level)
-		print(types)
 		places = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(types,price_level,int(num))
 		if(places):
 			return(jsonify(places))
@@ -184,6 +181,7 @@ def queryplaces():
 def getqueryplaces():
 	if request.method == 'GET':
 		placeIds = request.args.getlist('placeIds[]')
+		print(placeIds)
 		places = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getQueriedPlaces(placeIds)
 		if(places):
 			return(jsonify(places))
