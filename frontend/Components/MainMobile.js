@@ -53,10 +53,23 @@ class Main extends React.Component {
   state = {
     clicked: '',
     username: sessionStorage.getItem('username'),
+    filter: {types: [''], price_level: [''], num: '100'},
     currentPage: 'Places',
-    filter: {types: [], price_level: [], num: '100'},
-    tripMode: false
+    tripMode: false,
+    anchorEl: null,
+    open: '',
+    tripButton: false,
+    tripLocations: [],
+    tripPlaces: [],
+    removeFromTrip: "",
+    loggedIn: false
   };
+
+  componentDidMount = () => {
+    if(sessionStorage.getItem('username')){
+      this.setState({loggedIn: true});
+    }
+	}
 
   handleLoginClick = () => {
     this.setState({clicked: 0});
@@ -85,11 +98,12 @@ class Main extends React.Component {
   }
 
   handleLogin = () => {
-    this.setState({username: sessionStorage.getItem('username'), loginClick: '', clicked: ''})
+    this.setState({username: sessionStorage.getItem('username'), loginClick: '', clicked: '', loggedIn: true})
+    this.handleMenuClose();
   }
 
   handleLogout = () => {
-    this.setState({username: '', clicked: '', favorites: [], filter: {types: '', price_level: '', num: '100'}})
+    this.setState({username: '', clicked: '', favorites: [], filter: {types: [''], price_level: [''], num: '100'}, removeFromTrip: "", tripPlaces: [], loggedIn: false})
     sessionStorage.setItem('username', '')
     alert("Logged Out!")
   }
@@ -103,8 +117,22 @@ class Main extends React.Component {
     }
   }
 
+  updateTripPlaces = (places) => {
+    this.setState({tripPlaces: places});
+  }
+
   setFilter = (response) => {
     this.setState({filter: response})
+  }
+
+  handleMenuClose = () => {
+    this.setState({ anchorEl: null });
+  };
+
+  shouldComponentUpdate(nextProps, nextState){
+    if(nextState.clicked == 0 || nextState.clicked == 1){
+      return true;
+    }
   }
 
   render() {
@@ -135,10 +163,10 @@ class Main extends React.Component {
                               horizontal: 'right',
                             }}
                             open={menuOpen}
-                            onClose={this.handleClose}
+                            onClose={this.handleMenuClose}
                           >
-                            <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                            <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                            <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
+                            <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
                             <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
                           </Menu></div>);
     }
@@ -179,6 +207,9 @@ class Main extends React.Component {
             <Cards
               filter={this.state.filter}
               tripMode={this.state.tripMode}
+              onAddPlaceToTrip={this.updateTripLocations}
+              updateTripPlaces={this.updateTripPlaces}
+              loggedIn={this.state.loggedIn}
             />
           </div>
           <div style={{display: this.handlePageDisplay('Events'), marginTop: '4em'}}>
