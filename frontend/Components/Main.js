@@ -259,7 +259,7 @@ class Main extends React.Component {
   //**************************************
 
   getToolbarHeight = () => {
-    return $('.MuiToolbar-gutters-55').css('height');
+    return $('header').css('height');
   }
 
   shouldComponentUpdate(nextProps, nextState){
