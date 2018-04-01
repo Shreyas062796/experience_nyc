@@ -74,6 +74,7 @@ class MongoConnector:
 				return(True)
 		return(False)
 
+	#verifies email with the user 
 	def verifyEmail(self,username,unique_id):
 		db = self.clientConnect()
 		user = db.users.find_one({"username": username})
@@ -81,26 +82,54 @@ class MongoConnector:
 			user['verify'] = True
 			return(True)
 		return(False)
+
+	#populates the tags
+	def addTags(self,username,tags):
+		db = self.clientConnect()
+		user = db.users.find_one({"username": username})
+		for tag in tags:
+			if(tag not in user['tags']):
+				db.users.update_one({'username': username},{'$push':{'tags':tag}})
+				return("Added")
+			else:
+				return("Already Exists")
+
+	def removeTags(self,username,tags):
+		db = self.clientConnect()
+		for tag in tags:
+			db.users.update_one({'username': username},{'$pull':{'tags':tag}})
+			print("removed")
+
+	def getTags(self,username):
+		db = self.clientConnect()
+		user = db.users.find_one({"username": username})
+		return(user['tags'])
+
 		#authenticate login and return true or false
+	#adds favorite places to user profile
 	def addFavoritePlaces(self,username,place_id):
 		db = self.clientConnect()
+		user = db.users.find({'username': username})
 		if(place_id not in db.users.find({'username': username})):
 			db.users.update_one({'username': username},{'$push':{'favorite_places':place_id}})
 			return("Added")
 		else:
 			return("Already Exists")
 
+	#removes favorite places to user profile
 	def removeFavoritePlaces(self,username,place_id):
 		db = self.clientConnect()
 		db.users.update_one({'username': username},{'$pull':{'favorite_places':place_id}})
 		print("added")
 
+	#gets all the favorite place id's from the user profile
 	def getFavoritePlacesIds(self,username):
 		db = self.clientConnect()
 		user = db.users.find_one({"username": username})
 		print(user['favorite_places'])
 		return(user['favorite_places'])
 
+	#gets all the favorite places from the user profile
 	def getFavoritePlaces(self,username):
 		db = self.clientConnect()
 		favoritePlaces = []
@@ -112,24 +141,29 @@ class MongoConnector:
 				favoritePlaces.append(place)
 		return(favoritePlaces)
 
+	#adds a saved trip place to the user profile 
 	def addTripPlaces(self,username,place_id):
 		db = self.clientConnect()
+		user = db.users.find({'username': username})
 		if(place_id not in db.users.find({'username': username})):
 			db.users.update_one({'username': username},{'$push':{'current_trip_places':place_id}})
 			return("Added")
 		else:
 			return("Already Exists")
 
+	#removes a saved trip place to the user profile
 	def removeTripPlaces(self,username,place_id):
 		db = self.clientConnect()
 		db.users.update_one({'username': username},{'$pull':{'current_trip_places':place_id}})
 		print("added")
 
+	#gets all the saved trip placeid's to the user profile
 	def getTripPlacesIds(self,username):
 		db = self.clientConnect()
 		user = db.users.find_one({"username": username})
 		return(user['current_trip_places'])
 
+	#gets all the saved trip places by the user
 	def getTripPlaces(self,username):
 		db = self.clientConnect()
 		TripPlaces = []
@@ -141,37 +175,44 @@ class MongoConnector:
 				TripPlaces.append(place)
 		return(TripPlaces)
 
+	#gets the user info for the user profile
 	def getUserInfo(self, username):
 		db = self.clientConnect()
 		user = db.users.find_one({"username": username})
 		print(user)
 		user['_id'] = str(user['_id'])
 		return(user)
-			
-	def populateTags(self,tags):
-		db = self.clientConnect()
-		for tag in tags:
-			db.tags.insert_one(tag)
-
+	
+	#dynamically querying places
 	def queryPlaces(self,types,price,num):
 		db = self.clientConnect()
 		params = {}
 		queriedPlaces = []
-		if types == []:
-			# params['types'][0]['$in'] = types
+		if types == ['']:
 			types = ['restaurant','cafe','bar','florist','amusement_park','bakery','clothing_store','convenience_store','department_store','hair_care','library','movie_theater','museum','night_club'
 			,'stadium','store','zoo']
-		if price == []:
+		if price == ['']:
 			price = [1,2,3]
-			# params['price_level'][1]['$in'] = int(price)
-			# db.places.find({'$and':[{'types':{'$in': types}},{'price':{'$in':price}}]})
+		else:
+			for i in range(len(price)):
+				price[i] = len(price[i])
 		for place in db.places.find({'$and':[{'types':{'$in': types},'price_level':{'$in':price}}]}):
 			place['_id'] = str(place['_id'])
 			if('photos' in place):
 				queriedPlaces.append(place)
-		pprint(queriedPlaces)
-		return(queriedPlaces[:num])
+		if(len(queriedPlaces) == 0):
+			return([])
+		random.shuffle(queriedPlaces)
+		x = queriedPlaces[:num]
+		return(x)
 
+	def getQueriedPlaces(self,placeIds):
+		places = []
+		db = self.clientConnect()
+		for placeid in placeIds:
+			place = db.places.find({'id':placeid})
+			places.append(place)
+		return(places)
 # 	{
 #   trip_id:"1242112",
 #   user:"bored kid on speed",
@@ -185,6 +226,7 @@ class MongoConnector:
 #   ],
 #   add some more stuff whatever you feel is important
 # }
+	#creates a trip
 	def createTrip(self,placeIds,trip_id,user,distance):
 		tripPlaces = []
 		trip = {}
@@ -196,30 +238,42 @@ class MongoConnector:
 			tripPlaces.append()
 		trip['trip_id'] = trip_id
 		trip['user'] = user
-		trip['number_of_places'] = numofplaces
+		trip['number_of_places'] = len(tripPlaces)
 		trip['public'] = False
 		trip['rating'] = None
 		trip['distance'] = distance
 		trip['places'] = tripPlaces
-		print(trip)
 		return(trip)
 
+	#adds to the database
 	def populateTrip(self,trip):
 		db = self.clientConnect()
 		db.trips.insert_one(trip)
+		return("added")
 
+	#query the trips by the username
 	def queryTrip(self,username,rating=None):
 		trips = []
 		db = self.clientConnect()
 		for trip in db.trips.find({'user': username}):
 			trips.append(trip)
 		return(trips)
-# mongodb://<dbuser>:<dbpassword>@ds163918.mlab.com:63918/experience_nyc
+
+	#code to update trips and make them public
+	def makeTripPublic(self,tripId):
+		db = self.clientConnect()
+		db.trips.update_one({'trip_id': tripId},{'public':True})
+		return("updated")
+
+	#updates the trip rating
 	def updateTripRating(self,tripId,rating):
 		db = self.clientConnect()
-
+		db.trips.update_one({'trip_id': tripId},{'rating':rating})
+		return("updated")
+	#updates the place rating
 	def updatePlaceRating(self,tripId,placeId,rating):
 		db = self.clientConnect()
+
 
 if __name__ == "__main__":
 	Experience = MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
@@ -231,7 +285,7 @@ if __name__ == "__main__":
 	# Experience.getBars()
 	# Experience.getRestaurants()
 	# pprint(Experience.QueryRestaurants(2,2,2))
-	Experience.queryPlaces([],[],10)
+	print(Experience.queryPlaces([''],[''],100))
 	# pprint(Experience.QueryBars(2,2,2))
 	# Experience.addFavoritePlaces("testUser",134)
 	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
