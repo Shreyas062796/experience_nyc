@@ -181,7 +181,7 @@ def queryplaces():
 			return(jsonify({"response":"There is no values"}))
 
 @restClient.route('/getqueryplaces', methods=['GET'])
-def queryplaces():
+def getqueryplaces():
 	if request.method == 'GET':
 		placeIds = request.args.getlist('placeIds[]')
 		places = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getQueriedPlaces(placeIds)
