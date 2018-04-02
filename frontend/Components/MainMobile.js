@@ -62,7 +62,8 @@ class Main extends React.Component {
     tripLocations: [],
     tripPlaces: [],
     removeFromTrip: "",
-    loggedIn: false
+    loggedIn: false,
+    displayBottomNav: true
   };
 
   componentDidMount = () => {
@@ -70,6 +71,15 @@ class Main extends React.Component {
       this.setState({loggedIn: true});
     }
 	}
+
+  handleScroll = (down) => {
+    if(down){
+      this.setState({displayBottomNav: false});
+    }
+    else{
+      this.setState({displayBottomNav: true});
+    }
+  }
 
   handleLoginClick = () => {
     this.setState({clicked: 0});
@@ -210,6 +220,7 @@ class Main extends React.Component {
               onAddPlaceToTrip={this.updateTripLocations}
               updateTripPlaces={this.updateTripPlaces}
               loggedIn={this.state.loggedIn}
+              handleScroll={this.handleScroll}
             />
           </div>
           <div style={{display: this.handlePageDisplay('Events'), marginTop: '4em'}}>
@@ -222,7 +233,7 @@ class Main extends React.Component {
           <div style={{display: this.handlePageDisplay('Trips')}}>
             <Trips />
           </div>
-          <BottomNav pageChange={this.handlePage}/>
+          <BottomNav pageChange={this.handlePage} display={this.state.displayBottomNav}/>
         </div>
       </div>
     );
