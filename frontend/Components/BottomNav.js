@@ -12,6 +12,7 @@ const styles = {
     position: 'fixed',
     bottom: 0,
     boxShadow: '0px -0.5px 2px 0px rgba(51,51,51,0.25)',
+    textAlign:'center'
   },
   buttons: {
     paddingLeft: 0,
