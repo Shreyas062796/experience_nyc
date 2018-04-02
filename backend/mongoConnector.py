@@ -134,11 +134,12 @@ class MongoConnector:
 		db = self.clientConnect()
 		favoritePlaces = []
 		user = db.users.find_one({"username": username})
-		for placeId in user['favorite_places']:
-			place = db.places.find_one({"id": placeId})
-			if(place is not None):
-				place['_id'] = str(place['_id'])
-				favoritePlaces.append(place)
+		if(user['favorite_places']):
+			for placeId in user['favorite_places']:
+				place = db.places.find_one({"id": placeId})
+				if(place is not None):
+					place['_id'] = str(place['_id'])
+					favoritePlaces.append(place)
 		return(favoritePlaces)
 
 	#adds a saved trip place to the user profile 
@@ -168,11 +169,12 @@ class MongoConnector:
 		db = self.clientConnect()
 		TripPlaces = []
 		user = db.users.find_one({"username": username})
-		for placeId in user['current_trip_places']:
-			place = db.places.find_one({"id": placeId})
-			if(place is not None):
-				place['_id'] = str(place['_id'])
-				TripPlaces.append(place)
+		if(user['current_trip_places']):
+			for placeId in user['current_trip_places']:
+				place = db.places.find_one({"id": placeId})
+				if(place is not None):
+					place['_id'] = str(place['_id'])
+					TripPlaces.append(place)
 		return(TripPlaces)
 
 	#gets the user info for the user profile
@@ -209,10 +211,11 @@ class MongoConnector:
 	def getQueriedPlaces(self,placeIds):
 		places = []
 		db = self.clientConnect()
-		for placeid in placeIds:
-			place = db.places.find_one({'id':placeid})
-			place['_id'] = str(place['_id'])
-			places.append(place)
+		if(placeIds):
+			for placeid in placeIds:
+				place = db.places.find_one({'id':placeid})
+				place['_id'] = str(place['_id'])
+				places.append(place)
 		return(places)
 # 	{
 #   trip_id:"1242112",
@@ -235,13 +238,13 @@ class MongoConnector:
 		places = self.getPlaces()
 		for place_id in placeIds:
 			place = db.places.find_one({"id": place_id})
-			place['user_rating'] = None
-			tripPlaces.append()
+			place['user_rating'] = random.randint(1,5)
+			tripPlaces.append(place)
 		trip['trip_id'] = trip_id
 		trip['user'] = user
 		trip['number_of_places'] = len(tripPlaces)
 		trip['public'] = False
-		trip['rating'] = None
+		trip['rating'] = random.randint(1,5)
 		trip['distance'] = distance
 		trip['places'] = tripPlaces
 		return(trip)
@@ -271,6 +274,7 @@ class MongoConnector:
 		db = self.clientConnect()
 		db.trips.update_one({'trip_id': tripId},{'rating':rating})
 		return("updated")
+	
 	#updates the place rating
 	def updatePlaceRating(self,tripId,placeId,rating):
 		db = self.clientConnect()
@@ -286,12 +290,12 @@ if __name__ == "__main__":
 	# Experience.getBars()
 	# Experience.getRestaurants()
 	# pprint(Experience.QueryRestaurants(2,2,2))
-	print(Experience.queryPlaces([''],[''],100))
+	# print(Experience.queryPlaces([''],[''],100))
 	# pprint(Experience.QueryBars(2,2,2))
 	# Experience.addFavoritePlaces("testUser",134)
-	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
-	# for i in tripnames:
-	# 	trip = Experience.createTrip(3,i)
-	# 	Experience.populateTrip(trip)
-	# pprint(Experience.queryTrip('goat'))
+	tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
+	for i in tripnames:
+		trip = Experience.createTrip(['8f01b4b28a3d06af43a7df2f58adf9522a3fb2a9','791ead07b3b855e3ca3d7171d74e05f523e211db','4343309a95b24365fa34b002304e06d5ce71ff71','4fb9491c786ae9f79420e96777a54a935d92f34c'],i,'test',10)
+		Experience.populateTrip(trip)
+	# pprint(Experience.queryTrip('test'))
 	#QueryRestaurants(3,4)

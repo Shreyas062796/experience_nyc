@@ -22,13 +22,16 @@ class Reccomendations:
 		for trip in trips:
 			for place in trip['places']:
 				place['types'] = place['types'][0]
+				if('price_level' not in place):
+					place['price_level'] = 2
 				places.append(place)
 			alltrips.append(trip)
 		tripdf = pd.DataFrame(alltrips)
 		placesdf = pd.DataFrame(places)
-		newtripdf = tripdf[['rating','trip_name','distance']].copy()
+		newtripdf = tripdf[['rating','trip_id','distance']].copy()
 		newplacedf = placesdf[['price_level','name','types','user_rating','id','rating']].copy()
 		newplacedf['counts'] = newplacedf.groupby('types')['rating'].transform('count')
+		# print(newplacedf)
 		return(newtripdf,newplacedf)
 
 	#run the machine learning for all the places and if its in a 2 mile radius then it should
@@ -52,7 +55,7 @@ class Reccomendations:
 	# Reccomends places based on machine learning algorithm as well as places in a certain radius
 	def PlaceReccomendation(self):
 		typescores = {}
-		radiusPlaces = reccomender.getPlacesInRadius()
+		radiusPlaces = self.getPlacesInRadius()
 		placesdf = self.getTripsandPlaces()[1]
 		df = placesdf.groupby(["types"]).mean()
 		reccomendedplaces = []
@@ -65,6 +68,7 @@ class Reccomendations:
 			arr = []
 			for place in radiusPlaces:
 				if(typescores[placeType] in place['types'] and place['id'] not in placeIds):
+					place['_id'] = str(place['_id'])
 					placeIds.append(place['id'])
 					arr.append(place)
 			if(len(arr) > sortedScores.index(placeType)+1):
@@ -73,7 +77,10 @@ class Reccomendations:
 				num = len(arr)
 			for element in arr[:num]:
 				reccomendedplaces.append(element)
-		return(reccomendedplaces)
+		if(reccomendedplaces):
+			return(reccomendedplaces)
+		else:
+			return("empty")
 
 	def EventReccomendations(self):
 		reccomendedplaces = self.PlaceReccomendation()
@@ -86,8 +93,8 @@ class Reccomendations:
 			print(x)
 			
 if __name__ == "__main__":
-	reccomender = Reccomendations('goat','269 Amsterdam Ave, New York, NY 10023')
+	reccomender = Reccomendations('test','269 Amsterdam Ave, New York, NY 10023')
 	# reccomender.getPlacesInRadius('269 Amsterdam Ave, New York, NY 10023')
-	# reccomender.PlaceReccomendation()
+	reccomender.PlaceReccomendation()
 	# reccomender.getTripsandPlaces()
-	reccomender.EventReccomendations()
+	# reccomender.EventReccomendations()
