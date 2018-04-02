@@ -15,14 +15,14 @@ class TripBuilder extends Component{
 				<TripBuilderLocation location = {destination} />
 			)
 		})
+		
 	}
 	
 	
 	
     return (
 		<div className = "TripBuilder">
-			Trip
-		  <br />
+			<h2> Destinations </h2>
 		  
 		  <select multiple > 	
 			{location}
