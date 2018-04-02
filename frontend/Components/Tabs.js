@@ -21,23 +21,39 @@ TabContainer.propTypes = {
 const styles = theme => ({
   root: {
     flexGrow: 1
-  },
+  }
 });
 
 class FullWidthTabs extends React.Component {
   state = {
-    value: 0,
-    pageKeys: {0 : 'Places', 1 : 'Events', 2 : 'Favorites'}
+    value: 1,
+    pageKeys: {0: 'Recommended', 1 : 'Places', 2 : 'Events', 3 : 'Favorites'},
+    disabled: false
   };
 
   handleChange = (event, value) => {
-    this.setState({ value });
+    this.setState({value: value });
     this.props.pageChange(this.state.pageKeys[value]);
   };
 
   handleChangeIndex = index => {
     this.setState({ value: index });
   };
+
+  componentWillReceiveProps = (nextProps) =>{
+    if(nextProps.loggedIn){
+      this.setState({disabled: false});
+      if(!this.props.loggedIn){
+        this.setState({value: 0});
+      }
+    }
+    else{
+      this.setState({disabled: true});
+      if(this.props.loggedIn){
+        this.setState({value: 1});
+      }
+    }
+  }
 
   render() {
     const { classes, theme } = this.props;
@@ -52,9 +68,10 @@ class FullWidthTabs extends React.Component {
             textColor="primary"
             centered
           >
-            <Tab label="Places" />
+            <Tab label="Recommended" disabled={this.state.disabled}/>
+            <Tab label="Places"/>
             <Tab label="Events" />
-            <Tab label="Favorites" />
+            <Tab label="Favorites" disabled={this.state.disabled}/>
           </Tabs>
         </AppBar>
 

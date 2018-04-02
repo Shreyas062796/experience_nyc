@@ -25,11 +25,12 @@ import Tabs from './Tabs'
 import Trips from './Trips.js';
 import Events from './Events.js';
 import Favorites from './Favorites.js';
+import Recommended from './Recommended.js';
 import Switch from 'material-ui-next/Switch';
 import cyan from 'material-ui-next/colors/cyan';
 import Modal from 'material-ui-next/Modal';
 import Divider from 'material-ui-next/Divider';
-//import App from '../src/App'
+import App from '../src/App';
 
 const drawerWidth = 300;
 
@@ -79,7 +80,6 @@ const styles = theme => ({
     width: drawerWidth,
   },
   drawerHeader: {
-    display: 'inline-block',
     padding: '0 8px',
     //...theme.mixins.toolbar,
   },
@@ -140,7 +140,7 @@ class Main extends React.Component {
     loggedIn: false
   };
 
-  componentDidMount = () => {
+  componentWillMount = () => {
     if(sessionStorage.getItem('username')){
       this.setState({loggedIn: true});
     }
@@ -171,7 +171,7 @@ class Main extends React.Component {
   };
 
   handleLogin = () => {
-    this.setState({username: sessionStorage.getItem('username'), loginClick: '', clicked: '', loggedIn: true})
+    this.setState({username: sessionStorage.getItem('username'), loginClick: '', clicked: '', loggedIn: true, currentPage: 'Recommended'})
     this.handleMenuClose();
   }
 
@@ -180,7 +180,7 @@ class Main extends React.Component {
   }
 
   handleLogout = () => {
-    this.setState({username: '', clicked: '', favorites: [], filter: {types: [''], price_level: [''], num: '100'}, removeFromTrip: "", tripPlaces: [], loggedIn: false})
+    this.setState({username: '', currentPage: 'Places', clicked: '', favorites: [], filter: {types: [''], price_level: [''], num: '100'}, removeFromTrip: "", tripPlaces: [], loggedIn: false})
     sessionStorage.setItem('username', '')
     alert("Logged Out!")
   }
@@ -376,12 +376,21 @@ class Main extends React.Component {
             onClose={this.handleTripClose}
           >
             <div className={classes.paper} style={{width: '75%', height: '75%'}}>
-              {/*<App locations={this.state.tripLocations}/>*/}
+              <App locations={this.state.tripLocations}/>
             </div>
           </Modal>
 
             <div className={classes.drawerHeader} />
-            <Tabs pageChange={this.handlePage}/>
+            <Tabs pageChange={this.handlePage} loggedIn={this.state.loggedIn}/>
+              <div style={{display: this.handlePageDisplay('Recommended')}}>
+                <Recommended
+                  filter={this.state.filter}
+                  tripMode={this.state.tripMode}
+                  onAddPlaceToTrip={this.updateTripLocations}
+                  updateTripPlaces={this.updateTripPlaces}
+                  loggedIn={this.state.loggedIn}
+                />
+              </div>
               <div style={{display: this.handlePageDisplay('Places')}}>
                 <FilterBar setFilter={this.setFilter}/>
                 <LoginModal
@@ -415,8 +424,8 @@ class Main extends React.Component {
           >
             <div className={classes.drawerHeader}>
               <div style={{height: this.getToolbarHeight()}}>
-                <Typography variant="headline" component="h1" align="right">Trip Cart
-                  <IconButton onClick={this.handleDrawerClose}>
+                <Typography variant="headline" component="h1" align="right" style={{paddingTop: '.75em'}}>Trip Cart
+                  <IconButton style={{marginLeft: '2em'}} onClick={this.handleDrawerClose}>
                     {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                   </IconButton>
                 </Typography>
