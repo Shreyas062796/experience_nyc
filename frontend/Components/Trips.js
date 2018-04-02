@@ -23,23 +23,8 @@ class Trips extends React.Component {
   render() {
     const { classes, theme  } = this.props;
 
-    const tripCards = (<Card className={classes.card} style={{margin: '5%', marginTop: '15%'}}>
-                        <CardContent>
-                          <Typography className={classes.title}>The Broke College Kid</Typography>
-                          <Typography component="p">
-                            For a student on a budget
-                          </Typography>
-                        </CardContent>
-                        <CardActions>
-                          <Button color="primary" style={{width: '100%',color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
-                              View Trip
-                          </Button>
-                        </CardActions>
-                      </Card>);
-
     return (
       <div>
-        {tripCards}
       </div>
     );
   }

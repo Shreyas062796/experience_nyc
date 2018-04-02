@@ -67,6 +67,22 @@ class Recommended extends React.Component {
     this.setState({ expanded: !this.state.expanded });
   };
 
+
+  handleScroll = () => {
+    const thisPos = document.getElementById('recommendedDiv').scrollTop;
+    const down = thisPos > this.state.lastScrollPos;
+    // If current `down` value is differs from `down` from state,
+    // assign `thisPos` to variable, else assigning current `changedPos` state value.
+    const changedPos = down !== this.state.down ? thisPos : this.state.changedPos;
+    this.setState({
+      lastScrollPos: thisPos,
+      changedPos,
+      down
+    }, function() {
+      this.props.handleScroll(down);
+    });
+  }
+
   //check favorite list for passed id and return either a filler in or empty heart component
   getIcon = (id) => {
     var button = ''
@@ -302,8 +318,8 @@ class Recommended extends React.Component {
 
 
     return (
-      <div style={{margin: '1em', height: '75vh',overflowY: 'auto', overflowX: 'hidden'}}>
-        <Grid container spacing={40} justify={'center'} style={{padding: 25}}>
+      <div id='recommendedDiv' style={{margin: '1em', height:  window.innerWidth <= 760 ? '75vh' : '100vh',overflowY: 'auto', overflowX: 'hidden'}} onScroll={this.handleScroll}>
+        <Grid container spacing={40} justify={'center'} style={{padding: 25, paddingBottom: window.innerWidth <= 760 ? '1em' : '12em'}}>
           {this.state.items}
         </Grid>
       </div>

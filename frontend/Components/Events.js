@@ -60,7 +60,10 @@ class Events extends React.Component {
             items: [],
             favorites: [],
             filter: {types: '', price_level: '', num: '100'},
-            username: sessionStorage.getItem('username')
+            username: sessionStorage.getItem('username'),
+            lastScrollPos: 0,
+            changedPos: undefined,
+            down: true
           };
 
   handleExpandClick = () => {
@@ -69,6 +72,21 @@ class Events extends React.Component {
 
   cardWidth = () => {
     return $(card).width();
+  }
+
+  handleScroll = () => {
+    const thisPos = document.getElementById('eventsDiv').scrollTop;
+    const down = thisPos > this.state.lastScrollPos;
+    // If current `down` value is differs from `down` from state,
+    // assign `thisPos` to variable, else assigning current `changedPos` state value.
+    const changedPos = down !== this.state.down ? thisPos : this.state.changedPos;
+    this.setState({
+      lastScrollPos: thisPos,
+      changedPos,
+      down
+    }, function() {
+      this.props.handleScroll(down);
+    });
   }
 
   //set list of favorites for current user
@@ -235,8 +253,8 @@ class Events extends React.Component {
 
 
     return (
-      <div style={{margin: '1em', height: '75vh',overflowY: 'auto', overflowX: 'hidden'}}>
-        <Grid container spacing={40} justify={'center'} style={{padding: 25}}>
+      <div id="eventsDiv" style={{margin: '1em', height:  window.innerWidth <= 760 ? '75vh' : '100vh',overflowY: 'auto', overflowX: 'hidden'}} onScroll={this.handleScroll}>
+        <Grid container spacing={40} justify={'center'} style={{padding: 25, paddingBottom: window.innerWidth <= 760 ? '1em' : '12em'}}>
           {this.state.items}
         </Grid>
       </div>
