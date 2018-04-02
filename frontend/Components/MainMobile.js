@@ -57,7 +57,7 @@ class Main extends React.Component {
     username: sessionStorage.getItem('username'),
     filter: {types: [''], price_level: [''], num: '100'},
     currentPage: 'Places',
-    currentTab: 'Recommended',
+    currentTab: 'Search',
     tripMode: false,
     anchorEl: null,
     open: '',
@@ -71,12 +71,11 @@ class Main extends React.Component {
 
   componentDidMount = () => {
     if(sessionStorage.getItem('username')){
-      this.setState({loggedIn: true});
+      this.setState({loggedIn: true, currentTab: 'Recommended'});
     }
 	}
 
   handleScroll = (down) => {
-    console.log(down);
     if(down){
       this.setState({displayBottomNav: false});
     }
@@ -103,8 +102,11 @@ class Main extends React.Component {
 
   handlePage = (page) => {
     this.setState({
-      currentPage: page, currentTab: 'Recommended'
+      currentPage: page
     })
+    if(this.state.loggedIn){
+      this.setState({currentTab: 'Recommended'});
+    }
   }
 
   handleTab = (page) => {
@@ -118,12 +120,12 @@ class Main extends React.Component {
   }
 
   handleLogin = () => {
-    this.setState({username: sessionStorage.getItem('username'), loginClick: '', clicked: '', loggedIn: true})
+    this.setState({username: sessionStorage.getItem('username'), loginClick: '', clicked: '', loggedIn: true, currentTab: 'Recommended'})
     this.handleMenuClose();
   }
 
   handleLogout = () => {
-    this.setState({username: '', clicked: '', favorites: [], filter: {types: [''], price_level: [''], num: '100'}, removeFromTrip: "", tripPlaces: [], loggedIn: false})
+    this.setState({username: '', clicked: '', currentTab: 'Search', favorites: [], filter: {types: [''], price_level: [''], num: '100'}, removeFromTrip: "", tripPlaces: [], loggedIn: false})
     sessionStorage.setItem('username', '')
     alert("Logged Out!")
   }

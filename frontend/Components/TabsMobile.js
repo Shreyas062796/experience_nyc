@@ -26,7 +26,7 @@ const styles = theme => ({
 
 class FullWidthTabs extends React.Component {
   state = {
-    value: 0,
+    value: 1,
     pageKeys: {0: 'Recommended', 1: 'Search'},
     disabled: false
   };
@@ -41,6 +41,7 @@ class FullWidthTabs extends React.Component {
   };
 
   componentWillReceiveProps = (nextProps) =>{
+
     if(nextProps.loggedIn){
       this.setState({disabled: false});
       if(!this.props.loggedIn){
@@ -54,7 +55,7 @@ class FullWidthTabs extends React.Component {
       }
     }
 
-    if(nextProps.page != this.props.page){
+    if((nextProps.page != this.props.page) && this.props.loggedIn){
       this.setState({value: 0});
     }
   }
