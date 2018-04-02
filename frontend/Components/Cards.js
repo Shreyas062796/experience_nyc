@@ -523,7 +523,6 @@ class Cards extends React.Component {
 
   //listen for new props
   componentWillReceiveProps(nextProps) {
-    console.log('test');
       if(JSON.stringify(nextProps.filter) != JSON.stringify(this.state.filter)){
         this.setState({filter: nextProps.filter}, function() {
           this.searchPlaces("filter");

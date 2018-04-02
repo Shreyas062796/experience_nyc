@@ -69,7 +69,7 @@ class Recommended extends React.Component {
 
 
   handleScroll = () => {
-    const thisPos = document.getElementById('recommendedDiv').scrollTop;
+    const thisPos = document.getElementById('recommendedEventsDiv').scrollTop;
     console.log(thisPos);
     const down = thisPos > this.state.lastScrollPos;
     // If current `down` value is differs from `down` from state,
@@ -319,7 +319,7 @@ class Recommended extends React.Component {
 
 
     return (
-      <div id='recommendedDiv' style={{margin: '1em', height:  window.innerWidth <= 760 ? '75vh' : '100vh',overflowY: 'auto', overflowX: 'hidden'}} onScroll={this.handleScroll}>
+      <div id='recommendedEventsDiv' style={{margin: '1em', height:  window.innerWidth <= 760 ? '75vh' : '100vh',overflowY: 'auto', overflowX: 'hidden'}} onScroll={this.handleScroll}>
         <Grid container spacing={40} justify={'center'} style={{padding: 25, paddingBottom: window.innerWidth <= 760 ? '1em' : '12em'}}>
           {this.state.items}
         </Grid>

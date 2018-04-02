@@ -27,6 +27,7 @@ import Favorites from './Favorites.js';
 import Events from './Events.js';
 import TabsMobile from './TabsMobile.js'
 import Recommended from './Recommended.js';
+import RecommendedEvents from './RecommendedEvents.js';
 
 const styles = theme => ({
   root: {
@@ -235,17 +236,17 @@ class Main extends React.Component {
           />
           <div style={{display: this.handlePageDisplay('Places'), marginTop: '4em'}}>
             <TabsMobile tabChange={this.handleTab} loggedIn={this.state.loggedIn} page={this.state.currentPage}/>
-              <div style={{display: this.handleTabDisplay('RecommendedPlaces')}}>
-                <Recommended
-                  filter={this.state.filter}
-                  tripMode={this.state.tripMode}
-                  onAddPlaceToTrip={this.updateTripLocations}
-                  updateTripPlaces={this.updateTripPlaces}
-                  loggedIn={this.state.loggedIn}
-                  handleScroll={this.handleScroll}
-                />
-              </div>
             <FilterBar setFilter={this.setFilter}/>
+            <div style={{display: this.handleTabDisplay('RecommendedPlaces')}}>
+              <Recommended
+                filter={this.state.filter}
+                tripMode={this.state.tripMode}
+                onAddPlaceToTrip={this.updateTripLocations}
+                updateTripPlaces={this.updateTripPlaces}
+                loggedIn={this.state.loggedIn}
+                handleScroll={this.handleScroll}
+              />
+            </div>
             <Cards style={{display: this.handleTabDisplay('SearchPlaces')}}
               filter={this.state.filter}
               tripMode={this.state.tripMode}
@@ -257,17 +258,17 @@ class Main extends React.Component {
           </div>
           <div style={{display: this.handlePageDisplay('Events'), marginTop: '4em'}}>
             <TabsMobile tabChange={this.handleTab} loggedIn={this.state.loggedIn} page={this.state.currentPage}/>
-              <div style={{display: this.handleTabDisplay('RecommendedEvents')}}>
-                <Recommended
-                  filter={this.state.filter}
-                  tripMode={this.state.tripMode}
-                  onAddPlaceToTrip={this.updateTripLocations}
-                  updateTripPlaces={this.updateTripPlaces}
-                  loggedIn={this.state.loggedIn}
-                  handleScroll={this.handleScroll}
-                />
-              </div>
             <FilterBar setFilter={this.setFilter}/>
+            <div style={{display: this.handleTabDisplay('RecommendedEvents')}}>
+              <RecommendedEvents
+                filter={this.state.filter}
+                tripMode={this.state.tripMode}
+                onAddPlaceToTrip={this.updateTripLocations}
+                updateTripPlaces={this.updateTripPlaces}
+                loggedIn={this.state.loggedIn}
+                handleScroll={this.handleScroll}
+              />
+            </div>
             <Events style={{display: this.handleTabDisplay('SearchEvents')}} handleScroll={this.handleScroll}/>
           </div>
           <div style={{display: this.handlePageDisplay('Favorites')}}>
