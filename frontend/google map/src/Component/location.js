@@ -4,11 +4,9 @@ class Location extends Component{
 
 
   render() {
-
-    return (
-      <option className = "Location"> 	
-
-		Lat: {this.props.location.lat}, Lng: {this.props.location.lng}
+    return (			
+      <option className = "Location">		
+	  {this.props.location.name}
 	  </option>
     );
   }

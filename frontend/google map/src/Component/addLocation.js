@@ -10,9 +10,8 @@ class AddLocation extends Component{
 			newLocation:{}
 		}
 	}
-
-
-
+  
+  
 	submitForm(e){
 		if(this.refs.locationLat.value === '' || this.refs.locationLng.value === ''){
 			alert("Please enter a valid location")
@@ -28,8 +27,9 @@ class AddLocation extends Component{
 		}
 
 		e.preventDefault();
-	}
-  render() {
+  }
+	
+  render() {	
     return (
 	<div>
 		<h3> Map Visualizer</h3>

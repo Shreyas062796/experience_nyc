@@ -10,7 +10,7 @@ class GoogleMap extends Component{
 			dirServ : new google.maps.DirectionsService()
 		}
 	}
-
+  
 	generateJson(result, places, user){
 		return ({
 			num_places: this.props.trip.length,
@@ -19,7 +19,7 @@ class GoogleMap extends Component{
 			this.props.trip
 	})
 	}
-
+  
 	shouldComponentUpdate(){
 		return false;
 	}
@@ -60,8 +60,6 @@ class GoogleMap extends Component{
 					stopover: true
 				})
 			}
-
-
 			//var end = new google.maps.LatLng(42.7, -71.8);
 
 
@@ -77,7 +75,9 @@ class GoogleMap extends Component{
 			dirServ.route(request, function(result, status){
 				console.log(result, status);
 				if (status == 'OK'){
-					dirDisp.setDirections(result);
+					dirDisp.setDirections(result);			
+					//console.log(result.routes[0].legs[0])				
+					alert(this.refs.time)
 				}
 			});
 		}
@@ -94,7 +94,9 @@ class GoogleMap extends Component{
   render() {
     return (
 	<div>
-		<div id = "map" ref = "map" style={{height: '400px'}}/>
+		<div id = "map" ref = "map"/>
+		<h2 ref = "time" > Time: </h2>
+		<h2 ref = "dist" > Distance: </h2>
 		<br />
 	</div>
     );
