@@ -387,7 +387,7 @@ class Main extends React.Component {
             onClose={this.handleTripClose}
           >
             <div className={classes.paper} style={{width: '75%', height: '75%'}}>
-              <App locations={this.state.tripLocations}/>
+              {/*<App locations={this.state.tripLocations}/>*/}
             </div>
           </Modal>
           <LoginModal

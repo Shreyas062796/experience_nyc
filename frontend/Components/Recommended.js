@@ -239,11 +239,9 @@ class Recommended extends React.Component {
 
 
   //listen for new props
-  /*componentWillReceiveProps(nextProps) {
-      this.setState({filter: nextProps.filter}, function() {
-        this.searchPlaces();
-      });
-  }*/
+  componentWillReceiveProps(nextProps) {
+    this.getRecommended();
+  }
 
   //search for places
   getRecommended = () => {
@@ -299,9 +297,9 @@ class Recommended extends React.Component {
          </Card>
        </Grid>
      ));
-
+      if(JSON.stringify(this.state.items) != JSON.stringify(result)){
        this.setState({items: result});
-
+     }
     })
   }
 
