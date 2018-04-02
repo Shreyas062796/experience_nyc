@@ -7,7 +7,7 @@ import AddLocation from './Component/addLocation'
 import AddLocationToTrip from './Component/addLocationToTrip'
 import TripControl from './Component/tripControl'
 import MapControl from './Component/mapControl'
-
+import TripProps from './Component/tripProps'
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -22,25 +22,38 @@ class App extends Component{
 			selectedLocationIndex : 0,
 			endTripIndex : 0
 		}
-		
 	}
 	
 	componentWillMount(){		
 		this.setState({
 			locations : [
 			{
+				name: 'Location 1',
 				title: 42.8,
 				category: -71.6
 			},				
 			{
+				name: 'Location 2',
 				title: 42.5,
 				category: -71.1
-			}
+			},
+			
 		],
 		trip : [
 			{
-				title: 42.1,
-				category: -71.8
+				name: 'Location 3',
+				title: 42.9,
+				category: -75.6
+			},
+			{
+				name: 'Location 1',
+				title: 42.8,
+				category: -71.6
+			},				
+			{
+				name: 'Location 2',
+				title: 42.5,
+				category: -71.1
 			}
 		],
 		selectedLocationIndex : 0,
@@ -60,8 +73,7 @@ class App extends Component{
 		trip.push(location)
 		this.setState({
 			trip : trip
-			})
-		
+			})		
 	}
 	
 	funcClearTrip(location){
@@ -69,13 +81,18 @@ class App extends Component{
 	}
 	
 	funcUpdateSelectedIndex(selectedIndex){
+		
 		this.setState({
 			selectedLocationIndex : selectedIndex
 		})
 	}
 	
+	funcMoveUp(){		
+		//
+	}
+	
 	funcMoveDown(){		
-		
+		//Go
 	}
 	
   render(){
@@ -85,20 +102,20 @@ class App extends Component{
 		
 	  
 		<MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>  
+			<h1>Trip Details</h1>
 			
-		
 			
-			<AddLocation addLocation = {this.funcAddLocation.bind(this)}/>
-			<Locations locations = {this.state.locations} updateSelectedIndex = {this.funcUpdateSelectedIndex.bind(this)} />
+			<GoogleMap lat = {42.1} lng = {-71.8} trip = {this.state.trip}/>
 			
-			<AddLocationToTrip locations = {this.state.locations} selectedIndex = {this.state.selectedLocationIndex} addLocationToTrip = {this.funcAddLocationToTrip.bind(this)}/>
+			<TripBuilder trip = {this.state.trip} selectedIndex = {this.funcUpdateSelectedIndex.bind(this)}/>
 			
-			<TripBuilder trip = {this.state.trip}/>
 			<TripControl trip = {this.state.trip} clearTrip = {this.funcClearTrip.bind(this)} moveDown = {this.funcMoveDown.bind(this)}/>
+			
+			<TripProps />
 			
 			<br/>
 			
-			<GoogleMap lat = {42.1} lng = {-71.8} trip = {this.state.trip}/>
+			
 		</MuiThemeProvider>
 		
 	  </div>

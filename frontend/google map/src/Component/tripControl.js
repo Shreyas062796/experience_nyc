@@ -6,14 +6,14 @@ import RaisedButton from "material-ui/RaisedButton";
 
 class TripControl extends Component{		
 	
-	handleClear(){
+	handleClear(){		
 		this.props.clearTrip()
 	}
   render() {
     return (
 	<div>
-		<MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
-			<RaisedButton label = "clear" onClick = {this.handleClear.bind(this)} /> <br />
+		<MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>			
+			<RaisedButton label = "remove" onClick = {this.handleClear.bind(this)} /><RaisedButton label = "move up"/><RaisedButton label = "move down"/>
 		</MuiThemeProvider>
 	</div>
     );

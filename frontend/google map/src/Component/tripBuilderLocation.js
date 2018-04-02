@@ -4,10 +4,10 @@ class TripBuilderLocation extends Component{
 	
 	
   render() {
-	
+	  
     return (
 		<option className = "TripBuilderLocation">
-			Lat: {this.props.location.title}, Lng: {this.props.location.category}
+		{this.props.location.name}
 		</option>
     );
   }

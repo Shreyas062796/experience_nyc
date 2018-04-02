@@ -12,25 +12,22 @@ class AddLocationToTrip extends Component{
 		}
 	}
 	
-	submitForm(e){		
+	submitForm(e){
 		let index = this.props.selectedIndex
-	
 	
 		this.setState({
 			newLocation : {
 				title : Number(this.props.locations[index].title),
 				category: Number(this.props.locations[index].category)
 			}
-			}, function(){
-				
+			}, function(){				
 				this.props.addLocationToTrip(this.state.newLocation)
 			})
 		console.log('Submitted')
 		e.preventDefault();
 	}
 	
-    render() {
-	
+    render() {	
     return (
 	<div>		
 		<div>
