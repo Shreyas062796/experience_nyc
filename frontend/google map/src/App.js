@@ -23,8 +23,10 @@ class App extends Component{
 			endTripIndex : 0
 		}
 	}
-	
-	componentWillMount(){		
+
+	componentWillMount(){
+		let tempArray = this.props.locations;
+
 		this.setState({
 			locations : [
 			{
@@ -59,42 +61,42 @@ class App extends Component{
 		selectedLocationIndex : 0,
 		endTripIndex : 0
 		})
+		console.log(this.state.locations);
 	}
-	
+
 	funcAddLocation(location){
 		let locations = this.state.locations
 		locations.push(location)
 		this.setState(locations)
 	}
-	
-	
-	funcAddLocationToTrip(location){		
+
+
+	funcAddLocationToTrip(location){
 		let trip = this.state.trip
 		trip.push(location)
 		this.setState({
 			trip : trip
-			})		
 	}
-	
+
 	funcClearTrip(location){
 		this.setState({trip : []})
 	}
-	
+
 	funcUpdateSelectedIndex(selectedIndex){
 		
 		this.setState({
 			selectedLocationIndex : selectedIndex
 		})
 	}
+
+
+	funcMoveDown(){
 	
 	funcMoveUp(){		
 		//
 	}
-	
-	funcMoveDown(){		
-		//Go
 	}
-	
+
   render(){
     return (	
       <div> 
@@ -114,14 +116,13 @@ class App extends Component{
 			<TripProps />
 			
 			<br/>
-			
-			
-		</MuiThemeProvider>
 		
+		</MuiThemeProvider>
+
 	  </div>
     );
   }
-  
+
 }
 
 
