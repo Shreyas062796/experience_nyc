@@ -83,7 +83,7 @@ class Cards extends React.Component {
   };
 
   handleScroll = () => {
-    const thisPos = document.getElementById('places').scrollTop;
+    const thisPos = document.getElementById('cardDiv').scrollTop;
     const down = thisPos > this.state.lastScrollPos;
     // If current `down` value is differs from `down` from state,
     // assign `thisPos` to variable, else assigning current `changedPos` state value.
@@ -559,7 +559,7 @@ class Cards extends React.Component {
 
 
     return (
-      <div id="places" style={{margin: '1em', height:  window.innerWidth <= 760 ? '75vh' : '100vh',overflowY: 'auto', overflowX: 'hidden'}} onScroll={this.handleScroll}>
+      <div id="cardDiv" style={{margin: '1em', height:  window.innerWidth <= 760 ? '75vh' : '100vh',overflowY: 'auto', overflowX: 'hidden'}} onScroll={this.handleScroll}>
         <Grid container spacing={40} justify={'center'} style={{padding: 25, paddingBottom: window.innerWidth <= 760 ? '1em' : '12em'}}>
           {this.state.items}
         </Grid>

@@ -390,7 +390,12 @@ class Main extends React.Component {
               <App locations={this.state.tripLocations}/>
             </div>
           </Modal>
-
+          <LoginModal
+            clicked={this.state.clicked}
+            onClose={this.handleModalClose}
+            loggedIn={this.handleLogin}
+            registered={this.handleRegister}
+          />
             <div className={classes.drawerHeader} />
             <Tabs pageChange={this.handlePage} loggedIn={this.state.loggedIn}/>
               <div style={{display: this.handlePageDisplay('Recommended')}}>
@@ -400,16 +405,11 @@ class Main extends React.Component {
                   onAddPlaceToTrip={this.updateTripLocations}
                   updateTripPlaces={this.updateTripPlaces}
                   loggedIn={this.state.loggedIn}
+                  handleScroll={this.handleScroll}
                 />
               </div>
               <div style={{display: this.handlePageDisplay('Places')}}>
                 <FilterBar setFilter={this.setFilter}/>
-                <LoginModal
-                  clicked={this.state.clicked}
-                  onClose={this.handleModalClose}
-                  loggedIn={this.handleLogin}
-                  registered={this.handleRegister}
-                />
                 <Cards
                   filter={this.state.filter}
                   tripMode={this.state.tripMode}
@@ -420,10 +420,10 @@ class Main extends React.Component {
                 />
               </div>
               <div style={{display: this.handlePageDisplay('Events')}}>
-                <Events />
+                <Events handleScroll={this.handleScroll}/>
               </div>
               <div style={{display: this.handlePageDisplay('Favorites')}}>
-                <Favorites page={this.state.currentPage}/>
+                <Favorites page={this.state.currentPage} handleScroll={this.handleScroll}/>
               </div>
           </main>
           <Drawer

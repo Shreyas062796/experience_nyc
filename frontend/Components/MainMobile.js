@@ -25,6 +25,8 @@ import Menu, { MenuItem } from 'material-ui-next/Menu';
 import Trips from './Trips.js';
 import Favorites from './Favorites.js';
 import Events from './Events.js';
+import TabsMobile from './TabsMobile.js'
+import Recommended from './Recommended.js';
 
 const styles = theme => ({
   root: {
@@ -55,6 +57,7 @@ class Main extends React.Component {
     username: sessionStorage.getItem('username'),
     filter: {types: [''], price_level: [''], num: '100'},
     currentPage: 'Places',
+    currentTab: 'Recommended',
     tripMode: false,
     anchorEl: null,
     open: '',
@@ -73,6 +76,7 @@ class Main extends React.Component {
 	}
 
   handleScroll = (down) => {
+    console.log(down);
     if(down){
       this.setState({displayBottomNav: false});
     }
@@ -99,7 +103,13 @@ class Main extends React.Component {
 
   handlePage = (page) => {
     this.setState({
-      currentPage: page
+      currentPage: page, currentTab: 'Recommended'
+    })
+  }
+
+  handleTab = (page) => {
+    this.setState({
+      currentTab: page
     })
   }
 
@@ -120,6 +130,15 @@ class Main extends React.Component {
 
   handlePageDisplay = (page) => {
     if(page == this.state.currentPage){
+      return 'block';
+    }
+    else{
+      return 'none';
+    }
+  }
+
+  handleTabDisplay = (page) => {
+    if(page == this.state.currentTab + this.state.currentPage){
       return 'block';
     }
     else{
@@ -213,8 +232,19 @@ class Main extends React.Component {
             registered={this.handleRegister}
           />
           <div style={{display: this.handlePageDisplay('Places'), marginTop: '4em'}}>
+            <TabsMobile tabChange={this.handleTab} loggedIn={this.state.loggedIn} page={this.state.currentPage}/>
+              <div style={{display: this.handleTabDisplay('RecommendedPlaces')}}>
+                <Recommended
+                  filter={this.state.filter}
+                  tripMode={this.state.tripMode}
+                  onAddPlaceToTrip={this.updateTripLocations}
+                  updateTripPlaces={this.updateTripPlaces}
+                  loggedIn={this.state.loggedIn}
+                  handleScroll={this.handleScroll}
+                />
+              </div>
             <FilterBar setFilter={this.setFilter}/>
-            <Cards
+            <Cards style={{display: this.handleTabDisplay('SearchPlaces')}}
               filter={this.state.filter}
               tripMode={this.state.tripMode}
               onAddPlaceToTrip={this.updateTripLocations}
@@ -224,16 +254,27 @@ class Main extends React.Component {
             />
           </div>
           <div style={{display: this.handlePageDisplay('Events'), marginTop: '4em'}}>
+            <TabsMobile tabChange={this.handleTab} loggedIn={this.state.loggedIn} page={this.state.currentPage}/>
+              <div style={{display: this.handleTabDisplay('RecommendedEvents')}}>
+                <Recommended
+                  filter={this.state.filter}
+                  tripMode={this.state.tripMode}
+                  onAddPlaceToTrip={this.updateTripLocations}
+                  updateTripPlaces={this.updateTripPlaces}
+                  loggedIn={this.state.loggedIn}
+                  handleScroll={this.handleScroll}
+                />
+              </div>
             <FilterBar setFilter={this.setFilter}/>
-            <Events />
+            <Events style={{display: this.handleTabDisplay('SearchEvents')}} handleScroll={this.handleScroll}/>
           </div>
           <div style={{display: this.handlePageDisplay('Favorites')}}>
-            <Favorites page={this.state.currentPage}/>
+            <Favorites page={this.state.currentPage} handleScroll={this.handleScroll}/>
           </div>
           <div style={{display: this.handlePageDisplay('Trips')}}>
             <Trips />
           </div>
-          <BottomNav pageChange={this.handlePage} display={this.state.displayBottomNav}/>
+          <BottomNav pageChange={this.handlePage} display={this.state.displayBottomNav} />
         </div>
       </div>
     );
