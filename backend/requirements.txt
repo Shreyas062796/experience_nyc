@@ -5,3 +5,7 @@ googlemaps==2.5.1
 Flask==0.12.2
 gunicorn==19.7.1
 waitress==1.1.0
+Flask-Cors==3.0.3
+pandas==0.18.1
+beautifulsoup4==4.6.0
+nltk==3.2.2
