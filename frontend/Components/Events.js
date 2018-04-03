@@ -51,7 +51,7 @@ const styles = theme => ({
     backgroundColor: red[500],
   },
   title: {
-    fontSize: '1vh',
+    fontSize: '1.5vh',
   }
 });
 
@@ -195,7 +195,7 @@ class Events extends React.Component {
     //set list of favorites for current user
     //this.setFavorites();
 
-    var data = {amount: '15'};
+    var data = {amount: '100'};
 
     $.ajax({
       url:"https://experiencenyc.herokuapp.com/todayevents",

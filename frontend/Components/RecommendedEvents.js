@@ -23,6 +23,7 @@ import AttachMoney from 'material-ui-icons/AttachMoney';
 import Add from 'material-ui-icons/Add';
 import Tooltip from 'material-ui-next/Tooltip';
 import cyan from 'material-ui-next/colors/cyan';
+import noPhoto from "./Images/nophoto.png";
 
 const styles = theme => ({
   card: {
@@ -70,7 +71,6 @@ class Recommended extends React.Component {
 
   handleScroll = () => {
     const thisPos = document.getElementById('recommendedEventsDiv').scrollTop;
-    console.log(thisPos);
     const down = thisPos > this.state.lastScrollPos;
     // If current `down` value is differs from `down` from state,
     // assign `thisPos` to variable, else assigning current `changedPos` state value.
