@@ -222,11 +222,12 @@ def getReccomendations():
 	info = request.get_json()
 	print(info['username'])
 	print(info['address'])
-	reccomendations = rec.Reccomendations(info['username'],info['address']).PlaceReccomendation()
-	if(reccomendations == "empty"):
-		return(jsonify({"response":"the database is empty"}))
-	else:
-		return(jsonify(reccomendations))
+	reccomendations = rec.Reccomendations(info['username'],info['address']).GetPlacesBasedFavs()
+	return jsonify(reccomendations)
+	# if(reccomendations == "empty"):
+	# 	return(jsonify({"response":"the database is empty"}))
+	# else:
+	# 	return(jsonify(reccomendations))
 
 @restClient.route('/createtrip', methods=['POST'])
 def createTrip():
