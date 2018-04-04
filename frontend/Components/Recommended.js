@@ -23,6 +23,7 @@ import AttachMoney from 'material-ui-icons/AttachMoney';
 import Add from 'material-ui-icons/Add';
 import Tooltip from 'material-ui-next/Tooltip';
 import cyan from 'material-ui-next/colors/cyan';
+import noPhoto from "./Images/nophoto.png";
 
 const styles = theme => ({
   card: {
@@ -70,7 +71,6 @@ class Recommended extends React.Component {
 
   handleScroll = () => {
     const thisPos = document.getElementById('recommendedDiv').scrollTop;
-    console.log(thisPos);
     const down = thisPos > this.state.lastScrollPos;
     // If current `down` value is differs from `down` from state,
     // assign `thisPos` to variable, else assigning current `changedPos` state value.
@@ -274,7 +274,7 @@ class Recommended extends React.Component {
              subheader={value['formatted_address']}
            />
          <div style={{overflow:'hidden'}}>
-            <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A"}/>
+            <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
           </div>
            <CardActions className={this.props.actions} disableActionSpacing>
              <div style={{width: '20%'}}>

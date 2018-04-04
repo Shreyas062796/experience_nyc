@@ -24,6 +24,7 @@ import Add from 'material-ui-icons/Add';
 import Check from 'material-ui-icons/Check';
 import Tooltip from 'material-ui-next/Tooltip';
 import cyan from 'material-ui-next/colors/cyan';
+import noPhoto from "./Images/nophoto.png";
 
 const styles = theme => ({
   card1: {
@@ -223,7 +224,7 @@ class Cards extends React.Component {
                   subheader={value['formatted_address']}
                 />
               <div style={{overflow:'hidden'}}>
-                 <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A"}/>
+                 <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
                </div>
                 <CardActions className={this.props.actions} disableActionSpacing>
                   <div style={{width: '20%', textAlign: 'center', display: 'flex'}}>
@@ -275,7 +276,7 @@ class Cards extends React.Component {
                       subheader={value['formatted_address']}
                     />
                   <div style={{overflow:'hidden'}}>
-                     <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A"}/>
+                     <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
                    </div>
                     <CardActions className={this.props.actions} disableActionSpacing>
                       <div style={{width: '20%', textAlign: 'center', display: 'flex'}}>
@@ -476,7 +477,7 @@ class Cards extends React.Component {
                subheader={value['formatted_address']}
              />
            <div style={{overflow:'hidden'}}>
-              <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A"}/>
+              <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
             </div>
              <CardActions className={this.props.actions} disableActionSpacing>
                <div style={{width: '20%'}}>
@@ -519,8 +520,40 @@ class Cards extends React.Component {
       this.getTripPlaces();
       this.getTripPlacesIDs();
     }
-  }
 
+    /*if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }*/
+
+    function showPosition(position) {
+      console.log(position);
+      $.get(
+          "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + position.coords.latitude + ',' + position.coords.longitude + "&key=AIzaSyBUJaE_AJdQNfNjyqiiAs02Zv-ZXJQxp1k"),
+          function(data) {
+            console.log(data);
+          }
+    }
+
+    function showError(error) {
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                console.log("User denied the request for Geolocation.");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                console.log("Location information is unavailable.");
+                break;
+            case error.TIMEOUT:
+                console.log("The request to get user location timed out.");
+                break;
+            case error.UNKNOWN_ERROR:
+                console.log("An unknown error occurred.");
+                break;
+        }
+    }
+
+  }
   //listen for new props
   componentWillReceiveProps(nextProps) {
       if(JSON.stringify(nextProps.filter) != JSON.stringify(this.state.filter)){

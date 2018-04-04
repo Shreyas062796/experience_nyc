@@ -23,6 +23,7 @@ import AttachMoney from 'material-ui-icons/AttachMoney';
 import Add from 'material-ui-icons/Add';
 import Tooltip from 'material-ui-next/Tooltip';
 import cyan from 'material-ui-next/colors/cyan';
+import eventbriteLogo from "./Images/eventbriteLogo.png";
 
 const styles = theme => ({
   card: {
@@ -51,7 +52,7 @@ const styles = theme => ({
     backgroundColor: red[500],
   },
   title: {
-    fontSize: '1vh',
+    fontSize: '1.5vh',
   }
 });
 
@@ -195,7 +196,7 @@ class Events extends React.Component {
     //set list of favorites for current user
     //this.setFavorites();
 
-    var data = {amount: '15'};
+    var data = {amount: '100'};
 
     $.ajax({
       url:"https://experiencenyc.herokuapp.com/todayevents",
@@ -225,7 +226,10 @@ class Events extends React.Component {
                  {this.isFavorite(value['id'])}
              </div>
              <div style={{width: '50%', textAlign: 'center'}}>
-                {this.isFree(value['is_free'])}
+                {/*this.isFree(value['is_free'])*/}
+                <Button href={value['url']}  target="_blank" style={{minWidth: '0px', width:'10em', padding: '0px'}}>
+                   <img src={eventbriteLogo} style={{width: '100%', height: '100%'}}/>
+                </Button>
              </div>
              <div style={{width: '25%', textAlign: 'right'}}>
                <Button href={"http://maps.google.com/?q=" + value['name']['text']} target="_blank" color="primary" style={{minWidth: '0px', color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
