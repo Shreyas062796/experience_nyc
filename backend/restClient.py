@@ -26,9 +26,9 @@ EVENT_CACHE = EventCacher()
 
 
 restClient = Flask(__name__)
+
+# add routes for individual apps
 events.add_routes(restClient)
-
-
 
 CORS(restClient)
 

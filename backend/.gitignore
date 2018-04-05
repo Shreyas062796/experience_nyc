@@ -17,3 +17,6 @@ ghostdriver.log
 #testdata
 data.txt
 cache.json
+
+#directories
+oldcode
