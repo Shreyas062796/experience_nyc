@@ -1,4 +1,3 @@
-# python libraries
 from flask import Flask, render_template, request, redirect, session, jsonify
 from flask_cors import CORS
 import random, json
@@ -16,6 +15,10 @@ from maps.geo import addressToGeo
 from lib.caching import Cacher, EventCacher
 
 
+# import blueprints here
+import events
+
+
 DEBUG = True
 CACHE = Cacher()
 EVENT_CACHE = EventCacher()
@@ -23,6 +26,10 @@ EVENT_CACHE = EventCacher()
 
 
 restClient = Flask(__name__)
+events.add_routes(restClient)
+
+
+
 CORS(restClient)
 
 # this works, it may not be the best way to do it, but works
@@ -34,6 +41,23 @@ def isNotNull(astr,request):
 		return request.args[astr]
 	except KeyError:
 		return None
+
+
+
+
+
+
+@restClient.route('/api/help', methods = ['GET'])
+def help():
+	"""Print available functions."""
+	func_list = {}
+	for rule in restClient.url_map.iter_rules():
+		if rule.endpoint != 'static':
+			func_list[rule.rule] = restClient.view_functions[rule.endpoint].__doc__
+	return jsonify(func_list)
+
+
+
 
 @restClient.before_first_request
 def activate_job():
