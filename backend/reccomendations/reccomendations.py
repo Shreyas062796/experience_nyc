@@ -8,7 +8,13 @@ import lib.getKeywords as key
 import events.events_script as ev
 from maps.geo import addressToGeo
 
+<<<<<<< HEAD:backend/reccomendations/reccomendations.py
 placesconnector = ps.PlacesMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc")
+=======
+from random import shuffle
+
+placesconnector = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
+>>>>>>> be4b31e9ecca51018562315f83da20224ff093cc:backend/reccomendations.py
 eventsconnector = mg.MongoConnector("ds123619.mlab.com", "23619", "admin","admin","enyc")
 keywords = key.GetKeywords("AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o")
 events = ev.getEvents()
@@ -85,6 +91,65 @@ class Reccomendations:
 		else:
 			return("empty")
 
+	def GetPlacesBasedFavs(self):
+		recommendedplaces = self.getPlacesInRadius()
+		favorites = placesconnector.getFavoritePlaces(self.user)
+
+		# get the users average price level that they enjoy
+		total = 0
+		count = 0 # because not all locations have a price_level
+		for location in favorites:
+			try:
+				total+=int(location['price_level'])
+				count+=1
+			except KeyError:
+				pass
+		avg_level = round(total/count)
+
+		#get the main keywords that the user has
+		types = dict()
+		for location in favorites:
+			l = list()
+			try:
+				l = location['types']
+			except KeyError:
+				continue
+			for word in l:
+				if not word in types:
+					types[word] = 1 
+				else:
+					types[word] += 1
+		print(types)
+		user_types = sorted(types, key=types.get)[::-1]
+		print(user_types)
+
+		total_reccomended = 15 # this is static change later
+
+		# create reply list
+		reccomended_list = list()
+		shuffle(recommendedplaces)
+		for location in recommendedplaces:
+			loc_types = list()
+			try:
+				loc_types = location['types']
+			except KeyError:
+				continue
+			for atype in user_types[:3]:
+				if atype in loc_types:
+					reccomended_list.append(location)
+					break
+			if len(reccomended_list) >= total_reccomended:
+				break
+
+		for location in reccomended_list:
+			location['_id'] = str(location['_id'])
+
+
+		print(reccomended_list)
+		return reccomended_list
+		# print(price_level)	
+
+
 	def EventReccomendations(self):
 		reccomendedplaces = self.PlaceReccomendation()
 		db = eventsconnector.EventsclientConnect()
@@ -98,6 +163,12 @@ class Reccomendations:
 if __name__ == "__main__":
 	reccomender = Reccomendations('test','269 Amsterdam Ave, New York, NY 10023')
 	# reccomender.getPlacesInRadius('269 Amsterdam Ave, New York, NY 10023')
+<<<<<<< HEAD:backend/reccomendations/reccomendations.py
 	print(reccomender.PlaceReccomendation())
+=======
+	# reccomender.PlaceReccomendation()
+	print('starting')
+	reccomender.GetPlacesBasedFavs()
+>>>>>>> be4b31e9ecca51018562315f83da20224ff093cc:backend/reccomendations.py
 	# reccomender.getTripsandPlaces()
 	# reccomender.EventReccomendations()

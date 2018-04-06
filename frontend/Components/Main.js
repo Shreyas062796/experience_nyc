@@ -25,11 +25,14 @@ import Tabs from './Tabs'
 import Trips from './Trips.js';
 import Events from './Events.js';
 import Favorites from './Favorites.js';
+import Recommended from './Recommended.js';
 import Switch from 'material-ui-next/Switch';
 import cyan from 'material-ui-next/colors/cyan';
+import blue from 'material-ui-next/colors/blue';
 import Modal from 'material-ui-next/Modal';
+import Badge from 'material-ui-next/Badge';
 import Divider from 'material-ui-next/Divider';
-//import App from '../src/App'
+import App from '../src/App';
 
 const drawerWidth = 300;
 
@@ -44,6 +47,11 @@ const styles = theme => ({
     position: 'relative',
     display: 'flex',
     width: '100%',
+  },
+  badge: {
+    padding: '0.5em',
+    marginTop: '1.5em',
+    position: 'absolute'
   },
   hover: {
     ':hover': {
@@ -79,7 +87,6 @@ const styles = theme => ({
     width: drawerWidth,
   },
   drawerHeader: {
-    display: 'inline-block',
     padding: '0 8px',
     //...theme.mixins.toolbar,
   },
@@ -137,13 +144,18 @@ class Main extends React.Component {
     tripLocations: [],
     tripPlaces: [],
     removeFromTrip: "",
-    loggedIn: false
+    loggedIn: false,
   };
 
-  componentDidMount = () => {
+  componentWillMount = () => {
     if(sessionStorage.getItem('username')){
       this.setState({loggedIn: true});
     }
+  }
+
+  //handles scroll action, empty for non-mobile
+  handleScroll = (down) => {
+
   }
 
   handleDrawerOpen = () => {
@@ -171,7 +183,7 @@ class Main extends React.Component {
   };
 
   handleLogin = () => {
-    this.setState({username: sessionStorage.getItem('username'), loginClick: '', clicked: '', loggedIn: true})
+    this.setState({username: sessionStorage.getItem('username'), loginClick: '', clicked: '', loggedIn: true, currentPage: 'Recommended'})
     this.handleMenuClose();
   }
 
@@ -180,7 +192,7 @@ class Main extends React.Component {
   }
 
   handleLogout = () => {
-    this.setState({username: '', clicked: '', favorites: [], filter: {types: [''], price_level: [''], num: '100'}, removeFromTrip: "", tripPlaces: [], loggedIn: false})
+    this.setState({username: '', currentPage: 'Places', clicked: '', favorites: [], filter: {types: [''], price_level: [''], num: '100'}, removeFromTrip: "", tripPlaces: [], loggedIn: false})
     sessionStorage.setItem('username', '')
     alert("Logged Out!")
   }
@@ -245,9 +257,9 @@ class Main extends React.Component {
 
   handleTripButton = () => {
     if(this.state.tripButton){
-      return (<Button style={{backgroundColor: 'rgb(0, 188, 212)'}} onClick={() => { this.openTripModal()}}>
+      return (<Button style={{width: '100%', height:'100%', backgroundColor:'#3f51b5'}} disabled={this.state.tripPlaces.length < 2} onClick={() => { this.openTripModal()}}>
                 <Typography style={{color: 'white', display: 'inline-block'}}>
-                  Start Trip
+                  {(this.state.tripPlaces.length < 2) ? 'Select At Least 2 Places' : 'Start Trip'}
                 </Typography>
               </Button>);
     }
@@ -346,7 +358,6 @@ class Main extends React.Component {
                     bar: classes.bar,
                   }}
                 />
-              {this.handleTripButton()}
               </div>
               <div style={{width: '33%', alignItems: 'center', justifyContent: 'flex-end', display: 'flex'}}>
                 {userAppbarOption}
@@ -379,30 +390,40 @@ class Main extends React.Component {
               {/*<App locations={this.state.tripLocations}/>*/}
             </div>
           </Modal>
-
+          <LoginModal
+            clicked={this.state.clicked}
+            onClose={this.handleModalClose}
+            loggedIn={this.handleLogin}
+            registered={this.handleRegister}
+          />
             <div className={classes.drawerHeader} />
-            <Tabs pageChange={this.handlePage}/>
+            <Tabs pageChange={this.handlePage} loggedIn={this.state.loggedIn}/>
+              <div style={{display: this.handlePageDisplay('Recommended')}}>
+                <Recommended
+                  filter={this.state.filter}
+                  tripMode={this.state.tripMode}
+                  onAddPlaceToTrip={this.updateTripLocations}
+                  updateTripPlaces={this.updateTripPlaces}
+                  loggedIn={this.state.loggedIn}
+                  handleScroll={this.handleScroll}
+                />
+              </div>
               <div style={{display: this.handlePageDisplay('Places')}}>
                 <FilterBar setFilter={this.setFilter}/>
-                <LoginModal
-                  clicked={this.state.clicked}
-                  onClose={this.handleModalClose}
-                  loggedIn={this.handleLogin}
-                  registered={this.handleRegister}
-                />
                 <Cards
                   filter={this.state.filter}
                   tripMode={this.state.tripMode}
                   onAddPlaceToTrip={this.updateTripLocations}
                   updateTripPlaces={this.updateTripPlaces}
                   loggedIn={this.state.loggedIn}
+                  handleScroll={this.handleScroll}
                 />
               </div>
               <div style={{display: this.handlePageDisplay('Events')}}>
-                <Events />
+                <Events handleScroll={this.handleScroll}/>
               </div>
               <div style={{display: this.handlePageDisplay('Favorites')}}>
-                <Favorites page={this.state.currentPage}/>
+                <Favorites page={this.state.currentPage} handleScroll={this.handleScroll}/>
               </div>
           </main>
           <Drawer
@@ -415,17 +436,22 @@ class Main extends React.Component {
           >
             <div className={classes.drawerHeader}>
               <div style={{height: this.getToolbarHeight()}}>
-                <Typography variant="headline" component="h1" align="right">Trip Cart
-                  <IconButton onClick={this.handleDrawerClose}>
-                    {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                  </IconButton>
-                </Typography>
-
+                <Badge color="primary" badgeContent={this.state.tripPlaces.length} className={classes.badge}>
+                </Badge>
+                  <Typography variant="headline" component="h1" align="right" style={{paddingTop: '.75em'}}>Trip Cart
+                    <IconButton style={{marginLeft: '2em'}} onClick={this.handleDrawerClose}>
+                      {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                    </IconButton>
+                  </Typography>
               </div>
             </div>
             <Divider />
-            <div style={{overflowY: 'auto'}}>
+            <div style={{overflowY: 'auto', height: '90vh'}}>
               {this.state.tripPlaces}
+            </div>
+            <Divider />
+            <div style={{width: '100%',height: '3.5em', bottom: 0, position: 'absolute'}}>
+              {this.handleTripButton()}
             </div>
           </Drawer>
         </div>

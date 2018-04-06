@@ -24,6 +24,7 @@ import Add from 'material-ui-icons/Add';
 import Check from 'material-ui-icons/Check';
 import Tooltip from 'material-ui-next/Tooltip';
 import cyan from 'material-ui-next/colors/cyan';
+import noPhoto from "./Images/nophoto.png";
 
 const styles = theme => ({
   card1: {
@@ -71,12 +72,31 @@ class Cards extends React.Component {
             inTrip: [],
             filter: {types: [''], price_level: [''], num: '100'},
             username: sessionStorage.getItem('username'),
-            tripMode: false
+            tripMode: false,
+            loggedIn: false,
+            lastScrollPos: 0,
+            changedPos: undefined,
+            down: true
           };
 
   handleExpandClick = () => {
     this.setState({ expanded: !this.state.expanded });
   };
+
+  handleScroll = () => {
+    const thisPos = document.getElementById('cardDiv').scrollTop;
+    const down = thisPos > this.state.lastScrollPos;
+    // If current `down` value is differs from `down` from state,
+    // assign `thisPos` to variable, else assigning current `changedPos` state value.
+    const changedPos = down !== this.state.down ? thisPos : this.state.changedPos;
+    this.setState({
+      lastScrollPos: thisPos,
+      changedPos,
+      down
+    }, function() {
+      this.props.handleScroll(down);
+    });
+  }
 
   //generate list of dollar sign components based on passed price level
   returnPriceLevel = (items) => {
@@ -179,54 +199,112 @@ class Cards extends React.Component {
   }
 
   getTripPlaces = () => {
-    var data = {username: sessionStorage.getItem('username')};
 
-    $.ajax({
-      url:"https://experiencenyc.herokuapp.com/gettripplaces",
-      type:"POST",
-      data: JSON.stringify(data),
-      contentType:"application/json; charset=utf-8",
-      dataType:"json"})
-      .done((response) => {
-        const { classes } = this.props;
+    if(this.state.loggedIn){
+      var data = {username: sessionStorage.getItem('username')};
 
-        const result = response.map((value) =>
-        (
-          <Card style={{margin: '1em'}} className={this.inTrip(value['id'] && this.props.tripMode) ? classes.card2 : classes.card1}>
-            <CardHeader classes={{subheader: classes.subheader}}
-              avatar={
-                <Avatar aria-label="Recipe" src={value['icon']} className={this.props.avatar}/>
+      $.ajax({
+        url:"https://experiencenyc.herokuapp.com/gettripplaces",
+        type:"POST",
+        data: JSON.stringify(data),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json"})
+        .done((response) => {
+          const { classes } = this.props;
+
+          if(response['response'] != 'There is no values'){
+            const result = response.map((value) =>
+            (
+              <Card style={{margin: '1em'}} className={this.inTrip(value['id'] && this.props.tripMode) ? classes.card2 : classes.card1}>
+                <CardHeader classes={{subheader: classes.subheader}}
+                  avatar={
+                    <Avatar aria-label="Recipe" src={value['icon']} className={this.props.avatar}/>
+                  }
+                  title={value['name']}
+                  subheader={value['formatted_address']}
+                />
+              <div style={{overflow:'hidden'}}>
+                 <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
+               </div>
+                <CardActions className={this.props.actions} disableActionSpacing>
+                  <div style={{width: '20%', textAlign: 'center', display: 'flex'}}>
+                    <IconButton>
+                      {this.returnPriceLevel(value['price_level'])}
+                    </IconButton>
+                  </div>
+                  <div style={{width: '40%', textAlign: 'center', display: 'flex'}}>
+                    <Typography style={{marginTop: '14px', marginRight: '5px', }}>{value['rating']}</Typography>
+                    <IconButton style={{flex: 'auto'}}>
+                      {this.returnRatingLevel(value['rating'])}
+                    </IconButton>
+                  </div>
+                  <div style={{width: '40%', textAlign: 'right'}}>
+                    <Button target="_blank" onClick={() => {this.removeFromTrip(value['id'])}} className={classes.button}>
+                     Remove
+                    </Button>
+                  </div>
+                </CardActions>
+              </Card>
+            ))
+
+
+          this.props.updateTripPlaces(result);
+          }
+        })
+      }
+      else{
+          var data = {placeIds: this.state.inTrip};
+
+          $.ajax({
+            url:"https://experiencenyc.herokuapp.com/getqueryplaces",
+            type:"GET",
+            data: data,
+            contentType:"application/json; charset=utf-8",
+            dataType:"json"})
+            .done((response) => {
+              const { classes } = this.props;
+
+              if(response['response'] != 'There is no values'){
+                const result = response.map((value) =>
+                (
+                  <Card style={{margin: '1em'}} className={this.inTrip(value['id'] && this.props.tripMode) ? classes.card2 : classes.card1}>
+                    <CardHeader classes={{subheader: classes.subheader}}
+                      avatar={
+                        <Avatar aria-label="Recipe" src={value['icon']} className={this.props.avatar}/>
+                      }
+                      title={value['name']}
+                      subheader={value['formatted_address']}
+                    />
+                  <div style={{overflow:'hidden'}}>
+                     <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
+                   </div>
+                    <CardActions className={this.props.actions} disableActionSpacing>
+                      <div style={{width: '20%', textAlign: 'center', display: 'flex'}}>
+                        <IconButton>
+                          {this.returnPriceLevel(value['price_level'])}
+                        </IconButton>
+                      </div>
+                      <div style={{width: '40%', textAlign: 'center', display: 'flex'}}>
+                        <Typography style={{marginTop: '14px', marginRight: '5px', }}>{value['rating']}</Typography>
+                        <IconButton style={{flex: 'auto'}}>
+                          {this.returnRatingLevel(value['rating'])}
+                        </IconButton>
+                      </div>
+                      <div style={{width: '40%', textAlign: 'right'}}>
+                        <Button target="_blank" onClick={() => {this.removeFromTrip(value['id'])}} className={classes.button}>
+                         Remove
+                        </Button>
+                      </div>
+                    </CardActions>
+                  </Card>
+                ))
+              this.props.updateTripPlaces(result);
               }
-              title={value['name']}
-              subheader={value['formatted_address']}
-            />
-          <div style={{overflow:'hidden'}}>
-             <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A"}/>
-           </div>
-            <CardActions className={this.props.actions} disableActionSpacing>
-              <div style={{width: '20%', textAlign: 'center', display: 'flex'}}>
-                <IconButton>
-                  {this.returnPriceLevel(value['price_level'])}
-                </IconButton>
-              </div>
-              <div style={{width: '40%', textAlign: 'center', display: 'flex'}}>
-                <Typography style={{marginTop: '14px', marginRight: '5px', }}>{value['rating']}</Typography>
-                <IconButton style={{flex: 'auto'}}>
-                  {this.returnRatingLevel(value['rating'])}
-                </IconButton>
-              </div>
-              <div style={{width: '40%', textAlign: 'right'}}>
-                <Button target="_blank" onClick={() => {this.removeFromTrip(value['id'])}} className={classes.button}>
-                 Remove
-                </Button>
-              </div>
-            </CardActions>
-          </Card>
-        ))
-
-
-        this.props.updateTripPlaces(result);
-      })
+              else{
+                this.props.updateTripPlaces('');
+              }
+          })
+        }
   }
 
   //adds the passed id to the database and adds the lat and lng to a list for the trip creation
@@ -248,14 +326,14 @@ class Cards extends React.Component {
         })
     }
 
-    let tempArr = this.state.trip;
     let tempInTrip = this.state.inTrip;
-    //tempArr.push({'lat': Number(lat), 'lng': Number(lng)});
     tempInTrip.push(id);
     this.setState({inTrip: tempInTrip}, function(){
       this.props.onAddPlaceToTrip(this.state.trip);
+      this.getTripPlaces();
       this.searchPlaces("addToTrip");
     })
+
   }
 
   //removes the passed id and lat/lng from the db and from the trip id list
@@ -290,6 +368,7 @@ class Cards extends React.Component {
 
     this.setState({inTrip: tempInTrip}, function(){
       this.searchPlaces('removeFromTrip');
+      this.getTripPlaces();
     })
   }
 
@@ -314,7 +393,7 @@ class Cards extends React.Component {
     }
     else if(this.props.tripMode == true){
       button = (<Tooltip id="tooltip-bottom" title={this.inTrip(id) ? "Remove From Trip" : "Add to Trip"} placement="bottom">
-                  <IconButton aria-label={this.inTrip(id) ? "Remove from Trip" : "Add to Trip"} onClick={() => {this.inTrip(id) ? this.removeFromTrip(id) : this.addToTrip(id)}}>
+                  <IconButton aria-label={this.inTrip(id) ? "Remove from Trip" : "Add to Trip"} onClick={() => {this.inTrip(id) ? this.removeFromTrip(id) : this.addToTrip(id, this)}}>
                     {this.inTrip(id) ? <Check  /> : <Add  />}
                   </IconButton>
                 </Tooltip>);
@@ -398,7 +477,7 @@ class Cards extends React.Component {
                subheader={value['formatted_address']}
              />
            <div style={{overflow:'hidden'}}>
-              <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A"}/>
+              <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
             </div>
              <CardActions className={this.props.actions} disableActionSpacing>
                <div style={{width: '20%'}}>
@@ -441,8 +520,40 @@ class Cards extends React.Component {
       this.getTripPlaces();
       this.getTripPlacesIDs();
     }
-  }
 
+    /*if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }*/
+
+    function showPosition(position) {
+      console.log(position);
+      $.get(
+          "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + position.coords.latitude + ',' + position.coords.longitude + "&key=AIzaSyBUJaE_AJdQNfNjyqiiAs02Zv-ZXJQxp1k"),
+          function(data) {
+            console.log(data);
+          }
+    }
+
+    function showError(error) {
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                console.log("User denied the request for Geolocation.");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                console.log("Location information is unavailable.");
+                break;
+            case error.TIMEOUT:
+                console.log("The request to get user location timed out.");
+                break;
+            case error.UNKNOWN_ERROR:
+                console.log("An unknown error occurred.");
+                break;
+        }
+    }
+
+  }
   //listen for new props
   componentWillReceiveProps(nextProps) {
       if(JSON.stringify(nextProps.filter) != JSON.stringify(this.state.filter)){
@@ -456,9 +567,16 @@ class Cards extends React.Component {
       }
 
       if(nextProps.loggedIn != this.props.loggedIn){
-        this.searchPlaces("loggedIn");
         if(nextProps.loggedIn){
-          this.getTripPlaces();
+          this.setState({inTrip: [], loggedIn: true}, function() {
+            this.getTripPlaces();
+          });
+
+        }
+        else{
+          this.setState({inTrip: [], loggedIn: false}, function() {
+            this.getTripPlaces();
+          });
         }
       }
 
@@ -474,8 +592,8 @@ class Cards extends React.Component {
 
 
     return (
-      <div style={{margin: '1em', height: '75vh',overflowY: 'auto', overflowX: 'hidden'}}>
-        <Grid container spacing={40} justify={'center'} style={{padding: 25}}>
+      <div id="cardDiv" style={{margin: '1em', height:  window.innerWidth <= 760 ? '75vh' : '100vh',overflowY: 'auto', overflowX: 'hidden'}} onScroll={this.handleScroll}>
+        <Grid container spacing={40} justify={'center'} style={{padding: 25, paddingBottom: window.innerWidth <= 760 ? '1em' : '12em'}}>
           {this.state.items}
         </Grid>
       </div>

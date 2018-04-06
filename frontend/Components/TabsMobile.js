@@ -27,13 +27,13 @@ const styles = theme => ({
 class FullWidthTabs extends React.Component {
   state = {
     value: 1,
-    pageKeys: {0: 'Recommended', 1 : 'Places', 2 : 'Events', 3 : 'Favorites'},
+    pageKeys: {0: 'Recommended', 1: 'Search'},
     disabled: false
   };
 
   handleChange = (event, value) => {
     this.setState({value: value });
-    this.props.pageChange(this.state.pageKeys[value]);
+    this.props.tabChange(this.state.pageKeys[value]);
   };
 
   handleChangeIndex = index => {
@@ -41,6 +41,7 @@ class FullWidthTabs extends React.Component {
   };
 
   componentWillReceiveProps = (nextProps) =>{
+
     if(nextProps.loggedIn){
       this.setState({disabled: false});
       if(!this.props.loggedIn){
@@ -52,6 +53,10 @@ class FullWidthTabs extends React.Component {
       if(this.props.loggedIn){
         this.setState({value: 1});
       }
+    }
+
+    if((nextProps.page != this.props.page) && this.props.loggedIn){
+      this.setState({value: 0});
     }
   }
 
@@ -66,12 +71,10 @@ class FullWidthTabs extends React.Component {
             onChange={this.handleChange}
             indicatorColor="primary"
             textColor="primary"
-            centered
+            fullWidth
           >
             <Tab label="Recommended" disabled={this.state.disabled}/>
-            <Tab label="Places"/>
-            <Tab label="Events" />
-            <Tab label="Favorites" disabled={this.state.disabled}/>
+            <Tab label="Search"/>
           </Tabs>
         </AppBar>
 
