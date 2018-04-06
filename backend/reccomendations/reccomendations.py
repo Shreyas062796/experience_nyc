@@ -1,11 +1,14 @@
 import pandas as pd
-import mongoConnector as mg
+# import mongoConnector as mg
 from pprint import pprint
+import sys, os
+sys.path.append(os.path.abspath(os.path.join('..', '')))
+import places.PlacesMongo as ps
 import lib.getKeywords as key
 import events.events_script as ev
 from maps.geo import addressToGeo
 
-placesconnector = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
+placesconnector = ps.PlacesMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc")
 eventsconnector = mg.MongoConnector("ds123619.mlab.com", "23619", "admin","admin","enyc")
 keywords = key.GetKeywords("AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o")
 events = ev.getEvents()
@@ -42,7 +45,7 @@ class Reccomendations:
 		reccomendedplaces = []
 		curCoordinates = addressToGeo(self.address)
 		# print(curCoordinates)
-		places = placesconnector.getPlacesInRadius(curCoordinates['lat'],curCoordinates['lng'],5)
+		places = placesconnector.getPlacesInRadius(curCoordinates['lat'],curCoordinates['lng'],30)
 		userplaces = self.getTripsandPlaces()[1]
 		for place in places:
 			for userplaceid in userplaces['id']:
@@ -95,6 +98,6 @@ class Reccomendations:
 if __name__ == "__main__":
 	reccomender = Reccomendations('test','269 Amsterdam Ave, New York, NY 10023')
 	# reccomender.getPlacesInRadius('269 Amsterdam Ave, New York, NY 10023')
-	reccomender.PlaceReccomendation()
+	print(reccomender.PlaceReccomendation())
 	# reccomender.getTripsandPlaces()
 	# reccomender.EventReccomendations()
