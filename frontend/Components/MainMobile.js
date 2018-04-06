@@ -28,6 +28,12 @@ import Events from './Events.js';
 import TabsMobile from './TabsMobile.js'
 import Recommended from './Recommended.js';
 import RecommendedEvents from './RecommendedEvents.js';
+import Icon from 'material-ui-next/Icon';
+import Switch from 'material-ui-next/Switch';
+import cyan from 'material-ui-next/colors/cyan';
+import blue from 'material-ui-next/colors/blue';
+import Snackbar from 'material-ui-next/Snackbar';
+import PhotoModal from './PhotoModal.js';
 
 const styles = theme => ({
   root: {
@@ -44,7 +50,14 @@ const styles = theme => ({
   menuButton: {
     marginLeft: -12,
     marginRight: 20,
-  }
+  },
+  checked: {
+    color: cyan[500],
+    '& + $bar': {
+      backgroundColor: cyan[500],
+    },
+  },
+  bar: {},
 });
 
 class Main extends React.Component {
@@ -67,7 +80,11 @@ class Main extends React.Component {
     tripPlaces: [],
     removeFromTrip: "",
     loggedIn: false,
-    displayBottomNav: true
+    displayBottomNav: true,
+    snackbarMessage: '',
+    snackbarOpen: false,
+    photos: [],
+    photoModalOpened: false
   };
 
   componentDidMount = () => {
@@ -116,8 +133,12 @@ class Main extends React.Component {
     })
   }
 
+  handleLoginPopup = () => {
+    this.handleLoginClick();
+  }
+
   handleModalClose = () => {
-    this.setState({clicked: ''})
+    this.setState({clicked: '', photoModalOpened: false})
   }
 
   handleLogin = () => {
@@ -147,6 +168,49 @@ class Main extends React.Component {
     else{
       return 'none';
     }
+  }
+
+  handleTripSwitch = name => event => {
+    this.setState({ [name]: event.target.checked }, function() {
+      if(this.state.tripMode){
+        this.setState({tripButton: true})
+      }
+      else{
+        this.setState({tripButton: false})
+      }
+    });
+  };
+
+  handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ snackbarOpen: false });
+  };
+
+  handleTripButton = () => {
+    if(this.state.tripButton){
+      return (<Button style={{width: '100%', height:'100%', backgroundColor:'#3f51b5'}} disabled={this.state.tripPlaces.length < 2} onClick={() => { this.openTripModal()}}>
+                <Typography style={{color: 'white', display: 'inline-block'}}>
+                  {(this.state.tripPlaces.length < 2) ? 'Select At Least 2 Places' : 'Start Trip'}
+                </Typography>
+              </Button>);
+    }
+  }
+
+  setModalPhotos = (photos) => {
+    console.log(photos)
+    let temp = [];
+    temp.push(photos);
+    this.setState({photos: temp, photoModalOpened: true});
+  }
+
+  snackbar = (message) => {
+    this.setState({
+      snackbarOpen: true,
+      snackbarMessage: message
+    })
   }
 
   updateTripPlaces = (places) => {
@@ -217,10 +281,21 @@ class Main extends React.Component {
 
           >
             <Toolbar disableGutters={!open}>
-              <div style={{width: '60%'}}>
+              <div style={{width: '40%'}}>
                 <Typography variant="title" color="inherit" noWrap>
                   Experience NYC
                 </Typography>
+              </div>
+              <div style={{width: '20%'}}>
+                <Switch
+                  checked={this.state.tripMode}
+                  onChange={this.handleTripSwitch('tripMode')}
+                  value=""
+                  classes={{
+                    checked: classes.checked,
+                    bar: classes.bar,
+                  }}
+                />
               </div>
               <div style={{width: '40%', alignItems: 'center', justifyContent: 'flex-end', display: 'flex'}}>
                 {userAppbarOption}
@@ -234,8 +309,23 @@ class Main extends React.Component {
             loggedIn={this.handleLogin}
             registered={this.handleRegister}
           />
+          <PhotoModal
+            photos={this.state.photos}
+            onClose={this.handleModalClose}
+            open={this.state.photoModalOpened}
+          />
+          <Snackbar
+            anchorOrigin={{vertical: 'bottom',horizontal: 'center'}}
+            open={this.state.snackbarOpen}
+            onClose={this.handleSnackbarClose}
+            autoHideDuration={1000}
+            SnackbarContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            message={<span id="message-id">{this.state.snackbarMessage}</span>}
+          />
           <div style={{display: this.handlePageDisplay('Places'), marginTop: '4em'}}>
-            <TabsMobile tabChange={this.handleTab} loggedIn={this.state.loggedIn} page={this.state.currentPage}/>
+            <TabsMobile tabChange={this.handleTab} loggedIn={this.state.loggedIn} page={this.state.currentPage} logginPopup={this.handleLoginPopup}/>
             <FilterBar setFilter={this.setFilter}/>
             <div style={{display: this.handleTabDisplay('RecommendedPlaces')}}>
               <Recommended
@@ -245,6 +335,8 @@ class Main extends React.Component {
                 updateTripPlaces={this.updateTripPlaces}
                 loggedIn={this.state.loggedIn}
                 handleScroll={this.handleScroll}
+                snackbar={this.snackbar}
+                inTrip={this.state.tripPlaces}
               />
             </div>
             <Cards style={{display: this.handleTabDisplay('SearchPlaces')}}
@@ -254,10 +346,12 @@ class Main extends React.Component {
               updateTripPlaces={this.updateTripPlaces}
               loggedIn={this.state.loggedIn}
               handleScroll={this.handleScroll}
+              snackbar={this.snackbar}
+              inTrip={this.state.tripPlaces}
             />
           </div>
           <div style={{display: this.handlePageDisplay('Events'), marginTop: '4em'}}>
-            <TabsMobile tabChange={this.handleTab} loggedIn={this.state.loggedIn} page={this.state.currentPage}/>
+            <TabsMobile tabChange={this.handleTab} loggedIn={this.state.loggedIn} page={this.state.currentPage} logginPopup={this.handleLoginPopup}/>
             <FilterBar setFilter={this.setFilter}/>
             <div style={{display: this.handleTabDisplay('RecommendedEvents')}}>
               <RecommendedEvents
@@ -267,17 +361,32 @@ class Main extends React.Component {
                 updateTripPlaces={this.updateTripPlaces}
                 loggedIn={this.state.loggedIn}
                 handleScroll={this.handleScroll}
+                snackbar={this.snackbar}
+                inTrip={this.state.tripPlaces}
               />
             </div>
             <Events style={{display: this.handleTabDisplay('SearchEvents')}} handleScroll={this.handleScroll}/>
           </div>
           <div style={{display: this.handlePageDisplay('Favorites')}}>
-            <Favorites page={this.state.currentPage} handleScroll={this.handleScroll}/>
+            <Favorites
+              page={this.state.currentPage}
+              handleScroll={this.handleScroll}
+              filter={this.state.filter}
+              tripMode={this.state.tripMode}
+              onAddPlaceToTrip={this.updateTripLocations}
+              updateTripPlaces={this.updateTripPlaces}
+              loggedIn={this.state.loggedIn}
+              handleScroll={this.handleScroll}
+              snackbar={this.snackbar}
+              inTrip={this.state.tripPlaces}
+              />
           </div>
-          <div style={{display: this.handlePageDisplay('Trips')}}>
-            <Trips />
+          <div style={{display: this.handlePageDisplay('Trips'),marginTop: '4em', height: '100%'}}>
+              <div style={{overflowY: 'auto', height: '80vh'}}>
+                {this.state.tripPlaces}
+              </div>
           </div>
-          <BottomNav pageChange={this.handlePage} display={this.state.displayBottomNav} />
+          <BottomNav id='bottomNav' pageChange={this.handlePage} display={this.state.displayBottomNav} />
         </div>
       </div>
     );

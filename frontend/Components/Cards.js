@@ -25,13 +25,17 @@ import Check from 'material-ui-icons/Check';
 import Tooltip from 'material-ui-next/Tooltip';
 import cyan from 'material-ui-next/colors/cyan';
 import noPhoto from "./Images/nophoto.png";
+import { PulseLoader } from 'react-spinners';
 
 const styles = theme => ({
   card1: {
     maxWidth: 400,
+    borderRadius: '4px',
+    //border: '1px solid #8080806e',
   },
   card2: {
     maxWidth: 400,
+    borderRadius: '4px',
     boxShadow: '0px 0px 18px -1px rgba(0,208,255,1)'
   },
   button: {
@@ -65,6 +69,7 @@ const styles = theme => ({
 });
 
 class Cards extends React.Component {
+
   state = { expanded: false,
             items: [],
             favorites: [],
@@ -76,7 +81,8 @@ class Cards extends React.Component {
             loggedIn: false,
             lastScrollPos: 0,
             changedPos: undefined,
-            down: true
+            down: true,
+            pressed: false
           };
 
   handleExpandClick = () => {
@@ -161,6 +167,7 @@ class Cards extends React.Component {
       dataType:"json"})
       .done((response) => {
         if(response['response'] == "True"){
+          this.props.snackbar('Added To Favorites!')
           this.searchPlaces("addFavoritePlace");
         }
       })
@@ -178,6 +185,7 @@ class Cards extends React.Component {
       dataType:"json"})
       .done((response) => {
         if(response['response'] == "True"){
+          this.props.snackbar('Removed From Favorites!')
           this.searchPlaces("removeFavoritePlace");
         }
       })
@@ -199,7 +207,6 @@ class Cards extends React.Component {
   }
 
   getTripPlaces = () => {
-
     if(this.state.loggedIn){
       var data = {username: sessionStorage.getItem('username')};
 
@@ -223,8 +230,8 @@ class Cards extends React.Component {
                   title={value['name']}
                   subheader={value['formatted_address']}
                 />
-              <div style={{overflow:'hidden'}}>
-                 <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
+              <div style={{overflow:'hidden'}} onClick={() =>{this.getPhotos(value['place_id'])}}>
+                 <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover', cursor: 'pointer'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
                </div>
                 <CardActions className={this.props.actions} disableActionSpacing>
                   <div style={{width: '20%', textAlign: 'center', display: 'flex'}}>
@@ -275,8 +282,8 @@ class Cards extends React.Component {
                       title={value['name']}
                       subheader={value['formatted_address']}
                     />
-                  <div style={{overflow:'hidden'}}>
-                     <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
+                  <div style={{overflow:'hidden'}} onClick={() =>{this.getPhotos(value['place_id'])}}>
+                     <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover', cursor: 'pointer'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
                    </div>
                     <CardActions className={this.props.actions} disableActionSpacing>
                       <div style={{width: '20%', textAlign: 'center', display: 'flex'}}>
@@ -305,6 +312,7 @@ class Cards extends React.Component {
               }
           })
         }
+        this.searchPlaces('');
   }
 
   //adds the passed id to the database and adds the lat and lng to a list for the trip creation
@@ -321,6 +329,7 @@ class Cards extends React.Component {
         dataType:"json"})
         .done((response) => {
           if(response['response'] == "True"){
+            this.props.snackbar('Added To Trip!')
             this.getTripPlaces();
           }
         })
@@ -328,10 +337,13 @@ class Cards extends React.Component {
 
     let tempInTrip = this.state.inTrip;
     tempInTrip.push(id);
+
     this.setState({inTrip: tempInTrip}, function(){
-      this.props.onAddPlaceToTrip(this.state.trip);
-      this.getTripPlaces();
-      this.searchPlaces("addToTrip");
+      if(!sessionStorage.getItem('username')){
+        this.props.snackbar('Added To Trip!')
+        this.getTripPlaces();
+      }
+        this.searchPlaces("addToTrip");
     })
 
   }
@@ -350,6 +362,7 @@ class Cards extends React.Component {
         dataType:"json"})
         .done((response) => {
           if(response['response'] == "True"){
+            this.props.snackbar('Removed From Trip!')
             this.getTripPlaces();
           }
         })
@@ -367,8 +380,11 @@ class Cards extends React.Component {
     });*/
 
     this.setState({inTrip: tempInTrip}, function(){
-      this.searchPlaces('removeFromTrip');
-      this.getTripPlaces();
+      if(!sessionStorage.getItem('username')){
+        this.props.snackbar('Removed From Trip!')
+        this.getTripPlaces();
+      }
+        this.searchPlaces('removeFromTrip');
     })
   }
 
@@ -430,7 +446,7 @@ class Cards extends React.Component {
       this.getPlaces(data);
     }
 
-    if(message == ("loggedIn")){
+    if(message == "loggedIn" || message == "loggedOut"){
       data = this.state.filter;
       this.getPlaces(data);
     }
@@ -454,8 +470,35 @@ class Cards extends React.Component {
 
   }
 
+  getPhotos = (placeID) => {
+    $.ajax({
+      url:"https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A",
+      type:"GET",
+      contentType:"application/json; charset=utf-8",
+      dataType:"json"})
+      .done((response) => {
+       const { classes } = this.props;
+        const result = response['result']['photos'].map((value) => (
+          <img className="image" style={{width:'100%', height: '100%', objectFit: 'cover', position: 'relative', zIndex: 1}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "10000"+ "&maxheight=" + "10000" + "&photoreference=" + value['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A"}/>
+        ))
+        this.props.modalPhotos(result);
+     })
+  }
+
+  openPhotoModal = (photo) => {
+    this.props.modalPhotos(photo);
+  }
+
   //sends ajax request to get places data
   getPlaces = (data) => {
+
+    this.setState({items: [<div className='sweet-loading'>
+      <PulseLoader
+        color={'#123abc'}
+        loading={this.state.loading}
+      />
+    </div>]})
+
     $.ajax({
       url:"https://experiencenyc.herokuapp.com/queryplaces",
       type:"GET",
@@ -468,7 +511,7 @@ class Cards extends React.Component {
        if(response['response'] != "There is no values"){
          const result = response.map((value) =>
          (<Grid item xl={3} lg={4} md={6} sm={12} xs={12}>
-           <Card className={this.inTrip(value['id'] && this.props.tripMode) ? classes.card2 : classes.card1}>
+           <Card id="card" className={this.inTrip(value['id'] && this.props.tripMode) ? classes.card2 : classes.card1}>
              <CardHeader classes={{subheader: classes.subheader}}
                avatar={
                  <Avatar aria-label="Recipe" src={value['icon']} className={this.props.avatar}/>
@@ -476,8 +519,8 @@ class Cards extends React.Component {
                title={value['name']}
                subheader={value['formatted_address']}
              />
-           <div style={{overflow:'hidden'}}>
-              <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
+           <div style={{overflow:'hidden'}} onClick={() =>{this.getPhotos(value['place_id'])}}>
+              <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover', cursor: 'pointer'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
             </div>
              <CardActions className={this.props.actions} disableActionSpacing>
                <div style={{width: '20%'}}>
@@ -517,8 +560,10 @@ class Cards extends React.Component {
   componentDidMount = () => {
     this.searchPlaces("initial");
     if(sessionStorage.getItem('username')){
+      this.setState({loggedIn: true}, function(){
       this.getTripPlaces();
       this.getTripPlacesIDs();
+      })
     }
 
     /*if (navigator.geolocation) {
@@ -528,11 +573,9 @@ class Cards extends React.Component {
     }*/
 
     function showPosition(position) {
-      console.log(position);
       $.get(
           "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + position.coords.latitude + ',' + position.coords.longitude + "&key=AIzaSyBUJaE_AJdQNfNjyqiiAs02Zv-ZXJQxp1k"),
           function(data) {
-            console.log(data);
           }
     }
 
@@ -569,15 +612,19 @@ class Cards extends React.Component {
       if(nextProps.loggedIn != this.props.loggedIn){
         if(nextProps.loggedIn){
           this.setState({inTrip: [], loggedIn: true}, function() {
+            this.searchPlaces("loggedIn");
             this.getTripPlaces();
           });
-
         }
         else{
           this.setState({inTrip: [], loggedIn: false}, function() {
+            this.searchPlaces("loggedOut");
             this.getTripPlaces();
           });
         }
+      }
+      else{
+        this.setState({loggedIn: nextProps.loggedIn})
       }
 
       if(nextProps.removeFromTrip){
@@ -593,7 +640,7 @@ class Cards extends React.Component {
 
     return (
       <div id="cardDiv" style={{margin: '1em', height:  window.innerWidth <= 760 ? '75vh' : '100vh',overflowY: 'auto', overflowX: 'hidden'}} onScroll={this.handleScroll}>
-        <Grid container spacing={40} justify={'center'} style={{padding: 25, paddingBottom: window.innerWidth <= 760 ? '1em' : '12em'}}>
+        <Grid container spacing={40} justify={'center'} style={{padding: 25, paddingBottom: window.innerWidth <= 760 ? '1em' : '12em', alignItems: 'center', height: this.state.items.length == 1 ? '100%' : 'auto'}}>
           {this.state.items}
         </Grid>
       </div>

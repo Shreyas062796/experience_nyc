@@ -28,6 +28,7 @@ import noPhoto from "./Images/nophoto.png";
 const styles = theme => ({
   card: {
     maxWidth: 400,
+    borderRadius: '4px',
   },
   subheader: {
     height: '5em'

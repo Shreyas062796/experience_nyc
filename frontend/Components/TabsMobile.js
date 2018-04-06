@@ -32,13 +32,22 @@ class FullWidthTabs extends React.Component {
   };
 
   handleChange = (event, value) => {
-    this.setState({value: value });
-    this.props.tabChange(this.state.pageKeys[value]);
+    if(this.props.loggedIn || (!this.props.loggedIn && (value != 0))){
+      this.setState({value: value });
+      this.props.tabChange(this.state.pageKeys[value])
+    }
+    else{
+      this.popupLogin();
+    }
   };
 
   handleChangeIndex = index => {
     this.setState({ value: index });
   };
+
+  popupLogin = () => {
+    this.props.logginPopup();
+  }
 
   componentWillReceiveProps = (nextProps) =>{
 
@@ -73,7 +82,7 @@ class FullWidthTabs extends React.Component {
             textColor="primary"
             fullWidth
           >
-            <Tab label="Recommended" disabled={this.state.disabled}/>
+            <Tab label="Recommended"/>
             <Tab label="Search"/>
           </Tabs>
         </AppBar>
