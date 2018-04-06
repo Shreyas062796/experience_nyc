@@ -24,10 +24,13 @@ import Add from 'material-ui-icons/Add';
 import Tooltip from 'material-ui-next/Tooltip';
 import cyan from 'material-ui-next/colors/cyan';
 import eventbriteLogo from "./Images/eventbriteLogo.png";
+import noPhoto from "./Images/nophoto.png";
 
 const styles = theme => ({
   card: {
     maxWidth: 400,
+    borderRadius: '4px',
+
   },
   subheader: {
     height: '5em'
@@ -213,13 +216,13 @@ class Events extends React.Component {
          <Card className={this.props.card}>
            <CardHeader classes={{root: classes.subheader, title: classes.title}}
              avatar={
-               <Avatar aria-label="Recipe" src={value['logo']['original']['url']} className={this.props.avatar}/>
+               <Avatar aria-label="Recipe" src={value['logo'] ? value['logo']['original']['url'] : noPhoto} className={this.props.avatar}/>
              }
              title={value['name']['text']}
              subheader="Address"
            />
          <div style={{overflow:'hidden'}}>
-            <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={value['logo']['url']}/>
+            <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={value['logo'] ? value['logo']['original']['url'] : noPhoto}/>
           </div>
            <CardActions className={this.props.actions} disableActionSpacing>
              <div style={{width: '25%'}}>
@@ -228,7 +231,7 @@ class Events extends React.Component {
              <div style={{width: '50%', textAlign: 'center'}}>
                 {/*this.isFree(value['is_free'])*/}
                 <Button href={value['url']}  target="_blank" style={{minWidth: '0px', width:'10em', padding: '0px'}}>
-                   <img src={eventbriteLogo} style={{width: '100%', height: '100%'}}/>
+                   <img src={eventbriteLogo} style={{width: '7em', height: '100%'}}/>
                 </Button>
              </div>
              <div style={{width: '25%', textAlign: 'right'}}>

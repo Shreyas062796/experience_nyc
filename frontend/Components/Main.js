@@ -33,6 +33,9 @@ import Modal from 'material-ui-next/Modal';
 import Badge from 'material-ui-next/Badge';
 import Divider from 'material-ui-next/Divider';
 import App from '../src/App';
+import Snackbar from 'material-ui-next/Snackbar';
+import MainModal from './MainModal.js';
+import PhotoModal from './PhotoModal.js';
 
 const drawerWidth = 300;
 
@@ -57,6 +60,9 @@ const styles = theme => ({
     ':hover': {
       opacity: 0.5
     }
+  },
+  login: {
+    fontSize: '1em'
   },
   appBar: {
     position: 'absolute',
@@ -145,6 +151,10 @@ class Main extends React.Component {
     tripPlaces: [],
     removeFromTrip: "",
     loggedIn: false,
+    snackbarMessage: '',
+    snackbarOpen: false,
+    photos: [],
+    photoModalOpened: false
   };
 
   componentWillMount = () => {
@@ -198,7 +208,7 @@ class Main extends React.Component {
   }
 
   handleModalClose = () => {
-    this.setState({clicked: ''})
+    this.setState({clicked: '', photoModalOpened: false})
   }
 
   setFilter = (response) => {
@@ -217,6 +227,13 @@ class Main extends React.Component {
   handlePage = (page) => {
     this.setState({
       currentPage: page
+    })
+  }
+
+  snackbar = (message) => {
+    this.setState({
+      snackbarOpen: true,
+      snackbarMessage: message
     })
   }
 
@@ -274,6 +291,25 @@ class Main extends React.Component {
     return $('header').css('height');
   }
 
+  handleLoginPopup = () => {
+    this.handleLoginClick();
+  }
+
+  setModalPhotos = (photos) => {
+    console.log(photos)
+    let temp = [];
+    temp.push(photos);
+    this.setState({photos: temp, photoModalOpened: true});
+  }
+
+  handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ snackbarOpen: false });
+  };
+
   shouldComponentUpdate(nextProps, nextState){
     if(nextState.clicked == 0 || nextState.clicked == 1){
       return true;
@@ -319,15 +355,12 @@ class Main extends React.Component {
                           </div>);
     }
     else {
-      userAppbarOption = (<Typography style={{color: 'white', cursor: 'pointer'}}>
-                            <a className={classes.hover}
-                               onClick={this.handleLoginClick}>
-                               Login
-                            </a> | <a className={classes.hover}
-                               onClick={this.handleRegisterClick}>
-                               Signup
-                            </a>
-                          </Typography>);
+      userAppbarOption = (<div><Button style={{color: 'white', padding: '0px'}} onClick={this.handleLoginClick}>
+                             Login
+                          </Button>
+                          <Button style={{color: 'white', padding: '0px'}} onClick={this.handleRegisterClick}>
+                             Signup
+                          </Button></div>);
 
     }
 
@@ -348,7 +381,7 @@ class Main extends React.Component {
                 </Typography>
               </div>
               <div style={{display: 'inline-block', width: '34%', textAlign: 'center'}}>
-                <Typography style={{color: 'white', display: 'inline-block'}}>Trip Mode</Typography>
+                <Typography style={{color: 'white', display: 'inline-block', fontSize: '1.25rem'}}>Trip Mode</Typography>
                 <Switch
                   checked={this.state.tripMode}
                   onChange={this.handleTripSwitch('tripMode')}
@@ -362,14 +395,15 @@ class Main extends React.Component {
               <div style={{width: '33%', alignItems: 'center', justifyContent: 'flex-end', display: 'flex'}}>
                 {userAppbarOption}
 
-                <IconButton
+                <Button
+                  style={{padding: '0px', color: 'white'}}
                   aria-label="open drawer"
                   onClick={this.handleDrawerOpen}
                   className={classNames(classes.menuButton, drawerOpen && classes.hide)}
                 >
-                  <Typography style={{color: 'white'}}>Trips</Typography>
+                  Trip Cart
                   <Place color="white" />
-                </IconButton>
+                </Button>
               </div>
             </Toolbar>
 
@@ -390,14 +424,30 @@ class Main extends React.Component {
               {/*<App locations={this.state.tripLocations}/>*/}
             </div>
           </Modal>
+          {/*<MainModal />*/}
+          <PhotoModal
+            photos={this.state.photos}
+            onClose={this.handleModalClose}
+            open={this.state.photoModalOpened}
+          />
           <LoginModal
             clicked={this.state.clicked}
             onClose={this.handleModalClose}
             loggedIn={this.handleLogin}
             registered={this.handleRegister}
           />
+          <Snackbar
+            anchorOrigin={{vertical: 'bottom',horizontal: 'left'}}
+            open={this.state.snackbarOpen}
+            onClose={this.handleSnackbarClose}
+            autoHideDuration={1000}
+            SnackbarContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            message={<span id="message-id">{this.state.snackbarMessage}</span>}
+          />
             <div className={classes.drawerHeader} />
-            <Tabs pageChange={this.handlePage} loggedIn={this.state.loggedIn}/>
+            <Tabs pageChange={this.handlePage} loggedIn={this.state.loggedIn} logginPopup={this.handleLoginPopup}/>
               <div style={{display: this.handlePageDisplay('Recommended')}}>
                 <Recommended
                   filter={this.state.filter}
@@ -406,6 +456,10 @@ class Main extends React.Component {
                   updateTripPlaces={this.updateTripPlaces}
                   loggedIn={this.state.loggedIn}
                   handleScroll={this.handleScroll}
+                  snackbar={this.snackbar}
+                  inTrip={this.state.tripPlaces}
+                  modalPhotos={this.setModalPhotos}
+
                 />
               </div>
               <div style={{display: this.handlePageDisplay('Places')}}>
@@ -415,15 +469,29 @@ class Main extends React.Component {
                   tripMode={this.state.tripMode}
                   onAddPlaceToTrip={this.updateTripLocations}
                   updateTripPlaces={this.updateTripPlaces}
+                  modalPhotos={this.setModalPhotos}
                   loggedIn={this.state.loggedIn}
                   handleScroll={this.handleScroll}
+                  snackbar={this.snackbar}
                 />
               </div>
               <div style={{display: this.handlePageDisplay('Events')}}>
-                <Events handleScroll={this.handleScroll}/>
+                <Events
+                  handleScroll={this.handleScroll}
+                  snackbar={this.snackbar}/>
               </div>
               <div style={{display: this.handlePageDisplay('Favorites')}}>
-                <Favorites page={this.state.currentPage} handleScroll={this.handleScroll}/>
+                <Favorites
+                  page={this.state.currentPage}
+                  tripMode={this.state.tripMode}
+                  onAddPlaceToTrip={this.updateTripLocations}
+                  updateTripPlaces={this.updateTripPlaces}
+                  loggedIn={this.state.loggedIn}
+                  handleScroll={this.handleScroll}
+                  snackbar={this.snackbar}
+                  inTrip={this.state.tripPlaces}
+                  modalPhotos={this.setModalPhotos}
+                />
               </div>
           </main>
           <Drawer

@@ -14,7 +14,7 @@ import SelectField from 'material-ui/SelectField';
 import Select from 'material-ui-next/Select';
 import MenuItem from 'material-ui/MenuItem';
 import Grid from 'material-ui-next/Grid';
-import { FormControl } from 'material-ui-next/Form';
+import { FormControl, FormGroup } from 'material-ui-next/Form';
 import Button from 'material-ui-next/Button';
 import Input, { InputLabel } from 'material-ui-next/Input';
 import ExpansionPanel, {
@@ -66,7 +66,22 @@ const styles = theme => ({
   },
   typography: {
     fontSize: '1.5rem'
-  }
+  },
+  input: {
+    height: '72px !important',
+  },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+  menu: {
+    width: 200,
+  },
 });
 
 class FilterBar extends React.Component {
@@ -74,7 +89,8 @@ class FilterBar extends React.Component {
     catagories: [],
     prices: [],
     expanded: null,
-    filter: {types: [''], price_level: [''], num: '10'}
+    filter: {types: [''], price_level: [''], num: '10'},
+    distance: ''
   };
 
   handleChangeCatagories = (event, index, catagories) => this.setState({catagories});
@@ -98,7 +114,7 @@ class FilterBar extends React.Component {
     var distance = $('#distance').val();
 
     var data = {types: catagory, price_level: prices, num: '100'}
-    this.setState({filter: data}, function () {
+    this.setState({filter: data, expanded: null}, function () {
         this.handleFilterChange();
     });
   }
@@ -127,6 +143,12 @@ class FilterBar extends React.Component {
     ));
   }
 
+  handleDistanceChange = name => event => {
+    this.setState({
+      [name]: event.target.value,
+    });
+  };
+
   render() {
     const { catagories, prices, expanded } = this.state;
     const { classes } = this.props;
@@ -151,7 +173,7 @@ class FilterBar extends React.Component {
 
                   <Grid item xl={3} lg={3} md={3} sm={12} xs={12}>
                     <SelectField
-                      style={{height: '72px'}}
+                      className={classes.input}
                       id='catagory'
                       fullWidth={true}
                       multiple={true}
@@ -173,7 +195,7 @@ class FilterBar extends React.Component {
                   </Grid>
                   <Grid item xl={1} lg={3} md={2} sm={6} xs={6}>
                     <SelectField
-                      style={{height: '72px'}}
+                      className={classes.input}
                       id='price'
                       fullWidth={true}
                       multiple={true}
