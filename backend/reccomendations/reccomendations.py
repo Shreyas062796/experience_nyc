@@ -1,16 +1,19 @@
 import pandas as pd
-import mongoConnector as mg
+# import mongoConnector as mg
 from pprint import pprint
-import lib.getKeywords as key
-import events.events_script as ev
-from maps.geo import addressToGeo
+import sys, os
+sys.path.append(os.path.abspath(os.path.join('..', '')))
+from places.placesmongo import *
+sys.path.append(os.path.abspath(os.path.join('..', '')))
+from lib.getKeywords import *
+sys.path.append(os.path.abspath(os.path.join('..', '')))
+from events.events_script import *
+sys.path.append(os.path.abspath(os.path.join('..', '')))
+from maps.geo import *
 
-from random import shuffle
-
-placesconnector = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
-eventsconnector = mg.MongoConnector("ds123619.mlab.com", "23619", "admin","admin","enyc")
-keywords = key.GetKeywords("AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o")
-events = ev.getEvents()
+placesconnector = PlacesMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc")
+keywords = GetKeywords("AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o")
+events = getEvents()
 class Reccomendations:
 	def __init__(self,username,address):
 		self.user = username
@@ -44,7 +47,7 @@ class Reccomendations:
 		reccomendedplaces = []
 		curCoordinates = addressToGeo(self.address)
 		# print(curCoordinates)
-		places = placesconnector.getPlacesInRadius(curCoordinates['lat'],curCoordinates['lng'],5)
+		places = placesconnector.getPlacesInRadius(curCoordinates['lat'],curCoordinates['lng'],30)
 		userplaces = self.getTripsandPlaces()[1]
 		for place in places:
 			for userplaceid in userplaces['id']:
@@ -145,19 +148,17 @@ class Reccomendations:
 
 	def EventReccomendations(self):
 		reccomendedplaces = self.PlaceReccomendation()
-		db = eventsconnector.EventsclientConnect()
 		curCoordinates = addressToGeo(self.address)
 		# print(curCoordinates['name'])
 		# for x in db.events.find({'address':{'$nearSphere':[curCoordinates['lng'],curCoordinates['lat']],'$maxDistance':3*1609}}):
 		# 	print(x)
-		for x in db.events.find({}):
-			print(x)
-			
-if __name__ == "__main__":
-	reccomender = Reccomendations('test','269 Amsterdam Ave, New York, NY 10023')
-	# reccomender.getPlacesInRadius('269 Amsterdam Ave, New York, NY 10023')
-	# reccomender.PlaceReccomendation()
-	print('starting')
-	reccomender.GetPlacesBasedFavs()
-	# reccomender.getTripsandPlaces()
-	# reccomender.EventReccomendations()
+		
+# if __name__ == "__main__":
+# 	reccomender = Reccomendations('test','269 Amsterdam Ave, New York, NY 10023')
+# 	# reccomender.getPlacesInRadius('269 Amsterdam Ave, New York, NY 10023')
+# 	print(reccomender.PlaceReccomendation())
+# 	# reccomender.PlaceReccomendation()
+# 	print('starting')
+# 	reccomender.GetPlacesBasedFavs()
+# 	# reccomender.getTripsandPlaces()
+# 	# reccomender.EventReccomendations()
