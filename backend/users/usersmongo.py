@@ -92,7 +92,7 @@ class UsersMongo:
 		user = db.users.find_one({"username": username})
 		if(user['favorite_places']):
 			for placeId in user['favorite_places']:
-				place = db.places.find_one({"id": placeId})
+				place = db.places.find_one({"place_id": placeId})
 				if(place is not None):
 					place['_id'] = str(place['_id'])
 					favoritePlaces.append(place)
@@ -127,7 +127,7 @@ class UsersMongo:
 		user = db.users.find_one({"username": username})
 		if(user['current_trip_places']):
 			for placeId in user['current_trip_places']:
-				place = db.places.find_one({"id": placeId})
+				place = db.places.find_one({"place_id": placeId})
 				if(place is not None):
 					place['_id'] = str(place['_id'])
 					TripPlaces.append(place)

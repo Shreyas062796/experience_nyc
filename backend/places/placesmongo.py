@@ -81,7 +81,7 @@ class PlacesMongo:
 		db = self.clientConnect()
 		if(placeIds):
 			for placeid in placeIds:
-				place = db.places.find_one({'id':placeid})
+				place = db.places.find_one({'place_id':placeid})
 				place['_id'] = str(place['_id'])
 				places.append(place)
 		return(places)
