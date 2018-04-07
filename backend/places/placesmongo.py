@@ -1,5 +1,5 @@
 from pymongo import *
-from places import NYCPlaces
+from .places import NYCPlaces
 from bson.objectid import *
 import random
 import json

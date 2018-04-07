@@ -12,11 +12,15 @@ import datetime
 # import lib.sendmail as mail
 # from events import events, events_script
 # from maps.geo import addressToGeo
-# from lib.caching import Cacher, EventCacher
+from lib.caching import Cacher, EventCacher
 
 
 # import blueprints here
-import events, reccomendations, trips, users, places
+import events
+import places
+import reccomendations
+import trips
+import users
 
 
 DEBUG = True

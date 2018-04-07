@@ -1,5 +1,7 @@
-from flask import Blueprint 
-import placesmongo as ps
+from flask import Blueprint
+# import sys, os
+# sys.path.append(os.path.abspath(os.path.join('..', 'places')))
+from .placesmongo import PlacesMongo
 
 
 def add_routes(app=None):
@@ -12,7 +14,7 @@ def add_routes(app=None):
 			num = request.args['num']
 			price_level = request.args.getlist('price_level[]')
 			types = request.args.getlist('types[]')
-			places = ps.PlacesMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(types,price_level,int(num))
+			places = PlacesMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(types,price_level,int(num))
 			if(places):
 				return(jsonify(places))
 			elif(places == []):

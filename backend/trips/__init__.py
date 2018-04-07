@@ -1,5 +1,5 @@
 from flask import Blueprint 
-import tripmongo as trip
+from backend.trips.tripmongo import TripMongo
 
 
 def add_routes(app=None):
@@ -16,8 +16,8 @@ def add_routes(app=None):
 		# if(request.method == 'POST'):
 		# 	username = request.args['username']
 		info = request.get_json()
-		trip = trip.TripMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc").createTrip(info['placeIds'],info['trip_id'],info['username'],info['distance'])
-		populated = trip.TripMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateTrip(trip)
+		trip = TripMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc").createTrip(info['placeIds'],info['trip_id'],info['username'],info['distance'])
+		populated = TripMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateTrip(trip)
 		if(populated == "added"):
 			return(jsonify({"response":"Trip Added"}))
 		else:
@@ -27,7 +27,7 @@ def add_routes(app=None):
 	def makeTripPublic():
 		if request.method == "GET":
 			tripid = int(request.args['amount'])
-		trip = trip.TripMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc").makeTripPublic(tripid)
+		trip = TripMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc").makeTripPublic(tripid)
 		if(trip == "updated"):
 			return("updated")
 		else:

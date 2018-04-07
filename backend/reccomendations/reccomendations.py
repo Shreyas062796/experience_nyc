@@ -2,18 +2,18 @@ import pandas as pd
 # import mongoConnector as mg
 from pprint import pprint
 import sys, os
-sys.path.append(os.path.abspath(os.path.join('..', 'places')))
-import placesmongo as ps
-sys.path.append(os.path.abspath(os.path.join('..', 'lib')))
-import getKeywords as key
-sys.path.append(os.path.abspath(os.path.join('..', 'events')))
-import events_script as ev
-sys.path.append(os.path.abspath(os.path.join('..', 'maps')))
-from geo import addressToGeo
+sys.path.append(os.path.abspath(os.path.join('..', '')))
+from places.placesmongo import *
+sys.path.append(os.path.abspath(os.path.join('..', '')))
+from lib.getKeywords import *
+sys.path.append(os.path.abspath(os.path.join('..', '')))
+from events.events_script import *
+sys.path.append(os.path.abspath(os.path.join('..', '')))
+from maps.geo import *
 
-placesconnector = ps.PlacesMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc")
-keywords = key.GetKeywords("AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o")
-events = ev.getEvents()
+placesconnector = PlacesMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc")
+keywords = GetKeywords("AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o")
+events = getEvents()
 class Reccomendations:
 	def __init__(self,username,address):
 		self.user = username
