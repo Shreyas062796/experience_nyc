@@ -1,5 +1,7 @@
 import googlemaps
+import time
 from pprint import pprint
+from datetime import datetime
 '''
 coor_list is a list of lat, long respectivly
 a radius is the radius (in meters) to a maximum of 50,000m/50 km
@@ -13,8 +15,39 @@ def getNYCBars():
 	obj = NYCPlaces("AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A", 40,-73)
 	return(obj.getNYCBars())
 
+place_types = [
+	'amusement_park', 
+	'bakery',
+	'bar', 
+	'book_store',
+	'bowling_alley',
+	'cafe', 
+	'casino',
+	'clothing_store', 
+	'convenience_store', 
+	'department_store', 
+	'florist', 
+	'hair_care', 
+	'home_goods_store',
+	'jewelry_store',
+	'library', 
+	'meal_takeaway',
+	'movie_theater', 
+	'museum', 
+	'night_club', 
+	'painter',
+	'park',
+	'restaurant', 
+	'shopping_mall',
+	'stadium', 
+	'store', 
+	'zoo'
+]
 
-google_types = ['amusement_park', 'bakery', 'cafe', 'clothing_store', 'convenience_store', 'department_store', 'florist', 'hair_care', 'library', 'movie_theater', 'museum', 'night_club', 'bar', 'restaurant', 'stadium', 'store', 'zoo']
+# 3 points in manhattan
+coors_manhatan = [(40.733588, -73.993926), (40.780789, -73.973756), (40.813667, -73.935647)]
+# coors_manhatan = [(40.733588, -73.993926)]
+
 class NYCPlaces:
 	def __init__(self,key,lat,lng):
 		self.key = key
@@ -28,12 +61,60 @@ class NYCPlaces:
 		return(gmap)
 
 	def getAllPlaces(self):
-		gmap = self.setClient()
-		allPlaces = {}
-		placeType = ['amusement_park','bakery','cafe','clothing_store','convenience_store','department_store','florist','hair_care','library','movie_theater','museum','night_club','bar','restaurant','stadium','store','zoo']
-		for place in placeType:
-			allPlaces[place] = gmap.places(place,location=[self.lat,self.lng],type=place)
+		gmap = self.setClient() # client setter
+		allPlaces = {} # return value
+
+		# initialize all values for when you load them in
+		for place in place_types:
+			allPlaces[place] = list()
+
+
+		# placeType = ['amusement_park','bakery','cafe','clothing_store','convenience_store','department_store','florist','hair_care','library','movie_theater','museum','night_club','bar','restaurant','stadium','store','zoo']
+		for coors in coors_manhatan:
+			for place in place_types:
+				# ok so i have to go around the limitation of google
+				reply = gmap.places("", location=[coors[0],coors[1]],type=place, radius=3219)
+				results = reply['results']
+				
+
+				# this will check if there is an extra page, allowing me to get upto 60 places
+				next_page_token = ""
+				time.sleep(2) # have to wait for key to be up
+				while next_page_token != "DONE":
+					try:
+						next_page_token = reply['next_page_token']
+
+						# print(next_page_token)
+						reply = gmap.places('',page_token=str(next_page_token))
+						results.extend(reply['results'])
+						time.sleep(2) # have to wait for key to be up
+
+					except KeyError:
+						next_page_token = "DONE"
+
+
+				allPlaces[place].extend(results) # 2 miles
+				print("finished: {} found: {} current time: {}".format(place, len(allPlaces[place]), datetime.now()))
+				# if len(allPlaces[place])< 20:
+				# 	print(reply)
+		
+		# print total amount of places
+		count = 0
+		for place in allPlaces:
+			for location in place:
+				count+=1
+
+
+		# print(count)
+
+		# print(allPlaces)
+		# import pprint
+		# pprint.PrettyPrinter(indent=0).pprint(allPlaces)
+
 		return(allPlaces)
+	
+
+
 	# def getNYCRestaurants(self):
 	# 	gmap = self.setClient()
 	# 	return(gmap.places("restaurant",location=[self.lat,self.lng],type="restaurant"))

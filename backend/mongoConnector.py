@@ -20,7 +20,7 @@ class MongoConnector:
 	#connects to mongo server based on parameters
 	def clientConnect(self):
 		connection = 'mongodb://' + str(self.username) + ':' + str(self.password) + '@' + str(self.clientHost) + ':' + str(self.clientPort) + '/' + str(self.database)
-		client = MongoClient(connection).experience_nyc #places and users database
+		client = MongoClient(connection).enyc#places and users database
 		# client = MongoClient(connection).enyc #events database
 		return(client)
 
@@ -40,6 +40,26 @@ class MongoConnector:
 					print("populated")
 				except:
 					continue
+
+	# this is me updating the populate Places to work with the new code
+	def populatePlacesNew(self):
+		allplaces = places.getAllPlaces()
+		# connection = 'mongodb://' + str(self.username) + ':' + str(self.password) + '@' + str(self.clientHost) + ':' + str(self.clientPort) + '/' + str(self.database)
+		# db = MongoClient(connection).places #places and users database
+		db = self.clientConnect()
+
+
+
+		for placeId in allplaces:
+			for place in allplaces[placeId]:
+				try:
+					db.places.insert_one(place)
+					print("populated")
+				except Exception as e:
+					print(e)
+					print("couldn't add: {}".format(count))
+
+
 
 	#gets all documents from places collection
 	def getPlaces(self):
@@ -281,10 +301,11 @@ class MongoConnector:
 
 
 if __name__ == "__main__":
-	Experience = MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
+	# Experience = MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
+	Experience = MongoConnector("ds123619.mlab.com","23619","admin","admin","enyc")
 	# Experience.getUserInfo('test1')
 	# Experience = MongoConnector('ds123619.mlab.com', '23619', 'admin', 'admin', 'enyc'
-	# Experience.populatePlaces()
+	Experience.populatePlacesNew()
 	# pprint(Experience.getPlacesInRadius(40.7733125,-73.9837555,2))
 	# print(Experience.getFavoritePlaces('test1'))
 	# Experience.getBars()
@@ -293,9 +314,9 @@ if __name__ == "__main__":
 	# print(Experience.queryPlaces([''],[''],100))
 	# pprint(Experience.QueryBars(2,2,2))
 	# Experience.addFavoritePlaces("testUser",134)
-	tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
-	for i in tripnames:
-		trip = Experience.createTrip(['8f01b4b28a3d06af43a7df2f58adf9522a3fb2a9','791ead07b3b855e3ca3d7171d74e05f523e211db','4343309a95b24365fa34b002304e06d5ce71ff71','4fb9491c786ae9f79420e96777a54a935d92f34c'],i,'test',10)
-		Experience.populateTrip(trip)
+	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
+	# for i in tripnames:
+		# trip = Experience.createTrip(['8f01b4b28a3d06af43a7df2f58adf9522a3fb2a9','791ead07b3b855e3ca3d7171d74e05f523e211db','4343309a95b24365fa34b002304e06d5ce71ff71','4fb9491c786ae9f79420e96777a54a935d92f34c'],i,'test',10)
+		# Experience.populateTrip(trip)
 	# pprint(Experience.queryTrip('test'))
 	#QueryRestaurants(3,4)
