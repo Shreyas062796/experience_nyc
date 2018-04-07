@@ -30,6 +30,13 @@ class UsersMongo:
 				return(True)
 		return(False)
 
+	def getUserInfo(self, username):
+		db = self.clientConnect()
+		user = db.users.find_one({"username": username})
+		print(user)
+		user['_id'] = str(user['_id'])
+		return(user)
+
 	#verifies email with the user 
 	def verifyEmail(self,username,unique_id):
 		db = self.clientConnect()

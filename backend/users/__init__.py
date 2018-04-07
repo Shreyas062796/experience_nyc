@@ -18,6 +18,14 @@ def add_routes(app=None):
 		UsersMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
 		return(jsonify({"response":"True"}))
 
+	@users.route('/getuserdata', methods=['GET'])
+	def getUserData():
+		username = request.get_json()['username']
+		# print(info)
+		# info = request.args['username']
+		userinfo = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc").getUserInfo(username)
+		return jsonify(userinfo)
+
 	#authenticates user for database
 	@users.route('/authenticate', methods = ['POST'])
 	def auth():
@@ -26,7 +34,6 @@ def add_routes(app=None):
 			return(jsonify({"response":"True"}))
 		else:
 			return(jsonify({"response":"False"}))
-
 
 	@users.route('/verify', methods = ['POST'])
 	def verify():
