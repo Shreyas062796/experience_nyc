@@ -6,8 +6,8 @@ import hashlib
 import uuid
 from pprint import pprint
 import sys, os
-sys.path.append(os.path.abspath(os.path.join('..', '')))
-import places.places as ps
+sys.path.append(os.path.abspath(os.path.join('..', 'places')))
+import placesmongo as ps
 
 places = ps.NYCPlaces('AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A',40.7831,-73.9712)
 

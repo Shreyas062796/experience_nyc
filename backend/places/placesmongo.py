@@ -1,5 +1,5 @@
 from pymongo import *
-import places as ps
+from places import NYCPlaces
 from bson.objectid import *
 import random
 import json
@@ -7,7 +7,7 @@ import hashlib
 import uuid
 from pprint import pprint
 
-places = ps.NYCPlaces('AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A',40.7831,-73.9712)
+places = NYCPlaces('AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A',40.7831,-73.9712)
 
 class PlacesMongo:
 	def __init__(self,clientHost,clientPort,username,password,database):

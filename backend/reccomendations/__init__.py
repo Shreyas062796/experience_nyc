@@ -1,5 +1,5 @@
 from flask import Blueprint 
-import reccomendations
+import reccomendations as rec
 
 
 def add_routes(app=None):

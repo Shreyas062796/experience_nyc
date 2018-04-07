@@ -2,20 +2,16 @@ import pandas as pd
 # import mongoConnector as mg
 from pprint import pprint
 import sys, os
-sys.path.append(os.path.abspath(os.path.join('..', '')))
-import places.PlacesMongo as ps
-import lib.getKeywords as key
-import events.events_script as ev
-from maps.geo import addressToGeo
+sys.path.append(os.path.abspath(os.path.join('..', 'places')))
+import placesmongo as ps
+sys.path.append(os.path.abspath(os.path.join('..', 'lib')))
+import getKeywords as key
+sys.path.append(os.path.abspath(os.path.join('..', 'events')))
+import events_script as ev
+sys.path.append(os.path.abspath(os.path.join('..', 'maps')))
+from geo import addressToGeo
 
-<<<<<<< HEAD:backend/reccomendations/reccomendations.py
 placesconnector = ps.PlacesMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc")
-=======
-from random import shuffle
-
-placesconnector = mg.MongoConnector("ds163918.mlab.com","63918","admin","admin","experience_nyc")
->>>>>>> be4b31e9ecca51018562315f83da20224ff093cc:backend/reccomendations.py
-eventsconnector = mg.MongoConnector("ds123619.mlab.com", "23619", "admin","admin","enyc")
 keywords = key.GetKeywords("AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o")
 events = ev.getEvents()
 class Reccomendations:
@@ -152,23 +148,17 @@ class Reccomendations:
 
 	def EventReccomendations(self):
 		reccomendedplaces = self.PlaceReccomendation()
-		db = eventsconnector.EventsclientConnect()
 		curCoordinates = addressToGeo(self.address)
 		# print(curCoordinates['name'])
 		# for x in db.events.find({'address':{'$nearSphere':[curCoordinates['lng'],curCoordinates['lat']],'$maxDistance':3*1609}}):
 		# 	print(x)
-		for x in db.events.find({}):
-			print(x)
-			
-if __name__ == "__main__":
-	reccomender = Reccomendations('test','269 Amsterdam Ave, New York, NY 10023')
-	# reccomender.getPlacesInRadius('269 Amsterdam Ave, New York, NY 10023')
-<<<<<<< HEAD:backend/reccomendations/reccomendations.py
-	print(reccomender.PlaceReccomendation())
-=======
-	# reccomender.PlaceReccomendation()
-	print('starting')
-	reccomender.GetPlacesBasedFavs()
->>>>>>> be4b31e9ecca51018562315f83da20224ff093cc:backend/reccomendations.py
-	# reccomender.getTripsandPlaces()
-	# reccomender.EventReccomendations()
+		
+# if __name__ == "__main__":
+# 	reccomender = Reccomendations('test','269 Amsterdam Ave, New York, NY 10023')
+# 	# reccomender.getPlacesInRadius('269 Amsterdam Ave, New York, NY 10023')
+# 	print(reccomender.PlaceReccomendation())
+# 	# reccomender.PlaceReccomendation()
+# 	print('starting')
+# 	reccomender.GetPlacesBasedFavs()
+# 	# reccomender.getTripsandPlaces()
+# 	# reccomender.EventReccomendations()

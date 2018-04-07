@@ -6,17 +6,17 @@ import json
 import datetime
 
 # our libraries
-import mongoConnector as mg
-import reccomendations as rec
-import filtering
-import lib.sendmail as mail
-from events import events, events_script
-from maps.geo import addressToGeo
-from lib.caching import Cacher, EventCacher
+# import mongoConnector as mg
+# import reccomendations as rec
+# import filtering
+# import lib.sendmail as mail
+# from events import events, events_script
+# from maps.geo import addressToGeo
+# from lib.caching import Cacher, EventCacher
 
 
 # import blueprints here
-import events
+import events, reccomendations, trips, users, places
 
 
 DEBUG = True
