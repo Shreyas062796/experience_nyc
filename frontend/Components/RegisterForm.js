@@ -308,7 +308,7 @@ class RegisterForm extends React.Component {
         </FormControl>
         <FormControl className={classes.formControl}>
             <div style={{textAlign: "center"}}>
-              <Button id="register" className={classes.button} onClick={this.handleRegister} style={{width: '25%',color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
+              <Button id="register" className={classes.button} onClick={this.handleRegister} style={{width: '25%',color: 'white', backgroundColor: 'rgba(0, 0, 0, 0.87)'}}>
                 Register
               </Button>
             </div>
