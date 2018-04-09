@@ -308,17 +308,9 @@ if __name__ == "__main__":
 	# print(Experience.queryPlaces([''],[''],100))
 	# pprint(Experience.QueryBars(2,2,2))
 	# Experience.addFavoritePlaces("testUser",134)
-<<<<<<< HEAD:backend/mongoConnector.py
 	# tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
 	# for i in tripnames:
 		# trip = Experience.createTrip(['8f01b4b28a3d06af43a7df2f58adf9522a3fb2a9','791ead07b3b855e3ca3d7171d74e05f523e211db','4343309a95b24365fa34b002304e06d5ce71ff71','4fb9491c786ae9f79420e96777a54a935d92f34c'],i,'test',10)
 		# Experience.populateTrip(trip)
-=======
-	tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
-	# tripPlaces =[['8f01b4b28a3d06af43a7df2f58adf9522a3fb2a9','791ead07b3b855e3ca3d7171d74e05f523e211db'],[]
-	for i in tripnames:
-		trip = Experience.createTrip(["11b2bcd4b94f0bf8a0bf06a53c6c23eba5a82f19", "03a612fcf14c158ec2f7c4b61b02c534d095efde", "05cd1fdae128118f2497b55431d31201a7b4ac96", "90e1dd76028177af6ecc196b71a32695e59e6ef7", "ea7d77a25db19a89439ab5495e2d862b7cfb4337", "fd152323e7aba37814dda9b37aaff31d40b70f04", "8f15b543b258c3cd0bea4c1d5e9caa5d0e7af52a"],i,'test',10)
-		Experience.populateTrip(trip)
->>>>>>> master:backend/oldcode/mongoConnector.py
 	# pprint(Experience.queryTrip('test'))
 	#QueryRestaurants(3,4)
