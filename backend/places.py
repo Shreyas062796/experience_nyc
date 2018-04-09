@@ -63,79 +63,47 @@ class NYCPlaces:
 
 	def getAllPlaces(self):
 		gmap = self.setClient() # client setter
-		allPlaces = {} # return value
-
+		allPlaces = {} # to store the data
 		# initialize all values for when you load them in
 		for place in place_types:
 			allPlaces[place] = list()
 
-
-		# placeType = ['amusement_park','bakery','cafe','clothing_store','convenience_store','department_store','florist','hair_care','library','movie_theater','museum','night_club','bar','restaurant','stadium','store','zoo']
 		for coors in coors_manhatan:
 			for place in place_types:
 				# ok so i have to go around the limitation of google
 				reply = gmap.places("", location=[coors[0],coors[1]],type=place, radius=3219)
 				results = reply['results']
 				
-
 				# this will check if there is an extra page, allowing me to get upto 60 places
 				next_page_token = ""
 				time.sleep(2) # have to wait for key to be up
 				while next_page_token != "DONE":
 					try:
 						next_page_token = reply['next_page_token']
-
-						# print(next_page_token)
 						reply = gmap.places('',page_token=str(next_page_token))
 						results.extend(reply['results'])
 						time.sleep(2) # have to wait for key to be up
-
 					except KeyError:
 						next_page_token = "DONE"
 
-
 				allPlaces[place].extend(results) # 2 miles
 				print("finished: {} found: {} current time: {}".format(place, len(allPlaces[place]), datetime.now()))
-				# if len(allPlaces[place])< 20:
-				# 	print(reply)
-				# print("done with {}".format(place))
 		# print total amount of places
 		count = 0
 		for place in allPlaces:
 			for location in allPlaces[place]:
 				count+=1
-
-		# print(count)
-
+		# create a set of unique places
 		places_set = dict()
 		for place in allPlaces:
 			for location in allPlaces[place]:
 				places_set[location["id"]] = location
-				# print(location)
+		# this can be avoided if you optimize the first loop
+		# come back to it later
 
-		# for keys in places_set.keys():
-		# 	print(keys)
-
-		# print(allPlaces)
-		# import pprint
-		# pprint.PrettyPrinter(indent=0).pprint(allPlaces)
-
+		#return dictionary containing all places in random order
 		return(places_set)
 	
-
-
-	# def getNYCRestaurants(self):
-	# 	gmap = self.setClient()
-	# 	return(gmap.places("restaurant",location=[self.lat,self.lng],type="restaurant"))
-
-	# def getNYCCafes(self):
-	# 	gmap = self.setClient()
-	# 	return(gmap.places("cafe",location=[self.lat,self.lng],type="cafe"))
-
-	# def getNYCBars(self):
-	# 	gmap = self.setClient()
-	# 	return(gmap.places("bar",location=[self.lat,self.lng],type="bar"))
-
 	# get restaurants in a area based on coordinates
 	def getNYCRestaurantsByLoc(self,coor_list, aradius=5000):
 		gmap = self.setClient()
