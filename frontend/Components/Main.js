@@ -66,6 +66,7 @@ const styles = theme => ({
   },
   appBar: {
     position: 'absolute',
+    backgroundColor: '#24292e',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -94,6 +95,7 @@ const styles = theme => ({
   },
   drawerHeader: {
     padding: '0 8px',
+    borderLeft: '1px solid #24292e'
     //...theme.mixins.toolbar,
   },
   content: {
@@ -144,7 +146,6 @@ class Main extends React.Component {
     anchorEl: null,
     filter: {types: [''], price_level: [''], num: '100'},
     currentPage: 'Places',
-    tripMode: false,
     open: '',
     tripButton: false,
     tripLocations: [],
@@ -237,17 +238,6 @@ class Main extends React.Component {
     })
   }
 
-  handleTripSwitch = name => event => {
-    this.setState({ [name]: event.target.checked }, function() {
-      if(this.state.tripMode){
-        this.setState({tripButton: true})
-      }
-      else{
-        this.setState({tripButton: false})
-      }
-    });
-  };
-
   //Test for map*************************
   handleTripClose = () => {
     this.setState({open: ''});
@@ -273,13 +263,6 @@ class Main extends React.Component {
   }
 
   handleTripButton = () => {
-    if(this.state.tripButton){
-      return (<Button style={{width: '100%', height:'100%', backgroundColor:'#3f51b5'}} disabled={this.state.tripPlaces.length < 2} onClick={() => { this.openTripModal()}}>
-                <Typography style={{color: 'white', display: 'inline-block'}}>
-                  {(this.state.tripPlaces.length < 2) ? 'Select At Least 2 Places' : 'Start Trip'}
-                </Typography>
-              </Button>);
-    }
   }
 
   handleMenuClose = () => {
@@ -375,24 +358,12 @@ class Main extends React.Component {
 
           >
             <Toolbar disableGutters={!open}>
-              <div style={{width: '33%'}}>
-                <Typography variant="title" color="inherit" noWrap>
+              <div style={{width: '50%'}}>
+                <Typography variant="title" color="inherit" noWrap style={{fontWeight: '550'}}>
                   Experience NYC
                 </Typography>
               </div>
-              <div style={{display: 'inline-block', width: '34%', textAlign: 'center'}}>
-                <Typography style={{color: 'white', display: 'inline-block', fontSize: '1.25rem'}}>Trip Mode</Typography>
-                <Switch
-                  checked={this.state.tripMode}
-                  onChange={this.handleTripSwitch('tripMode')}
-                  value=""
-                  classes={{
-                    checked: classes.checked,
-                    bar: classes.bar,
-                  }}
-                />
-              </div>
-              <div style={{width: '33%', alignItems: 'center', justifyContent: 'flex-end', display: 'flex'}}>
+              <div style={{width: '50%', alignItems: 'center', justifyContent: 'flex-end', display: 'flex'}}>
                 {userAppbarOption}
 
                 <Button
@@ -450,8 +421,8 @@ class Main extends React.Component {
             <Tabs pageChange={this.handlePage} loggedIn={this.state.loggedIn} logginPopup={this.handleLoginPopup}/>
               <div style={{display: this.handlePageDisplay('Recommended')}}>
                 <Recommended
+                  page={this.state.currentPage}
                   filter={this.state.filter}
-                  tripMode={this.state.tripMode}
                   onAddPlaceToTrip={this.updateTripLocations}
                   updateTripPlaces={this.updateTripPlaces}
                   loggedIn={this.state.loggedIn}
@@ -463,10 +434,10 @@ class Main extends React.Component {
                 />
               </div>
               <div style={{display: this.handlePageDisplay('Places')}}>
-                <FilterBar setFilter={this.setFilter}/>
+                <FilterBar setFilter={this.setFilter} />
                 <Cards
+                  page={this.state.currentPage}
                   filter={this.state.filter}
-                  tripMode={this.state.tripMode}
                   onAddPlaceToTrip={this.updateTripLocations}
                   updateTripPlaces={this.updateTripPlaces}
                   modalPhotos={this.setModalPhotos}
@@ -483,7 +454,6 @@ class Main extends React.Component {
               <div style={{display: this.handlePageDisplay('Favorites')}}>
                 <Favorites
                   page={this.state.currentPage}
-                  tripMode={this.state.tripMode}
                   onAddPlaceToTrip={this.updateTripLocations}
                   updateTripPlaces={this.updateTripPlaces}
                   loggedIn={this.state.loggedIn}
@@ -504,7 +474,7 @@ class Main extends React.Component {
           >
             <div className={classes.drawerHeader}>
               <div style={{height: this.getToolbarHeight()}}>
-                <Badge color="primary" badgeContent={this.state.tripPlaces.length} className={classes.badge}>
+                <Badge  badgeContent={this.state.tripPlaces.length} className={classes.badge} color='primary'>
                 </Badge>
                   <Typography variant="headline" component="h1" align="right" style={{paddingTop: '.75em'}}>Trip Cart
                     <IconButton style={{marginLeft: '2em'}} onClick={this.handleDrawerClose}>
@@ -514,12 +484,16 @@ class Main extends React.Component {
               </div>
             </div>
             <Divider />
-            <div style={{overflowY: 'auto', height: '90vh'}}>
+            <div style={{overflowY: 'auto', height: '90vh', borderLeft: '1px solid #24292e'}}>
               {this.state.tripPlaces}
             </div>
             <Divider />
             <div style={{width: '100%',height: '3.5em', bottom: 0, position: 'absolute'}}>
-              {this.handleTripButton()}
+              <Button style={{width: '100%', height:'100%', backgroundColor:'#24292e'}} disabled={this.state.tripPlaces.length < 2} onClick={() => { this.openTripModal()}}>
+                <Typography style={{color: 'white', display: 'inline-block'}}>
+                  {(this.state.tripPlaces.length < 2) ? 'Select At Least 2 Places' : 'Start Trip'}
+                </Typography>
+              </Button>
             </div>
           </Drawer>
         </div>

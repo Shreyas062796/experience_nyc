@@ -1,5 +1,5 @@
 import sys
-import places
+from places.places import *
 import json
 from operator import itemgetter
 from math import sin, cos, sqrt, atan2, radians
@@ -7,7 +7,7 @@ from pprint import pprint
 
 DEBUG = True
 
-obj = places.NYCPlaces('AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o',40.7831,-73.9712)
+obj = NYCPlaces('AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o',40.7831,-73.9712)
 
 class Filtering:
 	def __init__(self, latitude, longitude, loc_type="bar"):

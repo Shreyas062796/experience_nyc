@@ -4,6 +4,7 @@ import { withStyles } from 'material-ui-next/styles';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
+import Filter from 'material-ui-icons/FilterList';
 import Sort from 'material-ui-icons/Sort';
 import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
 import DropDownMenu from 'material-ui/DropDownMenu';
@@ -52,6 +53,9 @@ const dollars = [
 const styles = theme => ({
   root: {
     flexGrow: 1,
+    backgroundColor: 'none',
+    display:'inline-flex',
+    width:'100%'
   },
   grid: {
     width: '100%',
@@ -65,7 +69,8 @@ const styles = theme => ({
     justifyContent: 'center'
   },
   typography: {
-    fontSize: '1.5rem'
+    fontSize: '1.5rem',
+    marginRight: '1em'
   },
   input: {
     height: '72px !important',
@@ -86,14 +91,14 @@ const styles = theme => ({
 
 class FilterBar extends React.Component {
   state = {
-    catagories: [],
+    categories: [],
     prices: [],
     expanded: null,
     filter: {types: [''], price_level: [''], num: '10'},
     distance: ''
   };
 
-  handleChangeCatagories = (event, index, catagories) => this.setState({catagories});
+  handleChangeCategories = (event, index, categories) => this.setState({categories});
   handlePriceChange = (event, index, prices) => this.setState({prices});
 
   handleFilterChange = () => {
@@ -109,22 +114,22 @@ class FilterBar extends React.Component {
   //on submit click grab values and change filter state
   handleSubmit = () => {
     var search = $('#search').val();
-    var catagory = this.state.catagories;
+    var category = this.state.categories;
     var prices = this.state.prices;
     var distance = $('#distance').val();
 
-    var data = {types: catagory, price_level: prices, num: '100'}
+    var data = {types: category, price_level: prices, num: '100'}
     this.setState({filter: data, expanded: null}, function () {
         this.handleFilterChange();
     });
   }
 
-  menuItems(catagories) {
+  menuItems(categories) {
     return names.map((name) => (
       <MenuItem
         key={name}
         insetChildren={true}
-        checked={catagories && catagories.indexOf(name) > -1}
+        checked={categories && categories.indexOf(name) > -1}
         value={name}
         primaryText={name}
       />
@@ -150,101 +155,103 @@ class FilterBar extends React.Component {
   };
 
   render() {
-    const { catagories, prices, expanded } = this.state;
+    const { categories, prices, expanded } = this.state;
     const { classes } = this.props;
 
     return (
-      <ExpansionPanel expanded={expanded === 'panel1'} onChange={this.handleChange('panel1')}>
-          <ExpansionPanelSummary expandIcon={<Sort />}>
-            <div style={{textAlign: 'center', width: '100%'}}>
-              <Typography className={classes.typography}>Filter</Typography>
-            </div>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-              <Grid  className={classes.grid} item container spacing={16}>
-                  <Grid item xl={3} lg={3} md={4} sm={12} xs={12}>
-                    <TextField
-                      id='search'
-                      fullWidth={true}
-                      hintText="Search"
-                      floatingLabelText="Search"
-                    />
-                  </Grid>
+      <div className={classes.root}>
+        <ExpansionPanel style={{backgroundColor: '#ffffff00', boxShadow: 'none',width:'100%'}} expanded={expanded === 'panel1'} onChange={this.handleChange('panel1')}>
+            <ExpansionPanelSummary expandIcon={<Filter />} style={{display: 'inline-flex', cursor: 'default', marginLeft: '16px', paddingRight: '0px'}}>
+              <div style={{width: '100%',display: 'inline-flex'}}>
+                <Typography className={classes.typography} style={{cursor: 'pointer'}}>Filter</Typography>
+              </div>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+                <Grid  className={classes.grid} item container spacing={16}>
+                    <Grid item xl={3} lg={3} md={4} sm={12} xs={12}>
+                      <TextField
+                        id='search'
+                        fullWidth={true}
+                        hintText="Search"
+                        floatingLabelText="Search"
+                      />
+                    </Grid>
 
-                  <Grid item xl={3} lg={3} md={3} sm={12} xs={12}>
-                    <SelectField
-                      className={classes.input}
-                      id='catagory'
-                      fullWidth={true}
-                      multiple={true}
-                      hintText="Catagory"
-                      value={this.state.catagories}
-                      onChange={this.handleChangeCatagories}
-                    >
-                      {this.menuItems(catagories)}
-                    </SelectField>
-                  </Grid>
+                    <Grid item xl={3} lg={3} md={3} sm={12} xs={12}>
+                      <SelectField
+                        className={classes.input}
+                        id='category'
+                        fullWidth={true}
+                        multiple={true}
+                        hintText="Category"
+                        value={this.state.categories}
+                        onChange={this.handleChangeCategories}
+                      >
+                        {this.menuItems(categories)}
+                      </SelectField>
+                    </Grid>
 
-                  <Grid item xl={2} lg={2} md={3} sm={6} xs={6}>
-                    <TextField
-                      id='distance'
-                      fullWidth={true}
-                      hintText="Distance"
-                      floatingLabelText="Distance (miles)"
-                    />
-                  </Grid>
-                  <Grid item xl={1} lg={3} md={2} sm={6} xs={6}>
-                    <SelectField
-                      className={classes.input}
-                      id='price'
-                      fullWidth={true}
-                      multiple={true}
-                      hintText="Price"
-                      value={this.state.prices}
-                      onChange={this.handlePriceChange}
-                    >
-                      {this.menuItemsPrices(prices)}
-                    </SelectField>
-                  </Grid>
-                  {/*<Grid item xl={1} lg={1} md={2} sm={6} xs={6}>
-                    <SelectField
-                      id='price'
-                      fullWidth={true}
-                      floatingLabelText="Price"
-                      value={this.state.price}
-                      onChange={this.handlePriceChange}
-                    >
-                      <MenuItem value={1} primaryText="$" />
-                      <MenuItem value={2} primaryText="$$" />
-                      <MenuItem value={3} primaryText="$$$" />
-                    </SelectField>
-                  </Grid>*/}
+                    <Grid item xl={2} lg={2} md={3} sm={6} xs={6}>
+                      <TextField
+                        id='distance'
+                        fullWidth={true}
+                        hintText="Distance"
+                        floatingLabelText="Distance (miles)"
+                      />
+                    </Grid>
+                    <Grid item xl={1} lg={3} md={2} sm={6} xs={6}>
+                      <SelectField
+                        className={classes.input}
+                        id='price'
+                        fullWidth={true}
+                        multiple={true}
+                        hintText="Price"
+                        value={this.state.prices}
+                        onChange={this.handlePriceChange}
+                      >
+                        {this.menuItemsPrices(prices)}
+                      </SelectField>
+                    </Grid>
+                    {/*<Grid item xl={1} lg={1} md={2} sm={6} xs={6}>
+                      <SelectField
+                        id='price'
+                        fullWidth={true}
+                        floatingLabelText="Price"
+                        value={this.state.price}
+                        onChange={this.handlePriceChange}
+                      >
+                        <MenuItem value={1} primaryText="$" />
+                        <MenuItem value={2} primaryText="$$" />
+                        <MenuItem value={3} primaryText="$$$" />
+                      </SelectField>
+                    </Grid>*/}
 
-                  {/*<Grid item xl={2} lg={2} md={2} sm={3} xs={4}>
-                    <TextField
-                      style={{height: '97%'}}
-                      id='date'
-                      fullWidth={true}
-                      id="date"
-                      label="Date"
-                      type="date"
-                      defaultValue="Today"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  </Grid>*/}
+                    {/*<Grid item xl={2} lg={2} md={2} sm={3} xs={4}>
+                      <TextField
+                        style={{height: '97%'}}
+                        id='date'
+                        fullWidth={true}
+                        id="date"
+                        label="Date"
+                        type="date"
+                        defaultValue="Today"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    </Grid>*/}
 
-                  <Grid item xl={2} lg={2} md={3} sm={10} xs={10}  style={{paddingBottom: 0, textAlign: 'center'}}>
-                    <Button onClick={this.handleSubmit} color="primary" style={{color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
-                        Submit
-                    </Button>
-                  </Grid>
-              </Grid>
-          </ExpansionPanelDetails>
+                    <Grid item xl={2} lg={2} md={3} sm={10} xs={10}  style={{paddingBottom: 0, textAlign: 'center'}}>
+                      <Button onClick={this.handleSubmit} color="primary" style={{color: 'white', backgroundColor: 'rgba(0, 0, 0, 0.87)'}}>
+                          Submit
+                      </Button>
+                    </Grid>
+                </Grid>
+            </ExpansionPanelDetails>
 
 
-      </ExpansionPanel>
+        </ExpansionPanel>
+      </div>
     );
   }
 }

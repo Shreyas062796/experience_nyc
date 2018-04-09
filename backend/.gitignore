@@ -3,6 +3,7 @@
 
 # general python 
 __pycache__
+*/__pycache__
 tester.py
 *.pyc
 *.pyo

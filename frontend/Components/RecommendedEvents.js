@@ -26,9 +26,10 @@ import cyan from 'material-ui-next/colors/cyan';
 import noPhoto from "./Images/nophoto.png";
 
 const styles = theme => ({
-  card: {
+  card1: {
     maxWidth: 400,
     borderRadius: '4px',
+    border: '1px solid #24292e'
   },
   subheader: {
     height: '5em'
@@ -90,34 +91,28 @@ class Recommended extends React.Component {
     var button = ''
 
 
-    if(this.state.favorites.includes(id) && (sessionStorage.getItem('username')) && (this.props.tripMode == false)){
+    if(this.state.favorites.includes(id) && sessionStorage.getItem('username')){
       button = (<Tooltip id="tooltip-bottom" title="Remove Favorite" placement="bottom">
                   <IconButton aria-label="Remove from Favorites" onClick={() => { this.removeFavorite(id) }}>
                       <Favorite />
                   </IconButton>
                 </Tooltip>);
     }
-    else if(sessionStorage.getItem('username') && (this.props.tripMode == false)) {
+    else if(sessionStorage.getItem('username')) {
       button = (<Tooltip id="tooltip-bottom" title="Add Favorite" placement="bottom">
                   <IconButton aria-label="Add to Favorites" onClick={() => { this.addFavorite(id) }}>
                     <FavoriteBorder />
                   </IconButton>
                 </Tooltip>);
     }
-    else if(this.props.tripMode == true){
-      button = (<Tooltip id="tooltip-bottom" title={this.inTrip(id) ? "Remove From Trip" : "Add to Trip"} placement="bottom">
-                  <IconButton aria-label="Add to Trip">
-                     <Add  />
-                  </IconButton>
-                </Tooltip>);
-    }
+
     return button;
   }
 
   returnPriceLevel = (items) => {
     let price = [];
     for(var i=0; i < items; i++){
-      price.push(<AttachMoney style={{color: 'rgb(0, 188, 212)', width: '40px'}}/>);
+      price.push(<AttachMoney style={{color: 'rgba(0, 0, 0, 0.87)', width: '20px'}}/>);
     }
     return price;
   }
@@ -127,17 +122,17 @@ class Recommended extends React.Component {
     let ratingStars = [];
     let floor = Math.floor(items)
     for(var i=0; i < floor; i++){
-      ratingStars.push(<Star style={{color: 'rgb(0, 188, 212)', height: '', width: '75px'}}/>);
+      ratingStars.push(<Star style={{color: 'rgba(0, 0, 0, 0.87)', height: '', width: '20px'}}/>);
     }
     if((items % 1) > 0.2){
-      ratingStars.push(<StarHalf style={{color: 'rgb(0, 188, 212)', height: '', width: '75px'}}/>);
+      ratingStars.push(<StarHalf style={{color: 'rgba(0, 0, 0, 0.87)', height: '', width: '20px'}}/>);
       for(var i = 0; i < (4-floor); i++){
-        ratingStars.push(<StarBorder style={{color: 'rgb(0, 188, 212)', height: '', width: '75px'}}/>);
+        ratingStars.push(<StarBorder style={{color: 'rgba(0, 0, 0, 0.87)', height: '', width: '20px'}}/>);
       }
     }
     else{
       for(var i = 0; i < (5-floor); i++){
-        ratingStars.push(<StarBorder style={{color: 'rgb(0, 188, 212)', height: '', width: '75px'}}/>);
+        ratingStars.push(<StarBorder style={{color: 'rgba(0, 0, 0, 0.87)', height: '', width: '20px'}}/>);
       }
     }
     return ratingStars;
@@ -215,27 +210,21 @@ class Recommended extends React.Component {
   isFavorite = (id) => {
     var button = ''
 
-    if(this.state.favorites.includes(id) && (sessionStorage.getItem('username')) && (this.props.tripMode == false)){
+    if(this.state.favorites.includes(id) && sessionStorage.getItem('username')){
       button = (<Tooltip id="tooltip-bottom" title="Remove Favorite" placement="bottom">
                   <IconButton aria-label="Remove from Favorites" onClick={() => { this.removeFavorite(id) }}>
                       <Favorite />
                   </IconButton>
                 </Tooltip>);
     }
-    else if(sessionStorage.getItem('username') && (this.props.tripMode == false)) {
+    else if(sessionStorage.getItem('username')) {
       button = (<Tooltip id="tooltip-bottom" title="Add Favorite" placement="bottom">
                   <IconButton aria-label="Add to Favorites" onClick={() => { this.addFavorite(id) }}>
                     <FavoriteBorder />
                   </IconButton>
                 </Tooltip>);
     }
-    else if(this.props.tripMode == true){
-      button = (<Tooltip id="tooltip-bottom" title="Add to Trip" placement="bottom">
-                  <IconButton aria-label="Add to Trip" onClick={() => { this.addTrip(id) }}>
-                    <Add  />
-                  </IconButton>
-                </Tooltip>);
-    }
+
     return button;
   }
 
@@ -253,7 +242,7 @@ class Recommended extends React.Component {
     //set list of favorites for current user
     //this.setFavorites();
 
-    var data = {username: 'test', address: '33rd Street station New York, NY 10001'};
+    var data = {username: sessionStorage.getItem('username'), address: '33rd Street station New York, NY 10001'};
 
     $.ajax({
       url:"https://experiencenyc.herokuapp.com/recommendedplaces",
@@ -274,30 +263,43 @@ class Recommended extends React.Component {
              title={value['name']}
              subheader={value['formatted_address']}
            />
-         <div style={{overflow:'hidden'}}>
-            <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
-          </div>
-           <CardActions className={this.props.actions} disableActionSpacing>
-             <div style={{width: '20%'}}>
-                 {this.getIcon(value['id'])}
-             </div>
-             <div style={{width: '25%', textAlign: 'center', display: 'flex'}}>
-               <IconButton>
+           <Divider inset/>
+           <div style={{display:'flex'}}>
+             <div style={{width: '50%', justifyContent: 'center', display: 'inline-flex'}}>
+               <IconButton style={{flex: 'auto'}}>
                  {this.returnPriceLevel(value['price_level'])}
                </IconButton>
              </div>
-             <div style={{width: '35%', textAlign: 'center', display: 'flex'}}>
-               <Typography style={{marginTop: '14px', marginRight: '5px', }}>{value['rating']}</Typography>
+             <div style={{width: '40%',display: 'inline-flex'}}>
+               {/*<Typography style={{marginTop: '14px', marginRight: '5px', }}>{value['rating']}</Typography>*/}
                <IconButton style={{flex: 'auto'}}>
                  {this.returnRatingLevel(value['rating'])}
                </IconButton>
              </div>
-             <div style={{width: '25%', textAlign: 'right'}}>
-               <Button href={"https://www.google.com/maps/search/?api=1&query=Google&query_place_id=" + value['place_id']} target="_blank" color="primary" style={{minWidth: '0px', color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
-                GO
-               </Button>
-             </div>
-           </CardActions>
+           </div>
+         <div style={{overflow:'hidden'}}>
+            <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
+          </div>
+          <CardActions className={this.props.actions} disableActionSpacing>
+            <div style={{width: '33%'}}>
+                {this.getIcon(value['place_id'])}
+            </div>
+            <div style={{width: '34%', display: 'block', textAlign: 'center'}}>
+                <Typography style={{display: 'inline-flex', cursor: 'pointer'}}>
+                  Details
+                </Typography>
+                <IconButton
+                   aria-label="Show more"
+                 >
+                   <ExpandMoreIcon />
+                 </IconButton>
+            </div>
+            <div style={{width: '33%', textAlign: 'right'}}>
+              <Button href={"https://www.google.com/maps/search/?api=1&query=Google&query_place_id=" + value['place_id']} target="_blank" style={{minWidth: '0px', color: 'rgba(0, 0, 0, 0.87)', border: '1px solid', borderRadius: '4px', marginRight: '1em'}}>
+               GO
+              </Button>
+            </div>
+          </CardActions>
          </Card>
        </Grid>
      ));

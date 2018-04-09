@@ -199,7 +199,7 @@ class LoginForm extends React.Component {
               </Typography>
             </Grid>
             <div style={{textAlign: "center"}}>
-              <Button id='login' className={classes.button} onClick={this.handleLogin} style={{width: '25%',color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
+              <Button id='login' className={classes.button} onClick={this.handleLogin} style={{width: '25%',color: 'white', backgroundColor: 'rgba(0, 0, 0, 0.87)'}}>
                 Login
               </Button>
             </div>

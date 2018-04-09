@@ -25,12 +25,26 @@ import Tooltip from 'material-ui-next/Tooltip';
 import cyan from 'material-ui-next/colors/cyan';
 import noPhoto from "./Images/nophoto.png";
 import { PulseLoader } from 'react-spinners';
+import Divider from 'material-ui-next/Divider';
+import Check from 'material-ui-icons/Check';
 
 const styles = theme => ({
-  card: {
+  card1: {
     maxWidth: 400,
     borderRadius: '4px',
-
+    border: '1px solid #24292e'
+  },
+  card2: {
+    maxWidth: 400,
+    borderRadius: '4px',
+    border: '1px solid #24292e',
+    boxShadow: '0px 0px 18px -1px rgba(0,208,255,1)'
+  },
+  button: {
+    minWidth: '0px',
+    color: 'rgba(0, 0, 0, 0.87)',
+    border: '1px solid',
+    borderRadius: '4px',
   },
   subheader: {
     display: 'block',
@@ -69,10 +83,6 @@ class Cards extends React.Component {
       this.getFavorites();
     }
 
-    if(nextProps.tripMode != this.props.tripMode){
-      this.getFavorites();
-    }
-
     if(nextProps.inTrip != this.state.inTrip){
       this.setState({inTrip: nextProps.inTrip});
     }
@@ -106,7 +116,7 @@ class Cards extends React.Component {
   returnPriceLevel = (items) => {
     let price = [];
     for(var i=0; i < items; i++){
-      price.push(<AttachMoney style={{color: 'rgb(0, 188, 212)', width: '40px'}}/>);
+      price.push(<AttachMoney style={{color: 'rgba(0, 0, 0, 0.87)', width: '20px'}}/>);
     }
     return price;
   }
@@ -115,48 +125,20 @@ class Cards extends React.Component {
     let ratingStars = [];
     let floor = Math.floor(items)
     for(var i=0; i < floor; i++){
-      ratingStars.push(<Star style={{color: 'rgb(0, 188, 212)', height: '', width: '75px'}}/>);
+      ratingStars.push(<Star style={{color: 'rgba(0, 0, 0, 0.87)', height: '', width: '20px'}}/>);
     }
     if((items % 1) > 0.2){
-      ratingStars.push(<StarHalf style={{color: 'rgb(0, 188, 212)', height: '', width: '75px'}}/>);
+      ratingStars.push(<StarHalf style={{color: 'rgba(0, 0, 0, 0.87)', height: '', width: '20px'}}/>);
       for(var i = 0; i < (4-floor); i++){
-        ratingStars.push(<StarBorder style={{color: 'rgb(0, 188, 212)', height: '', width: '75px'}}/>);
+        ratingStars.push(<StarBorder style={{color: 'rgba(0, 0, 0, 0.87)', height: '', width: '20px'}}/>);
       }
     }
     else{
       for(var i = 0; i < (5-floor); i++){
-        ratingStars.push(<StarBorder style={{color: 'rgb(0, 188, 212)', height: '', width: '75px'}}/>);
+        ratingStars.push(<StarBorder style={{color: 'rgba(0, 0, 0, 0.87)', height: '', width: '20px'}}/>);
       }
     }
     return ratingStars;
-  }
-
-  getIcon = (id) => {
-    var button = ''
-
-
-    if(this.state.favorites.includes(id) && (sessionStorage.getItem('username')) && (this.props.tripMode == false)){
-      button = (<Tooltip id="tooltip-bottom" title="Remove Favorite" placement="bottom">
-                  <IconButton aria-label="Remove from Favorites" onClick={() => { this.removeFavorite(id) }}>
-                      <Favorite />
-                  </IconButton>
-                </Tooltip>);
-    }
-    else if(sessionStorage.getItem('username') && (this.props.tripMode == false)) {
-      button = (<Tooltip id="tooltip-bottom" title="Add Favorite" placement="bottom">
-                  <IconButton aria-label="Add to Favorites" onClick={() => { this.addFavorite(id) }}>
-                    <FavoriteBorder />
-                  </IconButton>
-                </Tooltip>);
-    }
-    else if(this.props.tripMode == true){
-      button = (<Tooltip id="tooltip-bottom" title={this.inTrip(id) ? "Remove From Trip" : "Add to Trip"} placement="bottom">
-                  <IconButton aria-label={this.inTrip(id) ? "Remove from Trip" : "Add to Trip"} onClick={() => {this.inTrip(id) ? this.removeFromTrip(id) : this.addToTrip(id, this)}}>
-                    {this.inTrip(id) ? <Check  /> : <Add  />}
-                  </IconButton>
-                </Tooltip>);
-    }
-    return button;
   }
 
   cardWidth = () => {
@@ -240,61 +222,141 @@ class Cards extends React.Component {
     })
   }
 
+  //get a list of the place IDs that the user is building a trip with
+  getTripPlacesIDs = () => {
+    var data = {username: sessionStorage.getItem('username')};
+
+    $.ajax({
+      url:"https://experiencenyc.herokuapp.com/gettripplacesIds",
+      type:"POST",
+      data: JSON.stringify(data),
+      contentType:"application/json; charset=utf-8",
+      dataType:"json"})
+      .done((response) => {
+        this.setState({inTrip: response});
+      })
+  }
+
   getTripPlaces = () => {
-      if(this.props.loggedIn){
-        var data = {username: sessionStorage.getItem('username')};
+    if(this.state.loggedIn){
+      var data = {username: sessionStorage.getItem('username')};
 
-        $.ajax({
-          url:"https://experiencenyc.herokuapp.com/gettripplaces",
-          type:"POST",
-          data: JSON.stringify(data),
-          contentType:"application/json; charset=utf-8",
-          dataType:"json"})
-          .done((response) => {
-            const { classes } = this.props;
+      $.ajax({
+        url:"https://experiencenyc.herokuapp.com/gettripplaces",
+        type:"POST",
+        data: JSON.stringify(data),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json"})
+        .done((response) => {
+          const { classes } = this.props;
 
-            if(response['response'] != 'There is no values'){
-              const result = response.map((value) =>
-              (
-                <Card style={{margin: '1em'}} className={this.inTrip(value['id'] && this.props.tripMode) ? classes.card2 : classes.card1}>
-                  <CardHeader classes={{subheader: classes.subheader}}
-                    avatar={
-                      <Avatar aria-label="Recipe" src={value['icon']} className={this.props.avatar}/>
-                    }
-                    title={value['name']}
-                    subheader={value['formatted_address']}
-                  />
-                <div style={{overflow:'hidden'}} onClick={() =>{this.getPhotos(value['place_id'])}}>
-                   <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover', cursor: 'pointer'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
-                 </div>
-                  <CardActions className={this.props.actions} disableActionSpacing>
-                    <div style={{width: '20%', textAlign: 'center', display: 'flex'}}>
-                      <IconButton>
-                        {this.returnPriceLevel(value['price_level'])}
-                      </IconButton>
+          if(response['response'] != 'There is no values'){
+            const result = response.map((value) =>
+            (
+              <Card style={{margin: '1em'}} className={this.inTrip(value['place_id'])}>
+                <CardHeader classes={{subheader: classes.subheader}}
+                  avatar={
+                    <Avatar aria-label="Recipe" src={value['icon']} className={this.props.avatar}/>
+                  }
+                  title={value['name']}
+                  subheader={value['formatted_address']}
+                />
+                <Divider inset/>
+                <div style={{display:'flex'}}>
+                  <div style={{width: '50%', justifyContent: 'center', display: 'inline-flex'}}>
+                    <IconButton style={{flex: 'auto'}}>
+                      {this.returnPriceLevel(value['price_level'])}
+                    </IconButton>
+                  </div>
+                  <div style={{width: '40%',display: 'inline-flex'}}>
+                    {/*<Typography style={{marginTop: '14px', marginRight: '5px', }}>{value['rating']}</Typography>*/}
+                    <IconButton style={{flex: 'auto'}}>
+                      {this.returnRatingLevel(value['rating'])}
+                    </IconButton>
+                  </div>
+                </div>
+              <div style={{overflow:'hidden'}} onClick={() =>{this.getPhotos(value['place_id'])}}>
+                 <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover', cursor: 'pointer'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
+               </div>
+                <CardActions className={this.props.actions} disableActionSpacing>
+                  <div style={{width: '100%', textAlign: 'center'}}>
+                    <Button target="_blank" onClick={() => {this.removeFromTrip(value['place_id'])}} className={classes.button}>
+                     Remove
+                    </Button>
+                  </div>
+                </CardActions>
+              </Card>
+            ))
+          this.props.updateTripPlaces(result);
+          }
+        })
+      }
+      else{
+          var data = {placeIds: this.state.inTrip};
+
+          $.ajax({
+            url:"https://experiencenyc.herokuapp.com/getqueryplaces",
+            type:"GET",
+            data: data,
+            contentType:"application/json; charset=utf-8",
+            dataType:"json"})
+            .done((response) => {
+              const { classes } = this.props;
+
+              if(response['response'] != 'There is no values'){
+                const result = response.map((value) =>
+                (
+                  <Card style={{margin: '1em'}} className={this.inTrip(value['place_id'])}>
+                    <CardHeader classes={{subheader: classes.subheader}}
+                      avatar={
+                        <Avatar aria-label="Recipe" src={value['icon']} className={this.props.avatar}/>
+                      }
+                      title={value['name']}
+                      subheader={value['formatted_address']}
+                      action={
+                              <Tooltip id="tooltip-bottom" title={this.inTrip(value['place_id']) ? "Remove From Trip" : "Add to Trip"} placement="bottom">
+                                <IconButton aria-label={this.inTrip(value['place_id']) ? "Remove from Trip" : "Add to Trip"} onClick={() => {this.inTrip(value['place_id']) ? this.removeFromTrip(value['place_id']) : this.addToTrip(value['place_id'], this)}}>
+                                  {this.inTrip(value['place_id']) ? <Check  /> : <Add  />}
+                                </IconButton>
+                              </Tooltip>
+                       }
+                    />
+                    <Divider inset/>
+                    <div style={{display:'flex'}}>
+                      <div style={{width: '50%', justifyContent: 'center', display: 'inline-flex'}}>
+                        <IconButton style={{flex: 'auto'}}>
+                          {this.returnPriceLevel(value['price_level'])}
+                        </IconButton>
+                      </div>
+                      <div style={{width: '40%',display: 'inline-flex'}}>
+                        {/*<Typography style={{marginTop: '14px', marginRight: '5px', }}>{value['rating']}</Typography>*/}
+                        <IconButton style={{flex: 'auto'}}>
+                          {this.returnRatingLevel(value['rating'])}
+                        </IconButton>
+                      </div>
                     </div>
-                    <div style={{width: '40%', textAlign: 'center', display: 'flex'}}>
-                      <Typography style={{marginTop: '14px', marginRight: '5px', }}>{value['rating']}</Typography>
-                      <IconButton style={{flex: 'auto'}}>
-                        {this.returnRatingLevel(value['rating'])}
-                      </IconButton>
-                    </div>
-                    <div style={{width: '40%', textAlign: 'right'}}>
-                      <Button target="_blank" onClick={() => {this.removeFromTrip(value['id'])}} className={classes.button}>
-                       Remove
-                      </Button>
-                    </div>
-                  </CardActions>
-                </Card>
-              ))
-            this.props.updateTripPlaces(result);
-            }
+                  <div style={{overflow:'hidden'}} onClick={() =>{this.getPhotos(value['place_id'])}}>
+                     <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover', cursor: 'pointer'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
+                   </div>
+                    <CardActions className={this.props.actions} disableActionSpacing>
+                      <div style={{width: '100%', textAlign: 'center'}}>
+                        <Button target="_blank" onClick={() => {this.removeFromTrip(value['place_id'])}} className={classes.button}>
+                         Remove
+                        </Button>
+                      </div>
+                    </CardActions>
+                  </Card>
+                ))
+              this.props.updateTripPlaces(result);
+              }
+              else{
+                this.props.updateTripPlaces('');
+              }
           })
         }
-        else{
-          this.props.updateTripPlaces('');
-        }
-    }
+        this.getTripPlacesIDs();
+        this.getFavorites();
+  }
 
   //remove passed id from user's favorites
   removeFavorite = (id) => {
@@ -359,27 +421,51 @@ class Cards extends React.Component {
              }
              title={value['name']}
              subheader={value['formatted_address']}
+             action={
+                     <Tooltip id="tooltip-bottom" title={this.inTrip(value['place_id']) ? "Remove From Trip" : "Add to Trip"} placement="bottom">
+                       <IconButton aria-label={this.inTrip(value['place_id']) ? "Remove from Trip" : "Add to Trip"} onClick={() => {this.inTrip(value['place_id']) ? this.removeFromTrip(value['place_id']) : this.addToTrip(value['place_id'], this)}}>
+                         {this.inTrip(value['place_id']) ? <Check  /> : <Add  />}
+                       </IconButton>
+                     </Tooltip>
+              }
            />
-         <div style={{overflow:'hidden'}} onClick={() =>{this.getPhotos(value['place_id'])}}>
-            <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover', cursor: 'pointer'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
-          </div>
-           <CardActions className={this.props.actions} disableActionSpacing>
-             <div style={{width: '20%'}}>
-                 {this.getIcon(value['id'])}
-             </div>
-             <div style={{width: '25%', textAlign: 'center', display: 'flex'}}>
-               <IconButton>
+           <Divider inset/>
+           <div style={{display:'flex'}}>
+             <div style={{width: '50%', justifyContent: 'center', display: 'inline-flex'}}>
+               <IconButton style={{flex: 'auto'}}>
                  {this.returnPriceLevel(value['price_level'])}
                </IconButton>
              </div>
-             <div style={{width: '35%', textAlign: 'center', display: 'flex'}}>
-               <Typography style={{marginTop: '14px', marginRight: '5px', }}>{value['rating']}</Typography>
+             <div style={{width: '40%',display: 'inline-flex'}}>
+               {/*<Typography style={{marginTop: '14px', marginRight: '5px', }}>{value['rating']}</Typography>*/}
                <IconButton style={{flex: 'auto'}}>
                  {this.returnRatingLevel(value['rating'])}
                </IconButton>
              </div>
-             <div style={{width: '25%', textAlign: 'right'}}>
-               <Button href={"https://www.google.com/maps/search/?api=1&query=Google&query_place_id=" + value['place_id']} target="_blank" color="primary" style={{minWidth: '0px', color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
+           </div>
+         <div style={{overflow:'hidden'}} onClick={() =>{this.getPhotos(value['place_id'])}}>
+            <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover', cursor: 'pointer'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
+          </div>
+           <CardActions className={this.props.actions} disableActionSpacing>
+             <div style={{width: '33%'}}>
+             <Tooltip id="tooltip-bottom" title="Remove Favorite" placement="bottom">
+                 <IconButton aria-label="Remove from Favorites" onClick={() => { this.removeFavorite(value['place_id']) }}>
+                     <Favorite />
+                 </IconButton>
+               </Tooltip>
+             </div>
+             <div style={{width: '34%', display: 'block', textAlign: 'center'}}>
+                 <Typography style={{display: 'inline-flex', cursor: 'pointer'}}>
+                   Details
+                 </Typography>
+                 <IconButton
+                    aria-label="Show more"
+                  >
+                    <ExpandMoreIcon />
+                  </IconButton>
+             </div>
+             <div style={{width: '33%', textAlign: 'right'}}>
+               <Button href={"https://www.google.com/maps/search/?api=1&query=Google&query_place_id=" + value['place_id']} target="_blank" style={{minWidth: '0px', color: 'rgba(0, 0, 0, 0.87)', border: '1px solid', borderRadius: '4px', marginRight: '1em'}}>
                 GO
                </Button>
              </div>

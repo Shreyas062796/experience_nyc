@@ -72,7 +72,6 @@ class Main extends React.Component {
     filter: {types: [''], price_level: [''], num: '100'},
     currentPage: 'Places',
     currentTab: 'Search',
-    tripMode: false,
     anchorEl: null,
     open: '',
     tripButton: false,
@@ -169,17 +168,6 @@ class Main extends React.Component {
       return 'none';
     }
   }
-
-  handleTripSwitch = name => event => {
-    this.setState({ [name]: event.target.checked }, function() {
-      if(this.state.tripMode){
-        this.setState({tripButton: true})
-      }
-      else{
-        this.setState({tripButton: false})
-      }
-    });
-  };
 
   handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -281,23 +269,12 @@ class Main extends React.Component {
 
           >
             <Toolbar disableGutters={!open}>
-              <div style={{width: '40%'}}>
+              <div style={{width: '60%'}}>
                 <Typography variant="title" color="inherit" noWrap>
                   Experience NYC
                 </Typography>
               </div>
-              <div style={{width: '20%'}}>
-                <Switch
-                  checked={this.state.tripMode}
-                  onChange={this.handleTripSwitch('tripMode')}
-                  value=""
-                  classes={{
-                    checked: classes.checked,
-                    bar: classes.bar,
-                  }}
-                />
-              </div>
-              <div style={{width: '40%', alignItems: 'center', justifyContent: 'flex-end', display: 'flex'}}>
+              <div style={{width: '50%', alignItems: 'center', justifyContent: 'flex-end', display: 'flex'}}>
                 {userAppbarOption}
               </div>
             </Toolbar>
@@ -330,7 +307,6 @@ class Main extends React.Component {
             <div style={{display: this.handleTabDisplay('RecommendedPlaces')}}>
               <Recommended
                 filter={this.state.filter}
-                tripMode={this.state.tripMode}
                 onAddPlaceToTrip={this.updateTripLocations}
                 updateTripPlaces={this.updateTripPlaces}
                 loggedIn={this.state.loggedIn}
@@ -341,7 +317,6 @@ class Main extends React.Component {
             </div>
             <Cards style={{display: this.handleTabDisplay('SearchPlaces')}}
               filter={this.state.filter}
-              tripMode={this.state.tripMode}
               onAddPlaceToTrip={this.updateTripLocations}
               updateTripPlaces={this.updateTripPlaces}
               loggedIn={this.state.loggedIn}
@@ -356,7 +331,6 @@ class Main extends React.Component {
             <div style={{display: this.handleTabDisplay('RecommendedEvents')}}>
               <RecommendedEvents
                 filter={this.state.filter}
-                tripMode={this.state.tripMode}
                 onAddPlaceToTrip={this.updateTripLocations}
                 updateTripPlaces={this.updateTripPlaces}
                 loggedIn={this.state.loggedIn}
@@ -372,7 +346,6 @@ class Main extends React.Component {
               page={this.state.currentPage}
               handleScroll={this.handleScroll}
               filter={this.state.filter}
-              tripMode={this.state.tripMode}
               onAddPlaceToTrip={this.updateTripLocations}
               updateTripPlaces={this.updateTripPlaces}
               loggedIn={this.state.loggedIn}

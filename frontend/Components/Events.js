@@ -25,12 +25,19 @@ import Tooltip from 'material-ui-next/Tooltip';
 import cyan from 'material-ui-next/colors/cyan';
 import eventbriteLogo from "./Images/eventbriteLogo.png";
 import noPhoto from "./Images/nophoto.png";
+import Check from 'material-ui-icons/Check';
 
 const styles = theme => ({
-  card: {
+  card1: {
     maxWidth: 400,
     borderRadius: '4px',
-
+    border: '1px solid #24292e'
+  },
+  button: {
+    minWidth: '0px',
+    color: 'rgba(0, 0, 0, 0.87)',
+    border: '1px solid',
+    borderRadius: '4px',
   },
   subheader: {
     height: '5em'
@@ -152,27 +159,21 @@ class Events extends React.Component {
   isFavorite = (id) => {
     var button = ''
 
-    if(this.state.favorites.includes(id) && (sessionStorage.getItem('username')) && (this.props.tripMode == false)){
+    if(this.state.favorites.includes(id) && sessionStorage.getItem('username')){
       button = (<Tooltip id="tooltip-bottom" title="Remove Favorite" placement="bottom">
                   <IconButton aria-label="Remove from Favorites" onClick={() => { this.removeFavorite(id) }}>
                       <Favorite />
                   </IconButton>
                 </Tooltip>);
     }
-    else if(sessionStorage.getItem('username') && (this.props.tripMode == false)) {
+    else if(sessionStorage.getItem('username')) {
       button = (<Tooltip id="tooltip-bottom" title="Add Favorite" placement="bottom">
                   <IconButton aria-label="Add to Favorites" onClick={() => { this.addFavorite(id) }}>
                     <FavoriteBorder />
                   </IconButton>
                 </Tooltip>);
     }
-    else if(this.props.tripMode == true){
-      button = (<Tooltip id="tooltip-bottom" title="Add to Trip" placement="bottom">
-                  <IconButton aria-label="Add to Trip" onClick={() => { this.addTrip(id) }}>
-                    <Add  />
-                  </IconButton>
-                </Tooltip>);
-    }
+
     return button;
   }
 
@@ -213,7 +214,7 @@ class Events extends React.Component {
        response.shift();
        const result = response.map((value) =>
        (<Grid item xl={3} lg={4} md={6} sm={12} xs={12}>
-         <Card className={this.props.card}>
+         <Card className={classes.card1}>
            <CardHeader classes={{root: classes.subheader, title: classes.title}}
              avatar={
                <Avatar aria-label="Recipe" src={value['logo'] ? value['logo']['original']['url'] : noPhoto} className={this.props.avatar}/>
@@ -226,7 +227,7 @@ class Events extends React.Component {
           </div>
            <CardActions className={this.props.actions} disableActionSpacing>
              <div style={{width: '25%'}}>
-                 {this.isFavorite(value['id'])}
+                 {this.isFavorite(value['place_id'])}
              </div>
              <div style={{width: '50%', textAlign: 'center'}}>
                 {/*this.isFree(value['is_free'])*/}
@@ -235,7 +236,7 @@ class Events extends React.Component {
                 </Button>
              </div>
              <div style={{width: '25%', textAlign: 'right'}}>
-               <Button href={"http://maps.google.com/?q=" + value['name']['text']} target="_blank" color="primary" style={{minWidth: '0px', color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
+               <Button href={"http://maps.google.com/?q=" + value['name']['text']} target="_blank" color="primary" style={{minWidth: '0px', color: 'rgba(0, 0, 0, 0.87)', border: '1px solid', borderRadius: '4px', marginRight: '1em'}}>
                 GO
                </Button>
              </div>
