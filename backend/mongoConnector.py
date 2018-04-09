@@ -48,16 +48,23 @@ class MongoConnector:
 		# db = MongoClient(connection).places #places and users database
 		db = self.clientConnect()
 
+		for a_id, a_place in allplaces.items():
+			try:
+				db.places.insert_one(a_place)
+				print("populated")
+			except Exception as e:
+				print("couldn't add: {}".format(a_id))
 
 
-		for placeId in allplaces:
-			for place in allplaces[placeId]:
-				try:
-					db.places.insert_one(place)
-					print("populated")
-				except Exception as e:
-					print(e)
-					print("couldn't add: {}".format(count))
+
+		# for placeId in allplaces:
+		# 	for place in allplaces[placeId]:
+		# 		try:
+		# 			db.places.insert_one(place)
+		# 			print("populated")
+		# 		except Exception as e:
+		# 			print(e)
+		# 			print("couldn't add: {}".format(count))
 
 
 

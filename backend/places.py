@@ -1,3 +1,4 @@
+
 import googlemaps
 import time
 from pprint import pprint
@@ -97,21 +98,29 @@ class NYCPlaces:
 				print("finished: {} found: {} current time: {}".format(place, len(allPlaces[place]), datetime.now()))
 				# if len(allPlaces[place])< 20:
 				# 	print(reply)
-		
+				# print("done with {}".format(place))
 		# print total amount of places
 		count = 0
 		for place in allPlaces:
-			for location in place:
+			for location in allPlaces[place]:
 				count+=1
 
-
 		# print(count)
+
+		places_set = dict()
+		for place in allPlaces:
+			for location in allPlaces[place]:
+				places_set[location["id"]] = location
+				# print(location)
+
+		# for keys in places_set.keys():
+		# 	print(keys)
 
 		# print(allPlaces)
 		# import pprint
 		# pprint.PrettyPrinter(indent=0).pprint(allPlaces)
 
-		return(allPlaces)
+		return(places_set)
 	
 
 
