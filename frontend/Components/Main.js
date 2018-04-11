@@ -279,7 +279,6 @@ class Main extends React.Component {
   }
 
   setModalPhotos = (photos) => {
-    console.log(photos)
     let temp = [];
     temp.push(photos);
     this.setState({photos: temp, photoModalOpened: true});

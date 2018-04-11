@@ -13,6 +13,7 @@ import Grid from 'material-ui-next/Grid';
 import md5 from 'md5.js';
 import Snackbar from 'material-ui-next/Snackbar';
 import CloseIcon from 'material-ui-icons/Close';
+import ResetModal from './ResetModal.js'
 import $ from 'jquery';
 //import {md5} from 'js-md5';
 
@@ -65,12 +66,17 @@ class LoginForm extends React.Component {
     open: false,
     message: [],
     usernameError: false,
-    passwordError: false
+    passwordError: false,
+    displayResetModal: false
   }
 
   handleLoggedIn = (event, value) => {
     this.props.loggedIn();
   };
+
+  getResetForm = () => {
+    this.setState({displayResetModal: true})
+  }
 
   componentWillReceiveProps(nextProps) {
     this.setState({display: nextProps.display});
@@ -149,6 +155,10 @@ class LoginForm extends React.Component {
     this.setState({ open: false });
   };
 
+  handleReset = () => {
+    this.setState({displayResetModal: false});
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -195,7 +205,7 @@ class LoginForm extends React.Component {
         <FormControl className={classes.formControl}>
             <Grid item md={4}>
               <Typography>
-                <a href="#" style={{textDecoration: "none"}}>Forgot Username or Password?</a>
+                <a onClick={this.getResetForm} style={{textDecoration: "none", color: 'blue', cursor: 'pointer'}}>Forgot Username or Password?</a>
               </Typography>
             </Grid>
             <div style={{textAlign: "center"}}>
@@ -204,6 +214,7 @@ class LoginForm extends React.Component {
               </Button>
             </div>
         </FormControl>
+        <ResetModal display={this.state.displayResetModal} onClose={this.handleReset}/>
       </div>
     );
   }
