@@ -1,4 +1,5 @@
 from flask import Blueprint
+from flask import request
 # import sys, os
 # sys.path.append(os.path.abspath(os.path.join('..', 'places')))
 from .placesmongo import PlacesMongo
