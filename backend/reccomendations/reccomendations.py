@@ -1,5 +1,6 @@
 import pandas as pd
 # import mongoConnector as mg
+import random
 from pprint import pprint
 import sys, os
 
@@ -13,12 +14,14 @@ import sys, os
 sys.path.append(os.path.abspath(os.path.join('..', '')))
 from places.placesmongo import *
 from trips.tripmongo import *
+from users.usersmongo import *
 from lib.getKeywords import *
 from events.events_script import *
 from maps.geo import *
 
 placesconnector = PlacesMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc")
 tripconnector = TripMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc")
+userconnector = UsersMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc")
 keywords = GetKeywords("AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o")
 events = getEvents()
 class Reccomendations:
@@ -40,11 +43,12 @@ class Reccomendations:
 			alltrips.append(trip)
 		tripdf = pd.DataFrame(alltrips)
 		placesdf = pd.DataFrame(places)
-		newtripdf = tripdf[['rating','trip_id','distance']].copy()
-		newplacedf = placesdf[['price_level','name','types','user_rating','id','rating']].copy()
-		newplacedf['counts'] = newplacedf.groupby('types')['rating'].transform('count')
-		# print(newplacedf)
-		return(newtripdf,newplacedf)
+		if not tripdf.empty and not placesdf.empty:
+			newtripdf = tripdf[['rating','trip_id','distance']].copy()
+			newplacedf = placesdf[['price_level','name','types','user_rating','id','rating']].copy()
+			newplacedf['counts'] = newplacedf.groupby('types')['rating'].transform('count')
+			return(newtripdf,newplacedf)
+		return("empty","empty")
 
 	#run the machine learning for all the places and if its in a 2 mile radius then it should
 	#return
@@ -56,11 +60,14 @@ class Reccomendations:
 		# print(curCoordinates)
 		places = placesconnector.getPlacesInRadius(curCoordinates['lat'],curCoordinates['lng'],30)
 		userplaces = self.getTripsandPlaces()[1]
-		for place in places:
-			for userplaceid in userplaces['id']:
-				if(place['id'] != userplaceid and place not in reccomendedplaces):
-					reccomendedplaces.append(place)
-		return(reccomendedplaces)
+		if userplaces != "empty":
+			for place in places:
+				for userplaceid in userplaces['id']:
+					if(place['id'] != userplaceid and place not in reccomendedplaces):
+						reccomendedplaces.append(place)
+			return(reccomendedplaces)
+		else:
+			return(places)
 	#every user is going to have an address and filter what the 
 	#user likes based on what they like
 
@@ -96,7 +103,7 @@ class Reccomendations:
 
 	def GetPlacesBasedFavs(self):
 		recommendedplaces = self.getPlacesInRadius()
-		favorites = placesconnector.getFavoritePlaces(self.user)
+		favorites = userconnector.getFavoritePlaces(self.user)
 
 		# get the users average price level that they enjoy
 		total = 0
@@ -130,7 +137,7 @@ class Reccomendations:
 
 		# create reply list
 		reccomended_list = list()
-		shuffle(recommendedplaces)
+		random.shuffle(recommendedplaces)
 		for location in recommendedplaces:
 			loc_types = list()
 			try:
@@ -161,7 +168,7 @@ class Reccomendations:
 		# 	print(x)
 		
 # if __name__ == "__main__":
-# 	reccomender = Reccomendations('test','269 Amsterdam Ave, New York, NY 10023')
+	# reccomender = Reccomendations('test','269 Amsterdam Ave, New York, NY 10023')
 # 	# reccomender.getPlacesInRadius('269 Amsterdam Ave, New York, NY 10023')
 # 	print(reccomender.PlaceReccomendation())
 # 	# reccomender.PlaceReccomendation()

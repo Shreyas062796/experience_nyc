@@ -23,7 +23,7 @@ def add_routes(app=None):
 		info = request.get_json()
 		print(info['username'])
 		print(info['address'])
-		reccomendations = Reccomendations(info['username'],info['address']).PlaceReccomendation()
+		reccomendations = Reccomendations(info['username'],info['address']).GetPlacesBasedFavs()
 		if(reccomendations == "empty"):
 			return(jsonify({"response":"the database is empty"}))
 		else:

@@ -27,7 +27,7 @@ class TripPlaces extends React.Component {
                           </Typography>
                         </CardContent>
                         <CardActions>
-                          <Button color="primary" style={{width: '100%',color: 'white', backgroundColor: 'rgb(0, 188, 212)'}}>
+                          <Button color="primary" style={{width: '100%',color: 'white', backgroundColor: 'rgba(0, 0, 0, 0.87)'}}>
                               View Trip
                           </Button>
                         </CardActions>
