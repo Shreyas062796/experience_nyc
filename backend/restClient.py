@@ -7,8 +7,8 @@ import datetime
 
 # our libraries
 # import mongoConnector as mg
-import reccomendations as rec
-import filtering
+# import reccomendations as rec
+# import filtering
 import lib.sendmail as mail
 from events import events, events_script
 from maps.geo import addressToGeo
@@ -16,13 +16,23 @@ from lib.caching import Cacher, EventCacher
 
 
 # import blueprints here
+#Development
 import sys, os
+# sys.path.append(os.path.abspath(os.path.join('..', '')))
+# import backend.events as events
+# import backend.places as places
+# import backend.reccomendations as reccomendations
+# import backend.trips as trips
+# import backend.users as users
+
+#Production
 sys.path.append(os.path.abspath(os.path.join('..', '')))
-import backend.events as events
-import backend.places as places
-import backend.reccomendations as reccomendations
-import backend.trips as trips
-import backend.users as users
+import events as events
+import places as places
+import reccomendations as reccomendations
+import trips as trips
+import users as users
+
 
 
 DEBUG = True
@@ -234,8 +244,6 @@ def getTopEvents():
 		n = int(request.args['amount'])
 		return jsonify(EVENT_CACHE.getTopN(n))
 
-
-
 # gets bars that right now have preset coordinates
 # @restClient.route('/topbars/<amount>', methods = ['GET'])#have some parameters
 # def getTopBars(amount):
@@ -347,6 +355,7 @@ def getTopEvents():
 
 @restClient.route('/')
 def index():
+	"""Initial starting point"""
 	return '<h1>Flask Client is up and running</h1>'
 
 if __name__ == '__main__':
