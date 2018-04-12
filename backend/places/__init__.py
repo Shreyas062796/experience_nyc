@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask import request
+from flask import request, jsonify
 # import sys, os
 # sys.path.append(os.path.abspath(os.path.join('..', 'places')))
 from .placesmongo import PlacesMongo
