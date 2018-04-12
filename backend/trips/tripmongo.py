@@ -5,7 +5,12 @@ import json
 import hashlib
 import uuid
 from pprint import pprint
-import sys, os
+
+#development
+# from backend.places.placesmongo import *
+
+#production
+import sys,os
 sys.path.append(os.path.abspath(os.path.join('..', '')))
 from places.placesmongo import *
 
@@ -18,6 +23,13 @@ class TripMongo:
 		self.username = username
 		self.password = password
 		self.database = database
+
+	#connects to mongo server based on parameters
+	def clientConnect(self):
+		connection = 'mongodb://' + str(self.username) + ':' + str(self.password) + '@' + str(self.clientHost) + ':' + str(self.clientPort) + '/' + str(self.database)
+		client = MongoClient(connection).experience_nyc #places and users database
+		# client = MongoClient(connection).enyc #events database
+		return(client)
 
 	def createTrip(self,placeIds,trip_id,user,distance):
 		tripPlaces = []

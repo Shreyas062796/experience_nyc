@@ -2,16 +2,23 @@ import pandas as pd
 # import mongoConnector as mg
 from pprint import pprint
 import sys, os
+
+#development
+# from backend.places.placesmongo import *
+# from backend.lib.getKeywords import *
+# from backend.events.events_script import *
+# from backend.maps.geo import *
+
+#production
 sys.path.append(os.path.abspath(os.path.join('..', '')))
 from places.placesmongo import *
-sys.path.append(os.path.abspath(os.path.join('..', '')))
+from trips.tripmongo import *
 from lib.getKeywords import *
-sys.path.append(os.path.abspath(os.path.join('..', '')))
 from events.events_script import *
-sys.path.append(os.path.abspath(os.path.join('..', '')))
 from maps.geo import *
 
 placesconnector = PlacesMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc")
+tripconnector = TripMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc")
 keywords = GetKeywords("AIzaSyDZtF0dy0aVX83TRZEd65cvGbPcLNMEU8o")
 events = getEvents()
 class Reccomendations:
@@ -21,7 +28,7 @@ class Reccomendations:
 
 	#creates dataframes for places and trips that is going to be used for machine learning
 	def getTripsandPlaces(self):
-		trips = placesconnector.queryTrip(self.user)
+		trips = tripconnector.queryTrip(self.user)
 		alltrips = []
 		places = []
 		for trip in trips:

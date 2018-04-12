@@ -15,11 +15,12 @@ class UsersMongo:
 		self.password = password
 		self.database = database
 
-	#populates user collection with user information
-	def populateLogin(self,login):
-		db = self.clientConnect()
-		login['password'] = hashlib.md5(login['password'].encode('utf-8')).hexdigest()
-		db.users.insert_one(login)
+	#connects to mongo server based on parameters
+	def clientConnect(self):
+		connection = 'mongodb://' + str(self.username) + ':' + str(self.password) + '@' + str(self.clientHost) + ':' + str(self.clientPort) + '/' + str(self.database)
+		client = MongoClient(connection).experience_nyc #places and users database
+		# client = MongoClient(connection).enyc #events database
+		return(client)
 
 	#authenticating login given a username and
 	def authenticateLogin(self,username,password):
@@ -29,6 +30,12 @@ class UsersMongo:
 			if(login["password"] == hashlib.md5(password.encode('utf-8')).hexdigest()):
 				return(True)
 		return(False)
+
+	#populates user collection with user information
+	def populateLogin(self,login):
+		db = self.clientConnect()
+		login['password'] = hashlib.md5(login['password'].encode('utf-8')).hexdigest()
+		db.users.insert_one(login)
 
 	def getUserInfo(self, username):
 		db = self.clientConnect()

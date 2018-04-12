@@ -1,5 +1,8 @@
 from pymongo import *
-from .places import NYCPlaces
+#development
+# from backend.places.places import NYCPlaces
+#Production
+from places.places import NYCPlaces
 from bson.objectid import *
 import random
 import json
@@ -35,6 +38,30 @@ class PlacesMongo:
 					print("populated")
 				except:
 					continue
+
+	def populatePlacesNew(self):
+		allplaces = places.getAllNewPlaces()
+		# connection = 'mongodb://' + str(self.username) + ':' + str(self.password) + '@' + str(self.clientHost) + ':' + str(self.clientPort) + '/' + str(self.database)
+		# db = MongoClient(connection).places #places and users database
+		db = self.clientConnect()
+
+		for a_id, a_place in allplaces.items():
+			try:
+				db.places.insert_one(a_place)
+			except Exception as e:
+				print("couldn't add: {}".format(a_id))
+		print("ALL POSSIBLE VALUES HAVE BEEN LOADED INTO THE DATABASE")
+
+	def populateDetailPlaces(self):
+		allplaces = places.getAllDetailPlaces()
+		db = self.clientConnect()
+		count = 0
+		for place in allplaces:
+			try:
+				db.places.insert_one(place['results'])
+				print("populated")
+			except:
+				continue
 
 	#gets all documents from places collection
 	def getPlaces(self):
@@ -76,7 +103,7 @@ class PlacesMongo:
 		x = queriedPlaces[:num]
 		return(x)
 
-	def getQueriedPlaces(self,placeIds):
+	def getUserTripPlaces(self,placeIds):
 		places = []
 		db = self.clientConnect()
 		if(placeIds):
@@ -85,3 +112,4 @@ class PlacesMongo:
 				place['_id'] = str(place['_id'])
 				places.append(place)
 		return(places)
+
