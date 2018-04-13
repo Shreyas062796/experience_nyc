@@ -83,9 +83,14 @@ class PlacesMongo:
 		# pprint(allPlaces)
 		return(allPlaces)
 
+	def updateOpen(self,place):
+		url = 'https://maps.googleapis.com/maps/api/place/details/json?placeid=' + place['place_id'] + '&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A'
+		place['_id'] = str(place['_id'])
+		req = requests.get(url)
+		return(req.json())
+
 	def queryPlaces(self,types,price,search,num):
 		db = self.clientConnect()
-		today_date = date.today()
 		params = {}
 		queriedPlaces = []
 		if types == ['']:
@@ -99,9 +104,9 @@ class PlacesMongo:
 		if search == '':
 			search = 'coffee'
 		for place in db.places.find({'$and':[{'types':{'$in': types},'price_level':{'$in':price},'$text': {'$search': search}}]}):
-			place['_id'] = str(place['_id'])
-			if('photos' in place and place not in queriedPlaces):
-				queriedPlaces.append(place)
+			placex = updateOpen(place)
+			if('photos' in placex and placex not in queriedPlaces):
+				queriedPlaces.append(placex)
 		if(len(queriedPlaces) == 0):
 			return([])
 		random.shuffle(queriedPlaces)
