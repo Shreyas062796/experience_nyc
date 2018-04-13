@@ -13,6 +13,8 @@ import datetime
 #Production
 from places.placesmongo import PlacesMongo
 
+
+
 def add_routes(app=None):
 
 	places = Blueprint("places", __name__, url_prefix="/places")
