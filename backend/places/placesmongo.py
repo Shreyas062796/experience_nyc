@@ -7,6 +7,8 @@ from bson.objectid import *
 import random
 import json
 import hashlib
+from datetime import date
+import calendar
 import uuid
 from pprint import pprint
 
@@ -81,8 +83,9 @@ class PlacesMongo:
 		# pprint(allPlaces)
 		return(allPlaces)
 
-	def queryPlaces(self,types,price,num):
+	def queryPlaces(self,types,price,search,num):
 		db = self.clientConnect()
+		today_date = date.today()
 		params = {}
 		queriedPlaces = []
 		if types == ['']:
@@ -93,9 +96,11 @@ class PlacesMongo:
 		else:
 			for i in range(len(price)):
 				price[i] = len(price[i])
-		for place in db.places.find({'$and':[{'types':{'$in': types},'price_level':{'$in':price}}]}):
+		if search == '':
+			search = 'coffee'
+		for place in db.places.find({'$and':[{'types':{'$in': types},'price_level':{'$in':price},'$text': {'$search': search}}]}):
 			place['_id'] = str(place['_id'])
-			if('photos' in place):
+			if('photos' in place and place not in queriedPlaces):
 				queriedPlaces.append(place)
 		if(len(queriedPlaces) == 0):
 			return([])
@@ -112,4 +117,8 @@ class PlacesMongo:
 				place['_id'] = str(place['_id'])
 				places.append(place)
 		return(places)
+
+if __name__ == "__main__":
+	Experience = PlacesMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc")
+	Experience.queriedPlaces(['restaurant'],[1],'coffee',10)
 

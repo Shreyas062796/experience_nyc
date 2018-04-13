@@ -1,5 +1,5 @@
 from pymongo import *
-import places as ps
+# import places as ps
 from bson.objectid import *
 import random
 import json
@@ -7,7 +7,7 @@ import hashlib
 import uuid
 from pprint import pprint
 
-places = ps.NYCPlaces('AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A',40.7831,-73.9712)
+# places = ps.NYCPlaces('AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A',40.7831,-73.9712)
 
 class MongoConnector:
 	def __init__(self,clientHost,clientPort,username,password,database):
@@ -186,26 +186,26 @@ class MongoConnector:
 		return(user)
 	
 	#dynamically querying places
-	def queryPlaces(self,types,price,num):
+	def queryPlaces(self,types,price,search,num):
 		db = self.clientConnect()
 		params = {}
 		queriedPlaces = []
 		if types == ['']:
-			types = ['restaurant','cafe','bar','florist','amusement_park','bakery','clothing_store','convenience_store','department_store','hair_care','library','movie_theater','museum','night_club'
-			,'stadium','store','zoo']
+			types = ['restaurant','cafe','bar','florist','amusement_park','bakery','clothing_store','convenience_store','department_store','hair_care','library','movie_theater','museum','night_club','stadium','store','zoo']
 		if price == ['']:
 			price = [1,2,3]
 		else:
 			for i in range(len(price)):
 				price[i] = len(price[i])
-		for place in db.places.find({'$and':[{'types':{'$in': types},'price_level':{'$in':price}}]}):
+		for place in db.places.find({'$and':[{'types':{'$in': types},'price_level':{'$in':price},'$text': {'$search': search}}]}):
 			place['_id'] = str(place['_id'])
-			if('photos' in place):
+			if('photos' in place and place not in queriedPlaces):
 				queriedPlaces.append(place)
 		if(len(queriedPlaces) == 0):
 			return([])
 		random.shuffle(queriedPlaces)
 		x = queriedPlaces[:num]
+		print(x)
 		return(x)
 
 	def getQueriedPlaces(self,placeIds):
@@ -293,10 +293,6 @@ if __name__ == "__main__":
 	# print(Experience.queryPlaces([''],[''],100))
 	# pprint(Experience.QueryBars(2,2,2))
 	# Experience.addFavoritePlaces("testUser",134)
-	tripnames = ['dastrip','drunknight','badnight','boys are lit','drama is bad']
-	# tripPlaces =[['8f01b4b28a3d06af43a7df2f58adf9522a3fb2a9','791ead07b3b855e3ca3d7171d74e05f523e211db'],[]
-	for i in tripnames:
-		trip = Experience.createTrip(["11b2bcd4b94f0bf8a0bf06a53c6c23eba5a82f19", "03a612fcf14c158ec2f7c4b61b02c534d095efde", "05cd1fdae128118f2497b55431d31201a7b4ac96", "90e1dd76028177af6ecc196b71a32695e59e6ef7", "ea7d77a25db19a89439ab5495e2d862b7cfb4337", "fd152323e7aba37814dda9b37aaff31d40b70f04", "8f15b543b258c3cd0bea4c1d5e9caa5d0e7af52a"],i,'test',10)
-		Experience.populateTrip(trip)
+	Experience.queryPlaces([''],[''],'coffee',10)
 	# pprint(Experience.queryTrip('test'))
 	#QueryRestaurants(3,4)
