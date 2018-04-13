@@ -60,7 +60,7 @@ class Reccomendations:
 		# print(curCoordinates)
 		places = placesconnector.getPlacesInRadius(curCoordinates['lat'],curCoordinates['lng'],30)
 		userplaces = self.getTripsandPlaces()[1]
-		if userplaces != "empty":
+		if userplaces is not "empty":
 			for place in places:
 				for userplaceid in userplaces['id']:
 					if(place['id'] != userplaceid and place not in reccomendedplaces):

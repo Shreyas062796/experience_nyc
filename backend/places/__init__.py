@@ -22,9 +22,10 @@ def add_routes(app=None):
 		"""used to query places"""
 		if request.method == 'GET':
 			num = request.args['num']
+			search = request.args['search']
 			price_level = request.args.getlist('price_level[]')
 			types = request.args.getlist('types[]')
-			places = PlacesMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(types,price_level,int(num))
+			places = PlacesMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc").queryPlaces(types,price_level,search,int(num))
 			if(places):
 				return(jsonify(places))
 			elif(places == []):
