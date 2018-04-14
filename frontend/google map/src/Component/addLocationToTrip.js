@@ -7,6 +7,7 @@ import RaisedButton from "material-ui/RaisedButton";
 class AddLocationToTrip extends Component{	
 	constructor(){
 		super()
+		
 		this.state = {
 			newLocation:{}
 		}
@@ -23,7 +24,9 @@ class AddLocationToTrip extends Component{
 			}, function(){				
 				this.props.addLocationToTrip(this.state.newLocation)
 			})
+			
 		console.log('Submitted')
+		
 		e.preventDefault();
 	}
 	

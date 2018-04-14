@@ -2,23 +2,25 @@
 import React, { Component } from 'react';
 
 
-
-
 class GoogleMap extends Component{
 	
 	constructor(){
 		super()
 		this.state = {
 			dirDisp : new google.maps.DirectionsRenderer(),
-			dirServ : new google.maps.DirectionsService()
+			dirServ : new google.maps.DirectionsService(),
+			time : 10,
+			dist : 10,
+			inst : 0
+			
 		}
 	}
 	
-	shouldComponentUpdate(){
-		return false;
+	hey(){
+		alert('yo')
 	}
 	
-	componentWillReceiveProps(props){
+	componentWillUpdate(props){
 		
 		//directions
 		var dirDisp = this.state.dirDisp;
@@ -33,17 +35,20 @@ class GoogleMap extends Component{
 		
 		let endIndex = this.props.trip.length
 			
+			
 		if(endIndex > 0){	
 			
 			var start = {					
-				lat: this.props.trip[0].title, 
-				lng: this.props.trip[0].category
+				lat : this.props.trip[0].title, 
+				lng : this.props.trip[0].category
 			}
+			
 			
 			var end = {					
 				lat : this.props.trip[endIndex - 1].title, 
 				lng : this.props.trip[endIndex - 1].category
 			}
+			
 			
 			let waypts = [];
 			for(var i = 1; i < endIndex - 1; i++){
@@ -55,12 +60,7 @@ class GoogleMap extends Component{
 				})
 			}
 			
-			
-
-			
-			//var end = new google.maps.LatLng(42.7, -71.8);
-			
-			
+			//var end = new google.maps.LatLng(42.7, -71.8);			
 			
 			var request = {
 				origin: start,
@@ -69,16 +69,19 @@ class GoogleMap extends Component{
 				optimizeWaypoints: true,
 				travelMode: 'WALKING'
 			};
-			
+				
 			dirServ.route(request, function(result, status){
 				console.log(result, status);
 				if (status == 'OK'){
 					dirDisp.setDirections(result);			
 					//console.log(result.routes[0].legs[0])
-					
-					alert(this.refs.time)
+					this.setState({
+						time : result.routes[0].legs[0].duration.text,
+						dist : result.routes[0].legs[0].distance.text,						
+					})
 				}
-			});
+			}.bind(this))			
+			
 		}
 	}
 	
@@ -87,21 +90,21 @@ class GoogleMap extends Component{
 			center: { lat: this.props.lat, lng: this.props.lng },
 			zoom: 8
 		});
-		this.componentWillReceiveProps()
-		
+		this.componentWillUpdate()
 	}
 	
-	
-  render() {
+  render(){
     return (		
 	<div>
-		<div id = "map" ref = "map"/>
-		<h2 ref = "time" > Time: </h2>
-		<h2 ref = "dist" > Distance: </h2>
+		<div id = "map" ref = "map"/>		
+			<strong> Time: </strong> {this.state.time}
+			<strong> Distance: </strong> {this.state.dist}
+			
 		<br />
 	</div>
     );
   }
+  
 }
 
 

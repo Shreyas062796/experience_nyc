@@ -38,8 +38,6 @@ class AddLocation extends Component{
 				<br />
 				Lat: <input type = "text" ref = "locationLat"/> Lng: <input type = "text" ref = "locationLng"/> 
 				
-				
-				
 				<RaisedButton label = "add Loaction" onClick = {this.submitForm.bind(this)}/>
 				
 			</div>		
