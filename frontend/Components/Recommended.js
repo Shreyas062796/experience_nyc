@@ -78,7 +78,7 @@ const styles = theme => ({
 class Recommended extends React.Component {
   state = { items: [],
             favorites: [],
-            filter: {types: '', price_level: '', num: '100'},
+            filter: {search: '', types: '', price_level: '', num: '100', page: '1'},
             username: sessionStorage.getItem('username'),
             inTrip: [],
           };
@@ -104,7 +104,7 @@ class Recommended extends React.Component {
 
     if(data['username']){
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/getfavoriteplacesIds",
+        url:"https://experiencenyc.herokuapp.com/users/getfavoriteplacesIds",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -129,7 +129,7 @@ class Recommended extends React.Component {
     var data = {username: sessionStorage.getItem('username'), place_id: id};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/addfavoriteplaces",
+      url:"https://experiencenyc.herokuapp.com/users/addfavoriteplaces",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -148,7 +148,7 @@ class Recommended extends React.Component {
     var data = {username: sessionStorage.getItem('username'), place_id: id};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/removefavoriteplaces",
+      url:"https://experiencenyc.herokuapp.com/users/removefavoriteplaces",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -167,7 +167,7 @@ class Recommended extends React.Component {
     var data = {username: sessionStorage.getItem('username')};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/gettripplacesIds",
+      url:"https://experiencenyc.herokuapp.com/users/gettripplacesIds",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -182,7 +182,7 @@ class Recommended extends React.Component {
       var data = {username: sessionStorage.getItem('username')};
 
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/gettripplaces",
+        url:"https://experiencenyc.herokuapp.com/users/gettripplaces",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -215,7 +215,7 @@ class Recommended extends React.Component {
           var data = {placeIds: this.state.inTrip};
 
           $.ajax({
-            url:"https://experiencenyc.herokuapp.com/getqueryplaces",
+            url:"https://experiencenyc.herokuapp.com/places/getusertripplaces",
             type:"GET",
             data: data,
             contentType:"application/json; charset=utf-8",
@@ -256,7 +256,7 @@ class Recommended extends React.Component {
       var data = {username: sessionStorage.getItem('username'), place_id: id};
 
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/addtripplaces",
+        url:"https://experiencenyc.herokuapp.com/users/addtripplaces",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -288,7 +288,7 @@ class Recommended extends React.Component {
       var data = {username: sessionStorage.getItem('username'), place_id: id};
 
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/removetripplaces",
+        url:"https://experiencenyc.herokuapp.com/users/removetripplaces",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -322,19 +322,12 @@ class Recommended extends React.Component {
   }
 
 
-  getPhotos = (placeID) => {
-    $.ajax({
-      url:"https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A",
-      type:"GET",
-      contentType:"application/json; charset=utf-8",
-      dataType:"json"})
-      .done((response) => {
-       const { classes } = this.props;
-        const result = response['result']['photos'].map((value) => (
-          <img className="image" style={{width:'100%', height: '100%', objectFit: 'cover', position: 'relative', zIndex: 1}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "10000"+ "&maxheight=" + "10000" + "&photoreference=" + value['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A"}/>
-        ))
-        this.props.modalPhotos(result);
-     })
+  getPhotos = (photos) => {
+    this.props.modalPhotos(photos);
+  }
+
+  openPhotoModal = (photo) => {
+    this.props.modalPhotos(photo);
   }
 
   //listen for new props
@@ -345,7 +338,7 @@ class Recommended extends React.Component {
         this.getRecommended();
       });
     }
-    else if(nextProps.page == "Recommended"){
+    else if((nextProps.page != this.props.page) && nextProps.page == "Recommended"){
       this.getRecommended();
     }
 
@@ -370,7 +363,7 @@ class Recommended extends React.Component {
     var data = {username: sessionStorage.getItem('username'), address: '33rd Street station New York, NY 10001'};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/recommendedplaces",
+      url:"https://experiencenyc.herokuapp.com/recommendations/placeRecommendations",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -416,8 +409,8 @@ class Recommended extends React.Component {
 
 
     return (
-      <div id='recommendedDiv' style={{margin: '1em', height:  window.innerWidth <= 760 ? '75vh' : '100vh',overflowY: 'auto', overflowX: 'hidden'}} onScroll={this.handleScroll}>
-        <Grid container spacing={40} justify={'center'} style={{padding: 25, paddingBottom: window.innerWidth <= 760 ? '1em' : '12em', alignItems: 'center', height: this.state.items.length == 1 ? '100%' : 'auto'}}>
+      <div id='recommendedDiv' style={{margin: '1em', marginTop: 0, height:  window.innerWidth <= 760 ? '75vh' : '100vh',overflowY: 'auto', overflowX: 'hidden'}} onScroll={this.handleScroll}>
+        <Grid container spacing={40} justify={'center'} style={{padding: 25, paddingTop: 0, marginTop: '3em', paddingBottom: window.innerWidth <= 760 ? '1em' : '12em', alignItems: 'center', height: this.state.items.length == 1 ? '100%' : 'auto'}}>
           {this.state.items}
         </Grid>
       </div>

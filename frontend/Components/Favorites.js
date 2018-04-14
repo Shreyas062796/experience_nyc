@@ -99,7 +99,7 @@ class Cards extends React.Component {
 
     if(data['username']){
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/getfavoriteplacesIds",
+        url:"https://experiencenyc.herokuapp.com/users/getfavoriteplacesIds",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -121,7 +121,7 @@ class Cards extends React.Component {
     var data = {username: sessionStorage.getItem('username')};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/gettripplacesIds",
+      url:"https://experiencenyc.herokuapp.com/users/gettripplacesIds",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -136,7 +136,7 @@ class Cards extends React.Component {
       var data = {username: sessionStorage.getItem('username')};
 
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/gettripplaces",
+        url:"https://experiencenyc.herokuapp.com/users/gettripplaces",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -169,7 +169,7 @@ class Cards extends React.Component {
           var data = {placeIds: this.state.inTrip};
 
           $.ajax({
-            url:"https://experiencenyc.herokuapp.com/getqueryplaces",
+            url:"https://experiencenyc.herokuapp.com/places/getusertripplaces",
             type:"GET",
             data: data,
             contentType:"application/json; charset=utf-8",
@@ -211,7 +211,7 @@ class Cards extends React.Component {
       var data = {username: sessionStorage.getItem('username'), place_id: id};
 
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/addtripplaces",
+        url:"https://experiencenyc.herokuapp.com/users/addtripplaces",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -244,7 +244,7 @@ class Cards extends React.Component {
       var data = {username: sessionStorage.getItem('username'), place_id: id};
 
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/removetripplaces",
+        url:"https://experiencenyc.herokuapp.com/users/removetripplaces",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -291,7 +291,7 @@ class Cards extends React.Component {
     var data = {username: sessionStorage.getItem('username'), place_id: id};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/removefavoriteplaces",
+      url:"https://experiencenyc.herokuapp.com/users/removefavoriteplaces",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -304,19 +304,12 @@ class Cards extends React.Component {
       })
   }
 
-  getPhotos = (placeID) => {
-    $.ajax({
-      url:"https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeID + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A",
-      type:"GET",
-      contentType:"application/json; charset=utf-8",
-      dataType:"json"})
-      .done((response) => {
-       const { classes } = this.props;
-        const result = response['result']['photos'].map((value) => (
-          <img className="image" style={{width:'100%', height: '100%', objectFit: 'cover', position: 'relative', zIndex: 1}} src={"https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "10000"+ "&maxheight=" + "10000" + "&photoreference=" + value['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A"}/>
-        ))
-        this.props.modalPhotos(result);
-     })
+  getPhotos = (photos) => {
+    this.props.modalPhotos(photos);
+  }
+
+  openPhotoModal = (photo) => {
+    this.props.modalPhotos(photo);
   }
 
   //get favorites and display
@@ -324,7 +317,7 @@ class Cards extends React.Component {
     var data = {username: sessionStorage.getItem('username')};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/getfavoriteplaces",
+      url:"https://experiencenyc.herokuapp.com/users/getfavoriteplaces",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -360,7 +353,7 @@ class Cards extends React.Component {
 
     return (
       <div style={{margin: '1em', height: '90vh',overflowY: 'auto', overflowX: 'hidden'}}>
-        <Grid container spacing={40} justify={'center'} style={{padding: 25}}>
+        <Grid container spacing={40} justify={'center'} style={{padding: 25, paddingTop: 0}}>
           {this.state.items}
         </Grid>
       </div>

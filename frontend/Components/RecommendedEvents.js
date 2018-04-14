@@ -63,7 +63,7 @@ class Recommended extends React.Component {
   state = { expanded: false,
             items: [],
             favorites: [],
-            filter: {types: '', price_level: '', num: '100'},
+            filter: {search: '', types: '', price_level: '', num: '100', page: '1'},
             username: sessionStorage.getItem('username')
           };
 
@@ -149,7 +149,7 @@ class Recommended extends React.Component {
 
     if(data['username']){
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/getfavoriteplacesIds",
+        url:"https://experiencenyc.herokuapp.com/users/getfavoriteplacesIds",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -174,7 +174,7 @@ class Recommended extends React.Component {
     var data = {username: sessionStorage.getItem('username'), place_id: id};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/addfavoriteplaces",
+      url:"https://experiencenyc.herokuapp.com/users/addfavoriteplaces",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -191,7 +191,7 @@ class Recommended extends React.Component {
     var data = {username: sessionStorage.getItem('username'), place_id: id};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/removefavoriteplaces",
+      url:"https://experiencenyc.herokuapp.com/users/removefavoriteplaces",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -231,8 +231,14 @@ class Recommended extends React.Component {
 
 
   //listen for new props
-  componentWillReceiveProps(nextProps) {
+  /*componentWillReceiveProps(nextProps) {
     if((this.props.loggedIn != nextProps.loggedIn) && nextProps.loggedIn){
+      this.getRecommended();
+    }
+  }*/
+
+  componentDidMount = () => {
+    if(this.props.loggedIn){
       this.getRecommended();
     }
   }
@@ -246,7 +252,7 @@ class Recommended extends React.Component {
     var data = {username: sessionStorage.getItem('username'), address: '33rd Street station New York, NY 10001'};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/recommendedplaces",
+      url:"https://experiencenyc.herokuapp.com/recommendations/eventRecommendations",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -310,7 +316,7 @@ class Recommended extends React.Component {
     })
   }
 
-  //Load places when component mounts
+  //Load recommended when component mounts
   componentDidMount = () => {
     if(this.props.loggedIn){
       this.getRecommended();

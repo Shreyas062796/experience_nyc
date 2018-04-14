@@ -44,6 +44,9 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
   },
+  margin: {
+    margin: theme.spacing.unit * 2,
+  },
   appFrame: {
     zIndex: 1,
     overflow: 'hidden',
@@ -140,11 +143,11 @@ const styles = theme => ({
 
 class Main extends React.Component {
   state = {
-    drawerOpen: true,
+    drawerOpen: false,
     clicked: '',
     username: sessionStorage.getItem('username'),
     anchorEl: null,
-    filter: {types: [''], price_level: [''], num: '100'},
+    filter: {search: '', types: [''], price_level: [''], num: '100', page: '1'},
     currentPage: 'Places',
     open: '',
     tripButton: false,
@@ -203,8 +206,8 @@ class Main extends React.Component {
   }
 
   handleLogout = () => {
-    this.setState({username: '', currentPage: 'Places', clicked: '', favorites: [], filter: {types: [''], price_level: [''], num: '100'}, removeFromTrip: "", tripPlaces: [], loggedIn: false})
-    sessionStorage.setItem('username', '')
+    this.setState({username: '', currentPage: 'Places', clicked: '', favorites: [], filter: {search: '', types: [''], price_level: [''], num: '100'}, removeFromTrip: "", tripPlaces: [], loggedIn: false})
+    sessionStorage.removeItem('username')
     alert("Logged Out!")
   }
 
@@ -365,15 +368,17 @@ class Main extends React.Component {
               <div style={{width: '50%', alignItems: 'center', justifyContent: 'flex-end', display: 'flex'}}>
                 {userAppbarOption}
 
-                <Button
-                  style={{padding: '0px', color: 'white'}}
-                  aria-label="open drawer"
-                  onClick={this.handleDrawerOpen}
-                  className={classNames(classes.menuButton, drawerOpen && classes.hide)}
-                >
-                  Trip Cart
+              <Button
+                style={{padding: '0px', color: 'white'}}
+                aria-label="open drawer"
+                onClick={this.handleDrawerOpen}
+                className={classNames(classes.menuButton, drawerOpen && classes.hide)}
+              >
+                Trip Cart
+                <Badge color="primary" badgeContent={this.state.tripPlaces.length} className={classes.margin}>
                   <Place color="white" />
-                </Button>
+                </Badge>
+              </Button>
               </div>
             </Toolbar>
 
@@ -391,7 +396,7 @@ class Main extends React.Component {
             onClose={this.handleTripClose}
           >
             <div className={classes.paper} style={{width: '75%', height: '75%'}}>
-              {/*<App locations={this.state.tripLocations}/>*/}
+              <App locations={this.state.tripLocations}/>
             </div>
           </Modal>
           {/*<MainModal />*/}

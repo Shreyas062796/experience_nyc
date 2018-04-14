@@ -64,7 +64,6 @@ class LoginForm extends React.Component {
     display: 'block',
     showPassword: false,
     open: false,
-    message: [],
     usernameError: false,
     passwordError: false,
     displayResetModal: false
@@ -90,7 +89,8 @@ class LoginForm extends React.Component {
     this.setState({ showPassword: !this.state.showPassword });
   };
 
-  handleLogin = () => {
+  handleLogin = (event) => {
+    event.preventDefault();
     var data = this.validation();
 
     if(data == false){
@@ -98,7 +98,7 @@ class LoginForm extends React.Component {
     }
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/authenticate",
+      url:"https://experiencenyc.herokuapp.com/users/authenticate",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -117,20 +117,18 @@ class LoginForm extends React.Component {
 
   validation = () => {
     let missingFields = false;
-    this.setState({message :[], passwordError: false, usernameError: false})
+    this.setState({passwordError: false, usernameError: false})
 
     var user = $('#user').val();
     if(!user){
       missingFields = true;
       this.setState({usernameError: true})
-      this.state.message.push(<span>username</span>)
     }
 
     var password = $('#loginPassword').val();
     if(!password){
       missingFields = true;
       this.setState({passwordError: true})
-      this.state.message.push(<span>password</span>)
     }
 
     if(missingFields){
@@ -164,56 +162,45 @@ class LoginForm extends React.Component {
 
     return (
       <div className={classes.container} style={{display: this.state.display, marginTop: 10}}>
-        <Snackbar
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                  }}
-                  open={this.state.open}
-                  onClose={this.handleClose}
-                  autoHideDuration={2000}
-                  SnackbarContentProps={{
-                    'aria-describedby': 'message-id',
-                  }}
-                  message={this.handleMessage()}
-                />
-              <FormControl className={classes.formControl} error={this.state.usernameError}>
-          <InputLabel FormControlClasses={{focused: classes.inputLabelFocused}} htmlFor="custom-color-input">
-            User Name
-          </InputLabel>
-          <Input classes={{inkbar: classes.inputInkbar}} id="user" />
-        </FormControl>
+        <form className="form" onSubmit={this.handleLogin}>
+          <FormControl className={classes.formControl} error={this.state.usernameError}>
+            <InputLabel FormControlClasses={{focused: classes.inputLabelFocused}} htmlFor="custom-color-input">
+              User Name
+            </InputLabel>
+            <Input classes={{inkbar: classes.inputInkbar}} id="user" />
+          </FormControl>
 
-        <FormControl className={classes.formControl} error={this.state.passwordError}>
-          <InputLabel htmlFor="password">Password</InputLabel>
-            <Input
-              id="loginPassword"
-              type={this.state.showPassword ? 'text' : 'password'}
-              value={this.state.password}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={this.handleClickShowPasssword}
-                    onMouseDown={this.handleMouseDownPassword}
-                  >
-                    {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-        </FormControl>
-        <FormControl className={classes.formControl}>
-            <Grid item md={4}>
-              <Typography>
-                <a onClick={this.getResetForm} style={{textDecoration: "none", color: 'blue', cursor: 'pointer'}}>Forgot Username or Password?</a>
-              </Typography>
-            </Grid>
-            <div style={{textAlign: "center"}}>
-              <Button id='login' className={classes.button} onClick={this.handleLogin} style={{width: '25%',color: 'white', backgroundColor: 'rgba(0, 0, 0, 0.87)'}}>
-                Login
-              </Button>
-            </div>
-        </FormControl>
+          <FormControl className={classes.formControl} error={this.state.passwordError}>
+            <InputLabel htmlFor="password">Password</InputLabel>
+              <Input
+                id="loginPassword"
+                type={this.state.showPassword ? 'text' : 'password'}
+                value={this.state.password}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={this.handleClickShowPasssword}
+                      onMouseDown={this.handleMouseDownPassword}
+                    >
+                      {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+          </FormControl>
+          <FormControl className={classes.formControl}>
+              <Grid item md={4}>
+                <Typography>
+                  <a onClick={this.getResetForm} style={{textDecoration: "none", color: 'blue', cursor: 'pointer'}}>Forgot Username or Password?</a>
+                </Typography>
+              </Grid>
+              <div style={{textAlign: "center"}}>
+                <Button id='login' className={classes.button} type="submit" style={{width: '25%',color: 'white', backgroundColor: 'rgba(0, 0, 0, 0.87)'}}>
+                  Login
+                </Button>
+              </div>
+          </FormControl>
+        </form>
         <ResetModal display={this.state.displayResetModal} onClose={this.handleReset}/>
       </div>
     );

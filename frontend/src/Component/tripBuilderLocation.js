@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
 class TripBuilderLocation extends Component{
-
-
+	
+	
   render() {
 	  
     return (

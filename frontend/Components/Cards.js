@@ -79,7 +79,8 @@ class Cards extends React.Component {
             favorites: [''],
             trip: [],
             inTrip: [],
-            filter: {types: [''], price_level: [''], num: '100'},
+            page: 1,
+            filter: {search: '', types: [''], price_level: [''], num: '100'},
             username: sessionStorage.getItem('username'),
             loggedIn: false,
             lastScrollPos: 0,
@@ -90,6 +91,13 @@ class Cards extends React.Component {
 
   handleScroll = () => {
     const thisPos = document.getElementById('cardDiv').scrollTop;
+    const scrollHeight = document.getElementById('cardDiv').scrollHeight;
+    const offset = thisPos + window.innerHeight;
+
+    if(offset >= scrollHeight * 0.99 ){
+      this.searchPlaces("nextPage");
+    }
+
     const down = thisPos > this.state.lastScrollPos;
     // If current `down` value is differs from `down` from state,
     // assign `thisPos` to variable, else assigning current `changedPos` state value.
@@ -109,7 +117,7 @@ class Cards extends React.Component {
 
     if(data['username']){
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/getfavoriteplacesIds",
+        url:"https://experiencenyc.herokuapp.com/users/getfavoriteplacesIds",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -125,7 +133,7 @@ class Cards extends React.Component {
     var data = {username: sessionStorage.getItem('username'), place_id: id};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/addfavoriteplaces",
+      url:"https://experiencenyc.herokuapp.com/users/addfavoriteplaces",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -143,7 +151,7 @@ class Cards extends React.Component {
     var data = {username: sessionStorage.getItem('username'), place_id: id};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/removefavoriteplaces",
+      url:"https://experiencenyc.herokuapp.com/users/removefavoriteplaces",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -158,25 +166,27 @@ class Cards extends React.Component {
 
   //get a list of the place IDs that the user is building a trip with
   getTripPlacesIDs = () => {
-    var data = {username: sessionStorage.getItem('username')};
-
-    $.ajax({
-      url:"https://experiencenyc.herokuapp.com/gettripplacesIds",
-      type:"POST",
-      data: JSON.stringify(data),
-      contentType:"application/json; charset=utf-8",
-      dataType:"json"})
-      .done((response) => {
-        this.setState({inTrip: response});
-      })
-  }
-
-  getTripPlaces = () => {
-    if(this.state.loggedIn){
+    if(sessionStorage.getItem('username')){
       var data = {username: sessionStorage.getItem('username')};
 
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/gettripplaces",
+        url:"https://experiencenyc.herokuapp.com/users/gettripplacesIds",
+        type:"POST",
+        data: JSON.stringify(data),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json"})
+        .done((response) => {
+          this.setState({inTrip: response});
+        })
+    }
+  }
+
+  getTripPlaces = () => {
+    if(this.props.loggedIn){
+      var data = {username: sessionStorage.getItem('username')};
+
+      $.ajax({
+        url:"https://experiencenyc.herokuapp.com/users/gettripplaces",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -209,7 +219,7 @@ class Cards extends React.Component {
           var data = {placeIds: this.state.inTrip};
 
           $.ajax({
-            url:"https://experiencenyc.herokuapp.com/getqueryplaces",
+            url:"https://experiencenyc.herokuapp.com/places/getusertripplaces",
             type:"GET",
             data: data,
             contentType:"application/json; charset=utf-8",
@@ -251,7 +261,7 @@ class Cards extends React.Component {
       var data = {username: sessionStorage.getItem('username'), place_id: id};
 
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/addtripplaces",
+        url:"https://experiencenyc.herokuapp.com/users/addtripplaces",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -284,7 +294,7 @@ class Cards extends React.Component {
       var data = {username: sessionStorage.getItem('username'), place_id: id};
 
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/removetripplaces",
+        url:"https://experiencenyc.herokuapp.com/users/removetripplaces",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -329,20 +339,43 @@ class Cards extends React.Component {
   //search for places
   searchPlaces = (message) => {
     var data = '';
+
     //set list of favorites for current user
     if(message == "addFavoritePlace" || message == "removeFavoritePlace"){
       this.setFavorites();
       data = this.state.filter;
+      let page = this.state.page;
+      data['page'] = page;
       this.getPlaces(data);
     }
 
     if(message == "removeFromTrip" || message == "addToTrip"){
       data = this.state.filter;
+      let page = this.state.page;
+      data['page'] = page;
       this.getPlaces(data);
     }
 
     if(message == "loggedIn" || message == "loggedOut"){
       data = this.state.filter;
+      data['page'] = 1;
+      this.getPlaces(data);
+    }
+
+    if(message == "nextPage" && !this.state.items[this.state.items.length-1].props){
+      let tempItems = this.state.items;
+      tempItems.push(<div className='sweet-loading'>
+        <PulseLoader
+          color={'#123abc'}
+          loading={this.state.loading}
+        />
+      </div>);
+      this.setState({items: tempItems});
+
+      data = this.state.filter;
+      let page = this.state.page + 1
+      this.setState({page: page});
+      data['page'] = page;
       this.getPlaces(data);
     }
 
@@ -358,6 +391,8 @@ class Cards extends React.Component {
       }
       this.setState({filter: tempArr}, function() {
         data = this.state.filter;
+        let page = this.state.page;
+        data['page'] = page;
         this.getPlaces(data);
       })
     }
@@ -375,16 +410,16 @@ class Cards extends React.Component {
 
   //sends ajax request to get places data
   getPlaces = (data) => {
-
-    this.setState({items: [<div className='sweet-loading'>
-      <PulseLoader
-        color={'#123abc'}
-        loading={this.state.loading}
-      />
-    </div>]})
-
+    if(data['page'] == 1){
+      this.setState({items: [<div className='sweet-loading'>
+        <PulseLoader
+          color={'#123abc'}
+          loading={this.state.loading}
+        />
+      </div>]})
+    }
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/queryplaces",
+      url:"https://experiencenyc.herokuapp.com/places/newqueryplaces",
       type:"GET",
       data: data,
       contentType:"application/json; charset=utf-8",
@@ -408,11 +443,14 @@ class Cards extends React.Component {
              favorites={this.state.favorites}
            />
          ))
-        this.setState({items: result});
+        let tempItems = this.state.items;
+        tempItems.pop();
+        tempItems.push(result);
+        this.setState({items: tempItems});
        }
        else{
          alert('No data available for that filter!')
-         this.setState({filter: {types: [''], price_level: [''], num: '100',}}, function() {
+         this.setState({filter: {search: '', types: [''], price_level: [''], num: '100'}}, function() {
            this.searchPlaces('filter');
          }) ;
        }
@@ -501,8 +539,8 @@ class Cards extends React.Component {
 
 
     return (
-      <div id="cardDiv" style={{margin: '1em', height:  window.innerWidth <= 760 ? '75vh' : '100vh',overflowY: 'auto', overflowX: 'hidden'}} onScroll={this.handleScroll}>
-        <Grid container spacing={40} justify={'center'} style={{padding: 25, paddingBottom: window.innerWidth <= 760 ? '1em' : '12em', alignItems: 'center', height: this.state.items.length == 1 ? '100%' : 'auto'}}>
+      <div id="cardDiv" style={{margin: '1em', marginTop: 0, height:  window.innerWidth <= 760 ? '75vh' : '100vh',overflowY: 'auto', overflowX: 'hidden'}} onScroll={this.handleScroll}>
+        <Grid container spacing={40} justify={'center'} style={{padding: 25, paddingTop: 0, marginTop: '3em', paddingBottom: window.innerWidth <= 760 ? '1em' : '12em', alignItems: 'center', height: this.state.items.length == 1 ? '100%' : 'auto'}}>
           {this.state.items}
         </Grid>
       </div>

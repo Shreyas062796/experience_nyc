@@ -54,11 +54,10 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
     backgroundColor: 'none',
-    display:'inline-flex',
     width:'100%'
   },
   grid: {
-    width: '100%',
+    width: window.innerWidth <= 760 ? '100%' :  window.innerWidth - 300,
     paddingLeft: 15,
     paddingBottom: 20,
     flexDirection: 'row',
@@ -94,7 +93,7 @@ class FilterBar extends React.Component {
     categories: [],
     prices: [],
     expanded: null,
-    filter: {types: [''], price_level: [''], num: '10'},
+    filter: {search: '', types: [''], price_level: [''], num: '100', page: '1'},
     distance: ''
   };
 
@@ -118,7 +117,7 @@ class FilterBar extends React.Component {
     var prices = this.state.prices;
     var distance = $('#distance').val();
 
-    var data = {types: category, price_level: prices, num: '100'}
+    var data = {search: search, types: category, price_level: prices, num: '100', page: '1'}
     this.setState({filter: data, expanded: null}, function () {
         this.handleFilterChange();
     });
@@ -160,7 +159,7 @@ class FilterBar extends React.Component {
 
     return (
       <div className={classes.root}>
-        <ExpansionPanel style={{backgroundColor: '#ffffff00', boxShadow: 'none',width:'100%'}} expanded={expanded === 'panel1'} onChange={this.handleChange('panel1')}>
+        <ExpansionPanel style={{backgroundColor: this.state.expanded ? '#fafafa' : '#fafafae6', boxShadow: 'none',width:'100%', position: 'absolute', zIndex: 10}} expanded={expanded === 'panel1'} onChange={this.handleChange('panel1')}>
             <ExpansionPanelSummary expandIcon={<Filter />} style={{display: 'inline-flex', cursor: 'default', marginLeft: '16px', paddingRight: '0px'}}>
               <div style={{width: '100%',display: 'inline-flex'}}>
                 <Typography className={classes.typography} style={{cursor: 'pointer'}}>Filter</Typography>
@@ -251,6 +250,7 @@ class FilterBar extends React.Component {
 
 
         </ExpansionPanel>
+
       </div>
     );
   }

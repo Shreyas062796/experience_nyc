@@ -84,6 +84,19 @@ const styles = theme => ({
   },
   typography: {
     fontSize: '1em'
+  },
+  morePhotos: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    margin: 'auto',
+    width: '10em',
+    height: '3em',
+    fontSize: '1em',
+    color: 'rgba(255, 255, 255, 0.79)',
+    backgroundColor: '#ffffff4a',
   }
 });
 
@@ -93,7 +106,8 @@ class PlaceCard extends React.Component {
             loggedIn:false,
             favorites: [],
             inTrip: [],
-            priceKeys: {1: 'Cheap', 2: 'Average', 3: 'Pricey', 4: 'Expensive'}
+            priceKeys: {1: 'Cheap', 2: 'Average', 3: 'Pricey', 4: 'Expensive'},
+            photoHover: false
           };
 
   handleExpandClick = (id) => {
@@ -146,9 +160,7 @@ class PlaceCard extends React.Component {
 
   componentWillMount = () => {
     if(sessionStorage.getItem('username')){
-      this.setState({loggedIn: true, favorites: this.props.favorites, inTrip: this.props.inTrip}, function(){
-        this.setState({})
-      })
+      this.setState({loggedIn: true, favorites: this.props.favorites, inTrip: this.props.inTrip})
     }
   }
 
@@ -234,7 +246,23 @@ class PlaceCard extends React.Component {
     return tags;
   }
 
+  getHours = (hoursList) => {
+    const hours = hoursList.map((value) => (
+      <span style={{display: 'block'}}>{value}</span>
+    ))
+
+    return hours;
+  }
+
   componentWillReceiveProps = (nextProps) => {
+  }
+
+  onHover = () => {
+    this.setState({photoHover: true});
+  }
+
+  onLeave = () => {
+    this.setState({photoHover: false});
   }
 
 
@@ -272,7 +300,8 @@ class PlaceCard extends React.Component {
              </IconButton>
            </div>
         </div>
-         <div style={{overflow:'hidden'}} onClick={() =>{this.getPhotos(this.props.value['photos'])}}>
+          <div style={{overflow:'hidden', position: 'relative'}} onMouseOver={this.onHover} onMouseLeave={this.onLeave} >
+            <Chip label="More Photos" className={classes.morePhotos} style={{display: this.state.photoHover ? 'flex' : 'none'}} onClick={() =>{this.getPhotos(this.props.value['photos'])}}/>
             <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover', cursor: 'pointer'}} src={this.props.value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + this.props.value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
           </div>
            <CardActions className={this.props.actions} disableActionSpacing>
@@ -302,30 +331,47 @@ class PlaceCard extends React.Component {
            </CardActions>
            <Collapse in={this.state.expanded.includes(this.props.value['place_id'])} timeout="auto" unmountOnExit>
             <CardContent>
+              {this.props.value['rating'] ? <div>
               <Typography className={classes.typography}>
                 Rating: {this.props.value['rating']}
               </Typography>
-              <Divider className={classes.divider}/>
+              <Divider className={classes.divider}/> </div>: false}
+
+              {this.props.value['price_level'] ? <div>
               <Typography className={classes.typography}>
                 Price: {this.state.priceKeys[this.props.value['price_level']]}
               </Typography>
-              <Divider className={classes.divider}/>
+              <Divider className={classes.divider}/>  </div> : false}
+
+              {this.props.value['formatted_phone_number'] ? <div>
               <Typography className={classes.typography}>
                 Phone Number: {this.props.value['formatted_phone_number']}
               </Typography>
-              <Divider className={classes.divider}/>
+              <Divider className={classes.divider}/> </div> : false}
+
+              {this.props.value['opening_hours'] ? <div>
+              <Typography className={classes.typography} style={{textAlign: 'center'}}>
+                Hours <Chip label={this.props.value['opening_hours']['open_now'] ? 'Open' : 'Closed'} style={{backgroundColor: this.props.value['opening_hours']['open_now'] ? '#00ff159e' : '#f44336de'}} className={classes.chip} />
+              </Typography>
+              <Typography paragraph className={classes.typography}>
+                {this.getHours(this.props.value['opening_hours']['weekday_text'])}
+              </Typography>
+              <Divider className={classes.divider}/> </div>: false}
+
+              {this.props.value['types'] ?
               <div className={classes.root}>
               <Typography style={{display: 'inline-block'}} className={classes.typography}>
                 Tags:
               </Typography>
                 {this.getTags(this.props.value['types'])}
-              </div>
-              <Divider className={classes.divider}/>
+              <Divider className={classes.divider}/> </div>: false}
+
+              {this.props.value['website'] ?
               <div style={{textAlign: 'center'}}>
                 <Button href={this.props.value['website']} target="_blank" style={{minWidth: '0px', color: 'rgba(0, 0, 0, 0.87)', border: '1px solid', borderRadius: '4px'}}>
                  Website
                 </Button>
-              </div>
+              </div> : false}
             </CardContent>
           </Collapse>
          </Card>
