@@ -53,6 +53,10 @@ const styles = theme => ({
   },
   textFieldFormLabel: {
     fontSize: 18,
+  },
+  snackbar: {
+    backgroundColor: 'white',
+    minWidth: 0
   }
 });
 
@@ -91,8 +95,8 @@ class RegisterForm extends React.Component {
     this.props.registered();
   };
 
-  handleRegister = () => {
-
+  handleRegister = (event) => {
+      event.preventDefault();
       var data = this.validation();
 
       if(data == false){
@@ -100,7 +104,7 @@ class RegisterForm extends React.Component {
       }
 
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/createuser",
+        url:"https://experiencenyc.herokuapp.com/users/createuser",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -127,44 +131,62 @@ class RegisterForm extends React.Component {
     if(!firstName){
       missingFields = true;
       this.setState({first_nameError: true})
-      //this.state.message.push(<span>username</span>)
+
+      let tempMessage = this.state.message;
+      tempMessage.push(<Typography style={{color: 'red'}}>Invalid First Name</Typography>);
+      tempMessage.push(<br />);
+      this.setState({message: tempMessage});
     }
 
     var lastName = $('#last_name').val();
     if(!lastName){
       missingFields = true;
       this.setState({last_nameError: true})
-      //this.state.message.push(<span>username</span>)
+      let tempMessage = this.state.message;
+      tempMessage.push(<Typography style={{color: 'red'}}>Invalid Last Name</Typography>);
+      tempMessage.push(<br />);
+      this.setState({message: tempMessage});
     }
 
     var email = $('#email').val();
     if(!email || !re.test(String(email).toLowerCase())){
       missingFields = true;
       this.setState({emailError: true})
-      //this.state.message.push(<span>username</span>)
+      let tempMessage = this.state.message;
+      tempMessage.push(<Typography style={{color: 'red'}}>Invalid Email</Typography>);
+      tempMessage.push(<br />);
+      this.setState({message: tempMessage});
     }
 
     var username = $('#username').val();
     if(!username){
       missingFields = true;
       this.setState({usernameError: true})
-      //this.state.message.push(<span>username</span>)
+      let tempMessage = this.state.message;
+      tempMessage.push(<Typography style={{color: 'red'}}>Invalid Username</Typography>);
+      tempMessage.push(<br />);
+      this.setState({message: tempMessage});
     }
 
     var password = $('#registerPassword').val();
     if(!this.isOkPass(password)){
       missingFields = true;
       this.setState({passwordError: true})
-      //this.state.message.push(<span>password</span>)
+      let tempMessage = this.state.message;
+      tempMessage.push(<Typography style={{color: 'red'}}>Invalid Password</Typography>);
+      tempMessage.push(<br />);
+      this.setState({message: tempMessage});
     }
 
     var confirmPassword = $('#confirmPassword').val();
     if(password != confirmPassword){
       missingFields = true;
       this.setState({confirmPasswordError: true})
-      //this.state.message.push(<span>password</span>)
+      let tempMessage = this.state.message;
+      tempMessage.push(<Typography style={{color: 'red'}}>Passwords Don't Match</Typography>);
+      tempMessage.push(<br />);
+      this.setState({message: tempMessage});
     }
-
     if(missingFields){
       this.setState({open: true})
       return false;
@@ -193,6 +215,7 @@ class RegisterForm extends React.Component {
   }
 
   handleClose = (event, reason) => {
+    this.setState({message: []});
     if (reason === 'clickaway') {
       return;
     }
@@ -214,48 +237,52 @@ class RegisterForm extends React.Component {
     return (
       <div className={classes.container} style={{display: this.state.display, marginTop: 10}}>
         <Snackbar
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                  }}
-                  open={this.state.open}
-                  onClose={this.handleClose}
-                  autoHideDuration={2000}
-                  SnackbarContentProps={{
-                    'aria-describedby': 'message-id',
-                  }}
-                  message={this.handleMessage()}
-                />
-              <FormControl className={classes.formControl} style={{width: '50%'}} error={this.state.first_nameError}>
-          <InputLabel FormControlClasses={{focused: classes.inputLabelFocused}} htmlFor="custom-color-input">
-            First Name
-          </InputLabel>
-          <Input classes={{inkbar: classes.inputInkbar}} id="first_name" />
-        </FormControl>
+            anchorOrigin={{
+              vertical: 'center',
+              horizontal: 'center',
+            }}
+            open={this.state.open}
+            onClose={this.handleClose}
+            autoHideDuration={2000}
+            SnackbarContentProps={{
+              'aria-describedby': 'message-id',
+              className: classes.snackbar,
+            }}
+            message={this.handleMessage()}
+          />
+        <form className="form" onSubmit={this.handleRegister}>
+          <FormControl className={classes.formControl} style={{width: '50%'}} error={this.state.first_nameError}>
+            <InputLabel  htmlFor="first_name">
+              First Name
+            </InputLabel>
+            <Input classes={{inkbar: classes.inputInkbar}} id="first_name" />
+          </FormControl>
 
-        <FormControl className={classes.formControl} style={{width: '50%'}} error={this.state.last_nameError}>
-          <InputLabel FormControlClasses={{focused: classes.inputLabelFocused}} htmlFor="custom-color-input">
-            Last Name
-          </InputLabel>
-          <Input classes={{inkbar: classes.inputInkbar}} id="last_name" />
-        </FormControl>
+          <FormControl className={classes.formControl} style={{width: '50%'}} error={this.state.last_nameError}>
+            <InputLabel  htmlFor="custom-color-input">
+              Last Name
+            </InputLabel>
+            <Input classes={{inkbar: classes.inputInkbar}} id="last_name" />
+          </FormControl>
 
-        <FormControl className={classes.formControl} error={this.state.emailError}>
-          <InputLabel FormControlClasses={{focused: classes.inputLabelFocused}} htmlFor="custom-color-input">
-            Email
-          </InputLabel>
-          <Input classes={{inkbar: classes.inputInkbar}} id="email" />
-        </FormControl>
+          <FormControl className={classes.formControl} error={this.state.emailError}>
+            <InputLabel htmlFor="custom-color-input">
+              Email
+            </InputLabel>
+            <Input classes={{inkbar: classes.inputInkbar}} id="email" />
+          </FormControl>
 
-        <FormControl className={classes.formControl} error={this.state.usernameError}>
-          <InputLabel FormControlClasses={{focused: classes.inputLabelFocused}} htmlFor="custom-color-input">
-            Username
-          </InputLabel>
-          <Input classes={{inkbar: classes.inputInkbar}} id="username" />
-        </FormControl>
+          <FormControl className={classes.formControl} error={this.state.usernameError}>
+            <InputLabel htmlFor="custom-color-input">
+              Username
+            </InputLabel>
+            <Input classes={{inkbar: classes.inputInkbar}} id="username" />
+          </FormControl>
 
-        <FormControl className={classes.formControl} error={this.state.passwordError}>
-          <InputLabel htmlFor="password">Password</InputLabel>
+          <FormControl className={classes.formControl} error={this.state.passwordError}>
+            <InputLabel htmlFor="registerPassword">
+              Password
+            </InputLabel>
             <Input
               id="registerPassword"
               type={this.state.showPassword ? 'text' : 'password'}
@@ -286,9 +313,9 @@ class RegisterForm extends React.Component {
               }
             />
 
-        </FormControl>
-        <FormControl className={classes.formControl} error={this.state.confirmPasswordError}>
-          <InputLabel htmlFor="confirm password">Confirm Password</InputLabel>
+          </FormControl>
+          <FormControl className={classes.formControl} error={this.state.confirmPasswordError}>
+            <InputLabel htmlFor="confirm password">Confirm Password</InputLabel>
             <Input
               id="confirmPassword"
               type={this.state.showPassword ? 'text' : 'password'}
@@ -305,14 +332,15 @@ class RegisterForm extends React.Component {
               }
             />
 
-        </FormControl>
-        <FormControl className={classes.formControl}>
-            <div style={{textAlign: "center"}}>
-              <Button id="register" className={classes.button} onClick={this.handleRegister} style={{width: '25%',color: 'white', backgroundColor: 'rgba(0, 0, 0, 0.87)'}}>
-                Register
-              </Button>
-            </div>
-        </FormControl>
+          </FormControl>
+          <FormControl className={classes.formControl}>
+              <div style={{textAlign: "center"}}>
+                <Button id="register" className={classes.button} type="submit" style={{width: '25%',color: 'white', backgroundColor: 'rgba(0, 0, 0, 0.87)'}}>
+                  Register
+                </Button>
+              </div>
+          </FormControl>
+        </form>
       </div>
     );
   }

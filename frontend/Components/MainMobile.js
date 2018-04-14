@@ -69,7 +69,7 @@ class Main extends React.Component {
   state = {
     clicked: '',
     username: sessionStorage.getItem('username'),
-    filter: {types: [''], price_level: [''], num: '100'},
+    filter: {search: '', types: [''], price_level: [''], num: '100'},
     currentPage: 'Places',
     currentTab: 'Search',
     anchorEl: null,
@@ -146,7 +146,7 @@ class Main extends React.Component {
   }
 
   handleLogout = () => {
-    this.setState({username: '', clicked: '', currentTab: 'Search', favorites: [], filter: {types: [''], price_level: [''], num: '100'}, removeFromTrip: "", tripPlaces: [], loggedIn: false})
+    this.setState({username: '', clicked: '', currentTab: 'Search', favorites: [], filter: {search: '', types: [''], price_level: [''], num: '100'}, removeFromTrip: "", tripPlaces: [], loggedIn: false})
     sessionStorage.setItem('username', '')
     alert("Logged Out!")
   }
@@ -313,6 +313,7 @@ class Main extends React.Component {
                 handleScroll={this.handleScroll}
                 snackbar={this.snackbar}
                 inTrip={this.state.tripPlaces}
+                modalPhotos={this.setModalPhotos}
               />
             </div>
             <Cards style={{display: this.handleTabDisplay('SearchPlaces')}}
@@ -323,6 +324,7 @@ class Main extends React.Component {
               handleScroll={this.handleScroll}
               snackbar={this.snackbar}
               inTrip={this.state.tripPlaces}
+              modalPhotos={this.setModalPhotos}
             />
           </div>
           <div style={{display: this.handlePageDisplay('Events'), marginTop: '4em'}}>
@@ -352,6 +354,7 @@ class Main extends React.Component {
               handleScroll={this.handleScroll}
               snackbar={this.snackbar}
               inTrip={this.state.tripPlaces}
+              modalPhotos={this.setModalPhotos}
               />
           </div>
           <div style={{display: this.handlePageDisplay('Trips'),marginTop: '4em', height: '100%'}}>

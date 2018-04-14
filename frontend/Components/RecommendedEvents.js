@@ -24,6 +24,7 @@ import Add from 'material-ui-icons/Add';
 import Tooltip from 'material-ui-next/Tooltip';
 import cyan from 'material-ui-next/colors/cyan';
 import noPhoto from "./Images/nophoto.png";
+import TripCard from './TripCard.js';
 
 const styles = theme => ({
   card1: {
@@ -62,7 +63,7 @@ class Recommended extends React.Component {
   state = { expanded: false,
             items: [],
             favorites: [],
-            filter: {types: '', price_level: '', num: '100'},
+            filter: {search: '', types: '', price_level: '', num: '100', page: '1'},
             username: sessionStorage.getItem('username')
           };
 
@@ -148,7 +149,7 @@ class Recommended extends React.Component {
 
     if(data['username']){
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/getfavoriteplacesIds",
+        url:"https://experiencenyc.herokuapp.com/users/getfavoriteplacesIds",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -173,7 +174,7 @@ class Recommended extends React.Component {
     var data = {username: sessionStorage.getItem('username'), place_id: id};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/addfavoriteplaces",
+      url:"https://experiencenyc.herokuapp.com/users/addfavoriteplaces",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -190,7 +191,7 @@ class Recommended extends React.Component {
     var data = {username: sessionStorage.getItem('username'), place_id: id};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/removefavoriteplaces",
+      url:"https://experiencenyc.herokuapp.com/users/removefavoriteplaces",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -230,8 +231,14 @@ class Recommended extends React.Component {
 
 
   //listen for new props
-  componentWillReceiveProps(nextProps) {
+  /*componentWillReceiveProps(nextProps) {
     if((this.props.loggedIn != nextProps.loggedIn) && nextProps.loggedIn){
+      this.getRecommended();
+    }
+  }*/
+
+  componentDidMount = () => {
+    if(this.props.loggedIn){
       this.getRecommended();
     }
   }
@@ -245,7 +252,7 @@ class Recommended extends React.Component {
     var data = {username: sessionStorage.getItem('username'), address: '33rd Street station New York, NY 10001'};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/recommendedplaces",
+      url:"https://experiencenyc.herokuapp.com/recommendations/eventRecommendations",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -281,20 +288,20 @@ class Recommended extends React.Component {
             <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={value['photos'] ? "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + "1000"+ "&maxheight=" + "1000" + "&photoreference=" + value['photos'][0]['photo_reference'] + "&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A" : noPhoto}/>
           </div>
           <CardActions className={this.props.actions} disableActionSpacing>
-            <div style={{width: '33%'}}>
+            <div style={{width: '25%'}}>
                 {this.getIcon(value['place_id'])}
             </div>
-            <div style={{width: '34%', display: 'block', textAlign: 'center'}}>
+            <div style={{width: '50%', display: 'block', textAlign: 'center'}}>
                 <Typography style={{display: 'inline-flex', cursor: 'pointer'}}>
                   Details
                 </Typography>
-                <IconButton
+                <IconButton style={{width: 'auto'}}
                    aria-label="Show more"
                  >
                    <ExpandMoreIcon />
                  </IconButton>
             </div>
-            <div style={{width: '33%', textAlign: 'right'}}>
+            <div style={{width: '25%', textAlign: 'right'}}>
               <Button href={"https://www.google.com/maps/search/?api=1&query=Google&query_place_id=" + value['place_id']} target="_blank" style={{minWidth: '0px', color: 'rgba(0, 0, 0, 0.87)', border: '1px solid', borderRadius: '4px', marginRight: '1em'}}>
                GO
               </Button>
@@ -309,7 +316,7 @@ class Recommended extends React.Component {
     })
   }
 
-  //Load places when component mounts
+  //Load recommended when component mounts
   componentDidMount = () => {
     if(this.props.loggedIn){
       this.getRecommended();
