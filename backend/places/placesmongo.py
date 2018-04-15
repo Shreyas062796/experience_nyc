@@ -2,6 +2,7 @@ from pymongo import *
 #development
 # from backend.places.places import NYCPlaces
 #Production
+import requests
 from places.places import NYCPlaces
 from bson.objectid import *
 import random
@@ -47,11 +48,11 @@ class PlacesMongo:
 		# db = MongoClient(connection).places #places and users database
 		db = self.clientConnect()
 
-		for a_id, a_place in allplaces.items():
+		for a_place in allplaces:
 			try:
-				db.places.insert_one(a_place)
+				db.places.insert_one(a_place['result'])
 			except Exception as e:
-				print("couldn't add: {}".format(a_id))
+				print("couldn't add: {}".format("an item"))
 		print("ALL POSSIBLE VALUES HAVE BEEN LOADED INTO THE DATABASE")
 
 	def populateDetailPlaces(self):
@@ -60,11 +61,10 @@ class PlacesMongo:
 		count = 0
 		for place in allplaces:
 			try:
-				db.places.insert_one(place['results'])
+				db.places.insert_one(place['result'])
 				print("populated")
 			except:
 				continue
-
 	#gets all documents from places collection
 	def getPlaces(self):
 		allPlaces = []
@@ -72,7 +72,6 @@ class PlacesMongo:
 		for document in db.places.find({}):
 			allPlaces.append(document)
 		return(allPlaces)
-
 	#gets all the places in a certain radius around a coordinate
 	def getPlacesInRadius(self,lat,lng,radius):
 		allPlaces = []
@@ -80,18 +79,15 @@ class PlacesMongo:
 		# db.places.find({'geometry.location':{'$geoWithin':{'$centerSphere': [[-73.93414657,40.82302903], 5]}}})
 		for document in db.places.find({'geometry.location':{'$nearSphere':[lng,lat],'$maxDistance':radius*1609}}):
 			allPlaces.append(document)
-		# pprint(allPlaces)
 		return(allPlaces)
 
 	def updateOpen(self,place):
 		url = 'https://maps.googleapis.com/maps/api/place/details/json?placeid=' + place['place_id'] + '&key=AIzaSyA3wV-hPoa6m5Gxjcc_sZ2fyatNS21Pv0A'
-		place['_id'] = str(place['_id'])
 		req = requests.get(url)
 		return(req.json())
 
 	def queryPlaces(self,types,price,search,num):
 		db = self.clientConnect()
-		params = {}
 		queriedPlaces = []
 		if types == ['']:
 			types = ['restaurant','cafe','bar','florist','amusement_park','bakery','clothing_store','convenience_store','department_store','hair_care','library','movie_theater','museum','night_club'
@@ -104,14 +100,90 @@ class PlacesMongo:
 		if search == '':
 			search = 'coffee'
 		for place in db.places.find({'$and':[{'types':{'$in': types},'price_level':{'$in':price},'$text': {'$search': search}}]}):
-			placex = updateOpen(place)
-			if('photos' in placex and placex not in queriedPlaces):
-				queriedPlaces.append(placex)
+			place['_id'] = str(place['_id'])
+			if('photos' in place and place not in queriedPlaces):
+				queriedPlaces.append(place)
 		if(len(queriedPlaces) == 0):
 			return([])
 		random.shuffle(queriedPlaces)
 		x = queriedPlaces[:num]
 		return(x)
+
+	def queryAllPlaces(self,types,price,search):
+		db = self.clientConnect()
+		today_date = date.today()
+		queriedPlaces = []
+		if types == ['']:
+			types = ['restaurant','cafe','bar','florist','amusement_park','bakery','clothing_store','convenience_store','department_store','hair_care','library','movie_theater','museum','night_club','stadium','store','zoo']
+		if price == ['']:
+			price = [1,2,3]
+		else:
+			for i in range(len(price)):
+				price[i] = len(price[i])
+		if search == '':
+			search = 'coffee'
+		for place in db.places.find({'$and':[{'types':{'$in': types},'price_level':{'$in':price},'$text': {'$search': search}}]}):
+			place['_id'] = str(place['_id'])
+			if('photos' in place and place not in queriedPlaces):
+				queriedPlaces.append(place)
+		if(len(queriedPlaces) == 0):
+			return([])
+	#this should work
+		return queriedPlaces
+
+
+
+	def queryBasedOnSearch(self, types, price, search, page=1):
+		db = self.clientConnect()
+
+		base_query = {'$and':[{}]}
+		return_amount = 150 # 10 pages
+		return_list = list() #list to be returned
+
+		# get everything in n amount
+		if (types==[''] and price==[''] and search==''):
+			for place in db.places.aggregate([{'$sample': {'size':15}}]):#db.places.find().skip(6+int(page)).limit(15):
+				place['_id'] = str(place['_id'])
+				if('photos' in place):
+					return_list.append(place)
+			return return_list
+
+		# create a search query based on given data
+		if (types!=['']):
+			base_query['$and'][0]['types'] = {'$in':types }
+		if (price!=['']):
+			for i in range(len(price)):
+				price[i] = len(price[i])
+			base_query['$and'][0]['price_level'] = {'$in':price} 
+		if (search!=''):
+			base_query['$and'][0]['$text'] = {'$search': search}  
+		print(base_query)
+
+		# create a way for pagination
+		page_size = 15
+
+		skips = page_size * (int(page) - 1)
+
+		for place in db.places.find(base_query).skip(skips).limit(page_size):
+			place['_id'] = str(place['_id'])
+			if('photos' in place):
+				return_list.append(place)
+		if(len(return_list) == 0):
+			return([])
+
+		return return_list
+
+	def queryLiterallyAll(self):
+		db = self.clientConnect()
+		allData = list()
+
+		queryResult = db.places.find()
+		print(len(list(queryResult)))
+		for place in queryResult:
+			place["_id"] = str(place["_id"])
+			if('photos' in place.keys()):
+				allData.append(place)
+		return allData
 
 	def getUserTripPlaces(self,placeIds):
 		places = []
@@ -124,6 +196,10 @@ class PlacesMongo:
 		return(places)
 
 if __name__ == "__main__":
-	Experience = PlacesMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc")
-	Experience.queriedPlaces(['restaurant'],[1],'coffee',10)
-
+	Experience = PlacesMongo("ds159217.mlab.com","59217","admin","admin","experience_nyc")
+	# Experience.populatePlacesNew()
+	# print(len(Experience.queryAllPlaces([''],[''],'')))
+	# print(len(Experience.queryLiterallyAll()))
+	print(len(Experience.queryBasedOnSearch(['bar'],[''],'bar')))
+# # 	# Experience.queriedPlaces(['restaurant'],[1],'coffee',10)
+# # 	Experience.populateDetailPlaces()
