@@ -81,12 +81,10 @@ def activate_job():
 			time.sleep(90)
 			print('Hour Notification')
 			EVENT_CACHE.setTopToday(events_script.getEvents().getEventsOfTheDay())
-
-	CACHE.
+	# CACHE.addBatchID()
 	EVENT_CACHE.setTopToday(events_script.getEvents().getEventsOfTheDay())
 	thread = threading.Thread(target=get_data)
 	thread.start()
-
 
 @restClient.route('/todayevents', methods=['GET'])
 def getTopEvents():
@@ -100,6 +98,6 @@ def index():
 	"""Initial starting point"""
 	return '<h1>Flask Client is up and running</h1>'
 
+
 if __name__ == '__main__':
 	restClient.run(debug=DEBUG)
-
