@@ -17,8 +17,8 @@ const styles = theme => ({
     position: 'relative',
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-    width: '80%',
-    height: '80%'
+    width: window.innerWidth <= 760 ? false : '80%',
+    height: window.innerWidth <= 760 ? false : '80%'
   }
 });
 
@@ -84,10 +84,10 @@ class PhotoModal extends React.Component {
         >
           <div className={classes.paper}>
             {this.getPhoto()}
-            {this.notLastPhoto() ? <IconButton onClick={this.nextPhoto} style={{position: 'absolute',left:'85%',top: '45%', zIndex: 10,height: '5em', width: '5em', backgroundColor: '#ffffff4a'}}>
+            {this.notLastPhoto() ? <IconButton onClick={this.nextPhoto} style={{fontSize: window.innerWidth <= 760 ? '0.5em' : '1em', position: 'absolute',left:'85%',top: '45%', zIndex: 10,height: '5em', width: '5em', backgroundColor: '#ffffff4a'}}>
               <NavigateNext style={{height: '5em', width: '5em', color: 'rgba(255, 255, 255, 0.5)'}}/>
             </IconButton> : false}
-            {this.state.photoIndex != 0 ? <IconButton onClick={this.prevPhoto} style={{position: 'absolute',left:'5%',top: '45%', zIndex: 10,height: '5em', width: '5em', backgroundColor: '#ffffff4a'}}>
+            {this.state.photoIndex != 0 ? <IconButton onClick={this.prevPhoto} style={{fontSize: window.innerWidth <= 760 ? '0.5em' : '1em', position: 'absolute',left:'5%',top: '45%', zIndex: 10,height: '5em', width: '5em', backgroundColor: '#ffffff4a'}}>
               <NavigateBefore style={{height: '5em', width: '5em', color: 'rgba(255, 255, 255, 0.5)'}}/>
             </IconButton> : false}
         </div>
