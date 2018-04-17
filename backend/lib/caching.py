@@ -29,6 +29,13 @@ class Cacher:
 		for location in alist:
 			self._ids.append(location['id'])
 
+	def addId(self, places_to_add):
+		pass
+
+	def addBatchById(self, alist):
+		for location in alist:
+			self._ids.append(location['id'])
+
 	def retrieveJson(self, address):
 		if self._isIn(address):
 			return self._data[address]

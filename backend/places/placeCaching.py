@@ -22,7 +22,7 @@ class PlaceCaching:
 			self._ids.append(location['id'])
 		self._size+=size
 		self._page+=1
-
+		
 	def add(self):
 		pass
 
