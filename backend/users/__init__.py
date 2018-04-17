@@ -31,6 +31,7 @@ def add_routes(app=None):
 		info['current_trip_places'] = []
 		info['tags'] = []
 		UsersMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
+		sendMail("experiencenycco@gmail.com","anotherone_44")._sendmail(info['email'], "Welcome To Experience NYC","Please verify your email here")
 		return(jsonify({"response":"True"}))
 
 	@users.route('/getuserdata', methods=['GET'])
@@ -61,6 +62,14 @@ def add_routes(app=None):
 		else:
 			return(jsonify({"response":"The email was not verified try again"}))
 		#username,unique_id,email
+
+	@users.route('/updateEmailVerified', methods = ['POST'])
+	def updateEmailVerified():
+		info = request.get_json()
+		if(UsersMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc").updateVerifiedEmail(info['username'])):
+			return(jsonify({"response":"True"}))
+		else:
+			return(jsonify({"response":"False"}))
 
 	# I'll need a function from you (addToFavorites) tha will take a unique place id as a single param and inserts it into the db as a list of favorite places
 	# I'll also need you to write a function that will retreive the favorites returned as a json list

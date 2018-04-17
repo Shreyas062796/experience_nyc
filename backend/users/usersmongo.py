@@ -27,7 +27,7 @@ class UsersMongo:
 		db = self.clientConnect()
 		login = db.users.find_one({"username": username})
 		if(login):
-			if(login["password"] == hashlib.md5(password.encode('utf-8')).hexdigest()):
+			if(login["password"] == hashlib.md5(password.encode('utf-8')).hexdigest() and login['verify']):
 				return(True)
 		return(False)
 
@@ -43,6 +43,11 @@ class UsersMongo:
 		print(user)
 		user['_id'] = str(user['_id'])
 		return(user)
+
+	def updateVerifiedEmail(self,username):
+		db = self.clientConnect()
+		db.users.update_one({'username': username},{'verified': True})
+		return(True)
 
 	#verifies email with the user 
 	def verifyEmail(self,username,unique_id):
