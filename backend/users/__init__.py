@@ -18,18 +18,30 @@ from lib.sendmail import sendMail
 
 def add_routes(app=None):
 
+	frontend_url = "https://reactnycapp.herokuapp.com/"
 	users = Blueprint("users", __name__, url_prefix="/users")
+
+
 	@users.route('/createuser', methods = ['POST'])
-	def addUser():
+	def createUser():
 		"""add user to the database"""
 		print(request.is_json)
 		info = request.get_json() 
 		print(info)
+
+		# initialize the email
+		mailbot = sendMail("experiencenycco@gmail.com","Shreyas_code_is_bad69")
+
+		# setup data for creating a user
 		info['verify'] = False
-		info['user_unique_id'] = sendMail("experiencenycco@gmail.com","anotherone_44").generateCode(info['email'])
+		info['user_unique_id'], message = mailbot.generateCode(info['email'])
 		info['favorite_places'] = []
 		info['current_trip_places'] = []
 		info['tags'] = []
+
+		#send a verification email
+		mailbot.Send(info['email'], "ExperienceNYC Verification", message) # to_email, email_subject
+
 		UsersMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
 		return(jsonify({"response":"True"}))
 
@@ -52,15 +64,19 @@ def add_routes(app=None):
 		else:
 			return(jsonify({"response":"False"}))
 
-	@users.route('/verify', methods = ['POST'])
-	def verify():
+	@users.route('/verify/<auth_code>', methods = ['GET'])
+	def verify(auth_code):
 		"""Verify the email when the person signs up"""
-		info = request.get_json()
-		if(UsersMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc").verifyEmail(info['username'],info['unique_id']) == True):
-			return(jsonify({"response":"The email was verified"}))
+		
+		# print(auth_code)
+		# return "<h1>hello</h1>"
+		# info = request.get_json()
+		if UsersMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc").verifyEmail(auth_code):
+			return redirect(frontend_url)
+			# return(jsonify({"response":"The email was verified"}))
 		else:
-			return(jsonify({"response":"The email was not verified try again"}))
-		#username,unique_id,email
+			# return(jsonify({"response":"The email was not verified try again"}))
+			return redirect(frontend_url)
 
 	# I'll need a function from you (addToFavorites) tha will take a unique place id as a single param and inserts it into the db as a list of favorite places
 	# I'll also need you to write a function that will retreive the favorites returned as a json list

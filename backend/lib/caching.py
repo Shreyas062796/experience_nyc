@@ -11,13 +11,15 @@ class Cacher:
 		self._data = dict()
 		self._size = size 
 
-
 	def curr_len(self):
 		return len(self._data)
 
 	
 	def _isIn(self, address):
 		return address in self._data.keys()
+
+	def addId(self, places_to_add):
+		pass
 
 
 	def addId(self, places_to_add):

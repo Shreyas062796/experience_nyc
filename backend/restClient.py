@@ -81,13 +81,11 @@ def activate_job():
 			time.sleep(90)
 			print('Hour Notification')
 			EVENT_CACHE.setTopToday(events_script.getEvents().getEventsOfTheDay())
-
 	# CACHE.addBatchID()
 	EVENT_CACHE.setTopToday(events_script.getEvents().getEventsOfTheDay())
 	thread = threading.Thread(target=get_data)
 	thread.start()
 
-# @restClient.route('/places')
 @restClient.route('/todayevents', methods=['GET'])
 def getTopEvents():
 	if request.method == "GET":

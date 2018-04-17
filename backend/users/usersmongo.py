@@ -27,7 +27,7 @@ class UsersMongo:
 		db = self.clientConnect()
 		login = db.users.find_one({"username": username})
 		if(login):
-			if(login["password"] == hashlib.md5(password.encode('utf-8')).hexdigest()):
+			if(login["password"] == hashlib.md5(password.encode('utf-8')).hexdigest() and login["verify"] == True):
 				return(True)
 		return(False)
 
@@ -45,13 +45,23 @@ class UsersMongo:
 		return(user)
 
 	#verifies email with the user 
-	def verifyEmail(self,username,unique_id):
+	def verifyEmail(self, unique_id):
 		db = self.clientConnect()
-		user = db.users.find_one({"username": username})
-		if(user['user_unique_id'] == unique_id):
-			user['verify'] = True
-			return(True)
-		return(False)
+
+		# for item in db.users.find():
+		# 	print(item)
+		user = db.users.update({"user_unique_id": unique_id}, {"set":{"verify":True}}, upsert=True)
+		print(user)
+		try:
+			an_id = user['unique_id']
+			return True
+		except KeyError:
+			return False
+
+		# if(user['unique_id'] == unique_id):
+		# 	user['verify'] = True
+		# 	return(True)
+		# return(False)
 
 	#populates the tags
 	def addTags(self,username,tags):
@@ -146,3 +156,6 @@ class UsersMongo:
 					place['_id'] = str(place['_id'])
 					TripPlaces.append(place)
 		return(TripPlaces)
+
+if __name__ == '__main__':
+	UsersMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc").verifyEmail('fcf02043a6437cd15ab86301687e832f')

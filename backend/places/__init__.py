@@ -37,6 +37,7 @@ def add_routes(app=None):
 		"""used to query places"""
 		if request.method == 'GET':
 			num = request.args['num']
+			print(num)
 			search = request.args['search']
 			price_level = request.args.getlist('price_level[]')
 			types = request.args.getlist('types[]')

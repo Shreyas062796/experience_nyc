@@ -112,8 +112,6 @@ class PlacesMongo:
 	def queryAllPlaces(self,types,price,search):
 		db = self.clientConnect()
 		today_date = date.today()
-		params = {}
-
 		queriedPlaces = []
 		if types == ['']:
 			types = ['restaurant','cafe','bar','florist','amusement_park','bakery','clothing_store','convenience_store','department_store','hair_care','library','movie_theater','museum','night_club','stadium','store','zoo']
@@ -130,7 +128,6 @@ class PlacesMongo:
 				queriedPlaces.append(place)
 		if(len(queriedPlaces) == 0):
 			return([])
-
 	#this should work
 		return queriedPlaces
 
@@ -187,7 +184,6 @@ class PlacesMongo:
 			if('photos' in place.keys()):
 				allData.append(place)
 		return allData
-
 
 	def getUserTripPlaces(self,placeIds):
 		places = []
