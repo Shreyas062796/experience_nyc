@@ -8,7 +8,7 @@ import time, hashlib
 LOG_NAME = 'Error_Log.log'
 logging.basicConfig(filename=LOG_NAME, level=logging.DEBUG)
 base_msg = "Hi there, thanks for creating an account at ExperienceNYC,\nin order to finalize your authentication please go to the following link.\n"
-base_url = "https://experiencenyc.herokuapp.com/"
+base_url = "https://experiencenyc.herokuapp.com/users/verify/"
 
 class sendMail:
 
