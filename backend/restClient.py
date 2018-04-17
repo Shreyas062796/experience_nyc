@@ -87,9 +87,7 @@ def activate_job():
 	thread = threading.Thread(target=get_data)
 	thread.start()
 
-
-@restClient.route('/places')
-
+# @restClient.route('/places')
 @restClient.route('/todayevents', methods=['GET'])
 def getTopEvents():
 	if request.method == "GET":

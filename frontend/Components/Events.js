@@ -70,7 +70,7 @@ class Events extends React.Component {
   state = { expanded: false,
             items: [],
             favorites: [],
-            filter: {types: '', price_level: '', num: '100'},
+            filter: {search: '', types: '', price_level: '', num: '100'},
             username: sessionStorage.getItem('username'),
             lastScrollPos: 0,
             changedPos: undefined,
@@ -106,7 +106,7 @@ class Events extends React.Component {
 
     if(data['username']){
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/getfavoriteplacesIds",
+        url:"https://experiencenyc.herokuapp.com/users/users/getfavoriteplacesIds",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -122,7 +122,7 @@ class Events extends React.Component {
     var data = {username: sessionStorage.getItem('username'), place_id: id};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/addfavoriteplaces",
+      url:"https://experiencenyc.herokuapp.com/users/addfavoriteplaces",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -139,7 +139,7 @@ class Events extends React.Component {
     var data = {username: sessionStorage.getItem('username'), place_id: id};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/removefavoriteplaces",
+      url:"https://experiencenyc.herokuapp.com/users/removefavoriteplaces",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",

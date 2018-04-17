@@ -20,26 +20,26 @@ class App extends Component{
 			locations:[],
 			trip:[],
 			selectedLocationIndex : 0,
-			endTripIndex : 0
+			endTripIndex : 0,
+			time : 10,
+			dist : 25
 		}
 	}
-
-	componentWillMount(){
-		let tempArray = this.props.locations;
-
+	
+	componentWillMount(){		
 		this.setState({
 			locations : [
 			{
 				name: 'Location 1',
 				title: 42.8,
 				category: -71.6
-			},
+			},				
 			{
 				name: 'Location 2',
 				title: 42.5,
 				category: -71.1
 			},
-
+			
 		],
 		trip : [
 			{
@@ -51,71 +51,136 @@ class App extends Component{
 				name: 'Location 1',
 				title: 42.8,
 				category: -71.6
-			},
+			},				
 			{
 				name: 'Location 2',
 				title: 42.5,
 				category: -71.1
 			}
-		],
-		selectedLocationIndex : 0,
-		endTripIndex : 0
+		]
 		})
-		console.log(this.state.locations);
 	}
-
+	
+	
+	
+	uniqueId() {
+		return new Date().getTime();
+	}
+	
 	funcAddLocation(location){
 		let locations = this.state.locations
 		locations.push(location)
 		this.setState(locations)
 	}
-
-
-	funcAddLocationToTrip(location){
+	
+	
+	removeLocation(location){
+		
+		let trip = []
+		let oldTrip = this.state.trip
+		
+		
+		for(var i = 0; i < this.state.trip.length; i++ ){
+			if(i != this.state.selectedLocationIndex){				
+				trip.push(this.state.trip[i])
+			}
+		}
+				
+		this.setState({
+			trip : trip,			
+		})
+	}
+	
+	funcAddLocationToTrip(location){		
 		let trip = this.state.trip
 		trip.push(location)
 		this.setState({
 			trip : trip
-		});
+		})		
 	}
-
-	funcClearTrip(location){
-		this.setState({trip : []})
+	
+	setDist(dist){
+		this.setState({
+			dist : dist			
+		})
 	}
-
+	
 	funcUpdateSelectedIndex(selectedIndex){
-
 		this.setState({
 			selectedLocationIndex : selectedIndex
 		})
 	}
-
+	
+	setTime(time){
+		this.setState({
+			time : time			
+		})
+	}
+	
+	funcMoveUp(){		
+		//Go up
+		let trip = this.state.trip
+		let temp = trip[this.state.selectedLocationIndex - 1]
+		
+		if(this.state.selectedLocationIndex - 1 >= 0){
+			trip[this.state.selectedLocationIndex - 1] = trip[this.state.selectedLocationIndex]
+			trip[this.state.selectedLocationIndex] = temp
+			this.setState({
+				trip : trip,
+			})
+		}
+	}
+	
+	funcMoveDown(){		
+		let trip = this.state.trip
+		let temp = trip[this.state.selectedLocationIndex + 1]
+		
+		if(this.state.selectedLocationIndex + 1 < this.state.trip.length){
+			trip[this.state.selectedLocationIndex + 1] = trip[this.state.selectedLocationIndex]
+			trip[this.state.selectedLocationIndex] = temp
+			this.setState({
+				trip : trip,
+			})
+		}
+	}
+	
+	
+	funcUpdateSelectedIndex(selectedIndex){
+		
+		this.setState({
+			selectedLocationIndex : selectedIndex
+		})
+		
+	}
+	
   render(){
-    return (
-      <div>
-
-
-
-		<MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+    return (	
+      <div> 
+		
+		
+	  
+		<MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>  
 			<h1>Trip Details</h1>
-
-
-			<GoogleMap lat = {42.1} lng = {-71.8} trip = {this.state.trip}/>
-
-			<TripBuilder trip = {this.state.trip} selectedIndex = {this.funcUpdateSelectedIndex}/>
-
-			<TripControl trip = {this.state.trip} clearTrip = {this.funcClearTrip} moveDown = {this.funcMoveDown}/>
-
+			
 			<TripProps />
-
+			
+			<GoogleMap ref = 'googlemap' trip = {this.state.trip} date = {this.uniqueId.bind(this)}/>
+			
+			<TripBuilder trip = {this.state.trip} selectedIndex = {this.funcUpdateSelectedIndex.bind(this)}/>
+			
+			<TripControl trip = {this.state.trip} removeLocation = {this.removeLocation.bind(this)} moveDown = {this.funcMoveDown.bind(this)} moveUp = {this.funcMoveUp.bind(this)}/>
+			
+			
+			
 			<br/>
-
+			
+			
 		</MuiThemeProvider>
-
+		
 	  </div>
     );
   }
-
+  
 }
 
 

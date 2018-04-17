@@ -4,6 +4,7 @@ import Location from './location'
 
 class Locations extends Component{
 	shout(){
+		this.forceUpdate()
 		this.props.updateSelectedIndex(this.refs.selectTripLocation.selectedIndex)
 	}
 	

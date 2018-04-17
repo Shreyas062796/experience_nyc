@@ -23,7 +23,6 @@ class PlaceCaching:
 		self._size+=size
 		self._page+=1
 
-	def 
 
 
 

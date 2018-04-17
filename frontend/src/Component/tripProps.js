@@ -20,9 +20,8 @@ class TripProps extends Component{
   render() {
     return (
 	<div>
-		<form>
-			<br/>
-			<h2>Trip Name: </h2> <TextField hintText="Hint Text"/>
+		<form>			
+			Trip Name: <input type = "text" id = "textField"/>
 			<RaisedButton label = "Save Trip!" onClick = {this.handleClick.bind(this)}/>
 		</form>	
 	</div>
