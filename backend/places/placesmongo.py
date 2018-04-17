@@ -108,6 +108,31 @@ class PlacesMongo:
 		x = queriedPlaces[:num]
 		return(x)
 
+	def queryAllPlaces(self,types,price,search):
+		db = self.clientConnect()
+		today_date = date.today()
+		params = {}
+		queriedPlaces = []
+		if types == ['']:
+			types = ['restaurant','cafe','bar','florist','amusement_park','bakery','clothing_store','convenience_store','department_store','hair_care','library','movie_theater','museum','night_club'
+			,'stadium','store','zoo']
+		if price == ['']:
+			price = [1,2,3]
+		else:
+			for i in range(len(price)):
+				price[i] = len(price[i])
+		if search == '':
+			search = 'coffee'
+		for place in db.places.find({'$and':[{'types':{'$in': types},'price_level':{'$in':price},'$text': {'$search': search}}]}):
+			place['_id'] = str(place['_id'])
+			if('photos' in place and place not in queriedPlaces):
+				queriedPlaces.append(place)
+		if(len(queriedPlaces) == 0):
+			return([])
+		#this should work
+		return queriedPlaces
+
+
 	def getUserTripPlaces(self,placeIds):
 		places = []
 		db = self.clientConnect()

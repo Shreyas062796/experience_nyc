@@ -7,24 +7,31 @@ class Cacher:
 	1000 replies = 7000kb
 	'''
 	def __init__(self, size=1000):
+		self._ids = list()
 		self._data = dict()
 		self._size = size 
 
+
 	def curr_len(self):
 		return len(self._data)
+
 	
 	def _isIn(self, address):
 		return address in self._data.keys()
 
+
 	def addId(self, places_to_add):
 		pass
 
+	def addBatchById(self, alist):
+		for location in alist:
+			self._ids.append(location['id'])
 
 	def retrieveJson(self, address):
 		if self._isIn(address):
 			return self._data[address]
 		else:
-			return None
+			return {}
 
 	# add a json to the cache,
 	# if size is 1000+ delete an
