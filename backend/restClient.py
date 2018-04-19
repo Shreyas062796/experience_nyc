@@ -34,13 +34,8 @@ import trips as trips
 import users as users
 
 
-DEBUG = True
 
-# only set debug if on development server, do not if on production
-if os.environ.get('ENV') == 'production':
-	DEBUG = False
-else:
-	DEBUG = True
+restClient = Flask(__name__)
 
 
 CACHE = Cacher()
@@ -48,7 +43,11 @@ EVENT_CACHE = EventCacher()
 
 
 
-restClient = Flask(__name__)
+# this sets server variables for heroku and development
+if os.environ.get('ENV') == 'production':
+	restClient.config.from_object('config.ProductionConfig')
+else:
+	restClient.config.from_object('config.DevelopmentConfig')
 
 # add routes for individual apps
 events.add_routes(restClient)
@@ -108,4 +107,4 @@ def index():
 
 if __name__ == '__main__':
 	print("server is starting")
-	restClient.run(debug=DEBUG)
+	restClient.run()
