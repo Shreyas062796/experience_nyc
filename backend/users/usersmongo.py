@@ -51,7 +51,6 @@ class UsersMongo:
 
 		# for item in db.users.find():
 		# 	print(item)
-
 		user = db.users.update({'user_unique_id': unique_id},{'$set': {'verify':True}})
 		print(user)
 		try:
