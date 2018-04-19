@@ -59,11 +59,13 @@ class Reccomendations:
 		curCoordinates = addressToGeo(self.address)
 		# print(curCoordinates)
 		places = placesconnector.getPlacesInRadius(curCoordinates['lat'],curCoordinates['lng'],30)
-		userplaces = self.getTripsandPlaces()[1]
+		# userplaces = self.getTripsandPlaces()[1]
+		userplaces = placesconnector.getPlaces()
 		if userplaces is not "empty":
 			for place in places:
-				for userplaceid in userplaces['id']:
-					if(place['id'] != userplaceid and place not in reccomendedplaces):
+				for userplace in userplaces:
+					# userplaceid = str(userplace['id'])
+					if(place['id'] != userplace['id'] and place not in reccomendedplaces):
 						reccomendedplaces.append(place)
 			return(reccomendedplaces)
 		else:
@@ -114,7 +116,8 @@ class Reccomendations:
 				count+=1
 			except KeyError:
 				pass
-		avg_level = round(total/count)
+		if(count != 0):
+			avg_level = round(total/count)
 
 		#get the main keywords that the user has
 		types = dict()

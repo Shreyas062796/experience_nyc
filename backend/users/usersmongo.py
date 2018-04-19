@@ -36,6 +36,7 @@ class UsersMongo:
 		db = self.clientConnect()
 		login['password'] = hashlib.md5(login['password'].encode('utf-8')).hexdigest()
 		db.users.insert_one(login)
+		print("populated")
 
 	def getUserInfo(self, username):
 		db = self.clientConnect()
@@ -50,7 +51,7 @@ class UsersMongo:
 
 		# for item in db.users.find():
 		# 	print(item)
-		user = db.users.update({"user_unique_id": unique_id}, {"set":{"verify":True}}, upsert=True)
+		user = db.users.update({'user_unique_id': unique_id},{'$set': {'verify':True}})
 		print(user)
 		try:
 			an_id = user['unique_id']
