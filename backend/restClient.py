@@ -34,8 +34,15 @@ import trips as trips
 import users as users
 
 
-
 DEBUG = True
+
+# only set debug if on development server, do not if on production
+if os.environ.get('ENV') == 'production':
+	DEBUG = False
+else:
+	DEBUG = True
+
+
 CACHE = Cacher()
 EVENT_CACHE = EventCacher()
 
@@ -80,9 +87,9 @@ def activate_job():
 			requests.get('https://reactnycapp.herokuapp.com/') # ping front so it doesn't fall alseep
 			time.sleep(90)
 			print('Hour Notification')
-			EVENT_CACHE.setTopToday(events_script.getEvents().getEventsOfTheDay())
+			EVENT_CACHE.setTopToday(events_script.getEvents().getEventsNInfo())
 	# CACHE.addBatchID()
-	EVENT_CACHE.setTopToday(events_script.getEvents().getEventsOfTheDay())
+	EVENT_CACHE.setTopToday(events_script.getEvents().getEventsNInfo())
 	thread = threading.Thread(target=get_data)
 	thread.start()
 
@@ -100,4 +107,5 @@ def index():
 
 
 if __name__ == '__main__':
+	print("server is starting")
 	restClient.run(debug=DEBUG)
