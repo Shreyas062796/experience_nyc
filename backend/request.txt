@@ -1,0 +1,1 @@
+https://www.eventbriteapi.com/v3/events/search/?token=3PLRBVBROECU3VJOPGUY&location.viewport.northeast.latitude=40.850074&location.viewport.northeast.longitude=-73.947387&location.viewport.southwest.latitude=40.687712&location.viewport.southwest.longitude=-74.002422&start_date.keyword=today&sort_by=distance

@@ -35,13 +35,19 @@ import users as users
 
 
 
-DEBUG = True
+restClient = Flask(__name__)
+
+
 CACHE = Cacher()
 EVENT_CACHE = EventCacher()
 
 
 
-restClient = Flask(__name__)
+# this sets server variables for heroku and development
+if os.environ.get('ENV') == 'production':
+	restClient.config.from_object('config.ProductionConfig')
+else:
+	restClient.config.from_object('config.DevelopmentConfig')
 
 # add routes for individual apps
 events.add_routes(restClient)
@@ -80,9 +86,9 @@ def activate_job():
 			requests.get('https://reactnycapp.herokuapp.com/') # ping front so it doesn't fall alseep
 			time.sleep(90)
 			print('Hour Notification')
-			EVENT_CACHE.setTopToday(events_script.getEvents().getEventsOfTheDay())
+			EVENT_CACHE.setTopToday(events_script.getEvents().getEventsNInfo())
 	# CACHE.addBatchID()
-	EVENT_CACHE.setTopToday(events_script.getEvents().getEventsOfTheDay())
+	EVENT_CACHE.setTopToday(events_script.getEvents().getEventsNInfo())
 	thread = threading.Thread(target=get_data)
 	thread.start()
 
@@ -100,4 +106,5 @@ def index():
 
 
 if __name__ == '__main__':
-	restClient.run(debug=DEBUG)
+	print("server is starting")
+	restClient.run()

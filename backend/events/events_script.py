@@ -29,14 +29,17 @@ DEFAULT_KEYWORDS = ['music', 'dance', 'convention', 'exercise', 'sports', 'conce
 class getEvents:
 
 	def __init__(self):
-		self.geocode = "location.viewport.northeast.latitude={0}&location.viewport.northeast.longitude={1}&location.viewport.southwest.latitude={2}&location.viewport.southwest.longitude={3}"
+		self.geocode = "&location.viewport.northeast.latitude={0}&location.viewport.northeast.longitude={1}&location.viewport.southwest.latitude={2}&location.viewport.southwest.longitude={3}".format(TOP_LEFT[0], TOP_LEFT[1], BOTTOM_RIGHT[0], BOTTOM_RIGHT[1])
 		self.events = list()
 
 
 	def getEventsOfTheDay(self):
 		today_events = list()
 		rectangle = self.geocode.format(TOP_LEFT[0], TOP_LEFT[1], BOTTOM_RIGHT[0], BOTTOM_RIGHT[1])
-		request_link = EVENT_LINK + "&start_date.keyword=today&sort_by=best"
+		request_link = EVENT_LINK + self.geocode + "&start_date.keyword=today&sort_by=distance"
+
+		with open("request.txt", 'w') as File:
+			File.write(request_link)
 
 		data = requests.get(request_link)
 		events = data.json()
@@ -66,8 +69,7 @@ class getEvents:
 			today_events.extend(new_data.json()['events'])
 			time.sleep(0.01)
 
-		today_events = [event for event in today_events if event['start']['timezone']=='America/New_York']
-
+		# today_events = [event for event in today_events if event['start']['timezone']=='America/New_York']
 		return today_events
 
 
@@ -115,6 +117,40 @@ class getEvents:
 	def venueInfo(self, venue_id):
 		return requests.get(VENUE_LINK.replace(":id", str(venue_id))).json()
 
+
+	def getEventsNInfo(self):
+		events = self.getEventsOfTheDay()
+
+		current_names = list()
+		# get the venue id
+		for i in range(len(events)):
+			
+			venue_data = self.venueInfo(events[i]['venue_id'])
+			if events[i]['name']['text'] not in current_names:
+				current_names.append(events[i]['name']['text']) # add it to the list of curr ids
+				events[i]['venue_data'] = venue_data # get the data into it
+			else: continue
+
+
+		# filter back only events that happened in nyc
+		nyevents = list()
+		for event in events:
+			try:
+				venue_location = event['venue_data']['address']['localized_address_display']
+				# try:
+				# 	print(venue_location)
+				# except UnicodeEncodeError:
+				# 	pass
+				if venue_location is not None and 'new york' in venue_location.lower()	:
+					nyevents.append(event)
+			except KeyError:
+				continue 
+
+		# print(len(events))
+		# print(len(current_ids))
+		# print(len(nyevents))
+		return nyevents
+
 # this is for testing, repeating old code
 class ConnectMongo:
 	def __init__(self,clientHost,clientPort,username,password,database):
@@ -140,8 +176,9 @@ class ConnectMongo:
 
 
 # this is to initialize the event data
-def initialPopulate():
+if __name__ == '__main__':
 	ge = getEvents()
+	ge.getEventsNInfo()
 	# print(ge.getEverythingIn())
 	# ge.seeIf()
 
