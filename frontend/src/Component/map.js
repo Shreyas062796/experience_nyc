@@ -9,19 +9,13 @@ class GoogleMap extends Component{
 		this.state = {
 			dirDisp : new google.maps.DirectionsRenderer(),
 			dirServ : new google.maps.DirectionsService(),
-			time : 10,
-			dist : 10,
+			time : 0,
+			dist : 0,
 			inst : 0
-			
 		}
 	}
-	
-	hey(){
-		alert('yo')
-	}
-	
-	componentWillUpdate(props){
-		
+
+	createMap = () => {
 		//directions
 		var dirDisp = this.state.dirDisp;
 		var dirServ = this.state.dirServ;
@@ -39,14 +33,14 @@ class GoogleMap extends Component{
 		if(endIndex > 0){	
 			
 			var start = {					
-				lat : this.props.trip[0].title, 
-				lng : this.props.trip[0].category
+				lat : this.props.trip[0].lat, 
+				lng : this.props.trip[0].lng
 			}
 			
 			
 			var end = {					
-				lat : this.props.trip[endIndex - 1].title, 
-				lng : this.props.trip[endIndex - 1].category
+				lat : this.props.trip[endIndex - 1].lat, 
+				lng : this.props.trip[endIndex - 1].lng
 			}
 			
 			
@@ -55,7 +49,7 @@ class GoogleMap extends Component{
 				//lat and lng				
 			
 				waypts.push({
-					location: {lat: Number(this.props.trip[i].title), lng: Number(this.props.trip[i].category)},
+					location: {lat: Number(this.props.trip[i].lat), lng: Number(this.props.trip[i].lng)},
 					stopover: true
 				})
 			}
@@ -71,36 +65,73 @@ class GoogleMap extends Component{
 			};
 				
 			dirServ.route(request, function(result, status){
-				console.log(result, status);
+				console.log(result)
 				if (status == 'OK'){
-					dirDisp.setDirections(result);			
+					dirDisp.setDirections(result);
+					//dirDisp.setPanel(document.getElementById('directionsPanel'));	
 					//console.log(result.routes[0].legs[0])
+
+					var distance= 0;
+					var time = 0;
+					for(i = 0; i < result.routes[0].legs.length; i++){
+						distance += parseFloat(result.routes[0].legs[i].distance.value);
+						time += parseFloat(result.routes[0].legs[i].duration.value);
+					}
+					
+					time = this.fancyTimeFormat(time);
+					distance = Math.round(distance* 0.000621371192 * 100) / 100 + " Miles";
+
 					this.setState({
-						time : result.routes[0].legs[0].duration.text,
-						dist : result.routes[0].legs[0].distance.text,						
-					})
+						time : time,
+						dist : distance,						
+					}, function() {
+						this.props.updateTripDetails(this.state.time, this.state.dist);
+					}.bind(this) )
 				}
 			}.bind(this))			
 			
 		}
 	}
+
+	fancyTimeFormat(time)
+	{   
+		// Hours, minutes and seconds
+		var hrs = ~~(time / 3600);
+		var mins = ~~((time % 3600) / 60);
+		var secs = time % 60;
+
+		// Output like "1:01" or "4:03:59" or "123:03:59"
+		var ret = "";
+
+		if (hrs > 0) {
+			ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+		}
+
+		ret += "" + mins + ":" + (secs < 10 ? "0" : "");
+		ret += "" + secs;
+		return ret;
+	}
+	
+	componentWillReceiveProps(props){
+		this.createMap();
+	}
 	
 	componentDidMount(){
 		this.map = new google.maps.Map(this.refs.map,{
-			center: { lat: this.props.lat, lng: this.props.lng },
+			//center: { lat: this.props.lat, lng: this.props.lng },
+			center: { lat: 42.95, lng: -71.33 },
 			zoom: 8
 		});
-		this.componentWillUpdate()
+		this.createMap();
 	}
 	
   render(){
     return (		
-	<div>
-		<div id = "map" ref = "map"/>		
-			<strong> Time: </strong> {this.state.time}
-			<strong> Distance: </strong> {this.state.dist}
-			
-		<br />
+	<div >
+		<div style={{height: '100%', width: '40%', display: 'inline-flex', position: 'absolute', top: 0, right: 0}} id = "map" ref = "map">
+		</div>	
+		{/*<div style={{width: '100%', height: '300px',overflow: 'auto'}} id="directionsPanel"></div>
+		<br />*/}
 	</div>
     );
   }

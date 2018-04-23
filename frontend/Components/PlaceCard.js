@@ -101,7 +101,6 @@ const styles = theme => ({
 });
 
 class PlaceCard extends React.Component {
-
   state = { expanded: [],
             loggedIn:false,
             favorites: [],
@@ -151,11 +150,11 @@ class PlaceCard extends React.Component {
     this.props.removeFromTrip(id)
   }
 
-  addToTrip = (id) => {
+  addToTrip = (id, name, lat, lng) => {
     let tempInTrip = this.state.inTrip;
     tempInTrip.push(id);
     this.setState({inTrip: tempInTrip});
-    this.props.addToTrip(id)
+    this.props.addToTrip(id, name, lat, lng)
   }
 
   componentWillMount = () => {
@@ -254,9 +253,6 @@ class PlaceCard extends React.Component {
     return hours;
   }
 
-  componentWillReceiveProps = (nextProps) => {
-  }
-
   onHover = () => {
     this.setState({photoHover: true});
   }
@@ -271,7 +267,7 @@ class PlaceCard extends React.Component {
 
     return (
       <Grid item xl={3} lg={4} md={6} sm={12} xs={12}>
-         <Card id="card" className={this.state.inTrip.includes(this.props.value['place_id']) ? classes.card2 : classes.card1}>
+         <Card id="card" className={this.props.inTrip.includes(this.props.value['place_id']) ? classes.card2 : classes.card1}>
            <CardHeader classes={{subheader: classes.subheader}}
              avatar={
                <Avatar aria-label="Recipe" src={this.props.value['icon']} className={this.props.avatar}/>
@@ -279,9 +275,9 @@ class PlaceCard extends React.Component {
              title={this.props.value['name']}
              subheader={this.props.value['formatted_address']}
              action={
-                     <Tooltip id="tooltip-bottom" title={this.state.inTrip.includes(this.props.value['place_id']) ? "Remove From Trip" : "Add to Trip"} placement="bottom">
-                       <IconButton aria-label={this.state.inTrip.includes(this.props.value['place_id']) ? "Remove from Trip" : "Add to Trip"} onClick={() => {this.state.inTrip.includes(this.props.value['place_id']) ? this.removeFromTrip(this.props.value['place_id']) : this.addToTrip(this.props.value['place_id'], this)}}>
-                         {this.state.inTrip.includes(this.props.value['place_id']) ? <Check  /> : <Add  />}
+                     <Tooltip id="tooltip-bottom" title={this.props.inTrip.includes(this.props.value['place_id']) ? "Remove From Trip" : "Add to Trip"} placement="bottom">
+                       <IconButton aria-label={this.props.inTrip.includes(this.props.value['place_id']) ? "Remove from Trip" : "Add to Trip"} onClick={() => {this.state.inTrip.includes(this.props.value['place_id']) ? this.removeFromTrip(this.props.value['place_id']) : this.addToTrip(this.props.value['place_id'], this.props.value['name'], this.props.value['geometry']['location']['lat'], this.props.value['geometry']['location']['lng'], this)}}>
+                         {this.props.inTrip.includes(this.props.value['place_id']) ? <Check  /> : <Add  />}
                        </IconButton>
                      </Tooltip>
               }

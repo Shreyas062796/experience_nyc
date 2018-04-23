@@ -17,8 +17,8 @@ class AddLocation extends Component{
 		}else{
 			this.setState({
 				newLocation : {
-					title :this.refs.locationLat.value,
-						category: this.refs.locationLng.value
+					lat :this.refs.locationLat.value,
+						lng: this.refs.locationLng.value
 				}
 				}, function(){
 					this.props.addLocation(this.state.newLocation)

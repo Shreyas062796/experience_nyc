@@ -18,8 +18,8 @@ class AddLocationToTrip extends Component{
 	
 		this.setState({
 			newLocation : {
-				title : Number(this.props.locations[index].title),
-				category: Number(this.props.locations[index].category)
+				lat : Number(this.props.locations[index].lat),
+				lng: Number(this.props.locations[index].lng)
 			}
 			}, function(){				
 				this.props.addLocationToTrip(this.state.newLocation)

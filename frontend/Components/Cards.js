@@ -29,6 +29,8 @@ import { PulseLoader } from 'react-spinners';
 import Divider from 'material-ui-next/Divider';
 import PlaceCard from './PlaceCard.js';
 import TripCard from './TripCard.js';
+import TripMapCard from './TripMapCard.js';
+
 
 const styles = theme => ({
   card1: {
@@ -79,7 +81,11 @@ class Cards extends React.Component {
             favorites: [''],
             trip: [],
             inTrip: [],
+            result: [],
+            tripMapCardResult: [],
+            tripOrder: [],
             page: 1,
+            selectedCard: '',
             filter: {search: '', types: [''], price_level: [''], num: '100'},
             username: sessionStorage.getItem('username'),
             loggedIn: false,
@@ -181,7 +187,68 @@ class Cards extends React.Component {
     }
   }
 
+  handleCardSelect = (id) => {
+    this.setState({selectedCard: id}, () => {
+      this.props.cardSelect(id);
+      this.updateTripCards();
+    })
+  }
+
+  removeFromTripOrder = (index) => {
+    console.log(index);
+    let tempTrip = this.state.tripMapCardResult;
+    tempTrip.splice(index, 1);
+    this.setState({tripMapCardResult: tempTrip}, () => {
+      this.updateTripCards();
+    })
+  }
+
+  moveUpInTripOrder = (index) => {
+    let tempTrip = this.state.tripMapCardResult;
+    var element = tempTrip[index];
+    tempTrip.splice(index, 1);
+    tempTrip.splice(index-1, 0, element);
+
+    this.setState({tripMapCardResult: tempTrip}, () => {
+      this.updateTripCards();
+    })
+  }
+
+  moveDownInTripOrder = (index) => {
+    let tempTrip = this.state.tripMapCardResult;
+    var element = tempTrip[index];
+    tempTrip.splice(index, 1);
+    tempTrip.splice(index+1, 0, element);
+
+    this.setState({tripMapCardResult: tempTrip}, () => {
+      this.updateTripCards();
+    })
+  }
+
+  updateTripCards = () => {
+    const result2 = this.state.tripMapCardResult.map((value, index) =>
+    (
+      <TripMapCard
+        value={value}
+        getTripPlaces={this.getTripPlaces}
+        snackbar={this.props.snackbar}
+        handleCardSelect={this.handleCardSelect}
+        selectedCard={this.state.selectedCard}
+        order={index}
+        remove={this.removeFromTripOrder}
+        moveUp={this.moveUpInTripOrder}
+        moveDown={this.moveDownInTripOrder}
+        last={index == this.state.tripMapCardResult.length-1}
+      />
+    ))
+    this.setState({tripOrder: result2}, () => {
+      this.props.updateTripOrder(this.state.tripOrder);
+    });
+  }
+
+
   getTripPlaces = () => {
+    console.log('tripUpdate')
     if(this.props.loggedIn){
       var data = {username: sessionStorage.getItem('username')};
 
@@ -211,7 +278,25 @@ class Cards extends React.Component {
                 favorites={this.state.favorites}
               />
             ))
-          this.props.updateTripPlaces(result);
+            const result2 = response.map((value, index) =>
+                (
+                  <TripMapCard
+                    value={value}
+                    getTripPlaces={this.getTripPlaces}
+                    snackbar={this.props.snackbar}
+                    handleCardSelect={this.handleCardSelect}
+                    selectedCard={this.state.selectedCard}
+                    order={index}
+                    remove={this.removeFromTripOrder}
+                    moveUp={this.moveUpInTripOrder}
+                    moveDown={this.moveDownInTripOrder}
+                    last={index == response.length-1}
+                  />
+                ))
+                this.setState({tripOrder: result2, tripMapCardResult: response}, () => {
+                  this.props.updateTripPlaces(result);
+                  this.props.updateTripOrder(result2);
+                });
           }
         })
       }
@@ -244,7 +329,27 @@ class Cards extends React.Component {
                     favorites={this.state.favorites}
                   />
                 ))
-              this.props.updateTripPlaces(result);
+
+                const result2 = response.map((value, index) =>
+                (
+                  <TripMapCard
+                    value={value}
+                    getTripPlaces={this.getTripPlaces}
+                    snackbar={this.props.snackbar}
+                    handleCardSelect={this.handleCardSelect}
+                    selectedCard = {this.state.selectedCard}
+                    order={index}
+                    remove={this.removeFromTripOrder}
+                    moveUp={this.moveUpInTripOrder}
+                    moveDown={this.moveDownInTripOrder}
+                    last={index == response.length-1}                   
+                  />
+                ))
+              this.setState({tripOrder: result2, tripMapCardResult: response}, () => {
+                this.props.updateTripPlaces(result);
+                this.props.updateTripOrder(result2);
+              });
+              
               }
               else{
                 this.props.updateTripPlaces('');
@@ -255,7 +360,7 @@ class Cards extends React.Component {
   }
 
   //adds the passed id to the database and adds the lat and lng to a list for the trip creation
-  addToTrip = (id) => {
+  addToTrip = (id, name, lat, lng) => {
 
     if(sessionStorage.getItem('username')){
       var data = {username: sessionStorage.getItem('username'), place_id: id};
@@ -274,6 +379,8 @@ class Cards extends React.Component {
         })
     }
 
+    this.props.onAddPlaceToTrip({name: name,lat: lat,lng: lng});
+
     let tempInTrip = this.state.inTrip;
     tempInTrip.push(id);
 
@@ -285,7 +392,8 @@ class Cards extends React.Component {
         //this.searchPlaces("addToTrip");
     })
 
-  }
+  }  
+
 
   //removes the passed id and lat/lng from the db and from the trip id list
   removeFromTrip = (id) => {
@@ -325,6 +433,38 @@ class Cards extends React.Component {
       }
         //this.searchPlaces('removeFromTrip');
     })
+
+    this.updateCards(id, "removeFromTrip")
+  }
+
+  updateCards =(id, message) => {
+      let tempItems = this.state.items;
+      if(message == "removeFromTrip"){
+          for(var innerIndex = 0; innerIndex < tempItems.length; innerIndex++){
+            
+            if(id == tempItems[innerIndex]['props']['value']['place_id']){
+              console.log(id + " " + tempItems[innerIndex]['props']['value']['place_id'])
+              console.log(this.state.inTrip)
+              tempItems[innerIndex] = (<PlaceCard
+                                  value={this.state.result[innerIndex]}
+                                  inTrip={this.state.inTrip}
+                                  addToTrip={this.addToTrip}
+                                  removeFromTrip={this.removeFromTrip}
+                                  addFavorite={this.addFavorite}
+                                  removeFavorite={this.removeFavorite}
+                                  getTripPlaces={this.getTripPlaces}
+                                  searchPlaces={this.searchPlaces}
+                                  getPhotos={this.getPhotos}
+                                  snackbar={this.props.snackbar}
+                                  favorites={this.state.favorites}
+                                />)
+            }
+          }
+        this.setState({items: ''}, function() {
+          this.setState({items: tempItems})
+        });
+      }
+      
   }
 
   inTrip = (id) => {
@@ -362,7 +502,7 @@ class Cards extends React.Component {
       this.getPlaces(data);
     }
 
-    if(message == "nextPage" && !this.state.items[this.state.items.length-1].props){
+    if(message == "nextPage" && $.active == 0){
       let tempItems = this.state.items;
       tempItems.push(<div className='sweet-loading'>
         <PulseLoader
@@ -381,7 +521,7 @@ class Cards extends React.Component {
 
     if(message == "initial" || message == "filter"){
       let tempArr = this.state.filter;
-
+      
       if(tempArr['types'].length == 0){
         tempArr['types'].push('');
       }
@@ -389,8 +529,8 @@ class Cards extends React.Component {
       if(tempArr['price_level'].length == 0){
         tempArr['price_level'].push('');
       }
-      this.setState({filter: tempArr}, function() {
-        data = this.state.filter;
+      this.setState({filter: tempArr}, () => {
+        data = Object.assign({}, this.state.filter);
         let page = this.state.page;
         data['page'] = page;
         this.getPlaces(data);
@@ -444,9 +584,12 @@ class Cards extends React.Component {
            />
          ))
         let tempItems = this.state.items;
+        let tempResult = this.state.result;
         tempItems.pop();
-        tempItems.push(result);
-        this.setState({items: tempItems});
+        tempItems = tempItems.concat(result);
+        tempResult = tempResult.concat(response);
+
+        this.setState({items: tempItems, result: tempResult});
        }
        else{
          alert('No data available for that filter!')
@@ -469,7 +612,7 @@ class Cards extends React.Component {
     this.searchPlaces("initial");
 
 
-
+    
     /*if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition, showError);
     } else {
@@ -501,6 +644,12 @@ class Cards extends React.Component {
     }
 
   }
+
+  //scroll to last position when cards update
+  componentDidUpdate = () => {
+    document.getElementById('cardDiv').scrollTo(0,this.state.lastScrollPos)
+  }
+
   //listen for new props
   componentWillReceiveProps(nextProps) {
       if(JSON.stringify(nextProps.filter) != JSON.stringify(this.state.filter)){
@@ -511,13 +660,13 @@ class Cards extends React.Component {
 
       if(nextProps.loggedIn != this.props.loggedIn){
         if(nextProps.loggedIn){
-          this.setState({inTrip: [], loggedIn: true}, function() {
+          this.setState({inTrip: [], result: [], loggedIn: true}, function() {
             this.searchPlaces("loggedIn");
             this.getTripPlaces();
           });
         }
         else{
-          this.setState({inTrip: [], loggedIn: false}, function() {
+          this.setState({inTrip: [], result: [], loggedIn: false}, function() {
             this.searchPlaces("loggedOut");
             this.getTripPlaces();
           });
