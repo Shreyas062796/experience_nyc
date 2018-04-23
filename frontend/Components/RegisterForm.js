@@ -111,7 +111,7 @@ class RegisterForm extends React.Component {
         dataType:"json"})
         .done((response) => {
           if(response['response'] == "True"){
-            alert("Registered Successfully!");
+            alert("Registered Successfully! You will need to verify you account by clicking the link sent to your email before you are able to login");
             this.handleRegistered();
           }
           else {

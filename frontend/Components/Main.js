@@ -32,10 +32,12 @@ import blue from 'material-ui-next/colors/blue';
 import Modal from 'material-ui-next/Modal';
 import Badge from 'material-ui-next/Badge';
 import Divider from 'material-ui-next/Divider';
-import App from '../src/App';
 import Snackbar from 'material-ui-next/Snackbar';
 import MainModal from './MainModal.js';
 import PhotoModal from './PhotoModal.js';
+import MapWithADirectionsRenderer from './MapWithADirectionsRenderer';
+import TripMap from '../src/TripMap.js';
+//import LandingPage from './LandingPage.js';
 
 const drawerWidth = 300;
 
@@ -147,7 +149,7 @@ class Main extends React.Component {
     clicked: '',
     username: sessionStorage.getItem('username'),
     anchorEl: null,
-    filter: {search: '', types: [''], price_level: [''], num: '100', page: '1'},
+    filter: {search: '', types: [''], price_level: [''], num: '100'},
     currentPage: 'Places',
     open: '',
     tripButton: false,
@@ -158,10 +160,14 @@ class Main extends React.Component {
     snackbarMessage: '',
     snackbarOpen: false,
     photos: [],
-    photoModalOpened: false
+    photoModalOpened: false,
+    selectedCard: ''
   };
 
   componentWillMount = () => {
+    if(document.location.href.split('/')[3] == "login"){
+      this.setState({clicked: 0})
+    }
     if(sessionStorage.getItem('username')){
       this.setState({loggedIn: true});
     }
@@ -170,6 +176,10 @@ class Main extends React.Component {
   //handles scroll action, empty for non-mobile
   handleScroll = (down) => {
 
+  }
+
+  handleCardSelect = (index) => {
+    this.setState({selectedCard: index})
   }
 
   handleDrawerOpen = () => {
@@ -251,12 +261,19 @@ class Main extends React.Component {
     this.setState({open: true});
   }
 
-  updateTripLocations = (locations) => {
-    this.setState({tripLocations: locations});
+  updateTripLocations = (location) => {
+    //console.log(location)
+    let tempTripLocs = this.state.tripLocations;
+    tempTripLocs.push(location);
+    this.setState({tripLocations: tempTripLocs, drawerOpen: true});
   }
 
   updateTripPlaces = (places) => {
     this.setState({tripPlaces: places});
+  }
+
+  updateTripOrder = (mapPlaces) => {
+    this.setState({tripMapPlaces: mapPlaces});
   }
 
   removeFromTrip = (id) =>{
@@ -352,6 +369,17 @@ class Main extends React.Component {
     return (
       <div className={classes.root}>
         <div className={classes.appFrame}>
+          <Snackbar
+            style={{zIndex: 100}}
+            anchorOrigin={{vertical: 'bottom',horizontal: 'left'}}
+            open={this.state.snackbarOpen}
+            onClose={this.handleSnackbarClose}
+            autoHideDuration={1000}
+            SnackbarContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            message={<span id="message-id">{this.state.snackbarMessage}</span>}
+          />
           <AppBar
             className={classNames(classes.appBar, {
               [classes.appBarShift]: drawerOpen,
@@ -395,11 +423,10 @@ class Main extends React.Component {
             open={this.state.open}
             onClose={this.handleTripClose}
           >
-            <div className={classes.paper} style={{width: '75%', height: '75%'}}>
-              <App locations={this.state.tripLocations}/>
+            <div className={classes.paper} style={{width: '85%', height: '85%'}}>
+              <TripMap locations={this.state.tripLocations} places={this.state.tripMapPlaces} selected={this.state.selectedCard}/>
             </div>
           </Modal>
-          {/*<MainModal />*/}
           <PhotoModal
             photos={this.state.photos}
             onClose={this.handleModalClose}
@@ -410,16 +437,6 @@ class Main extends React.Component {
             onClose={this.handleModalClose}
             loggedIn={this.handleLogin}
             registered={this.handleRegister}
-          />
-          <Snackbar
-            anchorOrigin={{vertical: 'bottom',horizontal: 'left'}}
-            open={this.state.snackbarOpen}
-            onClose={this.handleSnackbarClose}
-            autoHideDuration={1000}
-            SnackbarContentProps={{
-              'aria-describedby': 'message-id',
-            }}
-            message={<span id="message-id">{this.state.snackbarMessage}</span>}
           />
             <div className={classes.drawerHeader} />
             <Tabs pageChange={this.handlePage} loggedIn={this.state.loggedIn} logginPopup={this.handleLoginPopup}/>
@@ -448,6 +465,8 @@ class Main extends React.Component {
                   loggedIn={this.state.loggedIn}
                   handleScroll={this.handleScroll}
                   snackbar={this.snackbar}
+                  cardSelect={this.handleCardSelect}
+                  updateTripOrder={this.updateTripOrder}
                 />
               </div>
               <div style={{display: this.handlePageDisplay('Events')}}>

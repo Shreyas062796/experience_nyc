@@ -93,7 +93,7 @@ class FilterBar extends React.Component {
     categories: [],
     prices: [],
     expanded: null,
-    filter: {search: '', types: [''], price_level: [''], num: '100', page: '1'},
+    filter: {search: '', types: [''], price_level: [''], num: '100'},
     distance: ''
   };
 
@@ -117,7 +117,7 @@ class FilterBar extends React.Component {
     var prices = this.state.prices;
     var distance = $('#distance').val();
 
-    var data = {search: search, types: category, price_level: prices, num: '100', page: '1'}
+    var data = {search: search, types: category, price_level: prices, num: '100'}
     this.setState({filter: data, expanded: null}, function () {
         this.handleFilterChange();
     });
