@@ -98,13 +98,31 @@ def getTopEvents():
 		n = int(request.args['amount'])
 		return jsonify(EVENT_CACHE.getTopN(n))
 
-
 @restClient.route('/')
 def index():
 	"""Initial starting point"""
 	return '<h1>Flask Client is up and running</h1>'
 
 
+def start_runner():
+	def start_loop():
+		not_started = True 
+		while not_started:
+			print("In startup loop")
+			try:
+				r = requests.get("http://experiencenyc.herokuapp.com/")
+				if r.status_code == 200:
+					print("Server started, quiting start_loop")
+				print(r.status_code)
+			except Exception as e:
+				print("Server has not started, yet.")
+			time.sleep(2)
+	print("Started Runner")
+	thread = threading.Thread(target=start_loop)
+	thread.start()
+
+
 if __name__ == '__main__':
 	print("server is starting")
+	start_runner()
 	restClient.run()

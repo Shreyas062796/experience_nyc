@@ -197,9 +197,9 @@ class PlacesMongo:
 
 if __name__ == "__main__":
 	Experience = PlacesMongo("ds159217.mlab.com","59217","admin","admin","experience_nyc")
-	# Experience.populatePlacesNew()
+	Experience.populatePlacesNew()
 	# print(len(Experience.queryAllPlaces([''],[''],'')))
 	# print(len(Experience.queryLiterallyAll()))
-	print(len(Experience.queryBasedOnSearch(['bar'],[''],'bar')))
+	# print(len(Experience.queryBasedOnSearch(['bar'],[''],'bar')))
 # # 	# Experience.queriedPlaces(['restaurant'],[1],'coffee',10)
 # # 	Experience.populateDetailPlaces()

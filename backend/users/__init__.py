@@ -40,7 +40,7 @@ def add_routes(app=None):
 		info['tags'] = []
 
 		#send a verification email
-		mailbot.Send(info['email'], "ExperienceNYC Verification", message) # to_email, email_subject
+		mailbot.Send(info['email'], "ExperienceNYC Verification", message, info['user_unique_id']) # to_email, email_subject
 
 		UsersMongo("ds163918.mlab.com","63918","admin","admin","experience_nyc").populateLogin(info)
 		return(jsonify({"response":"True"}))

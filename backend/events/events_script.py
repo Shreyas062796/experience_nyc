@@ -17,11 +17,16 @@ TOP_RIGHT = [40.835389, -73.878768]
 BOTTOM_LEFT = [40.701147, -74.040328]
 BOTTOM_RIGHT = [40.687712, -74.002422]
 
+TOKEN_ONE = "JETJBBD25AFDAF3GIPUE"
+TOKEN_TWO = "3PLRBVBROECU3VJOPGUY"
+
 # Remove the token later on
-EVENT_LINK = "https://www.eventbriteapi.com/v3/events/search/?token=3PLRBVBROECU3VJOPGUY"
-VENUE_LINK = "https://www.eventbriteapi.com/v3/venues/:id/?token=3PLRBVBROECU3VJOPGUY"
+EVENT_LINK = "https://www.eventbriteapi.com/v3/events/search/?token=" + TOKEN_TWO
+VENUE_LINK = "https://www.eventbriteapi.com/v3/venues/:id/?token=" + TOKEN_TWO
 
 DEFAULT_KEYWORDS = ['music', 'dance', 'convention', 'exercise', 'sports', 'concerts']
+
+
 
 
 
@@ -85,7 +90,7 @@ class getEvents:
 
 		pages = data.json()['pagination']['page_count']
 		print("found a total of {} pages, or documents".format(pages))
-		print(data.json()['pagination']['object_count'])
+		# print(data.json()['pagination']['object_count'])
 
 
 		self.events.extend(data.json()['events'])

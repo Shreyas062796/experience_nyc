@@ -36,8 +36,10 @@ class NYCPlaces:
 
 	
 	def getAllNewPlaces(self):
-		coors_manhatan = [(40.733588, -73.993926)]#, (40.780789, -73.973756), (40.813667, -73.935647)]
-		place_types = ['amusement_park','bakery', 'bar','book_store','bowling_alley','cafe','casino','clothing_store','convenience_store','department_store','florist','hair_care','home_goods_store','jewelry_store','library','meal_takeaway','movie_theater', 'museum','night_club','painter','park','restaurant','shopping_mall','stadium','store','zoo']
+		# coors_manhatan = [(40.733588, -73.993926)]#, (40.780789, -73.973756), (40.813667, -73.935647)]
+		coors_manhatan = [(40.733588, -73.993926), (40.780789, -73.973756), (40.813667, -73.935647), (40.710143, -74.006097), (	40.70509,-74.008639), (40.709342, -74.012954), (40.777055, -73.981867), (40.762841,-73.965388), (40.760024, -73.982554), (40.762017,-73.993197), (40.746847,-73.986331), (40.737266,-74.00373), (40.72365,-73.983131), (40.739693,-73.989139), (40.786212,-73.954336), (40.800031,-73.964121), (40.801374,-73.945582)]
+
+		place_types = ['bakery', 'bar','book_store','bowling_alley','cafe','casino','library','meal_takeaway','movie_theater', 'museum','night_club','park','restaurant','shopping_mall','stadium','store','zoo']
 		gmap = self.setClient() # client setter
 		allPlaces = {} # to store the data
 		# initialize all values for when you load them in
