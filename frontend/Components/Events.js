@@ -11,7 +11,8 @@ import red from 'material-ui-next/colors/red';
 import Favorite from 'material-ui-icons/Favorite';
 import FavoriteBorder from 'material-ui-icons/FavoriteBorder';
 import ShareIcon from 'material-ui-icons/Share';
-import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
+import ExpandMore from 'material-ui-icons/ExpandMore';
+import ExpandLess from 'material-ui-icons/ExpandLess';
 import MoreVertIcon from 'material-ui-icons/MoreVert';
 import Grid from 'material-ui-next/Grid';
 import Button from 'material-ui-next/Button';
@@ -26,6 +27,8 @@ import cyan from 'material-ui-next/colors/cyan';
 import eventbriteLogo from "./Images/eventbriteLogo.png";
 import noPhoto from "./Images/nophoto.png";
 import Check from 'material-ui-icons/Check';
+import Divider from 'material-ui-next/Divider';
+import EventCard from './EventCard.js'
 
 const styles = theme => ({
   card1: {
@@ -76,10 +79,6 @@ class Events extends React.Component {
             changedPos: undefined,
             down: true
           };
-
-  handleExpandClick = () => {
-    this.setState({ expanded: !this.state.expanded });
-  };
 
   cardWidth = () => {
     return $(card).width();
@@ -151,9 +150,19 @@ class Events extends React.Component {
       })
   }
 
-  addTrip(id){
+  handleExpandClick = (id) => {
+    /*let tempExpanded = this.state.expanded;
 
-  }
+    if(tempExpanded.includes(id)){
+      var index = tempExpanded.indexOf(id);
+      tempExpanded.splice(index, 1);
+    }
+    else{
+      tempExpanded.push(id);
+    }*/
+
+    this.setState({expanded: true});
+  };
 
   //check favorite list for passed id and return either a filler in or empty heart component
   isFavorite = (id) => {
@@ -213,37 +222,19 @@ class Events extends React.Component {
 
        response.shift();
        const result = response.map((value) =>
-       (<Grid item xl={3} lg={4} md={6} sm={12} xs={12}>
-         <Card className={classes.card1}>
-           <CardHeader classes={{root: classes.subheader, title: classes.title}}
-             avatar={
-               <Avatar aria-label="Recipe" src={value['logo'] ? value['logo']['original']['url'] : noPhoto} className={this.props.avatar}/>
-             }
-             title={value['name']['text']}
-             subheader="Address"
-           />
-         <div style={{overflow:'hidden'}}>
-            <img className="image" style={{width:'100%', height:'226px', objectFit: 'cover'}} src={value['logo'] ? value['logo']['original']['url'] : noPhoto}/>
-          </div>
-           <CardActions className={this.props.actions} disableActionSpacing>
-             <div style={{width: '25%'}}>
-                 {this.isFavorite(value['place_id'])}
-             </div>
-             <div style={{width: '50%', textAlign: 'center'}}>
-                {/*this.isFree(value['is_free'])*/}
-                <Button href={value['url']}  target="_blank" style={{minWidth: '0px', width:'10em', padding: '0px'}}>
-                   <img src={eventbriteLogo} style={{width: '7em', height: '100%'}}/>
-                </Button>
-             </div>
-             <div style={{width: '25%', textAlign: 'right'}}>
-               <Button href={"http://maps.google.com/?q=" + value['name']['text']} target="_blank" color="primary" style={{minWidth: '0px', color: 'rgba(0, 0, 0, 0.87)', border: '1px solid', borderRadius: '4px', marginRight: '1em'}}>
-                GO
-               </Button>
-             </div>
-           </CardActions>
-         </Card>
-       </Grid>)
-       );
+        (<EventCard
+        value={value}
+        inTrip={this.state.inTrip}
+        addToTrip={this.addToTrip}
+        removeFromTrip={this.removeFromTrip}
+        addFavorite={this.addFavorite}
+        removeFavorite={this.removeFavorite}
+        getTripPlaces={this.getTripPlaces}
+        searchPlaces={this.searchPlaces}
+        getPhotos={this.getPhotos}
+        snackbar={this.props.snackbar}
+        favorites={this.state.favorites}
+      />));
 
        this.setState({items: result});
 

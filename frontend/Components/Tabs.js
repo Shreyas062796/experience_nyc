@@ -26,7 +26,7 @@ const styles = theme => ({
 
 class FullWidthTabs extends React.Component {
   state = {
-    value: 1,
+    value: sessionStorage.getItem('username') ? 0 : 1,
     pageKeys: {0: 'Recommended', 1 : 'Places', 2 : 'Events', 3 : 'Favorites'},
     disabled: false
   };

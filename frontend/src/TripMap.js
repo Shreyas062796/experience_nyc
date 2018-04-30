@@ -15,16 +15,28 @@ import Typography from 'material-ui-next/Typography';
 
 const styles = theme => ({
 	root: {
-		width: '59%',
+		width: window.innerWidth <= 768 ? '100%' : '59%',
 		boxShadow: '0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)',
-		height: '70%', 
+		height: window.innerWidth <= 768 ? '40%' : '70%', 
 		overflowY: 'auto'
 	},
 	details: {
-		width: '59%',
+		width: window.innerWidth <= 768 ? '100%' : '59%',
 		boxShadow: '0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)',
-		overflowY: 'auto',
 		marginTop: '1em'
+	},
+	tripSave: {
+		width: window.innerWidth <= 768 ? '100%' : '59%',
+		height: '10%',
+		boxShadow: '0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)',
+		marginTop: '1em'
+	},
+	totalTimeAndDistance: {
+		fontWeight: '400', 
+		fontSize: window.innerWidth <= 450 ? '0.75rem' : window.innerWidth <= 1060 ? '1rem' : window.innerWidth <= 1600 ? '1.5rem' : '2rem', 
+		color: 'rgba(0, 0, 0, 0.87)',
+		marginTop: '1em',
+		marginBottom: '1em'
 	}
 })
 
@@ -38,6 +50,7 @@ class TripMap extends Component{
 			endTripIndex : 0,
 			time : 0,
 			dist : 0,
+			waypointTimeAndDist: []
 		}
 	}
 	
@@ -76,22 +89,6 @@ class TripMap extends Component{
 		return new Date().getTime();
 	}	
 	
-	removeLocation(location){
-		
-		let trip = []
-		let oldTrip = this.state.trip
-		
-		for(var i = 0; i < this.state.trip.length; i++ ){
-			if(i != this.state.selectedLocationIndex){				
-				trip.push(this.state.trip[i])
-			}
-		}
-				
-		this.setState({
-			trip : trip,			
-		})
-	}
-	
 	setDist(dist){
 		this.setState({
 			dist : dist			
@@ -126,42 +123,29 @@ class TripMap extends Component{
 	updateTripDetails = (time, distance) => {
 		this.setState({time: time, dist: distance})
 	}
-	
-	
-	/*funcMoveDown(){
-		let trip = this.state.trip
-		let places = this.state.places
-		let temp = trip[this.state.selectedLocationIndex + 1]
-		let tempPlace = places[this.state.selectedLocationIndex + 1]
-		if(this.state.selectedLocationIndex + 1 < this.state.trip.length){
-			trip[this.state.selectedLocationIndex + 1] = trip[this.state.selectedLocationIndex]
-			places[this.state.selectedLocationIndex + 1] = places[this.state.selectedLocationIndex]
-			trip[this.state.selectedLocationIndex] = temp
-			places[this.state.selectedLocationIndex] = tempPlace
-			this.setState({
-				trip : trip,
-				places: places
-			})
+
+	getPlaces = () => {
+		//let tempPlaces = Array.assign({}, this.state.places, array);
+		let tempPlaces = [this.state.places];
+		let tempArr = []
+		let tempWaypointTimeAndDist = this.state.waypointTimeAndDist;
+		for(var i = 0; i < tempPlaces[0].length; i++){
+			//tempPlaces[i].push(tempWaypointTimeAndDist[i]);
+
+			tempArr.push(tempPlaces[0][i]);
+
+			if(i != tempPlaces[0].length-1 && tempWaypointTimeAndDist[i]){
+				tempArr.push(<div style={{display: 'flex', justifyContent: 'center'}}><Typography style={{margin: '1em'}}> Time: {tempWaypointTimeAndDist[i]['time']} </Typography>
+							 <Typography style={{margin: '1em'}}> Distance: {tempWaypointTimeAndDist[i]['dist']} </Typography></div>
+							)
+			}
 		}
+		return tempArr;
 	}
-	
-	funcMoveUp(){		
-		//Go up
-		let trip = this.state.trip
-		let places = this.state.places
-		let temp = trip[this.state.selectedLocationIndex - 1]
-		let tempPlace = places[this.state.selectedLocationIndex - 1]
-		if(this.state.selectedLocationIndex - 1 >= 0){
-			trip[this.state.selectedLocationIndex - 1] = trip[this.state.selectedLocationIndex]
-			places[this.state.selectedLocationIndex - 1] = places[this.state.selectedLocationIndex]
-			trip[this.state.selectedLocationIndex] = temp
-			places[this.state.selectedLocationIndex] = tempPlace
-			this.setState({
-				trip : trip,
-				places: places
-			})
-		}
-	}*/
+
+	updateWaypointTimeAndDist = (arr) => {
+		this.setState({waypointTimeAndDist : arr});
+	}
 
 	componentWillReceiveProps = (nextProps) => {
 		if(this.props.selected != nextProps.selected){
@@ -192,6 +176,7 @@ class TripMap extends Component{
 					lng: value['props']['value']['geometry']['location']['lng']
 				}
 			))
+
 			this.setState({
 				locations : locs,
 				places: nextProps.places,
@@ -205,31 +190,35 @@ class TripMap extends Component{
 
     return (	
       <div style={{height: '100%'}}>
+	  	{window.innerWidth <= 768 ? <GoogleMap updateWaypointTimeAndDist={this.updateWaypointTimeAndDist} selected={this.state.selectedLocationIndex} updateTripDetails={this.updateTripDetails} ref = 'googlemap' trip = {this.state.trip} date = {this.uniqueId.bind(this)}/> : false}		
 		<div className={classes.root}>
-			<div style={{width: '100%', height: '44rem', display: 'inline-block'}}>
-				{this.state.places}
+			<div style={{width: '100%', height: window.innerWidth <= 768 ? '' : '44rem', display: 'inline-block'}}>
+				{this.getPlaces()}
+				{/*this.state.places*/}
 			</div>
 		</div>
 		<div className={classes.details}>
 			<div style={{display: 'inline-flex', justifyContent: 'center', width: '100%'}}>
-				<Typography variant="title" color="inherit" noWrap style={{margin: '1em', fontWeight: '400', fontSize: '2rem', color: 'rgba(0, 0, 0, 0.87)'}}>
+				<Typography variant="title" color="inherit" noWrap className={classes.totalTimeAndDistance} style={{marginRight: '1em'}}>
 					Time: {this.state.time}
 				</Typography>
-				<Typography variant="title" color="inherit" noWrap style={{margin: '1em', fontWeight: '400', fontSize: '2rem', color: 'rgba(0, 0, 0, 0.87)'}}>
+				<Typography variant="title" color="inherit" noWrap className={classes.totalTimeAndDistance}>
 					Distance: {this.state.dist}
 				</Typography>
 			</div>
 		</div>
 		{/*<div style={{display: 'inline-block', width: '60%'}}>*/}
-			<GoogleMap updateTripDetails={this.updateTripDetails} ref = 'googlemap' trip = {this.state.trip} date = {this.uniqueId.bind(this)}/>
+		{window.innerWidth <= 768 ? false : <GoogleMap updateWaypointTimeAndDist={this.updateWaypointTimeAndDist} selected={this.state.selectedLocationIndex}  updateTripDetails={this.updateTripDetails} ref = 'googlemap' trip = {this.state.trip} date = {this.uniqueId.bind(this)}/>}
+		<div className={classes.tripSave}>
+			<div style={{display: 'inline-flex', justifyContent: 'center', width: '100%', height: '100%'}}>
+			<TripProps places={this.state.places} locations={this.state.locations}/>
+			</div>
+		</div>
 		{/*</div>*/}
 		{/*<div style={{width: '50%', display: 'inline-flex'}}>
 			<TripBuilder trip = {this.state.trip} selectedIndex = {this.funcUpdateSelectedIndex.bind(this)}/>
 		</div>*/}
 		{/*<TripControl trip = {this.state.trip} removeLocation = {this.removeLocation.bind(this)} moveDown = {this.funcMoveDown.bind(this)} moveUp = {this.funcMoveUp.bind(this)}/>*/}
-		
-		<TripProps places={this.state.places} locations={this.state.locations}/>
-		
 		<br/>
 	  </div>
     );

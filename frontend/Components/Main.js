@@ -35,9 +35,7 @@ import Divider from 'material-ui-next/Divider';
 import Snackbar from 'material-ui-next/Snackbar';
 import MainModal from './MainModal.js';
 import PhotoModal from './PhotoModal.js';
-import MapWithADirectionsRenderer from './MapWithADirectionsRenderer';
 import TripMap from '../src/TripMap.js';
-//import LandingPage from './LandingPage.js';
 
 const drawerWidth = 300;
 
@@ -150,10 +148,9 @@ class Main extends React.Component {
     username: sessionStorage.getItem('username'),
     anchorEl: null,
     filter: {search: '', types: [''], price_level: [''], num: '100'},
-    currentPage: 'Places',
+    currentPage: sessionStorage.getItem('username') ? 'Recommended' : 'Places',
     open: '',
     tripButton: false,
-    tripLocations: [],
     tripPlaces: [],
     removeFromTrip: "",
     loggedIn: false,
@@ -165,16 +162,26 @@ class Main extends React.Component {
   };
 
   componentWillMount = () => {
+    /*$.ajax({
+        url: 'https://experiencenyc.herokuapp.com/',
+        error: function(result){
+          alert('Server is currently down!')
+        }
+    })*/
+   
     if(document.location.href.split('/')[3] == "login"){
       this.setState({clicked: 0})
+    }
+    if(document.location.href.split('/')[4] == "verify"){
+      alert('Thanks for verifying your email! Login and enjoy our app!')
     }
     if(sessionStorage.getItem('username')){
       this.setState({loggedIn: true});
     }
   }
 
-  //handles scroll action, empty for non-mobile
-  handleScroll = (down) => {
+  //required for mobile
+  handleScroll = () => {
 
   }
 
@@ -203,12 +210,13 @@ class Main extends React.Component {
   };
 
   handleClose = () => {
-    this.setState({ anchorEl: null });
+    this.setState({open: false, anchorEl: null });
   };
 
   handleLogin = () => {
     this.setState({username: sessionStorage.getItem('username'), loginClick: '', clicked: '', loggedIn: true, currentPage: 'Recommended'})
     this.handleMenuClose();
+    history.pushState({}, null, document.location.href.split('/')[0] + "//" + document.location.href.split('/')[1] + document.location.href.split('/')[2]);
   }
 
   handleRegister = () => {
@@ -251,21 +259,12 @@ class Main extends React.Component {
     })
   }
 
-  //Test for map*************************
   handleTripClose = () => {
     this.setState({open: ''});
-    this.props.onClose();
   };
 
   openTripModal = () => {
     this.setState({open: true});
-  }
-
-  updateTripLocations = (location) => {
-    //console.log(location)
-    let tempTripLocs = this.state.tripLocations;
-    tempTripLocs.push(location);
-    this.setState({tripLocations: tempTripLocs, drawerOpen: true});
   }
 
   updateTripPlaces = (places) => {
@@ -273,7 +272,11 @@ class Main extends React.Component {
   }
 
   updateTripOrder = (mapPlaces) => {
-    this.setState({tripMapPlaces: mapPlaces});
+    this.setState({tripMapPlaces: mapPlaces}, () => {
+      if(this.state.tripMapPlaces.length < 1){
+        this.setState({open: false});
+      }
+    });
   }
 
   removeFromTrip = (id) =>{
@@ -370,7 +373,6 @@ class Main extends React.Component {
       <div className={classes.root}>
         <div className={classes.appFrame}>
           <Snackbar
-            style={{zIndex: 100}}
             anchorOrigin={{vertical: 'bottom',horizontal: 'left'}}
             open={this.state.snackbarOpen}
             onClose={this.handleSnackbarClose}
@@ -424,7 +426,9 @@ class Main extends React.Component {
             onClose={this.handleTripClose}
           >
             <div className={classes.paper} style={{width: '85%', height: '85%'}}>
-              <TripMap locations={this.state.tripLocations} places={this.state.tripMapPlaces} selected={this.state.selectedCard}/>
+              <TripMap 
+                places={this.state.tripMapPlaces} 
+                selected={this.state.selectedCard}/>
             </div>
           </Modal>
           <PhotoModal
@@ -444,22 +448,22 @@ class Main extends React.Component {
                 <Recommended
                   page={this.state.currentPage}
                   filter={this.state.filter}
-                  onAddPlaceToTrip={this.updateTripLocations}
                   updateTripPlaces={this.updateTripPlaces}
                   loggedIn={this.state.loggedIn}
                   handleScroll={this.handleScroll}
                   snackbar={this.snackbar}
-                  inTrip={this.state.tripPlaces}
                   modalPhotos={this.setModalPhotos}
+                  cardSelect={this.handleCardSelect}
+                  updateTripOrder={this.updateTripOrder}
+                  tripMapOpen={this.state.open}
 
                 />
               </div>
               <div style={{display: this.handlePageDisplay('Places')}}>
-                <FilterBar setFilter={this.setFilter} />
+                <FilterBar setFilter={this.setFilter} drawerOpen={this.state.drawerOpen}/>
                 <Cards
                   page={this.state.currentPage}
                   filter={this.state.filter}
-                  onAddPlaceToTrip={this.updateTripLocations}
                   updateTripPlaces={this.updateTripPlaces}
                   modalPhotos={this.setModalPhotos}
                   loggedIn={this.state.loggedIn}
@@ -467,6 +471,7 @@ class Main extends React.Component {
                   snackbar={this.snackbar}
                   cardSelect={this.handleCardSelect}
                   updateTripOrder={this.updateTripOrder}
+                  tripMapOpen={this.state.open}
                 />
               </div>
               <div style={{display: this.handlePageDisplay('Events')}}>
@@ -477,13 +482,14 @@ class Main extends React.Component {
               <div style={{display: this.handlePageDisplay('Favorites')}}>
                 <Favorites
                   page={this.state.currentPage}
-                  onAddPlaceToTrip={this.updateTripLocations}
                   updateTripPlaces={this.updateTripPlaces}
                   loggedIn={this.state.loggedIn}
                   handleScroll={this.handleScroll}
                   snackbar={this.snackbar}
-                  inTrip={this.state.tripPlaces}
                   modalPhotos={this.setModalPhotos}
+                  cardSelect={this.handleCardSelect}
+                  updateTripOrder={this.updateTripOrder}
+                  tripMapOpen={this.state.open}
                 />
               </div>
           </main>

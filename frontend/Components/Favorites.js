@@ -29,6 +29,7 @@ import Divider from 'material-ui-next/Divider';
 import Check from 'material-ui-icons/Check';
 import PlaceCard from './PlaceCard.js';
 import TripCard from './TripCard.js';
+import TripMapCard from './TripMapCard.js';
 
 const styles = theme => ({
   card1: {
@@ -75,23 +76,19 @@ const styles = theme => ({
 
 class Cards extends React.Component {
   state = { items: [],
+            trip: [],
             inTrip: [],
-            favorites: []
+            result: [],
+            favorites: [],
+            tripMapCardResult: [],
+            tripOrder: [],
+            page: 1,
+            selectedCard: ''
           };
 
-  componentWillReceiveProps = (nextProps) => {
-    if(nextProps.page == "Favorites"){
-      this.getFavorites();
-    }
-
-    if(nextProps.inTrip != this.state.inTrip){
-      this.setState({inTrip: nextProps.inTrip});
-    }
-  }
-
-  componentWillMount = () => {
+  /*componentWillMount = () => {
     this.setState({loggedIn: this.props.loggedIn});
-  }
+  }*/
 
   //set list of favorites for current user
   setFavorites = () => {
@@ -110,29 +107,104 @@ class Cards extends React.Component {
     }
   }
 
-  componentDidMount = () => {
+  /*componentDidMount = () => {
     if(sessionStorage.getItem('username')){
+      this.setState({loggedIn: true}, function(){
+        this.getTripPlacesIDs();
+        this.getTripPlaces();
+        this.setFavorites();
+      })
+    }
+  }*/
+
+  componentWillReceiveProps = (nextProps) => {
+    console.log(nextProps.page);
+    if((nextProps.page != this.props.page) && nextProps.page == "Favorites"){
+      this.getTripPlacesIDs();
+      this.setFavorites()
       this.getFavorites();
     }
   }
 
   //get a list of the place IDs that the user is building a trip with
   getTripPlacesIDs = () => {
-    var data = {username: sessionStorage.getItem('username')};
+    if(sessionStorage.getItem('username')){
+      var data = {username: sessionStorage.getItem('username')};
 
-    $.ajax({
-      url:"https://experiencenyc.herokuapp.com/users/gettripplacesIds",
-      type:"POST",
-      data: JSON.stringify(data),
-      contentType:"application/json; charset=utf-8",
-      dataType:"json"})
-      .done((response) => {
-        this.setState({inTrip: response});
-      })
+      $.ajax({
+        url:"https://experiencenyc.herokuapp.com/users/gettripplacesIds",
+        type:"POST",
+        data: JSON.stringify(data),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json"})
+        .done((response) => {
+          this.setState({inTrip: response});
+        })
+    }
   }
 
+  handleCardSelect = (id) => {
+    this.setState({selectedCard: id}, () => {
+      this.props.cardSelect(id);
+      this.updateTripCards();
+    })
+  }
+
+  removeFromTripOrder = (index) => {
+    let tempTrip = this.state.tripMapCardResult;
+    tempTrip.splice(index, 1);
+    this.setState({tripMapCardResult: tempTrip}, () => {
+      this.updateTripCards();
+    })
+  }
+
+  moveUpInTripOrder = (index) => {
+    let tempTrip = this.state.tripMapCardResult;
+    var element = tempTrip[index];
+    tempTrip.splice(index, 1);
+    tempTrip.splice(index-1, 0, element);
+
+    this.setState({tripMapCardResult: tempTrip}, () => {
+      this.updateTripCards();
+    })
+  }
+
+  moveDownInTripOrder = (index) => {
+    let tempTrip = this.state.tripMapCardResult;
+    var element = tempTrip[index];
+    tempTrip.splice(index, 1);
+    tempTrip.splice(index+1, 0, element);
+
+    this.setState({tripMapCardResult: tempTrip}, () => {
+      this.updateTripCards();
+    })
+  }
+
+  updateTripCards = () => {
+    const result2 = this.state.tripMapCardResult.map((value, index) =>
+    (
+      <TripMapCard
+        value={value}
+        getTripPlaces={this.getTripPlaces}
+        snackbar={this.props.snackbar}
+        handleCardSelect={this.handleCardSelect}
+        selectedCard={this.state.selectedCard}
+        order={index}
+        remove={this.removeFromTripOrder}
+        moveUp={this.moveUpInTripOrder}
+        moveDown={this.moveDownInTripOrder}
+        last={index == this.state.tripMapCardResult.length-1}
+      />
+    ))
+    this.setState({tripOrder: result2}, () => {
+      this.props.updateTripOrder(this.state.tripOrder);
+    });
+  }
+
+
   getTripPlaces = () => {
-    if(this.state.loggedIn){
+    console.log(this.state.inTrip)
+    if(this.props.loggedIn){
       var data = {username: sessionStorage.getItem('username')};
 
       $.ajax({
@@ -161,7 +233,25 @@ class Cards extends React.Component {
                 favorites={this.state.favorites}
               />
             ))
-          this.props.updateTripPlaces(result);
+            const result2 = response.map((value, index) =>
+                (
+                  <TripMapCard
+                    value={value}
+                    getTripPlaces={this.getTripPlaces}
+                    snackbar={this.props.snackbar}
+                    handleCardSelect={this.handleCardSelect}
+                    selectedCard={this.state.selectedCard}
+                    order={index}
+                    remove={this.removeFromTripOrder}
+                    moveUp={this.moveUpInTripOrder}
+                    moveDown={this.moveDownInTripOrder}
+                    last={index == response.length-1}
+                  />
+                ))
+                this.setState({tripOrder: result2, tripMapCardResult: response}, () => {
+                  this.props.updateTripPlaces(result);
+                  this.props.updateTripOrder(result2);
+                });
           }
         })
       }
@@ -194,7 +284,27 @@ class Cards extends React.Component {
                     favorites={this.state.favorites}
                   />
                 ))
-              this.props.updateTripPlaces(result);
+
+                const result2 = response.map((value, index) =>
+                (
+                  <TripMapCard
+                    value={value}
+                    getTripPlaces={this.getTripPlaces}
+                    snackbar={this.props.snackbar}
+                    handleCardSelect={this.handleCardSelect}
+                    selectedCard = {this.state.selectedCard}
+                    order={index}
+                    remove={this.removeFromTripOrder}
+                    moveUp={this.moveUpInTripOrder}
+                    moveDown={this.moveDownInTripOrder}
+                    last={index == response.length-1}                   
+                  />
+                ))
+              this.setState({tripOrder: result2, tripMapCardResult: response}, () => {
+                this.props.updateTripPlaces(result);
+                this.props.updateTripOrder(result2);
+              });
+              
               }
               else{
                 this.props.updateTripPlaces('');
@@ -204,7 +314,7 @@ class Cards extends React.Component {
         this.getTripPlacesIDs();
   }
 
-  //adds the passed id to the database and adds the lat and lng to a list for the trip creation
+  //adds the passed id to the database and updates the current cards
   addToTrip = (id) => {
 
     if(sessionStorage.getItem('username')){
@@ -232,10 +342,11 @@ class Cards extends React.Component {
         this.props.snackbar('Added To Trip!')
         this.getTripPlaces();
       }
-        this.getFavorites();
+        //this.searchPlaces("addToTrip");
     })
 
-  }
+  }  
+
 
   //removes the passed id and lat/lng from the db and from the trip id list
   removeFromTrip = (id) => {
@@ -273,8 +384,38 @@ class Cards extends React.Component {
         this.props.snackbar('Removed From Trip!')
         this.getTripPlaces();
       }
-        this.getFavorites();
+        //this.searchPlaces('removeFromTrip');
     })
+
+    this.updateCards(id, "removeFromTrip")
+  }
+
+  updateCards =(id, message) => {
+      let tempItems = this.state.items;
+      if(message == "removeFromTrip"){
+          for(var innerIndex = 0; innerIndex < tempItems.length; innerIndex++){
+            
+            if(id == tempItems[innerIndex]['props']['value']['place_id']){
+              tempItems[innerIndex] = (<PlaceCard
+                                  value={this.state.result[innerIndex]}
+                                  inTrip={this.state.inTrip}
+                                  addToTrip={this.addToTrip}
+                                  removeFromTrip={this.removeFromTrip}
+                                  addFavorite={this.addFavorite}
+                                  removeFavorite={this.removeFavorite}
+                                  getTripPlaces={this.getTripPlaces}
+                                  searchPlaces={this.searchPlaces}
+                                  getPhotos={this.getPhotos}
+                                  snackbar={this.props.snackbar}
+                                  favorites={this.state.favorites}
+                                />)
+            }
+          }
+        this.setState({items: ''}, function() {
+          this.setState({items: tempItems})
+        });
+      }
+      
   }
 
   inTrip = (id) => {
@@ -314,6 +455,13 @@ class Cards extends React.Component {
 
   //get favorites and display
   getFavorites = () => {
+    this.setState({items: [<div className='sweet-loading'>
+      <PulseLoader
+        color={'#123abc'}
+        loading={this.state.loading}
+      />
+    </div>]})
+    
     var data = {username: sessionStorage.getItem('username')};
 
     $.ajax({
@@ -338,11 +486,10 @@ class Cards extends React.Component {
           snackbar={this.props.snackbar}
           favorites={this.state.favorites}
         />
-     ));
-      if(JSON.stringify(this.state.items) != JSON.stringify(result)){
-        this.setFavorites();
-        this.setState({items: result});
-     };
+     ))
+     if(JSON.stringify(this.state.items) != JSON.stringify(result)){
+      this.setState({items: result});
+    }
     });
   }
 

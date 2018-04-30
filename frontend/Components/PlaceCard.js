@@ -276,7 +276,7 @@ class PlaceCard extends React.Component {
              subheader={this.props.value['formatted_address']}
              action={
                      <Tooltip id="tooltip-bottom" title={this.props.inTrip.includes(this.props.value['place_id']) ? "Remove From Trip" : "Add to Trip"} placement="bottom">
-                       <IconButton aria-label={this.props.inTrip.includes(this.props.value['place_id']) ? "Remove from Trip" : "Add to Trip"} onClick={() => {this.state.inTrip.includes(this.props.value['place_id']) ? this.removeFromTrip(this.props.value['place_id']) : this.addToTrip(this.props.value['place_id'], this.props.value['name'], this.props.value['geometry']['location']['lat'], this.props.value['geometry']['location']['lng'], this)}}>
+                       <IconButton aria-label={this.props.inTrip.includes(this.props.value['place_id']) ? "Remove from Trip" : "Add to Trip"} onClick={() => {this.state.inTrip.includes(this.props.value['place_id']) ? this.removeFromTrip(this.props.value['place_id']) : this.addToTrip(this.props.value['place_id'])}}>
                          {this.props.inTrip.includes(this.props.value['place_id']) ? <Check  /> : <Add  />}
                        </IconButton>
                      </Tooltip>
@@ -329,25 +329,25 @@ class PlaceCard extends React.Component {
             <CardContent>
               {this.props.value['rating'] ? <div>
               <Typography className={classes.typography}>
-                Rating: {this.props.value['rating']}
+              <span style={{fontWeight:"bold"}}>Rating: </span>{this.props.value['rating']}
               </Typography>
               <Divider className={classes.divider}/> </div>: false}
 
               {this.props.value['price_level'] ? <div>
               <Typography className={classes.typography}>
-                Price: {this.state.priceKeys[this.props.value['price_level']]}
+              <span style={{fontWeight:"bold"}}>Price: </span>{this.state.priceKeys[this.props.value['price_level']]}
               </Typography>
               <Divider className={classes.divider}/>  </div> : false}
 
               {this.props.value['formatted_phone_number'] ? <div>
               <Typography className={classes.typography}>
-                Phone Number: {this.props.value['formatted_phone_number']}
+              <span style={{fontWeight:"bold"}}>Phone Number: </span>{this.props.value['formatted_phone_number']}
               </Typography>
               <Divider className={classes.divider}/> </div> : false}
 
               {this.props.value['opening_hours'] ? <div>
               <Typography className={classes.typography} style={{textAlign: 'center'}}>
-                Hours <Chip label={this.props.value['opening_hours']['open_now'] ? 'Open' : 'Closed'} style={{backgroundColor: this.props.value['opening_hours']['open_now'] ? '#00ff159e' : '#f44336de'}} className={classes.chip} />
+              <span style={{fontWeight:"bold"}}>Hours </span><Chip label={this.props.value['opening_hours']['open_now'] ? 'Open' : 'Closed'} style={{backgroundColor: this.props.value['opening_hours']['open_now'] ? '#00ff159e' : '#f44336de'}} className={classes.chip} />
               </Typography>
               <Typography paragraph className={classes.typography}>
                 {this.getHours(this.props.value['opening_hours']['weekday_text'])}
@@ -357,7 +357,7 @@ class PlaceCard extends React.Component {
               {this.props.value['types'] ?
               <div className={classes.root}>
               <Typography style={{display: 'inline-block'}} className={classes.typography}>
-                Tags:
+              <span style={{fontWeight:"bold"}}>Tags: </span>
               </Typography>
                 {this.getTags(this.props.value['types'])}
               <Divider className={classes.divider}/> </div>: false}

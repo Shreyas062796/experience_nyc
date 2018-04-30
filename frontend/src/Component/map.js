@@ -1,5 +1,14 @@
 /*global google*/
 import React, { Component } from 'react';
+//import icon from './googleMapIcons/number_0.png';
+
+/*function importAll(r) {
+  let images = {};
+  r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+  return images;
+}
+
+const images = importAll(require.context('./googleMapIcons', false, /\.(png|jpe?g|svg)$/));*/
 
 
 class GoogleMap extends Component{
@@ -7,29 +16,44 @@ class GoogleMap extends Component{
 	constructor(){
 		super()
 		this.state = {
-			dirDisp : new google.maps.DirectionsRenderer(),
-			dirServ : new google.maps.DirectionsService(),
 			time : 0,
 			dist : 0,
-			inst : 0
+			inst : 0,
+			markers: [],
+			disp : new google.maps.DirectionsRenderer({
+				suppressMarkers: true
+			})
 		}
 	}
 
 	createMap = () => {
 		//directions
-		var dirDisp = this.state.dirDisp;
-		var dirServ = this.state.dirServ;
+		var dirDisp = this.state.disp;
 
-			
-		dirDisp.setMap(this.map);
-		
-		//var start = new google.maps.LatLng(42.1, -71.2);
-		
-		//console.log(markers[0].getPosition().lng())
-		
+		var dirServ = new google.maps.DirectionsService();
+						
 		let endIndex = this.props.trip.length
-			
-			
+
+		this.clearMarkers();
+
+		let markers = this.state.markers
+
+		this.props.trip.forEach(function(element, index) {
+			let label = (index+1).toString()
+			//import icon from "'./googleMapIcons/number_0' + index+1 +'.png'";
+			var marker = new google.maps.Marker({
+				animation: this.props.selected == index ? google.maps.Animation.BOUNCE : false,
+				label: {text: label, color: "white"},
+				position: {lat: element.lat, lng: element.lng}
+				//icon: icon
+			});
+
+			markers.push(marker);
+
+		}.bind(this));
+
+		this.setMarkers(markers);
+		
 		if(endIndex > 0){	
 			
 			var start = {					
@@ -53,9 +77,7 @@ class GoogleMap extends Component{
 					stopover: true
 				})
 			}
-			
-			//var end = new google.maps.LatLng(42.7, -71.8);			
-			
+						
 			var request = {
 				origin: start,
 				destination: end,
@@ -63,13 +85,12 @@ class GoogleMap extends Component{
 				optimizeWaypoints: true,
 				travelMode: 'WALKING'
 			};
-				
 			dirServ.route(request, function(result, status){
-				console.log(result)
 				if (status == 'OK'){
 					dirDisp.setDirections(result);
 					//dirDisp.setPanel(document.getElementById('directionsPanel'));	
-					//console.log(result.routes[0].legs[0])
+					
+					//console.log(result);
 
 					var distance= 0;
 					var time = 0;
@@ -81,6 +102,8 @@ class GoogleMap extends Component{
 					time = this.fancyTimeFormat(time);
 					distance = Math.round(distance* 0.000621371192 * 100) / 100 + " Miles";
 
+					this.getWaypointTimeAndDist(result);
+
 					this.setState({
 						time : time,
 						dist : distance,						
@@ -88,10 +111,47 @@ class GoogleMap extends Component{
 						this.props.updateTripDetails(this.state.time, this.state.dist);
 					}.bind(this) )
 				}
-			}.bind(this))			
+			}.bind(this))
+			dirDisp.setMap(this.map);
 			
 		}
 	}
+
+	getWaypointTimeAndDist = (result) => {
+		let tempArr = []
+
+		for(var i = 0; i < result.routes[0].legs.length; i++){
+			var distance = parseFloat(result.routes[0].legs[i].distance.value);
+			var time = parseFloat(result.routes[0].legs[i].duration.value);
+			distance = Math.round(distance* 0.000621371192 * 100) / 100 + " Miles";
+			time = this.fancyTimeFormat(time);
+			tempArr.push({time: time, dist: distance})
+		}
+
+		this.props.updateWaypointTimeAndDist(tempArr);
+	}
+
+	setMarkers = (markers) => {
+		for (var i = 0; i < markers.length; i++ ) {
+			if(markers[i] != null){
+				markers[i].setMap(this.map);
+			}	
+		}
+		this.setState({markers: markers})
+	}
+
+	clearMarkers() {
+		let markers = this.state.markers;
+		for (var i = 0; i < markers.length; i++ ) {
+			if(markers[i] != null){
+				markers[i].setMap(null);
+				markers[i] = null;
+			}
+		}
+
+		this.setState({markers: markers})
+	}
+
 
 	fancyTimeFormat(time)
 	{   
@@ -104,31 +164,34 @@ class GoogleMap extends Component{
 		var ret = "";
 
 		if (hrs > 0) {
-			ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+			ret += "" + hrs + " Hours " + (mins < 10 ? "0" : "");
 		}
 
-		ret += "" + mins + ":" + (secs < 10 ? "0" : "");
-		ret += "" + secs;
+		ret += "" + mins + " Minutes"
 		return ret;
 	}
 	
-	componentWillReceiveProps(props){
-		this.createMap();
+	componentWillReceiveProps(nextProps){
+		if(this.props.trip != nextProps.trip)
+			this.setState({places: nextProps.trip}, function() {
+			this.createMap();
+		})
 	}
 	
 	componentDidMount(){
 		this.map = new google.maps.Map(this.refs.map,{
-			//center: { lat: this.props.lat, lng: this.props.lng },
-			center: { lat: 42.95, lng: -71.33 },
+			center: { lat: this.props.trip[0].lat, lng: this.props.trip[0].lng },
 			zoom: 8
 		});
-		this.createMap();
+		this.setState({places: this.props.trip}, function() {
+			this.createMap();
+		})
 	}
 	
   render(){
     return (		
-	<div >
-		<div style={{height: '100%', width: '40%', display: 'inline-flex', position: 'absolute', top: 0, right: 0}} id = "map" ref = "map">
+	<div style={{height: window.innerWidth <= 768 ? '40%' : false}}>
+		<div style={{height: '100%', width: window.innerWidth <= 768 ? '100%' : '40%', display: 'inline-flex', position: window.innerWidth <= 768 ? 'relative' : 'absolute', top: 0, right: 0}} id = "map" ref = "map">
 		</div>	
 		{/*<div style={{width: '100%', height: '300px',overflow: 'auto'}} id="directionsPanel"></div>
 		<br />*/}

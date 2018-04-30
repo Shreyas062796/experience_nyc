@@ -82,6 +82,33 @@ const styles = theme => ({
     textAlign: 'center',
     width: '10%', 
     backgroundColor: 'rgba(0, 0, 0, 0.87)'
+  },
+  arrows: {
+    width: '50px',
+    height: '50px'
+  },
+  arrowsMobile: {
+    width: '25px',
+    height: '25px'
+  },
+  heading: {
+    fontSize: '1.5rem'
+  },
+  headingMobile: {
+    fontSize: '1rem'
+  },
+  subheading: {
+    fontSize: '1rem'
+  },
+  subheadingMobile: {
+    fontSize: '0.75rem'
+  },
+  tripMapCardButtons: {
+    borderLeft: '1px solid', 
+    borderRadius: '0px', 
+    minWidth: '0px', 
+    width: '100%',
+    padding: '0px'
   }
 });
 
@@ -111,32 +138,32 @@ class TripMapCard extends React.Component {
     const { classes } = this.props;
 
     return (
-            <Card className={classes.card1} style={{margin: '1em', backgroundColor: (this.props.selectedCard == this.props.value['place_id']) ? '#a7e2ff' : 'white', cursor: 'pointer'}} onClick={() => {this.handleSelect(this.props.value['place_id'])}}>
+            <Card className={classes.card1} style={{margin: '1em', backgroundColor: (this.props.selectedCard == this.props.value['place_id']) ? '#a7e2ff' : 'white', cursor: 'pointer'}}>
             <div className={classes.details}>
                 <div className={classes.order}>
                     <Typography style={{color: 'white', fontSize: '2.5rem'}}>
                         {/*this.state.Alphabet[this.props.order]*/}
-                        {this.props.order}
+                        {this.props.order + 1}
                     </Typography>
                 </div>
-                <CardContent style={{width: this.props.order > 0  && !this.props.last ? '60%' : '70%'}}>
-                    <Typography variant="headline">{this.props.value['name']}</Typography>
-                    <Typography variant="subheading" color="textSecondary">
+                <CardContent style={{width: this.props.order > 0  && !this.props.last ? '60%' : '70%'}} onClick={() => {this.handleSelect(this.props.value['place_id'])}}>
+                    <Typography className={window.innerWidth <= 768 ? classes.headingMobile :  classes.heading} variant="headline">{this.props.value['name']}</Typography>
+                    <Typography className={window.innerWidth <= 768 ? classes.subheadingMobile :  classes.subheading} variant="subheading" color="textSecondary">
                     {this.props.value['formatted_address']}
                     </Typography>
                 </CardContent>
                 {(this.props.order > 0 && !this.props.last) ? <div style={{width: '10%', display: 'inline-flex', justifyContent: 'flex-end'}}>
-                    <Button onClick={() => {this.props.moveDown(this.props.order)}} style={{borderLeft: '1px solid', borderRadius: '0px', minWidth: '0px', width: '100%'}}>
-                        <DownArrow style={{height: '50px', width: '50px'}}/>
+                    <Button onClick={() => {this.props.moveDown(this.props.order)}} className={classes.tripMapCardButtons}>
+                        <DownArrow className={window.innerWidth <= 768 ? classes.arrowsMobile :  classes.arrows}/>
                     </Button>
                 </div> : false}
                 <div style={{width: '10%', display: 'inline-flex', justifyContent: 'flex-end'}}>
-                    <Button onClick={() => {this.props.order > 0 ? this.props.moveUp(this.props.order) : this.props.moveDown(this.props.order)}} style={{borderLeft: '1px solid', borderRadius: '0px', minWidth: '0px', width: '100%'}}>
-                        {this.props.order > 0 ? <UpArrow style={{height: '50px', width: '50px'}}/> : <DownArrow style={{height: '50px', width: '50px'}}/>}
+                    <Button onClick={() => {this.props.order > 0 ? this.props.moveUp(this.props.order) : this.props.moveDown(this.props.order)}} className={classes.tripMapCardButtons}>
+                        {this.props.order > 0 ? <UpArrow className={window.innerWidth <= 768 ? classes.arrowsMobile :  classes.arrows}/> : <DownArrow className={window.innerWidth <= 768 ? classes.arrowsMobile : classes.arrows}/>}
                     </Button>
                 </div>
                 <div style={{width: '10%', display: 'inline-flex'}}>
-                    <Button target="_blank" onClick={() => {this.props.remove(this.props.order)}} style={{width: '100%',minWidth: '0px', borderLeft: '1px solid', borderRadius: '0px'}}>
+                    <Button target="_blank" onClick={() => {this.props.remove(this.props.order)}} className={classes.tripMapCardButtons}>
                         <Clear />
                     </Button>
                 </div>

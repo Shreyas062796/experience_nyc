@@ -69,7 +69,7 @@ class LoginModal extends React.Component {
   }
 
   handleRegister = () => {
-    this.setState({open: ''});
+    this.setState({value: '0', loginForm: 'block',registerForm: 'none',});
     this.props.registered();
   }
 
