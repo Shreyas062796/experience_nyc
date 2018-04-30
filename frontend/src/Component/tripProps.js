@@ -5,10 +5,12 @@ import classnames from 'classnames';
 import { withStyles } from 'material-ui-next/styles';
 import Input, { InputLabel, InputAdornment } from 'material-ui-next/Input';
 import Typography from 'material-ui-next/Typography';
-import Directions from 'material-ui-icons/directions';
+import Directions from 'material-ui-icons/Directions';
+import Save from 'material-ui-icons/Save';
 import { FormGroup, FormControlLabel } from 'material-ui-next/Form';
 import Checkbox from 'material-ui-next/Checkbox';
 import Divider from 'material-ui-next/Divider'
+import SavePopup from './SavePopup.js';
 
 const styles = theme => ({
   button: {
@@ -17,16 +19,12 @@ const styles = theme => ({
     border: '1px solid',
     borderRadius: '4px',
 	},
-	tripSave: {
-		position: 'absolute',
-    bottom: 0,
-    width: '60%',
+	/*tripSave: {
+		position: 'relative',
+    //width: window.innerWidth <= 768 ? '100%' : '60%',
     textAlign: 'center',
-    left: 0,
-		display: 'table',
-		height: '10%',
-		boxShadow: '0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)'
-	},
+		display: 'inline-lflex',
+	},*/
 	checkboxLabel: {
 		fontSize: '1.5rem'
 	}
@@ -34,62 +32,82 @@ const styles = theme => ({
 
 class TripProps extends Component{	
 	state={
-		checked: false
+		saveClick: false,
+		tripSaved: false
 	}
-	
-	handleClick(){
 
-		let placeIds = this.getPlaceIds();
-		let tripName = $('tripName').val();
-
-		if(sessionStorage.getItem('username')){
-			var data = {
-				placeIds: [],
-				trip_name: tripName,
-				public: this.state.checked,
-				username: sessionStorage.getItem('username'),
-			}
-
-			$.ajax({
-				url:"https://experiencenyc.herokuapp.com/createtrip",
-				type:"POST",
-				data: JSON.stringify(data),
-				contentType:"application/json; charset=utf-8",
-				dataType:"json"})
-				.done((response) => {
-					if(response['response'] == "True"){
-						alert("Trip was saved!");
-					}
-					else {
-						alert("Trip failed to save!");
-					}
-				})
-		}
-		else{
-			alert('You must be logged in to save a trip!')
+	componentWillReceiveProps = (nextProps) => {
+		if(this.props.places != nextProps.places){
+			this.isSaved();
 		}
 	}
 
-	getPlaceIds = () => {
-		let places = [];
-
-		this.props.places.forEach(function(element) {
-			places.push(element['props']['value']['place_id'])
-		})
-
-		return places;
+	componentWillMount = () => {
+		this.isSaved();
 	}
 
 	handleCheck = name => event => {
     this.setState({ [name]: event.target.checked });
-  };
+	};
+	
+	saveClick = () => {
+		if(sessionStorage.getItem('username')){
+			this.setState({saveClick: true});
+		}
+		else{
+			alert('You must be logged in to save a trip!')
+		}
+	};
+	
+	handleSave = () => {
+    this.setState({saveClick: false});
+	};
+
+	getPlaceIds = () => {
+    let places = [];
+
+    this.props.places.forEach(function(element) {
+        places.push(element['props']['value']['place_id'])
+    })
+    return places;
+	}
+	
+	isSaved = () => {
+		let exists = false;
+		let ref = this;
+		if(sessionStorage.getItem('username')){
+			let placeIds = this.getPlaceIds();
+
+			var data = {
+				placeIds: placeIds,
+				username: sessionStorage.getItem('username'),
+			}
+			$.ajax({
+					url:"https://experiencenyc.herokuapp.com/trips/tripIsSaved",
+					type:"POST",
+					data: JSON.stringify(data),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json"})
+					.done(function(response){
+							if(response['response'] == "True"){
+								ref.setState({tripSaved: true})
+							}
+							else if(response['response'] == "False"){
+								ref.setState({tripSaved: false})
+							}
+					})
+		}
+		else{
+			ref.setState({tripSaved: false})
+		}
+	}
 
   render() {
 		const { classes } = this.props;
 
     return (
-	<div className={classes.tripSave}>
-		<div style={{display: 'table-cell', verticalAlign: 'middle', width: '100%'}}>
+	<div style={{width: '100%'}}>
+		{/*<div style={{display: 'table-cell', verticalAlign: 'middle', width: '100%'}}>
 			<Typography variant="title" color="inherit" noWrap style={{fontWeight: '400', fontSize: '2rem', color: 'rgba(0, 0, 0, 0.87)'}}>
 				Save Your Trip
 			</Typography>
@@ -110,12 +128,17 @@ class TripProps extends Component{
 					}
           label="Public"
       />
-			<Button onClick = {this.handleClick.bind(this)} style={{color: 'white', backgroundColor: '#3f51b5'}}>
+			<Button onClick = {this.handleSave.bind(this)} style={{color: 'white', backgroundColor: '#3f51b5'}}>
 				Save
 			</Button>
-		</div>
-		<div style={{display: 'table-cell', verticalAlign: 'middle', width: '100%'}}>
-			<Button href={"https://www.google.com/maps/dir/?api=1&waypoints=" + this.props.locations} target="_blank" style={{height: '100%', width: '100%', backgroundColor: '#3f51b5', color: 'white', fontSize: '2rem', borderRadius: '0px'}} onClick = {this.handleClick.bind(this)}>
+				</div>*/}
+		<SavePopup open={this.state.saveClick} close={this.handleSave} places={this.props.places} updateSaved={this.isSaved}/>
+		<div style={{display: 'inline-flex', width: '100%', height: '100%'}}>
+			<Button  disabled={this.state.tripSaved ? true : false}  onClick={this.saveClick} style={{paddingTop: 0, paddingBottom: 0, height: '100%', width: '100%', backgroundColor: '#5d6382', color: 'white', fontSize: '2rem', borderRadius: '0px'}}>
+			 {this.state.tripSaved ? 'Saved' : 'Save'}
+			<Save style={{width: '50px', height: '50px', color: 'white'}}/>
+			</Button>
+			<Button href={"https://www.google.com/maps/dir/?api=1&waypoints=" + this.props.locations} target="_blank" style={{paddingTop: 0, paddingBottom: 0, height: '100%', width: '100%', backgroundColor: '#3f51b5', color: 'white', fontSize: '2rem', borderRadius: '0px'}}>
 				Start
 				<Directions style={{width: '50px', height: '50px', color: 'white'}}/>
 			</Button>

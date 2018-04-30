@@ -14,6 +14,7 @@ import Snackbar from 'material-ui-next/Snackbar';
 import Tooltip from 'material-ui-next/Tooltip';
 import Info from 'material-ui-icons/Info';
 import md5 from 'md5.js';
+import RegisterPopup from './RegisterPopup.js';
 
 const styles = theme => ({
   container: {
@@ -72,7 +73,8 @@ class RegisterForm extends React.Component {
     usernameError: false,
     passwordError: false,
     tooltipOpen: false,
-    confirmPasswordError: false
+    confirmPasswordError: false,
+    registerPopupOpen: false
   }
 
   componentWillReceiveProps(nextProps) {
@@ -110,9 +112,9 @@ class RegisterForm extends React.Component {
         contentType:"application/json; charset=utf-8",
         dataType:"json"})
         .done((response) => {
+          document.getElementById("form").reset();
           if(response['response'] == "True"){
-            alert("Registered Successfully! You will need to verify you account by clicking the link sent to your email before you are able to login");
-            this.handleRegistered();
+            this.setState({registerPopupOpen: true})
           }
           else {
             alert("Registration Failed!");
@@ -231,11 +233,17 @@ class RegisterForm extends React.Component {
     this.setState({ tooltipOpen: true });
   };
 
+  closeRegisterPopup = () => {
+    this.setState({registerPopupOpen: false});
+    this.handleRegistered();
+  }
+
   render() {
     const { classes } = this.props;
 
     return (
       <div className={classes.container} style={{display: this.state.display, marginTop: 10}}>
+        <RegisterPopup open={this.state.registerPopupOpen} close={this.closeRegisterPopup}/>
         <Snackbar
             anchorOrigin={{
               vertical: 'center',
@@ -250,7 +258,7 @@ class RegisterForm extends React.Component {
             }}
             message={this.handleMessage()}
           />
-        <form className="form" onSubmit={this.handleRegister}>
+        <form id="form" className="form" onSubmit={this.handleRegister}>
           <FormControl className={classes.formControl} style={{width: '50%'}} error={this.state.first_nameError}>
             <InputLabel  htmlFor="first_name">
               First Name

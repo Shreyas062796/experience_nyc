@@ -15,7 +15,6 @@ import IconButton from 'material-ui-next/IconButton';
 const styles = theme => ({
   paper: {
     position: 'relative',
-    backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     width: window.innerWidth <= 760 ? false : '80%',
     height: window.innerWidth <= 760 ? false : '80%'

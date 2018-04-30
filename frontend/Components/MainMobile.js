@@ -34,6 +34,9 @@ import cyan from 'material-ui-next/colors/cyan';
 import blue from 'material-ui-next/colors/blue';
 import Snackbar from 'material-ui-next/Snackbar';
 import PhotoModal from './PhotoModal.js';
+import TripMap from '../src/TripMap.js';
+import Modal from 'material-ui-next/Modal';
+
 
 const styles = theme => ({
   root: {
@@ -85,6 +88,18 @@ class Main extends React.Component {
     photos: [],
     photoModalOpened: false
   };
+
+  componentWillMount = () => {
+    if(document.location.href.split('/')[3] == "login"){
+      this.setState({clicked: 0})
+    }
+    if(document.location.href.split('/')[4] == "verify"){
+      alert('Thanks for verifying your email! Login and enjoy our app!')
+    }
+    if(sessionStorage.getItem('username')){
+      this.setState({loggedIn: true});
+    }
+  }
 
   componentDidMount = () => {
     if(sessionStorage.getItem('username')){
@@ -143,6 +158,7 @@ class Main extends React.Component {
   handleLogin = () => {
     this.setState({username: sessionStorage.getItem('username'), loginClick: '', clicked: '', loggedIn: true, currentTab: 'Recommended'})
     this.handleMenuClose();
+    history.pushState({}, null, document.location.href.split('/')[0] + "//" + document.location.href.split('/')[1] + document.location.href.split('/')[2]);
   }
 
   handleLogout = () => {
@@ -177,18 +193,15 @@ class Main extends React.Component {
     this.setState({ snackbarOpen: false });
   };
 
-  handleTripButton = () => {
-    if(this.state.tripButton){
-      return (<Button style={{width: '100%', height:'100%', backgroundColor:'#3f51b5'}} disabled={this.state.tripPlaces.length < 2} onClick={() => { this.openTripModal()}}>
-                <Typography style={{color: 'white', display: 'inline-block'}}>
-                  {(this.state.tripPlaces.length < 2) ? 'Select At Least 2 Places' : 'Start Trip'}
-                </Typography>
-              </Button>);
-    }
+  handleTripClose = () => {
+    this.setState({open: ''});
+  };
+
+  openTripModal = () => {
+    this.setState({open: true});
   }
 
   setModalPhotos = (photos) => {
-    console.log(photos)
     let temp = [];
     temp.push(photos);
     this.setState({photos: temp, photoModalOpened: true});
@@ -201,9 +214,34 @@ class Main extends React.Component {
     })
   }
 
+  updateTripLocations = (location) => {
+    let tempTripLocs = this.state.tripLocations;
+    tempTripLocs.push(location);
+    this.setState({tripLocations: tempTripLocs, drawerOpen: true});
+  }
+
   updateTripPlaces = (places) => {
     this.setState({tripPlaces: places});
   }
+
+  updateTripOrder = (mapPlaces) => {
+    this.setState({tripMapPlaces: mapPlaces}, () => {
+      if(this.state.tripMapPlaces.length < 1){
+        this.setState({open: false});
+      }
+    });
+  }
+
+  removeFromTrip = (id) =>{
+    this.setState({removeFromTrip: id}, function(){
+      this.setState({removeFromTrip: ''});
+    })
+  }
+
+  handleTripClose = () => {
+    this.setState({open: ''});
+    this.props.onClose();
+  };
 
   setFilter = (response) => {
     this.setState({filter: response})
@@ -228,7 +266,8 @@ class Main extends React.Component {
     let userAppbarOption = null;
 
     if(sessionStorage.getItem('username')){
-      userAppbarOption = (<div><Typography style={{color: 'white', display: 'inline-block'}}>{sessionStorage.getItem('username')}</Typography><IconButton
+      userAppbarOption = (<div>
+                          <Typography style={{color: 'white', display: 'inline-block'}}>{sessionStorage.getItem('username')}</Typography><IconButton
                             aria-owns={menuOpen ? 'menu-appbar' : null}
                             aria-haspopup="true"
                             onClick={this.handleMenu}
@@ -280,6 +319,17 @@ class Main extends React.Component {
             </Toolbar>
 
           </AppBar>
+          <Modal
+            style={{justifyContent: 'center', alignItems: 'center'}}
+            open={this.state.open}
+            onClose={this.handleTripClose}
+          >
+            <div className={classes.paper} style={{width: '85%', height: '85%', backgroundColor: 'white'}}>
+              <TripMap 
+                  places={this.state.tripMapPlaces} 
+                  selected={this.state.selectedCard}/>
+            </div>
+          </Modal>
           <LoginModal
             clicked={this.state.clicked}
             onClose={this.handleModalClose}
@@ -314,6 +364,8 @@ class Main extends React.Component {
                 snackbar={this.snackbar}
                 inTrip={this.state.tripPlaces}
                 modalPhotos={this.setModalPhotos}
+                cardSelect={this.handleCardSelect}
+                updateTripOrder={this.updateTripOrder}
               />
             </div>
             <Cards style={{display: this.handleTabDisplay('SearchPlaces')}}
@@ -325,6 +377,8 @@ class Main extends React.Component {
               snackbar={this.snackbar}
               inTrip={this.state.tripPlaces}
               modalPhotos={this.setModalPhotos}
+              cardSelect={this.handleCardSelect}
+              updateTripOrder={this.updateTripOrder}
             />
           </div>
           <div style={{display: this.handlePageDisplay('Events'), marginTop: '4em'}}>
@@ -339,6 +393,8 @@ class Main extends React.Component {
                 handleScroll={this.handleScroll}
                 snackbar={this.snackbar}
                 inTrip={this.state.tripPlaces}
+                cardSelect={this.handleCardSelect}
+                updateTripOrder={this.updateTripOrder}
               />
             </div>
             <Events style={{display: this.handleTabDisplay('SearchEvents')}} handleScroll={this.handleScroll}/>
@@ -355,11 +411,20 @@ class Main extends React.Component {
               snackbar={this.snackbar}
               inTrip={this.state.tripPlaces}
               modalPhotos={this.setModalPhotos}
+              cardSelect={this.handleCardSelect}
+              updateTripOrder={this.updateTripOrder}
               />
           </div>
           <div style={{display: this.handlePageDisplay('Trips'),marginTop: '4em', height: '100%'}}>
-              <div style={{overflowY: 'auto', height: '80vh'}}>
+              <div style={{overflowY: 'auto', height: '75vh'}}>
                 {this.state.tripPlaces}
+              </div>
+              <div>
+                <Button style={{width: '100%', height:'100%', backgroundColor:'#24292e'}} disabled={this.state.tripPlaces.length < 2} onClick={() => { this.openTripModal()}}>
+                  <Typography style={{color: 'white', display: 'inline-block'}}>
+                    {(this.state.tripPlaces.length < 2) ? 'Select At Least 2 Places' : 'Start Trip'}
+                  </Typography>
+                </Button>
               </div>
           </div>
           <BottomNav id='bottomNav' pageChange={this.handlePage} display={this.state.displayBottomNav} />

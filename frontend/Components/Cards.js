@@ -91,8 +91,7 @@ class Cards extends React.Component {
             loggedIn: false,
             lastScrollPos: 0,
             changedPos: undefined,
-            down: true,
-            pressed: false
+            down: true
           };
 
   handleScroll = () => {
@@ -195,7 +194,6 @@ class Cards extends React.Component {
   }
 
   removeFromTripOrder = (index) => {
-    console.log(index);
     let tempTrip = this.state.tripMapCardResult;
     tempTrip.splice(index, 1);
     this.setState({tripMapCardResult: tempTrip}, () => {
@@ -248,7 +246,6 @@ class Cards extends React.Component {
 
 
   getTripPlaces = () => {
-    console.log('tripUpdate')
     if(this.props.loggedIn){
       var data = {username: sessionStorage.getItem('username')};
 
@@ -360,7 +357,7 @@ class Cards extends React.Component {
   }
 
   //adds the passed id to the database and adds the lat and lng to a list for the trip creation
-  addToTrip = (id, name, lat, lng) => {
+  addToTrip = (id) => {
 
     if(sessionStorage.getItem('username')){
       var data = {username: sessionStorage.getItem('username'), place_id: id};
@@ -378,8 +375,6 @@ class Cards extends React.Component {
           }
         })
     }
-
-    this.props.onAddPlaceToTrip({name: name,lat: lat,lng: lng});
 
     let tempInTrip = this.state.inTrip;
     tempInTrip.push(id);
@@ -443,8 +438,6 @@ class Cards extends React.Component {
           for(var innerIndex = 0; innerIndex < tempItems.length; innerIndex++){
             
             if(id == tempItems[innerIndex]['props']['value']['place_id']){
-              console.log(id + " " + tempItems[innerIndex]['props']['value']['place_id'])
-              console.log(this.state.inTrip)
               tempItems[innerIndex] = (<PlaceCard
                                   value={this.state.result[innerIndex]}
                                   inTrip={this.state.inTrip}
@@ -604,7 +597,6 @@ class Cards extends React.Component {
   componentDidMount = () => {
     if(sessionStorage.getItem('username')){
       this.setState({loggedIn: true}, function(){
-        this.getTripPlacesIDs();
         this.getTripPlaces();
         this.setFavorites();
       })
@@ -658,6 +650,11 @@ class Cards extends React.Component {
         });
       }
 
+      if((nextProps.tripMapOpen != this.props.tripMapOpen) && (nextProps.tripMapOpen == false)){
+        this.getTripPlaces();
+      }
+
+
       if(nextProps.loggedIn != this.props.loggedIn){
         if(nextProps.loggedIn){
           this.setState({inTrip: [], result: [], loggedIn: true}, function() {
@@ -678,6 +675,10 @@ class Cards extends React.Component {
 
       if(nextProps.removeFromTrip){
         this.removeFromTrip(nextProps.removeFromTrip);
+      }
+
+      if((nextProps.page != this.props.page) && nextProps.page == "Places"){
+        this.getTripPlacesIDs();
       }
   }
 
