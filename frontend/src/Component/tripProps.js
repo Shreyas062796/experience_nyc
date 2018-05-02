@@ -136,11 +136,11 @@ class TripProps extends Component{
 		<div style={{display: 'inline-flex', width: '100%', height: '100%'}}>
 			<Button  disabled={this.state.tripSaved ? true : false}  onClick={this.saveClick} style={{paddingTop: 0, paddingBottom: 0, height: '100%', width: '100%', backgroundColor: '#5d6382', color: 'white', fontSize: '2rem', borderRadius: '0px'}}>
 			 {this.state.tripSaved ? 'Saved' : 'Save'}
-			<Save style={{width: '50px', height: '50px', color: 'white'}}/>
+			<Save style={{width: '35px', height: '35px', color: 'white'}}/>
 			</Button>
 			<Button href={"https://www.google.com/maps/dir/?api=1&waypoints=" + this.props.locations} target="_blank" style={{paddingTop: 0, paddingBottom: 0, height: '100%', width: '100%', backgroundColor: '#3f51b5', color: 'white', fontSize: '2rem', borderRadius: '0px'}}>
 				Start
-				<Directions style={{width: '50px', height: '50px', color: 'white'}}/>
+				<Directions style={{width: '35px', height: '35px', color: 'white'}}/>
 			</Button>
 		</div>
 	</div>

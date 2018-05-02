@@ -85,7 +85,7 @@ class ResetModal extends React.Component {
               <Input classes={{inkbar: classes.inputInkbar}} id="emailReset" />
             </FormControl>
             <div style={{textAlign: "center", marginTop: '1em'}}>
-              <Button id='Submit' className={classes.button}  onClick={this.resetPassword} style={{width: '25%',color: 'white', backgroundColor: 'rgba(0, 0, 0, 0.87)'}}>
+              <Button id='Submit' className={classes.button}  onClick={this.resetPassword} style={{width: '25%',color: 'white', backgroundColor: '#3f51b5'}}>
                 Submit
               </Button>
             </div>

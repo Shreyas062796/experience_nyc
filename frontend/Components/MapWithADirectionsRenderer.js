@@ -27,7 +27,6 @@ export default compose(
         provideRouteAlternatives: true
       }, (result, status) => {
         if (status === google.maps.DirectionsStatus.OK) {
-            console.log(result);
           this.setState({
             directions: result,
           });

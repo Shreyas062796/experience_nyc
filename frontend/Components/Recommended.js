@@ -244,7 +244,6 @@ class Recommended extends React.Component {
 
 
   getTripPlaces = () => {
-    console.log(this.state.inTrip)
     if(this.props.loggedIn){
       var data = {username: sessionStorage.getItem('username')};
 
@@ -571,13 +570,13 @@ class Recommended extends React.Component {
     //set list of favorites for current user
     //this.setFavorites();
 
-    this.setState({items: [<div className='sweet-loading'>
+    this.setState({items: [<div style={{textAlign: 'center'}}className='sweet-loading'>
+      <Typography style={{color: '#3f51b5', margin: '1rem', fontSize: '1rem'}}>Retrieving Recommendations</Typography>
       <PulseLoader
         color={'#123abc'}
         loading={this.state.loading}
       />
     </div>]})
-    console.log(this.state.inTrip)
     var data = {username: sessionStorage.getItem('username'), address: '33rd Street station New York, NY 10001'};
     $.ajax({
       url:"https://experiencenyc.herokuapp.com/recommendations/placeRecommendations",
@@ -587,7 +586,6 @@ class Recommended extends React.Component {
       dataType:"json"})
       .done((response) => {
        const { classes } = this.props;
-        console.log(this.state.inTrip)
        const result = response.map((value) =>(
          <PlaceCard
            value={value}
@@ -605,7 +603,7 @@ class Recommended extends React.Component {
         ))
         
       if(JSON.stringify(this.state.items) != JSON.stringify(result)){
-       this.setState({items: result});
+       this.setState({items: result, result: response});
      }
     })
   }
