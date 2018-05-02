@@ -69,7 +69,7 @@ const styles = theme => ({
   },
   appBar: {
     position: 'absolute',
-    backgroundColor: '#24292e',
+    backgroundColor: '#3f51b5',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -95,6 +95,7 @@ const styles = theme => ({
   drawerPaper: {
     position: 'relative',
     width: drawerWidth,
+    borderLeft: '1px solid #3f51b5'
   },
   drawerHeader: {
     padding: '0 8px',
@@ -148,7 +149,8 @@ class Main extends React.Component {
     username: sessionStorage.getItem('username'),
     anchorEl: null,
     filter: {search: '', types: [''], price_level: [''], num: '100'},
-    currentPage: sessionStorage.getItem('username') ? 'Recommended' : 'Places',
+    //currentPage: sessionStorage.getItem('username') ? 'Recommended' : 'Places',
+    currentPage: 'Places',
     open: '',
     tripButton: false,
     tripPlaces: [],
@@ -178,6 +180,13 @@ class Main extends React.Component {
     if(sessionStorage.getItem('username')){
       this.setState({loggedIn: true});
     }
+  }
+
+  getTripHeight = () => {
+    let windowHeight = $(window).height();
+    let height = parseInt(this.getToolbarHeight(), 10);
+    height = windowHeight - height - 56;
+    return height;
   }
 
   //required for mobile
@@ -405,7 +414,7 @@ class Main extends React.Component {
                 className={classNames(classes.menuButton, drawerOpen && classes.hide)}
               >
                 Trip Cart
-                <Badge color="primary" badgeContent={this.state.tripPlaces.length} className={classes.margin}>
+                <Badge color="secondary" badgeContent={this.state.tripPlaces.length} className={classes.margin}>
                   <Place color="white" />
                 </Badge>
               </Button>
@@ -443,7 +452,7 @@ class Main extends React.Component {
             registered={this.handleRegister}
           />
             <div className={classes.drawerHeader} />
-            <Tabs pageChange={this.handlePage} loggedIn={this.state.loggedIn} logginPopup={this.handleLoginPopup}/>
+            <Tabs drawerOpen={this.state.drawerOpen} pageChange={this.handlePage} loggedIn={this.state.loggedIn} logginPopup={this.handleLoginPopup}/>
               <div style={{display: this.handlePageDisplay('Recommended')}}>
                 <Recommended
                   page={this.state.currentPage}
@@ -513,12 +522,14 @@ class Main extends React.Component {
               </div>
             </div>
             <Divider />
-            <div style={{overflowY: 'auto', height: '90vh', borderLeft: '1px solid #24292e'}}>
-              {this.state.tripPlaces}
+            <div style={{height: (this.getTripHeight())}}>
+              <div style={{overflowY: 'auto', height: '100%', borderLeft: '1px solid #24292e'}}>
+                {this.state.tripPlaces}
+              </div>
             </div>
             <Divider />
-            <div style={{width: '100%',height: '3.5em', bottom: 0, position: 'absolute'}}>
-              <Button style={{width: '100%', height:'100%', backgroundColor:'#24292e'}} disabled={this.state.tripPlaces.length < 2} onClick={() => { this.openTripModal()}}>
+            <div style={{width: '100%',height: 56, bottom: 0, position: 'absolute'}}>
+              <Button style={{width: '100%', height:'100%', backgroundColor:'#3f51b5'}} disabled={this.state.tripPlaces.length < 2} onClick={() => { this.openTripModal()}}>
                 <Typography style={{color: 'white', display: 'inline-block'}}>
                   {(this.state.tripPlaces.length < 2) ? 'Select At Least 2 Places' : 'Start Trip'}
                 </Typography>

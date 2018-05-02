@@ -128,7 +128,7 @@ class Cards extends React.Component {
         contentType:"application/json; charset=utf-8",
         dataType:"json"})
         .done((response) => {
-          this.setState({favorites: response}, function () {})
+          this.setState({favorites: response}, () => {this.updateCards()})
         })
     }
   }
@@ -457,6 +457,27 @@ class Cards extends React.Component {
           this.setState({items: tempItems})
         });
       }
+      else{
+         let tempResult = this.state.result;
+         let tempItems = tempResult.map((value) => (
+          <PlaceCard
+            value={value}
+            inTrip={this.state.inTrip}
+            addToTrip={this.addToTrip}
+            removeFromTrip={this.removeFromTrip}
+            addFavorite={this.addFavorite}
+            removeFavorite={this.removeFavorite}
+            getTripPlaces={this.getTripPlaces}
+            searchPlaces={this.searchPlaces}
+            getPhotos={this.getPhotos}
+            snackbar={this.props.snackbar}
+            favorites={this.state.favorites}
+          />
+        ))
+        this.setState({items: ''}, function() {
+          this.setState({items: tempItems})
+        });
+      }
       
   }
 
@@ -544,7 +565,8 @@ class Cards extends React.Component {
   //sends ajax request to get places data
   getPlaces = (data) => {
     if(data['page'] == 1){
-      this.setState({items: [<div className='sweet-loading'>
+      this.setState({items: [<div style={{textAlign: 'center'}} className='sweet-loading'>
+        <Typography style={{color: '#3f51b5', margin: '1rem', fontSize: '1rem'}}>Retrieving Places</Typography>
         <PulseLoader
           color={'#123abc'}
           loading={this.state.loading}
@@ -679,6 +701,8 @@ class Cards extends React.Component {
 
       if((nextProps.page != this.props.page) && nextProps.page == "Places"){
         this.getTripPlacesIDs();
+        this.setFavorites();
+        
       }
   }
 

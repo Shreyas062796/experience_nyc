@@ -21,12 +21,16 @@ TabContainer.propTypes = {
 const styles = theme => ({
   root: {
     flexGrow: 1
+  },
+  indicator: {
+    width: '100px !important'
   }
 });
 
 class FullWidthTabs extends React.Component {
   state = {
-    value: sessionStorage.getItem('username') ? 0 : 1,
+    //value: sessionStorage.getItem('username') ? 0 : 1,
+    value: 1,
     pageKeys: {0: 'Recommended', 1 : 'Places', 2 : 'Events', 3 : 'Favorites'},
     disabled: false
   };
@@ -58,6 +62,10 @@ class FullWidthTabs extends React.Component {
         this.setState({value: 1});
       }
     }
+
+    /*if(nextProps.drawerOpen != this.props.drawerOpen){
+      console.log('drawer')
+    }*/
   }
 
   popupLogin = () => {

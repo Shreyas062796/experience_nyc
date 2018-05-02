@@ -81,7 +81,7 @@ const styles = theme => ({
     flexDirection: 'column',
     textAlign: 'center',
     width: '10%', 
-    backgroundColor: 'rgba(0, 0, 0, 0.87)'
+    backgroundColor: '#3f51b5'
   },
   arrows: {
     width: '50px',

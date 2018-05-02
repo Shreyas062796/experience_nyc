@@ -102,7 +102,7 @@ class Cards extends React.Component {
         contentType:"application/json; charset=utf-8",
         dataType:"json"})
         .done((response) => {
-          this.setState({favorites: response})
+          this.setState({favorites: response}, () => {this.getFavorites()})
         })
     }
   }
@@ -117,12 +117,22 @@ class Cards extends React.Component {
     }
   }*/
 
+  componentDidMount = () => {
+    this.setState({items: [<div style={{textAlign: 'center'}} className='sweet-loading'>
+      <Typography style={{color: '#3f51b5', margin: '1rem', fontSize: '1rem'}}>Retrieving Your Favorites</Typography>
+      <PulseLoader
+        color={'#123abc'}
+        loading={this.state.loading}
+      />
+    </div>]})
+      
+  }
+
+
   componentWillReceiveProps = (nextProps) => {
-    console.log(nextProps.page);
     if((nextProps.page != this.props.page) && nextProps.page == "Favorites"){
       this.getTripPlacesIDs();
       this.setFavorites()
-      this.getFavorites();
     }
   }
 
@@ -203,7 +213,6 @@ class Cards extends React.Component {
 
 
   getTripPlaces = () => {
-    console.log(this.state.inTrip)
     if(this.props.loggedIn){
       var data = {username: sessionStorage.getItem('username')};
 
@@ -415,6 +424,24 @@ class Cards extends React.Component {
           this.setState({items: tempItems})
         });
       }
+
+      if(message == "removeFavorite"){
+        for(var innerIndex = 0; innerIndex < tempItems.length; innerIndex++){
+          
+          if(id == tempItems[innerIndex]['props']['value']['place_id']){
+            //tempItems.splice(tempItems[innerIndex], 1);
+            //tempItems[innerIndex] = ''
+            delete tempItems[ innerIndex ];
+
+          }
+        }
+      this.setState({items: ''}, function() {
+        this.setState({items: tempItems})
+      });
+      }
+      else{
+
+      }
       
   }
 
@@ -440,7 +467,8 @@ class Cards extends React.Component {
       .done((response) => {
         if(response['response'] == "True"){
           this.props.snackbar("Removed From Favorites")
-          this.getFavorites();
+          //this.getFavorites();
+          this.updateCards(id, 'removeFavorite')
         }
       })
   }
@@ -455,7 +483,8 @@ class Cards extends React.Component {
 
   //get favorites and display
   getFavorites = () => {
-    this.setState({items: [<div className='sweet-loading'>
+    this.setState({items: [<div style={{textAlign: 'center'}} className='sweet-loading'>
+      <Typography style={{color: '#3f51b5', margin: '1rem', fontSize: '1rem'}}>Retrieving Your Favorites</Typography>
       <PulseLoader
         color={'#123abc'}
         loading={this.state.loading}
@@ -487,8 +516,8 @@ class Cards extends React.Component {
           favorites={this.state.favorites}
         />
      ))
-     if(JSON.stringify(this.state.items) != JSON.stringify(result)){
-      this.setState({items: result});
+     if(JSON.stringify(this.state.result) != JSON.stringify(response)){
+      this.setState({items: result, result: response});
     }
     });
   }
@@ -500,7 +529,7 @@ class Cards extends React.Component {
 
     return (
       <div style={{margin: '1em', height: '90vh',overflowY: 'auto', overflowX: 'hidden'}}>
-        <Grid container spacing={40} justify={'center'} style={{padding: 25, paddingTop: 0}}>
+        <Grid container spacing={40} justify={'center'} style={{padding: 25, paddingTop: 0, alignItems: 'center', height: this.state.items.length == 1 ? '100%' : 'auto'}}>
           {this.state.items}
         </Grid>
       </div>

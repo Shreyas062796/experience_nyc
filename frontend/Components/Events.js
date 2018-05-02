@@ -29,6 +29,7 @@ import noPhoto from "./Images/nophoto.png";
 import Check from 'material-ui-icons/Check';
 import Divider from 'material-ui-next/Divider';
 import EventCard from './EventCard.js'
+import { PulseLoader } from 'react-spinners';
 
 const styles = theme => ({
   card1: {
@@ -205,7 +206,13 @@ class Events extends React.Component {
 
   //search for places
   searchEvents = () => {
-
+    this.setState({items: [<div style={{textAlign: 'center'}} className='sweet-loading'>
+        <Typography style={{color: '#3f51b5', margin: '1rem', fontSize: '1rem'}}>Retrieving Events</Typography>
+        <PulseLoader
+          color={'#123abc'}
+          loading={this.state.loading}
+        />
+      </div>]})
     //set list of favorites for current user
     //this.setFavorites();
 
@@ -253,7 +260,7 @@ class Events extends React.Component {
 
     return (
       <div id="eventsDiv" style={{margin: '1em', height:  window.innerWidth <= 760 ? '75vh' : '100vh',overflowY: 'auto', overflowX: 'hidden'}} onScroll={this.handleScroll}>
-        <Grid container spacing={40} justify={'center'} style={{padding: 25, paddingBottom: window.innerWidth <= 760 ? '1em' : '12em'}}>
+        <Grid container spacing={40} justify={'center'} style={{padding: 25, paddingTop: 0, paddingBottom: window.innerWidth <= 760 ? '1em' : '12em', alignItems: 'center', marginTop: '3em',height: this.state.items.length == 1 ? '100%' : 'auto'}}>
           {this.state.items}
         </Grid>
       </div>

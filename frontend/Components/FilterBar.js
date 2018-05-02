@@ -247,7 +247,7 @@ class FilterBar extends React.Component {
                       />
                     </Grid>
                     <Grid item xl={12} lg={12} md={12} sm={12} xs={12}  style={{paddingBottom: 0, textAlign: 'center'}}>
-                      <Button onClick={this.handleSubmit} color="primary" style={{color: 'white', backgroundColor: 'rgba(0, 0, 0, 0.87)'}}>
+                      <Button onClick={this.handleSubmit} color="primary" style={{color: 'white', backgroundColor: '#3f51b5'}}>
                           Submit
                       </Button>
                     </Grid>

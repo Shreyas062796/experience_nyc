@@ -65,7 +65,7 @@ class FullWidthTabs extends React.Component {
     }
 
     if((nextProps.page != this.props.page) && this.props.loggedIn){
-      this.setState({value: 0});
+      this.setState({value: 1});
     }
   }
 
@@ -82,7 +82,7 @@ class FullWidthTabs extends React.Component {
             textColor="primary"
             fullWidth
           >
-            <Tab label="Recommended"/>
+            <Tab disabled={this.props.page == 'Events' ? true : false} label="Recommended"/>
             <Tab label="Search"/>
           </Tabs>
         </AppBar>

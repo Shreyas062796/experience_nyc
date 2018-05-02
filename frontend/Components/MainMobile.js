@@ -86,7 +86,9 @@ class Main extends React.Component {
     snackbarMessage: '',
     snackbarOpen: false,
     photos: [],
-    photoModalOpened: false
+    photoModalOpened: false,
+    selectedCard: ''
+
   };
 
   componentWillMount = () => {
@@ -105,7 +107,18 @@ class Main extends React.Component {
     if(sessionStorage.getItem('username')){
       this.setState({loggedIn: true, currentTab: 'Recommended'});
     }
-	}
+  }
+  
+  getToolbarHeight = () => {
+    return $('header').css('height');
+  }
+
+  getTripHeight = () => {
+    let windowHeight = $(window).height();
+    let height = parseInt(this.getToolbarHeight(), 10);
+    height = windowHeight - height - 56;
+    return height;
+  }
 
   handleScroll = (down) => {
     if(down){
@@ -145,6 +158,10 @@ class Main extends React.Component {
     this.setState({
       currentTab: page
     })
+  }
+
+  handleCardSelect = (index) => {
+    this.setState({selectedCard: index})
   }
 
   handleLoginPopup = () => {
@@ -384,7 +401,7 @@ class Main extends React.Component {
           <div style={{display: this.handlePageDisplay('Events'), marginTop: '4em'}}>
             <TabsMobile tabChange={this.handleTab} loggedIn={this.state.loggedIn} page={this.state.currentPage} logginPopup={this.handleLoginPopup}/>
             <FilterBar setFilter={this.setFilter}/>
-            <div style={{display: this.handleTabDisplay('RecommendedEvents')}}>
+            {/*<div style={{display: this.handleTabDisplay('RecommendedEvents')}}>
               <RecommendedEvents
                 filter={this.state.filter}
                 onAddPlaceToTrip={this.updateTripLocations}
@@ -396,7 +413,7 @@ class Main extends React.Component {
                 cardSelect={this.handleCardSelect}
                 updateTripOrder={this.updateTripOrder}
               />
-            </div>
+          </div>*/}
             <Events style={{display: this.handleTabDisplay('SearchEvents')}} handleScroll={this.handleScroll}/>
           </div>
           <div style={{display: this.handlePageDisplay('Favorites')}}>
@@ -415,11 +432,11 @@ class Main extends React.Component {
               updateTripOrder={this.updateTripOrder}
               />
           </div>
-          <div style={{display: this.handlePageDisplay('Trips'),marginTop: '4em', height: '100%'}}>
-              <div style={{overflowY: 'auto', height: '75vh'}}>
+          <div style={{display: this.handlePageDisplay('Trips'),marginTop: this.getToolbarHeight(), height: (this.getTripHeight())}}>
+              <div style={{overflowY: 'auto', height: '90%'}}>
                 {this.state.tripPlaces}
               </div>
-              <div>
+              <div style={{height: '10%'}}>
                 <Button style={{width: '100%', height:'100%', backgroundColor:'#24292e'}} disabled={this.state.tripPlaces.length < 2} onClick={() => { this.openTripModal()}}>
                   <Typography style={{color: 'white', display: 'inline-block'}}>
                     {(this.state.tripPlaces.length < 2) ? 'Select At Least 2 Places' : 'Start Trip'}

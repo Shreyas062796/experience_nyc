@@ -195,7 +195,7 @@ class LoginForm extends React.Component {
                 </Typography>
               </Grid>
               <div style={{textAlign: "center"}}>
-                <Button id='login' className={classes.button} type="submit" style={{width: '25%',color: 'white', backgroundColor: 'rgba(0, 0, 0, 0.87)'}}>
+                <Button id='login' className={classes.button} type="submit" style={{width: '25%',color: 'white', backgroundColor: '#3f51b5'}}>
                   Login
                 </Button>
               </div>
