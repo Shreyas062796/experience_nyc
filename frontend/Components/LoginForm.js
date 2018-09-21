@@ -98,7 +98,7 @@ class LoginForm extends React.Component {
     }
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/users/authenticate",
+      url:"https://enyc-back.herokuapp.com/users/authenticate",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",

@@ -106,7 +106,7 @@ class RegisterForm extends React.Component {
       }
 
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/users/createuser",
+        url:"https://enyc-back.herokuapp.com/users/createuser",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",

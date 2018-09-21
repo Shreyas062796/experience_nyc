@@ -83,7 +83,7 @@ class TripProps extends Component{
 				username: sessionStorage.getItem('username'),
 			}
 			$.ajax({
-					url:"https://experiencenyc.herokuapp.com/trips/tripIsSaved",
+					url:"https://enyc-back.herokuapp.com/trips/tripIsSaved",
 					type:"POST",
 					data: JSON.stringify(data),
 					contentType:"application/json; charset=utf-8",

@@ -67,7 +67,7 @@ class SavePopup extends React.Component {
         username: sessionStorage.getItem('username'),
     }
     $.ajax({
-        url:"https://experiencenyc.herokuapp.com/trips/createtrip",
+        url:"https://enyc-back.herokuapp.com/trips/createtrip",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",

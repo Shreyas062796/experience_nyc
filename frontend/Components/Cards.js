@@ -122,7 +122,7 @@ class Cards extends React.Component {
 
     if(data['username']){
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/users/getfavoriteplacesIds",
+        url:"https://enyc-back.herokuapp.com/users/getfavoriteplacesIds",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -138,7 +138,7 @@ class Cards extends React.Component {
     var data = {username: sessionStorage.getItem('username'), place_id: id};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/users/addfavoriteplaces",
+      url:"https://enyc-back.herokuapp.com/users/addfavoriteplaces",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -156,7 +156,7 @@ class Cards extends React.Component {
     var data = {username: sessionStorage.getItem('username'), place_id: id};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/users/removefavoriteplaces",
+      url:"https://enyc-back.herokuapp.com/users/removefavoriteplaces",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -175,7 +175,7 @@ class Cards extends React.Component {
       var data = {username: sessionStorage.getItem('username')};
 
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/users/gettripplacesIds",
+        url:"https://enyc-back.herokuapp.com/users/gettripplacesIds",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -250,7 +250,7 @@ class Cards extends React.Component {
       var data = {username: sessionStorage.getItem('username')};
 
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/users/gettripplaces",
+        url:"https://enyc-back.herokuapp.com/users/gettripplaces",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -301,7 +301,7 @@ class Cards extends React.Component {
           var data = {placeIds: this.state.inTrip};
 
           $.ajax({
-            url:"https://experiencenyc.herokuapp.com/places/getusertripplaces",
+            url:"https://enyc-back.herokuapp.com/places/getusertripplaces",
             type:"GET",
             data: data,
             contentType:"application/json; charset=utf-8",
@@ -363,7 +363,7 @@ class Cards extends React.Component {
       var data = {username: sessionStorage.getItem('username'), place_id: id};
 
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/users/addtripplaces",
+        url:"https://enyc-back.herokuapp.com/users/addtripplaces",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -397,7 +397,7 @@ class Cards extends React.Component {
       var data = {username: sessionStorage.getItem('username'), place_id: id};
 
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/users/removetripplaces",
+        url:"https://enyc-back.herokuapp.com/users/removetripplaces",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -574,7 +574,7 @@ class Cards extends React.Component {
       </div>]})
     }
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/places/newqueryplaces",
+      url:"https://enyc-back.herokuapp.com/places/newqueryplaces",
       type:"GET",
       data: data,
       contentType:"application/json; charset=utf-8",

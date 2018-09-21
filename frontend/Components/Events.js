@@ -106,7 +106,7 @@ class Events extends React.Component {
 
     if(data['username']){
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/users/users/getfavoriteplacesIds",
+        url:"https://enyc-back.herokuapp.com/users/users/getfavoriteplacesIds",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -122,7 +122,7 @@ class Events extends React.Component {
     var data = {username: sessionStorage.getItem('username'), place_id: id};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/users/addfavoriteplaces",
+      url:"https://enyc-back.herokuapp.com/users/addfavoriteplaces",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -139,7 +139,7 @@ class Events extends React.Component {
     var data = {username: sessionStorage.getItem('username'), place_id: id};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/users/removefavoriteplaces",
+      url:"https://enyc-back.herokuapp.com/users/removefavoriteplaces",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -219,7 +219,7 @@ class Events extends React.Component {
     var data = {amount: '100'};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/todayevents",
+      url:"https://enyc-back.herokuapp.com/todayevents",
       type:"GET",
       data: data,
       contentType:"application/json; charset=utf-8",

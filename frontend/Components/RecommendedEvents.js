@@ -149,7 +149,7 @@ class Recommended extends React.Component {
 
     if(data['username']){
       $.ajax({
-        url:"https://experiencenyc.herokuapp.com/users/getfavoriteplacesIds",
+        url:"https://enyc-back.herokuapp.com/users/getfavoriteplacesIds",
         type:"POST",
         data: JSON.stringify(data),
         contentType:"application/json; charset=utf-8",
@@ -174,7 +174,7 @@ class Recommended extends React.Component {
     var data = {username: sessionStorage.getItem('username'), place_id: id};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/users/addfavoriteplaces",
+      url:"https://enyc-back.herokuapp.com/users/addfavoriteplaces",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -191,7 +191,7 @@ class Recommended extends React.Component {
     var data = {username: sessionStorage.getItem('username'), place_id: id};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/users/removefavoriteplaces",
+      url:"https://enyc-back.herokuapp.com/users/removefavoriteplaces",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",
@@ -252,7 +252,7 @@ class Recommended extends React.Component {
     var data = {username: sessionStorage.getItem('username'), address: '33rd Street station New York, NY 10001'};
 
     $.ajax({
-      url:"https://experiencenyc.herokuapp.com/recommendations/eventRecommendations",
+      url:"https://enyc-back.herokuapp.com/recommendations/eventRecommendations",
       type:"POST",
       data: JSON.stringify(data),
       contentType:"application/json; charset=utf-8",

@@ -165,7 +165,7 @@ class Main extends React.Component {
 
   componentWillMount = () => {
     /*$.ajax({
-        url: 'https://experiencenyc.herokuapp.com/',
+        url: 'https://enyc-back.herokuapp.com/',
         error: function(result){
           alert('Server is currently down!')
         }
